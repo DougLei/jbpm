@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpm-configuration>
-
+	<process code="" name="" version="" enabled="" description="">
+		
+	</process>
+	
+	<process-img>
+	</process-img>
 </bpm-configuration>

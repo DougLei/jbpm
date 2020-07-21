@@ -1,7 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpm-configuration>
-	<process code="" name="" version="" enabled="" description="">
+	<process code="" version="" name="" businessID="" enabled="false" description="">
+		<startEvent id="startEvent1" name=""></startEvent>
+		<endEvent id="endEvent1" name=""></endEvent>
+	
+		<userTask id="userTask1" name="编写申请单"></userTask>
+		<userTask id="userTask2" name="部门领导审批">
+			<!-- 任务内部支持的操作 -->
+			<option name="退回到流程起点"></option>
+			<option name="退回申请人"></option>
+			<option name="退回上一环节"></option>
+			<option name="流程跳转"></option>
+			<option name="抄送"></option>
+			<option name="转办"></option>
+			<option name="催办"></option>
+			
+			<!-- 指派信息, 多个表达式用,分隔开 -->
+			<assigees expressions=""></assigees>
+			
+			<!-- 前置后置监听器 -->
+			<listener type="pre" order="1" class=""></listener>
+			<listener type="post" order="1" class=""></listener>
+		</userTask>
 		
+		<!-- 并行网关 -->
+		<parallelGateway id="parallelgateway1" name=""></parallelGateway>
+		<!-- 排他网关 -->
+		<exclusiveGateway id="exclusivegateway3" name=""></exclusiveGateway>
+		<!-- 包容网关 -->
+		<inclusiveGateway id="inclusivegateway1" name=""></inclusiveGateway>
+		
+		<!-- 连线, 可配置条件 -->
+		<flow id="flow1" name="启动流程" source="startEvent1" target="userTask1" conditionExpr=""></flow>
+		<flow id="flow2" name="部门领导审批" source="userTask1" target="userTask2"></flow>
+		<flow id="flow3" name="审批结束" source="userTask2" target="endEvent1" order="1"></flow>
+		<flow id="flow4" name="退回" source="userTask2" target="userTask1" order="2"></flow>
 	</process>
 	
 	<process-img>

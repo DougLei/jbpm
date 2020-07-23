@@ -51,7 +51,9 @@
 			<listener type="post" item="多个项之间用;(分号)分隔开"></listener>
 			
 			<!-- 扩展配置 -->
-			
+			<allowActivation value="当流程结束后再激活时, 是否允许选择从当前用户任务进行激活">
+				<candidate>激活时的候选人配置, 如果没有配置, 延续当前用户任务原本的候选人配置</candidate>
+			</allowActivation>
 		</userTask>
 		
 		<!-- 子流程任务 -->

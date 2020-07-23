@@ -1701,7 +1701,7 @@ Shadow=0</a:DisplayPreferences>
 <o:ReferenceSymbol Id="o5">
 <a:CreationDate>1594870583</a:CreationDate>
 <a:ModificationDate>1594893767</a:ModificationDate>
-<a:Rect>((-75085,22547), (-63461,31670))</a:Rect>
+<a:Rect>((-69773,22547), (-68773,31670))</a:Rect>
 <a:ListOfPoints>((-69273,22547),(-69273,31670))</a:ListOfPoints>
 <a:CornerStyle>2</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
@@ -1723,7 +1723,7 @@ DESTINATION 0 新宋体,8,N</a:FontList>
 <o:ReferenceSymbol Id="o9">
 <a:CreationDate>1594870607</a:CreationDate>
 <a:ModificationDate>1594893767</a:ModificationDate>
-<a:Rect>((-64630,16694), (-53006,18016))</a:Rect>
+<a:Rect>((-62463,16694), (-53596,17144))</a:Rect>
 <a:ListOfPoints>((-53596,16919),(-62463,16919))</a:ListOfPoints>
 <a:CornerStyle>2</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>

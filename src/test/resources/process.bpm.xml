@@ -1,35 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpm-configuration>
-	<process code="" version="" name="" businessID="属于全局的业务标识" description="" titleExpression="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name">
-		<startEvent id="startEvent1" name=""></startEvent>
+	<!-- 
+		流程配置结构, 核心主要包括以下四种组件:
+		1. 事件
+		2. 连线
+		3. 网关
+		4. 任务 
+	-->
+	<process code="流程编码" version="版本" name="名称" businessID="属于全局的业务标识" description="描述" titleExpression="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name">
+		<!-- 开始事件, 一个流程中只能有一个开始 -->
+		<startEvent id="startEvent" name=""></startEvent>
+		<!-- 结束事件, 一个流程中可以有多个结束 -->
 		<endEvent id="endEvent1" name=""></endEvent>
 		
+		
+		<!-- 
+			任务包含两种:
+			1. 手动任务, 需要用户手动处理, 来推动流程流转, 例如用户任务
+			2. 自动任务, 可以自行推动流程流转, 例如子流程任务, SQL脚本任务, 定时任务, 邮件任务等 
+		-->
 		<!-- 用户任务 -->
 		<userTask id="userTask2" name="任务名称"  businessID="属于任务的业务标识, 优先级高于全局业务标识">
 			
 			<!-- 当前任务候选人配置 -->
 			<candidate>
 				<!-- 指派候选人的表达式 -->
-				<assigeeExpression value="指派候选人的表达式, 多个表达式用,分隔开"></assigeeExpression>
+				<assigeeExpression multi="是否可以选择多个候选人" value="指派候选人的表达式, 多个表达式用;(分号)分隔开"></assigeeExpression>
 				<!-- 候选人进行审批的策略 -->
-				<approvalStrategy multi="是否多人操作" value="百分比/人数"></approvalStrategy>
+				<approvalStrategy mode="具体审批的模式(单人操作/多人按百分比操作/多人按人数操作)" value="审批模式对应的配置值(百分比/人数)"></approvalStrategy>
 				<!-- 扩展配置 -->
 				<autoAssign value="是否自动指派候选人"></autoAssign>
 				<mandatoryDeclaration value="是否需要强制表态"></mandatoryDeclaration>
 			</candidate>
 			
-			<!-- 任务内部支持的操作 -->
+			<!-- 任务内部支持的操作, 属于 -->
 			<option name="退回到流程起点"></option>
 			<option name="退回申请人"></option>
 			<option name="退回上一环节"></option>
+			<option name="抄送">
+				<candidate></candidate>
+			</option>
+			<option name="转办">
+				<candidate></candidate>
+			</option>
 			<option name="流程跳转"></option>
-			<option name="抄送"><candidate></candidate></option>
-			<option name="转办"><candidate></candidate></option>
-			<option name="催办"></option>
+			<option name="流程跟踪"></option>
 			
 			<!-- 前/后置监听器 -->
-			<listener type="pre" order="1" class=""></listener>
-			<listener type="post" order="1" class=""></listener>
+			<listener type="pre" item="多个项之间用;(分号)分隔开"></listener>
+			<listener type="post" item="多个项之间用;(分号)分隔开"></listener>
+			
+			<!-- 扩展配置 -->
+			
 		</userTask>
 		
 		<!-- 子流程任务 -->
@@ -37,9 +59,10 @@
 		<!-- SQL脚本任务 -->
 		<sqlTask id="sqlTask1"></sqlTask>
 		<!-- 定时任务 -->
-		<timerTask id="timerTask1"></timerTask>
+		<timerTask id="timerTask1" cronExpression=""></timerTask>
 		<!-- 邮件任务 -->
 		<emailTask id="emailTask1"></emailTask>
+		
 		
 		<!-- 并行网关 -->
 		<parallelGateway id="parallelGateway1" name=""></parallelGateway>
@@ -48,10 +71,12 @@
 		<!-- 包容网关 -->
 		<inclusiveGateway id="inclusiveGateway1" name=""></inclusiveGateway>
 		
+		
 		<!-- 连线, 可配置条件 -->
 		<flow id="flow1" name="启动流程" source="startEvent1" target="userTask1" conditionExpression="配置比较表达式" order="排序, 如果同一个source引出多条线, 可以通过order进行排序"></flow>
 	</process>
 	
+	<!-- 配置流程图的结构, 目前不设计 -->
 	<process-img>
 	</process-img>
 </bpm-configuration>

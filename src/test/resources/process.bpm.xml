@@ -7,7 +7,7 @@
 		3. 网关
 		4. 任务 
 	-->
-	<process code="流程编码" version="版本" name="名称" businessID="属于全局的业务标识" description="描述" titleExpression="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name">
+	<process id="编码:版本" name="流程名称" pageID="属于全局的页面标识"  titleExpression="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name">
 		<!-- 开始事件, 一个流程中只能有一个开始 -->
 		<startEvent id="startEvent" name=""></startEvent>
 		<!-- 结束事件, 一个流程中可以有多个结束 -->
@@ -20,20 +20,20 @@
 			2. 自动任务, 可以自行推动流程流转, 例如子流程任务, SQL脚本任务, 定时任务, 邮件任务等 
 		-->
 		<!-- 用户任务 -->
-		<userTask id="userTask2" name="任务名称"  businessID="属于任务的业务标识, 优先级高于全局业务标识">
+		<userTask id="userTask2" name="任务名称"  pageID="属于任务的页面标识, 优先级高于全局页面标识"  timeLimitExpression="办理时限的表达式, 设置当前用户任务需要在多长时间内办理, 不配置则没有时限约束">
 			
 			<!-- 当前任务候选人配置 -->
 			<candidate>
-				<!-- 指派候选人的表达式 -->
-				<assigeeExpression multi="是否可以选择多个候选人" value="指派候选人的表达式, 多个表达式用;(分号)分隔开"></assigeeExpression>
-				<!-- 候选人进行审批的策略 -->
-				<approvalStrategy mode="具体审批的模式(单人操作/多人按百分比操作/多人按人数操作)" value="审批模式对应的配置值(百分比/人数)"></approvalStrategy>
-				<!-- 扩展配置 -->
-				<autoAssign value="是否自动指派候选人"></autoAssign>
-				<mandatoryDeclaration value="是否需要强制表态"></mandatoryDeclaration>
+				<!-- 候选人指派 -->
+				<assigee mode="选择候选人模式(只能选择一个候选人, 可以选择多个候选人)" expression="指派候选人的表达式, 多个表达式用;(分号)分隔开" 
+					autoAssign="是否自动指派候选人" autoAssignCount="自动选人时, 选择多少个人, 配置的值如果为-1, 或数量大于可选的人数, 则全部选择, 否则自动选择指定的人数量"></assigee>
+				<!-- 候选人审批 -->
+				<approval mode="具体审批的模式(单人操作, 多人按百分比操作, 多人按人数操作)" strategy="审批模式对应的配置值(百分比, 人数)" 
+					mandatoryDeclaration="是否需要强制表态"></approval>
 			</candidate>
 			
-			<!-- 任务内部支持的操作, 属于 -->
+			<!-- 在当前任务时, 可以执行的操作 -->
+			<option name="保存表单"></option>
 			<option name="退回到流程起点"></option>
 			<option name="退回申请人"></option>
 			<option name="退回上一环节"></option>
@@ -43,8 +43,14 @@
 			<option name="转办">
 				<candidate></candidate>
 			</option>
+			<option name="协办">
+				<candidate></candidate>
+			</option>
+			<option name="延长办理" ></option>
 			<option name="流程跳转"></option>
 			<option name="流程跟踪"></option>
+			<option name="流程结束"></option>
+			
 			
 			<!-- 前/后置监听器 -->
 			<listener type="pre" item="多个项之间用;(分号)分隔开"></listener>

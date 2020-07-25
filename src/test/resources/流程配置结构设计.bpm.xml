@@ -35,24 +35,23 @@
 			</candidate>
 			
 			<!-- 在当前任务时, 可以执行的操作 -->
-			<option type="" name="保存表单" alias="操作的别名"></option>
-			<option type="" name="退回到发起环节" alias="操作的别名"></option>
-			<option type="" name="退回发起人" alias="操作的别名"></option>
-			<option type="" name="退回上一环节" alias="操作的别名"></option>
-			<option type="" name="抄送" alias="操作的别名">
+			<option type="saveForm" name="保存表单"></option>
+			<option type="toInitiator" name="退回发起人"></option>
+			<option type="toPreLink" name="退回上一环节"></option>
+			<option type="sendCopy" name="抄送">
 				<candidate></candidate>
 			</option>
-			<option type="" name="转办" alias="操作的别名">
+			<option type="transfer" name="转办">
 				<candidate></candidate>
 			</option>
-			<option type="" name="协办" alias="操作的别名">
+			<option type="assist" name="协办">
 				<candidate></candidate>
 			</option>
-			<option type="" name="延长办理" times="可以延长办理几次, 默认值为1" maxDays="一次最多几天, 默认值为1" dayType="延长天数是工作日还是自然日, 默认值为工作日" >
+			<option type="extension" name="延长办理" times="可以延长办理几次, 默认值为1" maxDays="一次最多几天, 默认值为1" dayType="延长天数是工作日还是自然日, 默认值为工作日" >
 				<candidate></candidate>
 			</option>
-			<option type="" name="流程跟踪" alias="操作的别名"></option>
-			<option type="" name="流程结束" alias="操作的别名"></option>
+			<option type="tracking" name="流程跟踪"></option>
+			<option type="terminate" name="流程结束"></option>
 			
 			<!-- 前/后置监听器 -->
 			<listener type="pre" item="多个项之间用;(分号)分隔开"></listener>

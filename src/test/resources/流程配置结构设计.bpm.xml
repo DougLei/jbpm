@@ -7,7 +7,7 @@
 		3. 网关
 		4. 任务 
 	-->
-	<process id="编码:版本" name="流程名称" pageID="属于全局的页面标识"  titleExpression="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name">
+	<process id="编码:版本" name="流程名称" titleExpression="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name">
 		<!-- 开始事件, 一个流程中只能有一个开始 -->
 		<startEvent id="startEvent" name=""></startEvent>
 		<!-- 结束事件, 一个流程中可以有多个结束 -->

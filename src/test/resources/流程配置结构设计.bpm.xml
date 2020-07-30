@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpm-configuration>
 	<!-- 
-		流程配置结构, 核心主要包括以下四种组件:
-		1. 事件
-		2. 连线
-		3. 网关
-		4. 任务 
+		流程配置结构, 核心主要包括以下两种组件:
+		1. 连线
+		2. 任务, 包含两种类型:
+			2.1. 手动任务, 需要用户手动处理, 来推动流程流转, 例如用户任务
+			2.2. 自动任务, 可以自行推动流程流转, 例如开始任务, 结束任务, 并行任务, 排他任务, 包容任务, 子流程任务, SQL脚本任务, 定时任务, 邮件任务等 
 	-->
 	<process id="编码:版本" name="流程名称" titleExpression="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name">
-		<!-- 开始事件, 一个流程中只能有一个开始 -->
-		<startEvent id="startEvent" name=""></startEvent>
-		<!-- 结束事件, 一个流程中可以有多个结束 -->
-		<endEvent id="endEvent1" name=""></endEvent>
+		<!-- 开始任务, 一个流程中只能有一个开始 -->
+		<startTask id="startTask1" name=""></startTask>
+		<!-- 结束任务, 一个流程中可以有多个结束 -->
+		<endTask id="endTask1" name=""></endTask>
 		
 		
-		<!-- 
-			任务包含两种:
-			1. 手动任务, 需要用户手动处理, 来推动流程流转, 例如用户任务
-			2. 自动任务, 可以自行推动流程流转, 例如子流程任务, SQL脚本任务, 定时任务, 邮件任务等 
-		-->
 		<!-- 用户任务 -->
-		<userTask id="userTask2" name="任务名称"  pageID="属于任务的页面标识, 优先级高于全局页面标识"  
-			timeLimitExpression="办理时限的表达式(表达式中要能表达出是工作日还是自然日), 设置当前用户任务需要在多长时间内办理, 不配置则没有时限约束"
+		<userTask id="userTask2" name="任务名称" pageID="属于任务的页面标识, 优先级高于全局页面标识"  
+			timeLimitExpression="办理时限的表达式(表达式中要能表达出是工作日还是自然日), 设置当前用户任务需要在多长时间内办理, 不配置则没有时限约束" autoProcessingWhenOverdue="逾期后是否自动办理, 默认值为false"
 			allowActivation="当流程结束后再激活时, 是否允许选择从当前用户任务进行激活">
 			
 			<!-- 当前任务候选人相关配置 -->
@@ -52,7 +47,7 @@
 			</option>
 			<option type="tracking" name="流程跟踪"></option>
 			<option type="terminate" name="流程结束"></option>
-			<option type="urging" name="催办"></option><!-- 在超期后才会出现催办按钮 -->
+			<option type="urging" name="催办" auto="是否进行自动催办(一次), 默认为false"></option><!-- 在逾期后才会出现催办按钮 -->
 			
 			<!-- 前/后置监听器 -->
 			<listener type="pre" item="多个项之间用;(分号)分隔开"></listener>
@@ -60,7 +55,9 @@
 		</userTask>
 		
 		<!-- 子流程任务 -->
-		<processTask id="processTask1"></processTask>
+		<processTask id="processTask1">
+			<process></process>
+		</processTask>
 		<!-- SQL脚本任务 -->
 		<sqlTask id="sqlTask1"></sqlTask>
 		<!-- 定时任务 -->
@@ -69,19 +66,19 @@
 		<emailTask id="emailTask1"></emailTask>
 		
 		
-		<!-- 并行网关 -->
-		<parallelGateway id="parallelGateway1" name=""></parallelGateway>
-		<!-- 排他网关 -->
-		<exclusiveGateway id="exclusiveGateway1" name=""></exclusiveGateway>
-		<!-- 包容网关 -->
-		<inclusiveGateway id="inclusiveGateway1" name=""></inclusiveGateway>
+		<!-- 并行任务 -->
+		<parallelTask id="parallelTask1" name=""></parallelTask>
+		<!-- 排他任务 -->
+		<exclusiveTask id="exclusiveTask1" name=""></exclusiveTask>
+		<!-- 包容任务 -->
+		<inclusiveTask id="inclusiveTask1" name=""></inclusiveTask>
 		
 		
 		<!-- 连线, 可配置条件 -->
 		<flow id="flow1" name="启动流程" source="startEvent1" target="userTask1" conditionExpression="配置比较表达式" order="排序, 如果同一个source引出多条线, 可以通过order进行排序"></flow>
 	</process>
 	
-	<!-- 配置流程图的结构, 目前不设计 -->
+	<!-- 配置流程图的结构, 主要就是记录画布的长宽，以及各个节点的坐标，长宽 -->
 	<process-img>
 	</process-img>
 </bpm-configuration>

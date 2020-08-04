@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping-configuration>
+	<!-- createMode的值包括: none, create, drop_create, dynamic_update, 其中dynamic_update不建议在生产环境中使用, 默认为create -->
+	<!-- forceCreateMode的值同createMode, 表示强制, 没有默认值, 可以不配置, 该值可覆盖全局的tableCreateMode -->
+	<!-- forceCreateMode的优先级高于createMode -->
+	<table name="SYS_USER" class="com.douglei.orm.session.SysUser" createMode="create" forceCreateMode="">
+		<import-columns path=""/><!-- 从根路径查找, 要导入的列集合, 可以将所有表中的通用字段导入 -->
+		<columns>
+			<!-- dataType的值包括: string, nstring, char, nchar, byte, short, integer, long, float, double, date, clob, blob, 默认值为string -->
+			<!-- nullable默认值为true, validate默认值为false -->
+			<column name="id" oldName="NANE" property="id" dataType="string" primaryKey="true" length="30" precision="" nullable="true" unique="" defaultValue="" check="" fkTableName="" fkColumnName="" validate="true" />
+			<column oldName="NANE" descriptionName="姓名" property="name" dataType="string" length="30" validate="true" unique="true" />
+			<column name="age" property="age" dataType="integer" />
+			<column name="sex" property="sex" dataType="string" />
+		</columns>
+
+		<constraints>
+			<!-- type = PRIMARY_KEY, UNIQUE, DEFAULT_VALUE(value), CHECK(expression), FOREIGN_KEY(fkTableName, fkColumnName) -->
+			<constraint type="" value="" expression="" fkTableName="" fkColumnName="">
+				<column name="" />
+			</constraint>
+		</constraints>
+		
+		<indexes>
+			<index name="">
+				<createSql dialect=""></createSql>
+				<dropSql dialect=""></dropSql>
+			</index>
+		</indexes>
+		
+		<!-- 对主键的处理器, 如果不配置, 或不配置type均不起作用, type值包括: uuid32, uuid36, sequence, 或自定义的类(继承 {@link PrimaryKeyHandler}) -->
+		<primaryKeyHandler type="sequence">
+			<!-- 序列, 当上面的类型是sequence时, 该配置才生效 -->
+			<!-- name序列名, 如果不指定, 则系统自动生成一个 -->
+			<!-- 该序列会在表create时跟着create, 在表drop时跟着drop, 其余时候, 不会有任何处理 -->
+			<sequence name="">
+				<createSql></createSql><!-- 如果不配置, 则使用系统默认的创建语句 -->
+				<dropSql></dropSql><!-- 如果不配置, 则使用系统默认的删除语句 -->
+			</sequence>
+		</primaryKeyHandler>
+		
+		<!-- 验证器配置 -->
+		<validators>
+			<!-- name 列名 -->
+			<!-- regex 正则表达式 -->
+			<!-- notblank 不能为空字符串, 只要配置了该验证器, 则该列的值一定不能为空字符串, 和后面的true值无关系, 如果不需要验证则不要配置 -->
+			<validator name="id" regex="{'express':'express是必须配置的, 其他可以选择配置','multiline':'','message':'','i18nCode':''}" notBlank="true" />
+		</validators>
+	</table>
+</mapping-configuration>

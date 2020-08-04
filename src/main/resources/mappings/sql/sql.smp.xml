@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping-configuration>
+	<sql namespace="com.test">
+		<sql-content name="rs" dialect="">
+			select * from test
+			<include ref-name="xx" />
+		</sql-content>
+	
+		<content name="" dialect="" type="select"><!-- 如果不写, 默认是当前系统的dialect; 多种dialect, 用,分割; all表示所有类型的dialect -->
+			select * from sys_user 
+			
+			<include ref-name="rs" />
+			
+		<!-- 
+			defaultValue的一些内置值:
+				_currentDate
+				_uuid32
+				_uuid36
+			
+			<where>
+				<if test="age != null and age == 23">
+					and name = #{name, descriptionName=姓名, dataType=string, usePlaceholder=false, valuePrefix=', valueSuffix=', nullable=true, defaultValue=dv, validate=fales, legnth=10, precision=2}
+				</if>
+				<if test="age != null">
+					and name = 'DougLei'
+				</if>
+			</where>
+		-->	
+			
+		 <!-- 
+			<set>
+				<if test="age != null and age == 23">
+					name = #{name},
+				</if>
+				<if test="age == null">
+					name = 'DougLei',
+				</if>
+				<if test="age == null">
+					name = 'DougLei222',
+				</if>
+			</set>
+		-->	
+		
+		<!-- 	
+			<trim prefix="where" prefixoverride="" suffix="" suffixoverride="">
+				<if test="name == '哈哈'">
+					b
+				</if>
+			</trim> 
+		-->
+		
+		<!-- 
+			<switch>
+				<if test="age == null">
+					name = 'age is null',
+				</if>
+				<if test="age == null">
+					name = 'age not null',
+				</if>
+				<else>
+					and else 
+				</else>
+			</switch>
+		-->
+		
+		<!-- 
+			<foreach collection="users" alias="user" open="where id in (" separator="," close=")">
+				<if test="user.id == 1">
+					#{user.id, dataType=string}
+				</if>
+			</foreach>
+		-->	
+		
+			<foreach collection="userIds" alias="userId" open="where id in (" separator="," close=")">
+				<if test="userId == 1">
+					#{userId, dataType=string}
+				</if>
+			</foreach>
+			
+		
+		</content>
+	<!-- 	
+		<content name="execProcedure" type="procedure">
+			{call test_procedure (
+				#{id, dbType=VARCHAR, mode=in},
+				#{name, dbType=VARCHAR, mode=out}
+			)}
+		</content>
+	-->	
+	
+		<!-- 验证器配置 -->
+		<validators>
+			<!-- name 参数名 -->
+			<!-- regex 正则表达式 -->
+			<!-- notblank 不能为空字符串, 只要配置了该验证器, 则该列的值一定不能为空字符串, 和后面的true值无关系, 如果不需要验证则不要配置 -->
+			<validator name="id" regex="{'express':'express是必须配置的, 其他可以选择配置','multiline':'','message':'','i18nCode':''}" notBlank="true" />
+		</validators>
+	</sql>
+</mapping-configuration>

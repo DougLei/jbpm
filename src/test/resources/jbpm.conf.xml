@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration id="default">
 	<properties placeholderPrefix="${" placeholderSuffix="}">
 		<resource path="jdbc.properties" decryptValue="true"/><!-- decryptValue标识是否对配置文件中的数据进行解密, 默认值为false  -->
 	</properties>

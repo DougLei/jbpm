@@ -9,6 +9,11 @@
 	
 	<dependencies>
 		<dependency>
+		    <groupId>com.douglei</groupId>
+			<artifactId>jdb-orm</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.26</version>

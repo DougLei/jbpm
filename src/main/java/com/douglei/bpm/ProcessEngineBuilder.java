@@ -1,34 +1,68 @@
 package com.douglei.bpm;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
+import com.douglei.orm.configuration.environment.mapping.MappingType;
 import com.douglei.orm.configuration.impl.xml.XmlConfiguration;
+import com.douglei.orm.sessionfactory.SessionFactory;
+import com.douglei.orm.sessionfactory.dynamic.mapping.DynamicMapping;
+import com.douglei.tools.instances.scanner.FileScanner;
 
 /**
  * 流程引擎构建器
  * @author DougLei
  */
 public class ProcessEngineBuilder {
+	private static final String DEFAULT_CONFIGURATION_FILE_PATH = "jbpm.conf.xml"; // 默认的配置文件路径
 	
 	/**
-	 * 根据jdb-orm的配置文件, 构建流程引擎
-	 * @param jdbOrmConfigurationFile
+	 * 使用默认的jdb-orm配置文件, 构建流程引擎
 	 * @return
 	 */
-	public ProcessEngine build(String jdbOrmConfigurationFile) {
-		return build(jdbOrmConfigurationFile, null);
+	public ProcessEngine build() {
+		Configuration configuration = new XmlConfiguration(DEFAULT_CONFIGURATION_FILE_PATH);
+		return new ProcessEngine(configuration.buildSessionFactory());
 	}
 	
 	/**
-	 * 根据jdb-orm的配置文件, 以及外部传入的数据源, 构建流程引擎
-	 * @param jdbOrmConfigurationFile
-	 * @param exDataSource
+	 * 根据指定的jdb-orm配置文件, 构建流程引擎
+	 * @param configurationFilePath 配置文件路径
 	 * @return
 	 */
-	public ProcessEngine build(String jdbOrmConfigurationFile, ExternalDataSource exDataSource) {
-		Configuration configuration = new XmlConfiguration(jdbOrmConfigurationFile);
-		if(exDataSource != null)
-			configuration.setExternalDataSource(exDataSource);
+	public ProcessEngine build(String configurationFilePath) {
+		Configuration configuration = new XmlConfiguration(configurationFilePath);
 		return new ProcessEngine(configuration.buildSessionFactory());
+	}
+	
+	/**
+	 * 通过外部的数据源, 构建流程引擎
+	 * @param engineId 引擎的唯一标识, 在多数据源情况中可以使用, 当只有一个数据源时, 该参数可传入null
+	 * @param exDataSource 外部的数据源实例
+	 * @return
+	 */
+	public ProcessEngine build(String engineId, ExternalDataSource exDataSource) {
+		Configuration configuration = new XmlConfiguration(DEFAULT_CONFIGURATION_FILE_PATH);
+		configuration.setId(engineId);
+		configuration.setExternalDataSource(exDataSource);
+		return new ProcessEngine(configuration.buildSessionFactory());
+	}
+	
+	/**
+	 * 使用外部的 {@link SessionFactory}, 构建流程引擎
+	 * @param exSessionFactory 外部的 {@link SessionFactory} 实例
+	 * @param scanMappingFile 是否扫描(流程相关的)映射文件, 该值取决于传入参数exSessionFactory在构建时, 是否扫描过 {@link ProcessEngineBuilder#MAPPING_FILE_ROOT_PATH}
+	 * @return
+	 */
+	public ProcessEngine build(SessionFactory exSessionFactory, boolean scanMappingFile) {
+		if(scanMappingFile) {
+			List<String> mappingFiles = new FileScanner(MappingType.getMappingFileSuffixArray()).scan("jbpm-mappings");
+			List<DynamicMapping> dmEntities = new ArrayList<DynamicMapping>(mappingFiles.size());
+			mappingFiles.forEach(mappingFile -> dmEntities.add(new DynamicMapping(mappingFile)));
+			exSessionFactory.getDynamicMappingProcessor().batchAddMapping(dmEntities);
+		}
+		return new ProcessEngine(exSessionFactory);
 	}
 }

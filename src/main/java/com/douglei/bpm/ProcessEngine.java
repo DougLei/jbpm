@@ -20,4 +20,10 @@ public class ProcessEngine {
 	public String getId() {
 		return sf.getId();
 	}
+	
+	
+	// 获取RE的操作
+	// 获取RU的操作
+	// 获取HI的操作
+	
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration id="default">
+	<environment>
+		<mappings searchAll="false">
+			<mapping path="jbpm-mappings" />
+		</mappings>
+	</environment>
+</configuration>

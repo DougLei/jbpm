@@ -1,8 +1,5 @@
 package com.douglei.bpm;
 
-import com.douglei.bpm.component.hi.HistoryComponent;
-import com.douglei.bpm.component.re.RepositoryComponent;
-import com.douglei.bpm.component.ru.RuntimeComponent;
 import com.douglei.orm.sessionfactory.SessionFactory;
 
 /**
@@ -10,16 +7,17 @@ import com.douglei.orm.sessionfactory.SessionFactory;
  * @author DougLei
  */
 public class ProcessEngine {
-	private final String id; // 引擎唯一标识
-	private final RepositoryComponent repository;
-	private final RuntimeComponent runtime;
-	private final HistoryComponent history;
+	private String id; // 引擎唯一标识
+	private RepositoryModule repository;
+	private RuntimeModule runtime;
+	private HistoryModule history;
 	
 	ProcessEngine(SessionFactory sessionFactory){
 		this.id = sessionFactory.getId();
-		this.repository = new RepositoryComponent();
-		this.runtime = new RuntimeComponent();
-		this.history = new HistoryComponent();
+		SessionSource sessionSource = new SessionSource(sessionFactory);
+		this.repository = new RepositoryModule();
+		this.runtime = new RuntimeModule();
+		this.history = new HistoryModule();
 	}
 	
 	/**
@@ -34,7 +32,7 @@ public class ProcessEngine {
 	 * 获取Repository组件
 	 * @return
 	 */
-	public RepositoryComponent getRepository() {
+	public RepositoryModule getRepository() {
 		return repository;
 	}
 	
@@ -42,7 +40,7 @@ public class ProcessEngine {
 	 * 获取Runtime组件
 	 * @return
 	 */
-	public RuntimeComponent getRuntime() {
+	public RuntimeModule getRuntime() {
 		return runtime;
 	}
 	
@@ -50,7 +48,7 @@ public class ProcessEngine {
 	 * 获取History组件
 	 * @return
 	 */
-	public HistoryComponent getHistory() {
+	public HistoryModule getHistory() {
 		return history;
 	}
 }

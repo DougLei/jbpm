@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping-configuration>
+	<!-- 流程类型表 -->
 	<table name="BPM_RE_PROCTYPE" class="com.douglei.bpm.ProcessType" forceCreateMode="create">
 		<columns>
 			<column name="ID" property="id" dataType="integer" primaryKey="true" length="20" />
 			<column name="NAME" property="name" dataType="nstring" length="30" nullable="false" />
-			<column name="CREATE_USER_ID" property="createUserId" dataType="string" length="36" nullable="false" />
+			<column name="CREATE_USER_ID" property="createUserId" dataType="char" length="50" nullable="false" />
 			<column name="CREATE_DATE" property="createDate" dataType="date" nullable="false" />
-			<column name="LAST_UPDATE_USER_ID" property="lastUpdateUserId" dataType="string" length="36" nullable="false" />
+			<column name="LAST_UPDATE_USER_ID" property="lastUpdateUserId" dataType="char" length="50" nullable="false" />
 			<column name="LAST_UPDATE_DATE" property="lastUpdateDate" dataType="date" nullable="false" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>

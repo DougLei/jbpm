@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping-configuration>
+	<!-- 流程委托表 -->
+	<table name="BPM_RE_DELEGATION" class="" forceCreateMode="create">
+		<columns>
+			<column name="ID" property="id" dataType="integer" primaryKey="true" length="20" />
+			<column name="CLIENT_ID" property="clientId" dataType="char" length="50" nullable="false" />
+			<column name="TRUSTEE_ID" property="trusteeId" dataType="char" length="50" nullable="false" />
+			<column name="START_DATE" property="startDate" dataType="date" nullable="false" />
+			<column name="END_DATE" property="endDate" dataType="date" nullable="false" />
+			<column name="REASON" property="reason" dataType="nstring" length="100" nullable="false" />
+			<column name="CREATE_USER_ID" property="createUserId" dataType="char" length="50" nullable="false" />
+			<column name="CREATE_DATE" property="createDate" dataType="date" nullable="false" />
+			<column name="LAST_UPDATE_USER_ID" property="lastUpdateUserId" dataType="char" length="50" nullable="false" />
+			<column name="LAST_UPDATE_DATE" property="lastUpdateDate" dataType="date" nullable="false" />
+		</columns>
+		<primaryKeyHandler type="sequence"></primaryKeyHandler>
+	</table>
+</mapping-configuration>

@@ -76,7 +76,7 @@ class ProcessEngineBeanFactory {
 			Field[] fields;
 			for(Entry<Class<?>, Object> bean : BEAN_CONTAINER.entrySet()) {
 				currentClass = bean.getKey();
-				while(currentClass != Object.class) {
+				do{
 					fields = currentClass.getDeclaredFields();
 					if(fields.length > 0) {
 						for (Field field : fields) {
@@ -88,7 +88,7 @@ class ProcessEngineBeanFactory {
 						}
 					}
 					currentClass = currentClass.getSuperclass();
-				}
+				}while (currentClass != Object.class);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

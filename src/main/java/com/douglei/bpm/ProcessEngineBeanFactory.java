@@ -88,7 +88,7 @@ class ProcessEngineBeanFactory {
 						}
 					}
 					currentClass = currentClass.getSuperclass();
-				}while (currentClass != Object.class);
+				} while (currentClass != Object.class);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

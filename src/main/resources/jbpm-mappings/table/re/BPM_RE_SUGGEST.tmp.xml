@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping-configuration>
 	<!-- 流程常用意见表 -->
-	<table name="BPM_RE_SUGGEST" class="" forceCreateMode="create">
+	<table name="BPM_RE_SUGGEST" forceCreateMode="create">
 		<columns>
 			<column name="ID" property="id" dataType="integer" primaryKey="true" length="20" />
 			<column name="USER_ID" property="userId" dataType="char" length="50" nullable="false" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping-configuration>
 	<!-- 流程定义内容表 -->
-	<table name="BPM_RE_PROCDEF_CONTENT" class="" forceCreateMode="create">
+	<table name="BPM_RE_PROCDEF_CONTENT" forceCreateMode="create">
 		<columns>
 			<column name="ID" property="id" dataType="integer" primaryKey="true" length="20" />
 			<column name="REF_DEF_ID" property="refDefId" dataType="integer" length="20" />

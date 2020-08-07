@@ -1,23 +1,30 @@
 package com.douglei.bpm;
 
+import com.douglei.bpm.module.HistoryModule;
+import com.douglei.bpm.module.RepositoryModule;
+import com.douglei.bpm.module.RuntimeModule;
 import com.douglei.orm.sessionfactory.SessionFactory;
 
 /**
  * 流程引擎
  * @author DougLei
  */
+@ProcessEngineBean
 public class ProcessEngine {
-	private String id; // 引擎唯一标识
+	private String id;
+	
+	@ProcessEngineBeanField
 	private RepositoryModule repository;
+	
+	@ProcessEngineBeanField
 	private RuntimeModule runtime;
+	
+	@ProcessEngineBeanField
 	private HistoryModule history;
 	
-	ProcessEngine(SessionFactory sessionFactory){
-		this.id = sessionFactory.getId();
-		SessionSource sessionSource = new SessionSource(sessionFactory);
-		this.repository = new RepositoryModule();
-		this.runtime = new RuntimeModule();
-		this.history = new HistoryModule();
+	// 设置引擎的id值
+	void setId(String id) {
+		this.id = id;
 	}
 	
 	/**
@@ -29,7 +36,7 @@ public class ProcessEngine {
 	}
 	
 	/**
-	 * 获取Repository组件
+	 * 获取Repository模块
 	 * @return
 	 */
 	public RepositoryModule getRepository() {
@@ -37,7 +44,7 @@ public class ProcessEngine {
 	}
 	
 	/**
-	 * 获取Runtime组件
+	 * 获取Runtime模块
 	 * @return
 	 */
 	public RuntimeModule getRuntime() {
@@ -45,7 +52,7 @@ public class ProcessEngine {
 	}
 	
 	/**
-	 * 获取History组件
+	 * 获取History模块
 	 * @return
 	 */
 	public HistoryModule getHistory() {

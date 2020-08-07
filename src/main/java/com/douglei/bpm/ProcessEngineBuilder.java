@@ -24,7 +24,7 @@ public class ProcessEngineBuilder {
 	 */
 	public ProcessEngine build() {
 		Configuration configuration = new XmlConfiguration(DEFAULT_CONFIGURATION_FILE_PATH);
-		return new ProcessEngine(configuration.buildSessionFactory());
+		return new ProcessEngineBeanFactory(configuration.buildSessionFactory()).createBeans().getProcessEngine();
 	}
 	
 	/**
@@ -34,7 +34,7 @@ public class ProcessEngineBuilder {
 	 */
 	public ProcessEngine build(String configurationFilePath) {
 		Configuration configuration = new XmlConfiguration(configurationFilePath);
-		return new ProcessEngine(configuration.buildSessionFactory());
+		return new ProcessEngineBeanFactory(configuration.buildSessionFactory()).createBeans().getProcessEngine();
 	}
 	
 	/**
@@ -47,7 +47,7 @@ public class ProcessEngineBuilder {
 		Configuration configuration = new XmlConfiguration(DEFAULT_CONFIGURATION_FILE_PATH);
 		configuration.setId(engineId);
 		configuration.setExternalDataSource(exDataSource);
-		return new ProcessEngine(configuration.buildSessionFactory());
+		return new ProcessEngineBeanFactory(configuration.buildSessionFactory()).createBeans().getProcessEngine();
 	}
 	
 	/**
@@ -63,6 +63,6 @@ public class ProcessEngineBuilder {
 			mappingFiles.forEach(mappingFile -> dmEntities.add(new DynamicMapping(mappingFile)));
 			exSessionFactory.getDynamicMappingProcessor().batchAddMapping(dmEntities);
 		}
-		return new ProcessEngine(exSessionFactory);
+		return new ProcessEngineBeanFactory(exSessionFactory).createBeans().getProcessEngine();
 	}
 }

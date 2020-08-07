@@ -22,6 +22,8 @@ public class ProcessEngine {
 	@ProcessEngineField
 	private HistoryModule history;
 	
+	ProcessEngine(){}
+	
 	// 设置引擎的id值
 	void setId(String id) {
 		this.id = id;

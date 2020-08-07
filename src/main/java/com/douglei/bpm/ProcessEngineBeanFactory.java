@@ -30,7 +30,7 @@ class ProcessEngineBeanFactory {
 	 */
 	public ProcessEngineBeanFactory createBeans() {
 		initBeanContainer();
-		setBeanFields();
+		setBeanField();
 		return this;
 	}
 	
@@ -68,9 +68,9 @@ class ProcessEngineBeanFactory {
 	}
 	
 	/**
-	 * 设置Bean容器中每个Bean的属性实例, 完成依赖注入
+	 * 设置Bean容器中每个Bean的属性实例
 	 */
-	private void setBeanFields() {
+	private void setBeanField() {
 		try {
 			Class<?> currentClass;
 			Field[] fields;

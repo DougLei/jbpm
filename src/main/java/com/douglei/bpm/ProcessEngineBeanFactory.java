@@ -13,7 +13,6 @@ import com.douglei.orm.context.TransactionProxyInterceptor;
 import com.douglei.orm.context.transaction.component.Transaction;
 import com.douglei.orm.context.transaction.component.TransactionComponent;
 import com.douglei.orm.context.transaction.component.TransactionComponentEntity;
-import com.douglei.orm.sessionfactory.SessionFactory;
 import com.douglei.tools.instances.scanner.ClassScanner;
 import com.douglei.tools.utils.reflect.ClassLoadUtil;
 import com.douglei.tools.utils.reflect.ConstructorUtil;
@@ -23,14 +22,8 @@ import com.douglei.tools.utils.reflect.ConstructorUtil;
  * @author DougLei
  */
 class ProcessEngineBeanFactory {
-	private SessionFactory sessionFactory;
-	
 	private final Map<Class<?>, Object> BEAN_CONTAINER = new HashMap<Class<?>, Object>(64);
 	
-	public ProcessEngineBeanFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-
 	/**
 	 * 创建所有流程引擎用到的bean集合
 	 * @return
@@ -84,10 +77,10 @@ class ProcessEngineBeanFactory {
 			for(Entry<Class<?>, Object> bean : BEAN_CONTAINER.entrySet()) {
 				currentClass = bean.getKey();
 				while(currentClass != Object.class) {
-					fields = currentClass.getFields();
+					fields = currentClass.getDeclaredFields();
 					if(fields.length > 0) {
 						for (Field field : fields) {
-							if(field.getAnnotation(ProcessEngineBeanField.class) != null) {
+							if(field.getAnnotation(ProcessEngineField.class) != null) {
 								field.setAccessible(true);
 								field.set(bean.getValue(), BEAN_CONTAINER.get(field.getType()));
 								field.setAccessible(false);
@@ -108,18 +101,5 @@ class ProcessEngineBeanFactory {
 	 */
 	public ProcessEngine getProcessEngine() {
 		return (ProcessEngine) BEAN_CONTAINER.get(ProcessEngine.class);
-	}
-	
-	/**
-	 * 获取指定clz的实例
-	 * @param clz
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	<T> T get(Class<T> clz) {
-		Object bean = BEAN_CONTAINER.get(clz);
-		if(bean != null)
-			return (T) bean;
-		return null;
 	}
 }

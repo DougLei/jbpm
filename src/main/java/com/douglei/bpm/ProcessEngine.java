@@ -13,13 +13,13 @@ import com.douglei.orm.sessionfactory.SessionFactory;
 public class ProcessEngine {
 	private String id;
 	
-	@ProcessEngineBeanField
+	@ProcessEngineField
 	private RepositoryModule repository;
 	
-	@ProcessEngineBeanField
+	@ProcessEngineField
 	private RuntimeModule runtime;
 	
-	@ProcessEngineBeanField
+	@ProcessEngineField
 	private HistoryModule history;
 	
 	// 设置引擎的id值

@@ -24,7 +24,7 @@ public class ProcessEngineBuilder {
 	 */
 	public ProcessEngine build() {
 		Configuration configuration = new XmlConfiguration(DEFAULT_CONFIGURATION_FILE_PATH);
-		return new ProcessEngineBeanFactory(configuration.buildSessionFactory()).createBeans().getProcessEngine();
+		return build_(configuration.buildSessionFactory());
 	}
 	
 	/**
@@ -34,7 +34,7 @@ public class ProcessEngineBuilder {
 	 */
 	public ProcessEngine build(String configurationFilePath) {
 		Configuration configuration = new XmlConfiguration(configurationFilePath);
-		return new ProcessEngineBeanFactory(configuration.buildSessionFactory()).createBeans().getProcessEngine();
+		return build_(configuration.buildSessionFactory());
 	}
 	
 	/**
@@ -47,7 +47,7 @@ public class ProcessEngineBuilder {
 		Configuration configuration = new XmlConfiguration(DEFAULT_CONFIGURATION_FILE_PATH);
 		configuration.setId(engineId);
 		configuration.setExternalDataSource(exDataSource);
-		return new ProcessEngineBeanFactory(configuration.buildSessionFactory()).createBeans().getProcessEngine();
+		return build_(configuration.buildSessionFactory());
 	}
 	
 	/**
@@ -63,6 +63,17 @@ public class ProcessEngineBuilder {
 			mappingFiles.forEach(mappingFile -> dmEntities.add(new DynamicMapping(mappingFile)));
 			exSessionFactory.getDynamicMappingProcessor().batchAddMapping(dmEntities);
 		}
-		return new ProcessEngineBeanFactory(exSessionFactory).createBeans().getProcessEngine();
+		return build_(exSessionFactory);
+	}
+
+	/**
+	 * 构建流程引擎
+	 * @param sessionFactory
+	 * @return
+	 */
+	private ProcessEngine build_(SessionFactory sessionFactory) {
+		ProcessEngine engine = new ProcessEngineBeanFactory().createBeans().getProcessEngine();
+		engine.setId(sessionFactory.getId());
+		return engine;
 	}
 }

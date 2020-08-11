@@ -9,6 +9,9 @@ import java.util.Map.Entry;
 
 import com.douglei.aop.ProxyBeanContext;
 import com.douglei.aop.ProxyMethod;
+import com.douglei.bpm.module.HistoryModule;
+import com.douglei.bpm.module.RepositoryModule;
+import com.douglei.bpm.module.RuntimeModule;
 import com.douglei.orm.context.TransactionProxyInterceptor;
 import com.douglei.orm.context.transaction.component.Transaction;
 import com.douglei.orm.context.transaction.component.TransactionComponent;
@@ -24,14 +27,9 @@ import com.douglei.tools.utils.reflect.ConstructorUtil;
 class ProcessEngineBeanFactory {
 	private final Map<Class<?>, Object> BEAN_CONTAINER = new HashMap<Class<?>, Object>(64);
 	
-	/**
-	 * 创建所有流程引擎用到的bean集合
-	 * @return
-	 */
-	public ProcessEngineBeanFactory createBeans() {
+	ProcessEngineBeanFactory() {
 		initBeanContainer();
 		setBeanField();
-		return this;
 	}
 	
 	/**
@@ -96,10 +94,12 @@ class ProcessEngineBeanFactory {
 	}
 	
 	/**
-	 * 获取流程引擎实例
-	 * @return
+	 * 设置引擎中的属性
+	 * @param engine
 	 */
-	public ProcessEngine getProcessEngine() {
-		return (ProcessEngine) BEAN_CONTAINER.get(ProcessEngine.class);
+	void setProcessEngineFields(ProcessEngine engine) {
+		engine.setRepository((RepositoryModule)BEAN_CONTAINER.get(RepositoryModule.class));
+		engine.setRuntime((RuntimeModule)BEAN_CONTAINER.get(RuntimeModule.class));
+		engine.setHistory((HistoryModule)BEAN_CONTAINER.get(HistoryModule.class));
 	}
 }

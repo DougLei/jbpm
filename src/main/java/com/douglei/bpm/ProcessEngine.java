@@ -9,28 +9,28 @@ import com.douglei.orm.sessionfactory.SessionFactory;
  * 流程引擎
  * @author DougLei
  */
-@ProcessEngineBean
-public class ProcessEngine {
+public final class ProcessEngine {
 	private String id;
-	
-	@ProcessEngineField
 	private RepositoryModule repository;
-	
-	@ProcessEngineField
 	private RuntimeModule runtime;
-	
-	@ProcessEngineField
 	private HistoryModule history;
 	
-	ProcessEngine(){}
-	
-	// 设置引擎的id值
-	void setId(String id) {
+	ProcessEngine(String id) {
 		this.id = id;
 	}
 	
+	void setRepository(RepositoryModule repository) {
+		this.repository = repository;
+	}
+	void setRuntime(RuntimeModule runtime) {
+		this.runtime = runtime;
+	}
+	void setHistory(HistoryModule history) {
+		this.history = history;
+	}
+
 	/**
-	 * 获取引擎唯一标识, 该标识引用{@link SessionFactory#getId()}
+	 * 获取引擎唯一标识, 该标识引用{@link SessionFactory} 的id
 	 * @return
 	 */
 	public String getId() {

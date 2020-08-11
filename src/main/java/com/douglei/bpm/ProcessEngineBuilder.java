@@ -7,6 +7,7 @@ import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
 import com.douglei.orm.configuration.environment.mapping.MappingType;
 import com.douglei.orm.configuration.impl.xml.XmlConfiguration;
+import com.douglei.orm.context.SessionFactoryRegister;
 import com.douglei.orm.sessionfactory.SessionFactory;
 import com.douglei.orm.sessionfactory.dynamic.mapping.DynamicMapping;
 import com.douglei.tools.instances.scanner.FileScanner;
@@ -17,53 +18,54 @@ import com.douglei.tools.instances.scanner.FileScanner;
  */
 public class ProcessEngineBuilder {
 	private static final String DEFAULT_CONFIGURATION_FILE_PATH = "jbpm.conf.xml"; // 默认的配置文件路径
+	private static final String MAPPING_FILE_ROOT_PATH = "jbpm-mappings"; // 工作流引擎相关的mapping文件根路径
+	private ProcessEngine engine;
 	
 	/**
-	 * 使用默认的jdb-orm配置文件, 构建流程引擎
-	 * @return
+	 * 使用默认的jdb-orm配置文件, 创建SessionFactory实例
+	 * @return 将返回的SessionFactory实例, 使用 {@link SessionFactoryRegister}进行注册
 	 */
-	public ProcessEngine build() {
-		Configuration configuration = new XmlConfiguration(DEFAULT_CONFIGURATION_FILE_PATH);
-		return build_(configuration.buildSessionFactory());
+	public SessionFactory createSessionFactory() {
+		return createSessionFactory(DEFAULT_CONFIGURATION_FILE_PATH);
 	}
 	
 	/**
-	 * 根据指定的jdb-orm配置文件, 构建流程引擎
+	 * 根据指定的jdb-orm配置文件, 创建SessionFactory实例
 	 * @param configurationFilePath 配置文件路径
-	 * @return
+	 * @return 将返回的SessionFactory实例, 使用 {@link SessionFactoryRegister}进行注册
 	 */
-	public ProcessEngine build(String configurationFilePath) {
+	public SessionFactory createSessionFactory(String configurationFilePath) {
 		Configuration configuration = new XmlConfiguration(configurationFilePath);
-		return build_(configuration.buildSessionFactory());
+		return configuration.buildSessionFactory();
 	}
 	
 	/**
-	 * 通过外部的数据源, 构建流程引擎
+	 * 通过外部的数据源, 创建SessionFactory实例
 	 * @param engineId 引擎的唯一标识, 在多数据源情况中可以使用, 当只有一个数据源时, 该参数可传入null
 	 * @param exDataSource 外部的数据源实例
-	 * @return
+	 * @return 将返回的SessionFactory实例, 使用 {@link SessionFactoryRegister}进行注册
 	 */
-	public ProcessEngine build(String engineId, ExternalDataSource exDataSource) {
+	public SessionFactory createSessionFactory(String engineId, ExternalDataSource exDataSource) {
 		Configuration configuration = new XmlConfiguration(DEFAULT_CONFIGURATION_FILE_PATH);
 		configuration.setId(engineId);
 		configuration.setExternalDataSource(exDataSource);
-		return build_(configuration.buildSessionFactory());
+		return configuration.buildSessionFactory();
 	}
 	
 	/**
-	 * 使用外部的 {@link SessionFactory}, 构建流程引擎
+	 * 使用外部的 {@link SessionFactory}, 创建SessionFactory实例
 	 * @param exSessionFactory 外部的 {@link SessionFactory} 实例
 	 * @param scanMappingFile 是否扫描(流程相关的)映射文件, 该值取决于传入参数exSessionFactory在构建时, 是否扫描过 {@link ProcessEngineBuilder#MAPPING_FILE_ROOT_PATH}
-	 * @return
+	 * @return 将返回的SessionFactory实例, 使用 {@link SessionFactoryRegister}进行注册, 如传入的exSessionFactory已经注册过, 则可以不用注册
 	 */
-	public ProcessEngine build(SessionFactory exSessionFactory, boolean scanMappingFile) {
+	public SessionFactory createSessionFactory(SessionFactory exSessionFactory, boolean scanMappingFile) {
 		if(scanMappingFile) {
-			List<String> mappingFiles = new FileScanner(MappingType.getMappingFileSuffixArray()).scan("jbpm-mappings");
+			List<String> mappingFiles = new FileScanner(MappingType.getMappingFileSuffixArray()).scan(MAPPING_FILE_ROOT_PATH);
 			List<DynamicMapping> dmEntities = new ArrayList<DynamicMapping>(mappingFiles.size());
 			mappingFiles.forEach(mappingFile -> dmEntities.add(new DynamicMapping(mappingFile)));
 			exSessionFactory.getDynamicMappingProcessor().batchAddMapping(dmEntities);
 		}
-		return build_(exSessionFactory);
+		return exSessionFactory;
 	}
 
 	/**
@@ -71,9 +73,12 @@ public class ProcessEngineBuilder {
 	 * @param sessionFactory
 	 * @return
 	 */
-	private ProcessEngine build_(SessionFactory sessionFactory) {
-		ProcessEngine engine = new ProcessEngineBeanFactory().createBeans().getProcessEngine();
-		engine.setId(sessionFactory.getId());
+	public ProcessEngine build(SessionFactory sessionFactory) {
+		if(engine == null) {
+			ProcessEngineBeanFactory factory = new ProcessEngineBeanFactory();
+			engine = new ProcessEngine(sessionFactory.getId());
+			factory.setProcessEngineFields(engine);
+		}
 		return engine;
 	}
 }

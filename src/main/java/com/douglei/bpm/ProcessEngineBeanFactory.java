@@ -12,6 +12,7 @@ import com.douglei.aop.ProxyMethod;
 import com.douglei.bpm.module.HistoryModule;
 import com.douglei.bpm.module.RepositoryModule;
 import com.douglei.bpm.module.RuntimeModule;
+import com.douglei.bpm.module.test.TestModule;
 import com.douglei.orm.context.TransactionProxyInterceptor;
 import com.douglei.orm.context.transaction.component.Transaction;
 import com.douglei.orm.context.transaction.component.TransactionComponent;
@@ -101,5 +102,7 @@ class ProcessEngineBeanFactory {
 		engine.setRepository((RepositoryModule)BEAN_CONTAINER.get(RepositoryModule.class));
 		engine.setRuntime((RuntimeModule)BEAN_CONTAINER.get(RuntimeModule.class));
 		engine.setHistory((HistoryModule)BEAN_CONTAINER.get(HistoryModule.class));
+		
+		engine.setTest((TestModule)BEAN_CONTAINER.get(TestModule.class));
 	}
 }

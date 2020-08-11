@@ -13,10 +13,11 @@ public class Test1 {
 	public void init() {
 		ProcessEngineBuilder peBuilder = new ProcessEngineBuilder();
 		SessionFactory factory = peBuilder.createSessionFactory();
-		new SessionFactoryRegister().registerDefaultSessionFactory(factory);
+		new SessionFactoryRegister().registerSessionFactory(factory);
 		
 		ProcessEngine engine = peBuilder.build(factory);
 		
 		System.out.println(engine);
+		engine.getTest().countQueryTest();
 	}
 }

@@ -3,6 +3,7 @@ package com.douglei.bpm;
 import com.douglei.bpm.module.HistoryModule;
 import com.douglei.bpm.module.RepositoryModule;
 import com.douglei.bpm.module.RuntimeModule;
+import com.douglei.bpm.module.test.TestModule;
 import com.douglei.orm.sessionfactory.SessionFactory;
 
 /**
@@ -60,4 +61,17 @@ public final class ProcessEngine {
 	public HistoryModule getHistory() {
 		return history;
 	}
+	
+	
+	// --------------------------------------------------------------------------------------
+	// 测试用
+	// --------------------------------------------------------------------------------------
+	private TestModule test;
+	public TestModule getTest() {
+		return test;
+	}
+	void setTest(TestModule test) {
+		this.test = test;
+	}
+	// --------------------------------------------------------------------------------------
 }

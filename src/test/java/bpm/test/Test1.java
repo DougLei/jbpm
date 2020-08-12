@@ -16,8 +16,6 @@ public class Test1 {
 		new SessionFactoryRegister().registerSessionFactory(factory);
 		
 		ProcessEngine engine = peBuilder.build(factory);
-		
 		System.out.println(engine);
-		engine.getTest().countQueryTest();
 	}
 }

@@ -1,4 +1,4 @@
-package com.douglei.bpm.module;
+package com.douglei.bpm.module.runtime;
 
 import com.douglei.bpm.ProcessEngineBean;
 import com.douglei.orm.context.SessionContext;

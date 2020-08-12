@@ -1,4 +1,4 @@
-package com.douglei.bpm.module;
+package com.douglei.bpm.module.repository;
 
 import com.douglei.bpm.ProcessEngineBean;
 
@@ -7,6 +7,6 @@ import com.douglei.bpm.ProcessEngineBean;
  * @author DougLei
  */
 @ProcessEngineBean
-public class HistoryModule {
-
+public class RepositoryModule {
+	
 }

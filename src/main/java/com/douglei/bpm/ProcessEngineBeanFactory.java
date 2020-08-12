@@ -26,6 +26,7 @@ import com.douglei.tools.utils.reflect.ConstructorUtil;
  * @author DougLei
  */
 class ProcessEngineBeanFactory {
+	private static final String SCAN_ROOT_PACKAGE = "com.douglei.bpm"; // 要扫描的根包
 	private final Map<Class<?>, Object> BEAN_CONTAINER = new HashMap<Class<?>, Object>(64);
 	
 	ProcessEngineBeanFactory() {
@@ -41,7 +42,7 @@ class ProcessEngineBeanFactory {
 	 * 找到有 {@link ProcessEngineBean} 的类, 将其实例化, 存到 BEAN_CONTAINER 容器中
 	 */
 	private void initBeanContainer() {
-		List<String> classes = new ClassScanner().scan("com.douglei.bpm");
+		List<String> classes = new ClassScanner().scan(SCAN_ROOT_PACKAGE);
 		Class<?> loadClass = null;
 		Method[] declareMethods = null;
 		for (String clz : classes) {

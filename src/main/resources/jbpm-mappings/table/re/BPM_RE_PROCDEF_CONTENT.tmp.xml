@@ -4,7 +4,7 @@
 	<table name="BPM_RE_PROCDEF_CONTENT" forceCreateMode="create">
 		<columns>
 			<column name="ID" property="id" dataType="integer" primaryKey="true" length="20" />
-			<column name="REF_DEF_ID" property="refDefId" dataType="integer" length="20" />
+			<column name="REF_DEF_ID" property="refDefId" dataType="integer" length="20" nullable="false"/>
 			<column name="TYPE" property="type" dataType="integer" length="1" nullable="false" />
 			<column name="CONTENT" property="content" dataType="blob" nullable="false" />
 		</columns>

@@ -4,11 +4,11 @@
 	<table name="BPM_RE_SUGGEST" forceCreateMode="create">
 		<columns>
 			<column name="ID" property="id" dataType="integer" primaryKey="true" length="20" />
-			<column name="USER_ID" property="userId" dataType="char" length="50" nullable="false" />
+			<column name="USER_" property="user_" dataType="char" length="50" />
 			<column name="CONTENT" property="content" dataType="nstring" length="300" nullable="false" />
-			<column name="CREATE_USER_ID" property="createUserId" dataType="char" length="50" nullable="false" />
+			<column name="CREATE_USER" property="createUser" dataType="char" length="50" />
 			<column name="CREATE_DATE" property="createDate" dataType="date" nullable="false" />
-			<column name="LAST_UPDATE_USER_ID" property="lastUpdateUserId" dataType="char" length="50" nullable="false" />
+			<column name="LAST_UPDATE_USER" property="lastUpdateUser" dataType="char" length="50" />
 			<column name="LAST_UPDATE_DATE" property="lastUpdateDate" dataType="date" nullable="false" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>

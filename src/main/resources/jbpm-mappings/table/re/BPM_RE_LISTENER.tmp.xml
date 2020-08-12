@@ -7,9 +7,9 @@
 			<column name="NAME" property="name" dataType="nstring" length="60" nullable="false" />
 			<column name="TYPE" property="type" dataType="integer" length="2" nullable="false" />
 			<column name="TERM" property="term" dataType="string" length="150" nullable="false" />
-			<column name="CREATE_USER_ID" property="createUserId" dataType="char" length="50" nullable="false" />
+			<column name="CREATE_USER" property="createUser" dataType="char" length="50" />
 			<column name="CREATE_DATE" property="createDate" dataType="date" nullable="false" />
-			<column name="LAST_UPDATE_USER_ID" property="lastUpdateUserId" dataType="char" length="50" nullable="false" />
+			<column name="LAST_UPDATE_USER" property="lastUpdateUser" dataType="char" length="50" />
 			<column name="LAST_UPDATE_DATE" property="lastUpdateDate" dataType="date" nullable="false" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>

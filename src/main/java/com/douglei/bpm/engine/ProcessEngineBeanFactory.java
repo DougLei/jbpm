@@ -1,4 +1,4 @@
-package com.douglei.bpm;
+package com.douglei.bpm.engine;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -9,6 +9,9 @@ import java.util.Map.Entry;
 
 import com.douglei.aop.ProxyBeanContext;
 import com.douglei.aop.ProxyMethod;
+import com.douglei.bpm.ProcessEngineBean;
+import com.douglei.bpm.ProcessEngineField;
+import com.douglei.bpm.ProcessEngineTransactionBean;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
@@ -47,7 +50,7 @@ class ProcessEngineBeanFactory {
 		for (String clz : classes) {
 			loadClass = ClassLoadUtil.loadClass(clz);
 			
-			if(loadClass.getAnnotation(TransactionComponent.class) != null) {
+			if(loadClass.getAnnotation(ProcessEngineTransactionBean.class) != null) {
 				declareMethods = loadClass.getDeclaredMethods();
 				
 				TransactionComponentEntity transactionComponentEntity = null;

@@ -1,6 +1,8 @@
 package com.douglei.bpm.module.repository;
 
 import com.douglei.bpm.ProcessEngineBean;
+import com.douglei.bpm.ProcessEngineField;
+import com.douglei.bpm.module.repository.type.ProcessTypeService;
 
 /**
  * 
@@ -9,4 +11,6 @@ import com.douglei.bpm.ProcessEngineBean;
 @ProcessEngineBean
 public class RepositoryModule {
 	
+	@ProcessEngineField
+	private ProcessTypeService processTypeService;
 }

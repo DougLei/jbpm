@@ -9,8 +9,8 @@
 			<column name="TERM" property="term" dataType="string" length="150" nullable="false" />
 			<column name="CREATE_USER" property="createUser" dataType="char" length="50" />
 			<column name="CREATE_DATE" property="createDate" dataType="date" nullable="false" />
-			<column name="LAST_UPDATE_USER" property="lastUpdateUser" dataType="char" length="50" />
-			<column name="LAST_UPDATE_DATE" property="lastUpdateDate" dataType="date" nullable="false" />
+			<column name="UPDATE_USER" property="updateUser" dataType="char" length="50" />
+			<column name="UPDATE_DATE" property="updateDate" dataType="date" nullable="false" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

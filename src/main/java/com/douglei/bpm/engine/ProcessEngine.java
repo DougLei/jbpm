@@ -1,4 +1,4 @@
-package com.douglei.bpm;
+package com.douglei.bpm.engine;
 
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;

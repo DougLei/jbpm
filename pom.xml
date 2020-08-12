@@ -33,7 +33,11 @@
 			<artifactId>logback-access</artifactId>
 			<version>1.2.3</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>com.douglei</groupId>
+			<artifactId>ji18n</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>		
 		<dependency>
 		    <groupId>ognl</groupId>
 		    <artifactId>ognl</artifactId>

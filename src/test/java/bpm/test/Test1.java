@@ -2,8 +2,8 @@ package bpm.test;
 
 import org.junit.Test;
 
-import com.douglei.bpm.ProcessEngine;
-import com.douglei.bpm.ProcessEngineBuilder;
+import com.douglei.bpm.engine.ProcessEngine;
+import com.douglei.bpm.engine.ProcessEngineBuilder;
 import com.douglei.orm.context.SessionFactoryRegister;
 import com.douglei.orm.sessionfactory.SessionFactory;
 

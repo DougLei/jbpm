@@ -1,4 +1,4 @@
-package com.douglei.bpm.module;
+package com.douglei.bpm.module.common;
 
 import java.util.Date;
 
@@ -30,6 +30,7 @@ public abstract class Entity {
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+		setUpdateDate(createDate);
 	}
 	public String getUpdateUser() {
 		return updateUser;

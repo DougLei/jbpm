@@ -1,6 +1,6 @@
 package com.douglei.bpm.module.repository.type;
 
-import com.douglei.bpm.module.Entity;
+import com.douglei.bpm.module.common.Entity;
 
 /**
  * 流程类型实体

@@ -11,6 +11,13 @@ import com.douglei.bpm.module.repository.type.ProcessTypeService;
 @ProcessEngineBean
 public class RepositoryModule {
 	
+	/**
+	 * 流程类型服务类
+	 */
 	@ProcessEngineField
 	private ProcessTypeService processTypeService;
+	
+	public ProcessTypeService getProcessTypeService() {
+		return processTypeService;
+	}
 }

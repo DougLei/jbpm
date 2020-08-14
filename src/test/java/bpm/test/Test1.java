@@ -5,11 +5,10 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.alibaba.fastjson.JSONObject;
 import com.douglei.bpm.engine.ProcessEngine;
 import com.douglei.bpm.engine.ProcessEngineBuilder;
 import com.douglei.bpm.module.repository.type.ProcessTypeEntity;
-import com.douglei.i18n.I18nMessage;
+import com.douglei.i18n.Message;
 import com.douglei.orm.context.SessionFactoryRegister;
 import com.douglei.orm.sessionfactory.SessionFactory;
 
@@ -31,7 +30,7 @@ public class Test1 {
 		type.setName("测试类型");
 		type.setCreateDate(new Date());
 		
-		I18nMessage message = engine.getRepository().getProcessTypeService().save(type);
-		System.out.println(JSONObject.toJSONString(message.getMessages()));
+		Message message = engine.getRepository().getProcessTypeService().save(type);
+		System.out.println(message.getMessage());
 	}
 }

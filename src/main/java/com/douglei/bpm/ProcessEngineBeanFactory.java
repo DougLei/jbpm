@@ -1,4 +1,4 @@
-package com.douglei.bpm.engine;
+package com.douglei.bpm;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -9,9 +9,9 @@ import java.util.Map.Entry;
 
 import com.douglei.aop.ProxyBeanContext;
 import com.douglei.aop.ProxyMethod;
-import com.douglei.bpm.ProcessEngineBean;
-import com.douglei.bpm.ProcessEngineField;
-import com.douglei.bpm.ProcessEngineTransactionBean;
+import com.douglei.bpm.annotation.ProcessEngineBean;
+import com.douglei.bpm.annotation.ProcessEngineField;
+import com.douglei.bpm.annotation.ProcessEngineTransactionBean;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;

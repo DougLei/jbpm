@@ -2,7 +2,7 @@ package com.douglei.bpm.module.repository.type;
 
 import java.util.Arrays;
 
-import com.douglei.bpm.ProcessEngineTransactionBean;
+import com.douglei.bpm.annotation.ProcessEngineTransactionBean;
 import com.douglei.i18n.I18nContext;
 import com.douglei.i18n.Message;
 import com.douglei.orm.context.SessionContext;

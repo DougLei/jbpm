@@ -22,11 +22,11 @@
 			<!-- 当前任务候选人相关配置 -->
 			<candidate>
 				<!-- 候选人指派策略 -->
-				<assignStrategy mode="指派候选人模式(只能选择一个候选人, 可以选择多个候选人)" expression="指派候选人的表达式, 多个表达式用;(分号)分隔开" 
-					auto="是否自动指派候选人" autoValue="自动选人时, 选择多少个人, 配置的值如果小于1, 或数量大于可选的人数, 则全部选择, 否则选择指定的数量候选人, 默认值为1"></assignStrategy>
+				<assignPolicy mode="指派候选人模式(只能选择一个候选人, 可以选择多个候选人)" expression="指派候选人的表达式, 多个表达式用;(分号)分隔开" 
+					auto="是否自动指派候选人" autoValue="自动选人时, 选择多少个人, 配置的值如果小于1, 或数量大于可选的人数, 则全部选择, 否则选择指定的数量候选人, 默认值为1"></assignPolicy>
 				<!-- 候选人审批策略 -->
-				<approvalStrategy mode="具体审批的模式(单人操作, 多人按百分比操作, 多人按人数操作)" modeValue="审批模式对应的配置值(百分比, 人数)" 
-					mandatoryDeclaration="是否需要强制表态"></approvalStrategy>
+				<approvalPolicy mode="具体审批的模式(单人操作, 多人按百分比操作, 多人按人数操作)" modeValue="审批模式对应的配置值(百分比, 人数)" 
+					mandatoryDeclaration="是否需要强制表态"></approvalPolicy>
 			</candidate>
 			
 			<!-- 在当前任务时, 可以执行的操作 -->

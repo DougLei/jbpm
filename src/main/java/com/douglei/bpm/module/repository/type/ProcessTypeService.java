@@ -1,7 +1,6 @@
 package com.douglei.bpm.module.repository.type;
 
 import java.util.Arrays;
-import java.util.List;
 
 import com.douglei.bpm.annotation.ProcessEngineTransactionBean;
 import com.douglei.bpm.module.common.Service;
@@ -53,27 +52,6 @@ public class ProcessTypeService extends Service{
 			SessionContext.getTableSession().delete(type);
 		return result;
 	}
-	
-	/**
-	 * 查询
-	 * @param type
-	 */
-	@Transaction
-	public List<ProcessType> query(ProcessType condition) {
-		
-		return null;
-	}
-	
-	/**
-	 * 查询
-	 * @param type
-	 */
-	@Transaction
-	public ProcessType uniqueQuery(ProcessType condition) {
-		
-		return null;
-	}
-	
 	
 	/**
 	 * code验证器, 验证code是否重复

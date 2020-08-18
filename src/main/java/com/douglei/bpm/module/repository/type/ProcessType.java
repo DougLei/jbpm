@@ -6,7 +6,7 @@ import com.douglei.bpm.module.common.Entity;
  * 流程类型实体
  * @author DougLei
  */
-public class ProcessTypeEntity extends Entity{
+public class ProcessType extends Entity{
 	private String code;
 	private String name;
 

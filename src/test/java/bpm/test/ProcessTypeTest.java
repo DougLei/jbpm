@@ -8,7 +8,9 @@ import org.junit.Test;
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.repository.type.ProcessType;
+import com.douglei.i18n.I18nContext;
 import com.douglei.orm.context.SessionFactoryRegister;
+import com.douglei.orm.core.metadata.validator.ValidationResult;
 import com.douglei.orm.sessionfactory.SessionFactory;
 
 public class ProcessTypeTest {
@@ -28,7 +30,9 @@ public class ProcessTypeTest {
 		type.setCode("test_code1");
 		type.setName("测试类型");
 		type.setCreateDate(new Date());
-		System.out.println(engine.getRepository().getProcessTypeService().save(type));
+		ValidationResult result = engine.getRepository().getProcessTypeService().save(type);
+		System.out.println(result);
+		System.out.println(I18nContext.getMessage(result));
 	}
 	
 	@Test

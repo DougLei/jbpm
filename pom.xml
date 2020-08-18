@@ -34,15 +34,18 @@
 			<version>1.2.3</version>
 		</dependency>
 		<dependency>
-			<groupId>com.douglei</groupId>
-			<artifactId>ji18n</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>		
-		<dependency>
 		    <groupId>ognl</groupId>
 		    <artifactId>ognl</artifactId>
 		    <version>3.2.10</version>
 		</dependency>
+		
+		<!-- 需要使用本地国际化消息时, 加入此依赖 -->
+		<dependency>
+			<groupId>com.douglei</groupId>
+			<artifactId>ji18n</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<optional>true</optional>
+		</dependency>	
 
 		<dependency>
 			<groupId>com.alibaba</groupId>

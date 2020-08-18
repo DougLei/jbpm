@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping-configuration>
 	<!-- 流程定义表 -->
-	<table name="BPM_RE_PROCDEF" forceCreateMode="create">
+	<table name="BPM_RE_PROCDEF" class="com.douglei.bpm.module.repository.defined.ProcessDefined" forceCreateMode="create">
 		<columns>
 			<column name="ID" property="id" dataType="integer" primaryKey="true" length="20" />
 			<column name="REF_TYPE_ID" property="refTypeId" dataType="integer" length="20" nullable="false"/>

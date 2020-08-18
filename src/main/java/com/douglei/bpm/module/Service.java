@@ -1,6 +1,6 @@
-package com.douglei.bpm.module.common;
+package com.douglei.bpm.module;
 
-import com.douglei.i18n.Message;
+import com.douglei.orm.core.metadata.validator.ValidationResult;
 
 /**
  * 
@@ -12,15 +12,15 @@ public abstract class Service {
 	 * 验证数据
 	 * @param obj 被验证的实例
 	 * @param validators 验证器
-	 * @return
+	 * @return 
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected final Message validate(Object obj, Validator...validators) {
+	protected final ValidationResult validate(Object obj, Validator...validators) {
 		if(validators.length > 0) {
-			Message message = null;
+			ValidationResult result = null;
 			for (Validator validator : validators) {
-				if((message = validator.validate(obj)) != null)
-					return message;
+				if((result = validator.validate(obj)) != null)
+					return result;
 			}
 		}
 		return null;

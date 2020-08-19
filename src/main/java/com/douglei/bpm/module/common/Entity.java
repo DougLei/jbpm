@@ -1,4 +1,4 @@
-package com.douglei.bpm.module;
+package com.douglei.bpm.module.common;
 
 import java.util.Date;
 

@@ -3,9 +3,9 @@ package com.douglei.bpm.module.repository.type;
 import java.util.Arrays;
 
 import com.douglei.bpm.annotation.ProcessEngineTransactionBean;
-import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.Service;
-import com.douglei.bpm.module.Validator;
+import com.douglei.bpm.module.common.ExecutionResult;
+import com.douglei.bpm.module.common.Service;
+import com.douglei.bpm.module.common.Validator;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
 

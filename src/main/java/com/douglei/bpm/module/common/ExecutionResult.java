@@ -1,9 +1,9 @@
-package com.douglei.bpm.module;
+package com.douglei.bpm.module.common;
 
 import com.douglei.orm.core.metadata.validator.ValidationResult;
 
 /**
- * 
+ * 执行结果
  * @author DougLei
  */
 public class ExecutionResult extends ValidationResult{

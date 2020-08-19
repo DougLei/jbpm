@@ -1,7 +1,5 @@
 package com.douglei.bpm.module;
 
-import com.douglei.orm.core.metadata.validator.ValidationResult;
-
 /**
  * 验证器
  * @author DougLei
@@ -9,9 +7,9 @@ import com.douglei.orm.core.metadata.validator.ValidationResult;
 public interface Validator<T> {
 	
 	/**
-	 * 
+	 * 执行验证
 	 * @param t
 	 * @return
 	 */
-	ValidationResult validate(T t);
+	ExecutionResult validate(T t);
 }

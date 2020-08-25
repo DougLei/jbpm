@@ -63,7 +63,7 @@ public class ProcessEngineBuilder {
 			List<String> mappingFiles = new FileScanner(MappingType.getMappingFileSuffixArray()).scan(MAPPING_FILE_ROOT_PATH);
 			List<DynamicMapping> dmEntities = new ArrayList<DynamicMapping>(mappingFiles.size());
 			mappingFiles.forEach(mappingFile -> dmEntities.add(new DynamicMapping(mappingFile)));
-			exSessionFactory.getDynamicMappingProcessor().batchAddMapping(dmEntities);
+			exSessionFactory.getDynamicMappingProcessor().addMapping(dmEntities);
 		}
 		return exSessionFactory;
 	}

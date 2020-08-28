@@ -5,11 +5,14 @@ import java.util.List;
 
 import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
+import com.douglei.orm.configuration.environment.mapping.MappingEntity;
 import com.douglei.orm.configuration.environment.mapping.MappingType;
-import com.douglei.orm.configuration.impl.xml.XmlConfiguration;
+import com.douglei.orm.configuration.environment.mapping.ParseMappingException;
+import com.douglei.orm.configuration.impl.ConfigurationImpl;
+import com.douglei.orm.configuration.impl.element.environment.mapping.AddOrCoverMappingEntity;
 import com.douglei.orm.context.SessionFactoryRegister;
+import com.douglei.orm.core.dialect.mapping.MappingExecuteException;
 import com.douglei.orm.sessionfactory.SessionFactory;
-import com.douglei.orm.sessionfactory.dynamic.mapping.DynamicMapping;
 import com.douglei.tools.instances.scanner.FileScanner;
 
 /**
@@ -35,7 +38,7 @@ public class ProcessEngineBuilder {
 	 * @return 将返回的SessionFactory实例, 使用 {@link SessionFactoryRegister}进行注册
 	 */
 	public SessionFactory createSessionFactory(String configurationFilePath) {
-		Configuration configuration = new XmlConfiguration(configurationFilePath);
+		Configuration configuration = new ConfigurationImpl(configurationFilePath);
 		return configuration.buildSessionFactory();
 	}
 	
@@ -46,7 +49,7 @@ public class ProcessEngineBuilder {
 	 * @return 将返回的SessionFactory实例, 使用 {@link SessionFactoryRegister}进行注册
 	 */
 	public SessionFactory createSessionFactory(String engineId, ExternalDataSource exDataSource) {
-		Configuration configuration = new XmlConfiguration(DEFAULT_CONFIGURATION_FILE_PATH);
+		Configuration configuration = new ConfigurationImpl(DEFAULT_CONFIGURATION_FILE_PATH);
 		configuration.setId(engineId);
 		configuration.setExternalDataSource(exDataSource);
 		return configuration.buildSessionFactory();
@@ -57,13 +60,16 @@ public class ProcessEngineBuilder {
 	 * @param exSessionFactory 外部的 {@link SessionFactory} 实例
 	 * @param scanMappingFile 是否扫描(流程相关的)映射文件, 该值取决于传入参数exSessionFactory在构建时, 是否扫描过 {@link ProcessEngineBuilder#MAPPING_FILE_ROOT_PATH}
 	 * @return 将返回的SessionFactory实例, 使用 {@link SessionFactoryRegister}进行注册, 如传入的exSessionFactory已经注册过, 则可以不用注册
+	 * @throws ParseMappingException
+	 * @throws MappingExecuteException
 	 */
-	public SessionFactory createSessionFactory(SessionFactory exSessionFactory, boolean scanMappingFile) {
+	public SessionFactory createSessionFactory(SessionFactory exSessionFactory, boolean scanMappingFile) throws ParseMappingException, MappingExecuteException{
 		if(scanMappingFile) {
-			List<String> mappingFiles = new FileScanner(MappingType.getMappingFileSuffixArray()).scan(MAPPING_FILE_ROOT_PATH);
-			List<DynamicMapping> dmEntities = new ArrayList<DynamicMapping>(mappingFiles.size());
-			mappingFiles.forEach(mappingFile -> dmEntities.add(new DynamicMapping(mappingFile)));
-			exSessionFactory.getDynamicMappingProcessor().addMapping(dmEntities);
+			List<String> mappingFiles = new FileScanner(MappingType.getMappingFileSuffixs()).scan(MAPPING_FILE_ROOT_PATH);
+			List<MappingEntity> mappingEntities = new ArrayList<MappingEntity>(mappingFiles.size());
+			for (String mappingFile : mappingFiles) 
+				mappingEntities.add(new AddOrCoverMappingEntity(mappingFile));
+			exSessionFactory.getMappingProcessor().execute(mappingEntities);
 		}
 		return exSessionFactory;
 	}

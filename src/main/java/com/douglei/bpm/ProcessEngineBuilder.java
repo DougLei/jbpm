@@ -48,19 +48,6 @@ public class ProcessEngineBuilder {
 	}
 	
 	/**
-	 * 通过外部的数据源, 构建引擎
-	 * @param engineId 引擎的唯一标识, 在多数据源情况中可以使用, 当只有一个数据源时, 该参数可传入null
-	 * @param exDataSource 外部的数据源实例
-	 * @return 
-	 */
-	public ProcessEngine build(String engineId, ExternalDataSource exDataSource) {
-		Configuration configuration = new ConfigurationImpl(DEFAULT_CONFIGURATION_FILE_PATH);
-		configuration.setId(engineId);
-		configuration.setExternalDataSource(exDataSource);
-		return build_(configuration.buildSessionFactory());
-	}
-		
-	/**
 	 * 使用外部的 {@link SessionFactory}, 构建引擎
 	 * @param exSessionFactory 外部的 {@link SessionFactory} 实例
 	 * @param scanMappingFile 是否扫描(流程相关的)映射文件, 该值取决于传入参数exSessionFactory在构建时, 是否扫描过 {@link ProcessEngineBuilder#MAPPING_FILE_ROOT_PATH}
@@ -77,6 +64,19 @@ public class ProcessEngineBuilder {
 			exSessionFactory.getMappingProcessor().execute(mappingEntities);
 		}
 		return build_(exSessionFactory);
+	}
+	
+	/**
+	 * 通过外部的数据源, 构建引擎
+	 * @param engineId 引擎的唯一标识, 在多数据源情况中可以使用, 当只有一个数据源时, 该参数可传入null
+	 * @param exDataSource 外部的数据源实例
+	 * @return 
+	 */
+	public ProcessEngine build(String engineId, ExternalDataSource exDataSource) {
+		Configuration configuration = new ConfigurationImpl(DEFAULT_CONFIGURATION_FILE_PATH);
+		configuration.setId(engineId);
+		configuration.setExternalDataSource(exDataSource);
+		return build_(configuration.buildSessionFactory());
 	}
 
 	/**

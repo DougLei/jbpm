@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration id="default">
+<configuration id="defaultProcessEngine">
 	<environment>
 		<mappings>
 			<mapping path="jbpm-mappings" />

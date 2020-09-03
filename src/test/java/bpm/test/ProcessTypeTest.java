@@ -11,28 +11,26 @@ import com.douglei.bpm.module.common.ExecutionResult;
 import com.douglei.bpm.module.repository.type.ProcessType;
 import com.douglei.i18n.I18nContext;
 import com.douglei.orm.context.SessionFactoryRegister;
-import com.douglei.orm.sessionfactory.SessionFactory;
 
 public class ProcessTypeTest {
 	private ProcessEngine engine;
 	
 	@Before
 	public void init() {
-		ProcessEngineBuilder peBuilder = new ProcessEngineBuilder();
-		SessionFactory factory = peBuilder.createSessionFactory();
-		new SessionFactoryRegister().registerSessionFactory(factory);
-		engine = peBuilder.build(factory);
+		ProcessEngineBuilder peBuilder = new ProcessEngineBuilder(new SessionFactoryRegister());
+		engine = peBuilder.build();
 	}
 	
 	@Test
 	public void save() {
 		ProcessType type = new ProcessType();
-		type.setCode("test_code1");
+		type.setCode("test_code12");
 		type.setName("测试类型");
 		type.setCreateDate(new Date());
 		ExecutionResult result = engine.getRepository().getProcessTypeService().save(type);
 		System.out.println(result);
 		System.out.println(I18nContext.getMessage(result));
+		System.out.println(type.getId());
 	}
 	
 	@Test

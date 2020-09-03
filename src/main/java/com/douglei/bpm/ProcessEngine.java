@@ -11,12 +11,15 @@ import com.douglei.orm.sessionfactory.SessionFactory;
  */
 public final class ProcessEngine {
 	private String id;
+	private SessionFactory sessionFactory;
+	
 	private RepositoryModule repository;
 	private RuntimeModule runtime;
 	private HistoryModule history;
 	
-	ProcessEngine(String id) {
-		this.id = id;
+	ProcessEngine(SessionFactory sessionFactory) {
+		this.id = sessionFactory.getId();
+		this.sessionFactory = sessionFactory;
 	}
 	
 	void setRepository(RepositoryModule repository) {
@@ -29,14 +32,14 @@ public final class ProcessEngine {
 		this.history = history;
 	}
 
-	/**
-	 * 获取引擎唯一标识, 该标识引用{@link SessionFactory} 的id
-	 * @return
-	 */
+	
 	public String getId() {
 		return id;
 	}
-	
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
 	/**
 	 * 获取Repository模块
 	 * @return

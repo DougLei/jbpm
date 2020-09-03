@@ -24,12 +24,11 @@ import com.douglei.tools.utils.reflect.ClassLoadUtil;
 import com.douglei.tools.utils.reflect.ConstructorUtil;
 
 /**
- * 
+ * 引擎中bean工厂, 类似于spring的bean工厂, 扫描类并实例化后, 将实例set到各个属性中
  * @author DougLei
  */
 class ProcessEngineBeanFactory {
-	private static final String SCAN_ROOT_PACKAGE = "com.douglei.bpm"; // 要扫描的根包
-	private final Map<Class<?>, Object> BEAN_CONTAINER = new HashMap<Class<?>, Object>(64);
+	private Map<Class<?>, Object> BEAN_CONTAINER = new HashMap<Class<?>, Object>(64);
 	
 	ProcessEngineBeanFactory() {
 		initBeanContainer();
@@ -44,7 +43,7 @@ class ProcessEngineBeanFactory {
 	 * 找到有 {@link ProcessEngineBean} 的类, 将其实例化, 存到 BEAN_CONTAINER 容器中
 	 */
 	private void initBeanContainer() {
-		List<String> classes = new ClassScanner().scan(SCAN_ROOT_PACKAGE);
+		List<String> classes = new ClassScanner().scan("com.douglei.bpm"); // 扫描指定路径下的所有class
 		Class<?> loadClass = null;
 		Method[] declareMethods = null;
 		for (String clz : classes) {

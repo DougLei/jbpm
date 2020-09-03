@@ -3,7 +3,6 @@ package com.douglei.bpm;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
-import com.douglei.orm.sessionfactory.SessionFactory;
 
 /**
  * 流程引擎
@@ -11,15 +10,13 @@ import com.douglei.orm.sessionfactory.SessionFactory;
  */
 public final class ProcessEngine {
 	private String id;
-	private SessionFactory sessionFactory;
 	
 	private RepositoryModule repository;
 	private RuntimeModule runtime;
 	private HistoryModule history;
 	
-	ProcessEngine(SessionFactory sessionFactory) {
-		this.id = sessionFactory.getId();
-		this.sessionFactory = sessionFactory;
+	ProcessEngine(String id) {
+		this.id = id;
 	}
 	
 	void setRepository(RepositoryModule repository) {
@@ -32,12 +29,8 @@ public final class ProcessEngine {
 		this.history = history;
 	}
 
-	
 	public String getId() {
 		return id;
-	}
-	public SessionFactory getSessionFactory() {
-		return sessionFactory;
 	}
 
 	/**

@@ -25,27 +25,31 @@ public class ProcessEngineBuilder {
 	private static final ProcessEngineBeanFactory beanFactory = new ProcessEngineBeanFactory(); // 引擎bean工厂
 	private SessionFactoryRegister register;
 	
+	/**
+	 * 
+	 * @param register 如果项目中有SessionFactoryRegister实例, 传入进来即可; 否则传入new SessionFactoryRegister(), 并妥善保管该实例
+	 */
 	public ProcessEngineBuilder(SessionFactoryRegister register) {
 		this.register = register;
 	}
 
-	/**
-	 * 使用默认的jdb-orm配置文件, 构建引擎
-	 * @return 
-	 */
-	public ProcessEngine build() {
-		return build(DEFAULT_CONFIGURATION_FILE_PATH);
-	}
-	
-	/**
-	 * 根据指定的jdb-orm配置文件, 构建引擎
-	 * @param configurationFilePath 配置文件路径
-	 * @return 
-	 */
-	public ProcessEngine build(String configurationFilePath) {
-		Configuration configuration = new ConfigurationImpl(configurationFilePath);
-		return build_(configuration.buildSessionFactory());
-	}
+//	/**
+//	 * 使用默认的jdb-orm配置文件, 构建引擎
+//	 * @return 
+//	 */
+//	public ProcessEngine build() {
+//		return build(DEFAULT_CONFIGURATION_FILE_PATH);
+//	}
+//	
+//	/**
+//	 * 根据指定的jdb-orm配置文件, 构建引擎
+//	 * @param configurationFilePath 配置文件路径
+//	 * @return 
+//	 */
+//	public ProcessEngine build(String configurationFilePath) {
+//		Configuration configuration = new ConfigurationImpl(configurationFilePath);
+//		return build_(configuration.buildSessionFactory());
+//	}
 	
 	/**
 	 * 使用外部的 {@link SessionFactory}, 构建引擎
@@ -87,7 +91,7 @@ public class ProcessEngineBuilder {
 	private ProcessEngine build_(SessionFactory sessionFactory) {
 		register.registerSessionFactory(sessionFactory);
 		
-		ProcessEngine engine = new ProcessEngine(sessionFactory);
+		ProcessEngine engine = new ProcessEngine(sessionFactory.getId());
 		beanFactory.setProcessEngineFields(engine);
 		return engine;
 	}

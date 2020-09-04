@@ -9,14 +9,14 @@ import com.douglei.bpm.module.runtime.RuntimeModule;
  * @author DougLei
  */
 public final class ProcessEngine {
-	private String id;
+	private SessionfactoryWrapper sessionfactoryWrapper;
 	
 	private RepositoryModule repository;
 	private RuntimeModule runtime;
 	private HistoryModule history;
 	
-	ProcessEngine(String id) {
-		this.id = id;
+	ProcessEngine(SessionfactoryWrapper sessionfactoryWrapper) {
+		this.sessionfactoryWrapper = sessionfactoryWrapper;
 	}
 	
 	void setRepository(RepositoryModule repository) {
@@ -30,7 +30,7 @@ public final class ProcessEngine {
 	}
 
 	public String getId() {
-		return id;
+		return sessionfactoryWrapper.getId();
 	}
 
 	/**
@@ -55,5 +55,12 @@ public final class ProcessEngine {
 	 */
 	public HistoryModule getHistory() {
 		return history;
+	}
+	
+	/**
+	 * 销毁
+	 */
+	public void destroy() {
+		sessionfactoryWrapper.destroy();
 	}
 }

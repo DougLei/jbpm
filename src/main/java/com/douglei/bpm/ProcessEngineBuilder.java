@@ -106,7 +106,7 @@ public class ProcessEngineBuilder {
 		Configuration configuration = new ConfigurationImpl(DEFAULT_CONFIGURATION_FILE_PATH);
 		configuration.setId(engineId);
 		configuration.setExternalDataSource(exDataSource);
-		return build_(new SessionfactoryWrapper(getRegister(), configuration.buildSessionFactory(), true));
+		return build_(new SessionFactoryWrapper(getRegister(), configuration.buildSessionFactory(), true));
 	}
 	
 	/**

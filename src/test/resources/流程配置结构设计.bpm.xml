@@ -7,9 +7,9 @@
 			2.1. 手动任务, 需要用户手动处理, 来推动流程流转, 例如用户任务
 			2.2. 自动任务, 可以自行推动流程流转, 例如开始任务, 结束任务, 并行任务, 排他任务, 包容任务, 子流程任务, SQL脚本任务, 定时任务, 邮件任务等 
 	-->
-	<process id="编码:版本:内部版本" name="流程名称" titleExpression="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name">
+	<process id="编码" version="用户自定义的版本" name="流程名称" titleExpression="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name">
 		<!-- 开始任务, 一个流程中只能有一个开始 -->
-		<startTask id="startTask1" name=""></startTask>
+		<startTask id="startTask" name=""></startTask>
 		<!-- 结束任务, 一个流程中可以有多个结束 -->
 		<endTask id="endTask1" name=""></endTask>
 		

@@ -1,12 +1,12 @@
-package com.douglei.bpm.module.repository.defined;
+package com.douglei.bpm.module.repository.entity;
 
-import com.douglei.bpm.module.common.Entity;
+import com.douglei.bpm.module.common.IdEntity;
 
 /**
  * 流程内容实体
  * @author DougLei
  */
-public class ProcessContent extends Entity{
+public class ProcessContent extends IdEntity{
 	private int refDefId;
 	private int type;
 	private String content;

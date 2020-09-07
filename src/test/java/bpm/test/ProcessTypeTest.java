@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.common.ExecutionResult;
-import com.douglei.bpm.module.repository.type.ProcessType;
+import com.douglei.bpm.module.repository.entity.ProcessType;
 import com.douglei.i18n.I18nContext;
 import com.douglei.orm.context.IdDuplicateException;
 

@@ -6,6 +6,7 @@ import com.douglei.bpm.annotation.ProcessEngineTransactionBean;
 import com.douglei.bpm.module.common.ExecutionResult;
 import com.douglei.bpm.module.common.Service;
 import com.douglei.bpm.module.common.Validator;
+import com.douglei.bpm.module.repository.entity.ProcessType;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
 

@@ -16,10 +16,8 @@ public class ProcessDefinedService {
 	
 	// 部署
 	
-	
-	
 	@Transaction
-	public void deploy() {
+	public void save() {
 		
 	}
 }

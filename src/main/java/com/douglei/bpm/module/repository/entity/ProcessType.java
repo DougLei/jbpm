@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.repository.type;
+package com.douglei.bpm.module.repository.entity;
 
 import com.douglei.bpm.module.common.Entity;
 

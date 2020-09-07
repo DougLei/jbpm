@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping-configuration>
 	<!-- 流程定义内容表 -->
-	<table name="BPM_RE_PROCDEF_CONTENT" class="com.douglei.bpm.module.repository.defined.ProcessContent" forceCreateMode="create">
+	<table name="BPM_RE_PROCDEF_CONTENT" class="com.douglei.bpm.module.repository.entity.ProcessContent" forceCreateMode="create">
 		<columns>
 			<column name="ID" property="id" dataType="integer" primaryKey="true" length="20" />
 			<column name="REF_DEF_ID" property="refDefId" dataType="integer" length="20" nullable="false"/>
 			<column name="TYPE" property="type" dataType="integer" length="1" nullable="false" />
-			<column name="CONTENT" property="content" dataType="blob" nullable="false" />
+			<column name="CONTENT" property="content" dataType="clob" nullable="false" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

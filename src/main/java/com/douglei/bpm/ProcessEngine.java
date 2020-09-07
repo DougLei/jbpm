@@ -3,20 +3,20 @@ package com.douglei.bpm;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
+import com.douglei.orm.core.dialect.mapping.MappingExecuteException;
 
 /**
  * 流程引擎
  * @author DougLei
  */
-public final class ProcessEngine {
-	private SessionfactoryWrapper sessionfactoryWrapper;
-	
+public abstract class ProcessEngine {
+	protected String id;
 	private RepositoryModule repository;
 	private RuntimeModule runtime;
 	private HistoryModule history;
 	
-	ProcessEngine(SessionfactoryWrapper sessionfactoryWrapper) {
-		this.sessionfactoryWrapper = sessionfactoryWrapper;
+	protected ProcessEngine(String id) {
+		this.id = id;
 	}
 	
 	void setRepository(RepositoryModule repository) {
@@ -30,7 +30,7 @@ public final class ProcessEngine {
 	}
 
 	public String getId() {
-		return sessionfactoryWrapper.getId();
+		return id;
 	}
 
 	/**
@@ -59,8 +59,7 @@ public final class ProcessEngine {
 	
 	/**
 	 * 销毁
+	 * @throws MappingExecuteException
 	 */
-	public void destroy() {
-		sessionfactoryWrapper.destroy();
-	}
+	public abstract void destroy() throws MappingExecuteException;
 }

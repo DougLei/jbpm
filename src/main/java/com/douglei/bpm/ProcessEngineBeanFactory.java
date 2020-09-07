@@ -97,12 +97,15 @@ class ProcessEngineBeanFactory {
 	}
 	
 	/**
-	 * 设置引擎中的属性
+	 * 初始化引擎中的属性
 	 * @param engine
+	 * @return 
 	 */
-	void setProcessEngineFields(ProcessEngine engine) {
+	ProcessEngine initProcessEngineFields(ProcessEngine engine) {
 		engine.setRepository((RepositoryModule)BEAN_CONTAINER.get(RepositoryModule.class));
 		engine.setRuntime((RuntimeModule)BEAN_CONTAINER.get(RuntimeModule.class));
 		engine.setHistory((HistoryModule)BEAN_CONTAINER.get(HistoryModule.class));
+		
+		return engine;
 	}
 }

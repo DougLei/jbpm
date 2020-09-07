@@ -50,7 +50,7 @@ public class ProcessEngineBuilder {
 	 * 1. 使用了其他 orm框架的系统, 使用 {@link ProcessEngineBuilder.build(String, DataSource)} 方法构建引擎, 传入引擎的唯一标识, 以及自己的数据源实例
 	 *    - 在流程引擎被销毁时, 会同时销毁SessionFactory实例, 因为该SessionFactory是完全属于流程引擎的, 同时将SessionFactory从 {@link SessionFactoryRegister} 中移除
 	 *    
-	 * 2. 使用了jdb-orm框架的系统, 使用 {@link ProcessEngineBuilder.build(SessionFactory, boolean)} 方法构建引擎, 传入自己的SessionFactory实例(externalSessionFactory)
+	 * 2. 使用了jdb-orm框架的系统, 使用 {@link ProcessEngineBuilder.build(SessionFactory)} 方法构建引擎, 传入自己的SessionFactory实例(externalSessionFactory)
 	 *    - 在流程引擎被销毁时, 不会同时销毁SessionFactory实例, 流程引擎具体销毁的逻辑如下: 
 	 *    - 如果externalSessionFactory之前在 {@link SessionFactoryRegister} 中已经注册过, 则只会将流程引擎相关的mapping从externalSessionFactory中移除
 	 *    - 反之会将流程引擎相关的mapping从externalSessionFactory中移除, 并将externalSessionFactory从 {@link SessionFactoryRegister} 中移除
@@ -103,20 +103,17 @@ public class ProcessEngineBuilder {
 	/**
 	 * 使用外部的 {@link SessionFactory}实例, 构建引擎
 	 * @param externalSessionFactory 外部的 {@link SessionFactory} 实例
-	 * @param scanMapping 是否扫描(流程相关的)映射文件, 该值取决于传入参数externalSessionFactory在构建时, 是否扫描过 {@link ProcessEngineBuilder#MAPPING_FILE_ROOT_PATH}
 	 * @return 
 	 * @throws ParseMappingException
 	 * @throws MappingExecuteException
 	 * @throws IdDuplicateException 
 	 */
-	public ProcessEngine build(SessionFactory externalSessionFactory, boolean scanMapping) throws ParseMappingException, MappingExecuteException, IdDuplicateException{
-		if(scanMapping) {
-			List<String> mappingFiles = new FileScanner(MappingType.getMappingFileSuffixs()).scan(MAPPING_FILE_ROOT_PATH);
-			List<MappingEntity> mappingEntities = new ArrayList<MappingEntity>(mappingFiles.size());
-			for (String mappingFile : mappingFiles) 
-				mappingEntities.add(new AddOrCoverMappingEntity(mappingFile));
-			externalSessionFactory.getMappingProcessor().execute(mappingEntities);
-		}
+	public ProcessEngine build(SessionFactory externalSessionFactory) throws ParseMappingException, MappingExecuteException, IdDuplicateException{
+		List<String> mappingFiles = new FileScanner(MappingType.getMappingFileSuffixs()).scan(MAPPING_FILE_ROOT_PATH);
+		List<MappingEntity> mappingEntities = new ArrayList<MappingEntity>(mappingFiles.size());
+		for (String mappingFile : mappingFiles) 
+			mappingEntities.add(new AddOrCoverMappingEntity(mappingFile));
+		externalSessionFactory.getMappingProcessor().execute(mappingEntities);
 		
 		RegistrationResult result = registerSessionFactory(externalSessionFactory);
 		return beanFactory.initProcessEngineFields(new ProcessEngineOfExternalSessionfactory(externalSessionFactory.getId(), result == RegistrationResult.SUCCESS));

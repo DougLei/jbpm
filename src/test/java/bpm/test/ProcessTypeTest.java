@@ -17,8 +17,7 @@ public class ProcessTypeTest {
 	
 	@Before
 	public void init() throws IdDuplicateException {
-		ProcessEngineBuilder peBuilder = ProcessEngineBuilder.getSingleton();
-		engine = peBuilder.build();
+		engine = ProcessEngineBuilder.getSingleton().build();
 	}
 	
 	@Test

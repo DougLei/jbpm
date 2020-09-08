@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.common;
+package com.douglei.bpm.module.common.entity;
 
 import java.util.Date;
 
@@ -6,7 +6,7 @@ import java.util.Date;
  * 
  * @author DougLei
  */
-public abstract class Entity extends IdEntity{
+public abstract class BasicEntity extends IdEntity{
 	private String createUser;
 	private Date createDate;
 	private String updateUser;
@@ -17,6 +17,7 @@ public abstract class Entity extends IdEntity{
 	}
 	public void setCreateUser(String createUser) {
 		this.createUser = createUser;
+		setUpdateUser(createUser);
 	}
 	public Date getCreateDate() {
 		return createDate;
@@ -32,6 +33,8 @@ public abstract class Entity extends IdEntity{
 		this.updateUser = updateUser;
 	}
 	public Date getUpdateDate() {
+		if(updateDate == null)
+			return new Date();
 		return updateDate;
 	}
 	public void setUpdateDate(Date updateDate) {

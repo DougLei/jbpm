@@ -16,7 +16,7 @@ import com.douglei.orm.sessionfactory.SessionFactory;
 public class ProcessEngineOfExternalSessionfactory extends ProcessEngine {
 	private boolean removeSessionFactory; // 销毁时, 是否要从SessionFactoryRegister中移除SessionFactory
 	private String[] mappingCodes = {
-			"BPM_RE_DELEGATION", "BPM_RE_LISTENER", "BPM_RE_PROCDEF", "BPM_RE_PROCDEF_CONTENT", "BPM_RE_PROCTYPE", "BPM_RE_SUGGEST"
+			"BPM_RE_DELEGATION", "BPM_RE_LISTENER", "BPM_RE_PROCDEF", "BPM_RE_PROCTYPE", "BPM_RE_SUGGEST"
 			}; // 流程的映射code数组, 在销毁时, 从SessionFactory中移除
 
 	ProcessEngineOfExternalSessionfactory(String id, boolean removeSessionFactory) {

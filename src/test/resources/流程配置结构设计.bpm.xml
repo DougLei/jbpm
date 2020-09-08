@@ -49,7 +49,8 @@
 			<option type="terminate" name="流程结束"></option>
 			<option type="urging" name="催办" auto="是否进行自动催办(一次), 默认为false"></option><!-- 在逾期后才会出现催办按钮 -->
 			<!-- 当用户提交后, 如果发现提交的有问题, 还可以自主选择撤回, 重新编辑后再提交 -->
-			<option type="withdraw" name="撤回"></option>
+			<!-- times设置可以撤回的次数, 默认值为0, 配置的值在小于1时, 都表示不限制次数 -->
+			<option type="withdraw" name="撤回" times="0"></option>
 			
 			<!-- 前/后置监听器 -->
 			<listener type="pre" item="多个项之间用;(分号)分隔开"></listener>

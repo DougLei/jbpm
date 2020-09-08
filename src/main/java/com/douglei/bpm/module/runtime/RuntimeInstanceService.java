@@ -1,23 +1,17 @@
-package com.douglei.bpm.module.repository.defined;
+package com.douglei.bpm.module.runtime;
 
 import com.douglei.bpm.annotation.ProcessEngineTransactionBean;
 import com.douglei.orm.context.transaction.component.Transaction;
 
 /**
- * 流程部署服务
+ * 运行实例服务
  * @author DougLei
  */
 @ProcessEngineTransactionBean
-public class ProcessDefinedService {
-	
-	// 保存
-	// 修改
-	// 删除
-	
-	// 部署
+public class RuntimeInstanceService {
 	
 	@Transaction
-	public void save() {
-		
+	public boolean existsInstance(int processDefinedId) {
+		return true;
 	}
 }

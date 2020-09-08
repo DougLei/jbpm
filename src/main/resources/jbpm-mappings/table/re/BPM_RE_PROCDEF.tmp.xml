@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping-configuration>
 	<!-- 流程定义表 -->
-	<table name="BPM_RE_PROCDEF" class="com.douglei.bpm.module.repository.entity.ProcessDefined" forceCreateMode="create">
+	<table name="BPM_RE_PROCDEF" class="com.douglei.bpm.module.repository.deploy.ProcessDefined" forceCreateMode="create">
 		<columns>
 			<column name="ID" property="id" dataType="integer" primaryKey="true" length="20" />
-			<column name="REF_TYPE_ID" property="refTypeId" dataType="integer" length="20" nullable="false"/>
-			<column name="MODE" property="mode" dataType="integer" length="1" defaultValue="1" nullable="false"/>
+			
+			<column name="REF_TYPE_ID" property="refTypeId" dataType="integer" length="20" nullable="false" defaultValue="0"/>
+			<column name="NAME" property="name" dataType="nstring" length="50" nullable="false" />
 			<column name="CODE" property="code" dataType="string" length="50" nullable="false" />
 			<column name="VERSION" property="version" dataType="string" length="50" nullable="false" />
-			<column name="VERSION_" property="version_" dataType="integer" length="3" nullable="false" />
-			<column name="NAME" property="name" dataType="nstring" length="50" nullable="false" />
+			<column name="BUILTIN_VERSION" property="builtinVersion" dataType="integer" length="4" defaultValue="0" nullable="false" />
+			<column name="CONTENT_" property="content" dataType="clob" nullable="false" />
 			<column name="ENABLED" property="enabled" dataType="integer" length="1" defaultValue="0" nullable="false"/>
 			<column name="DESCRIPTION" property="description" dataType="nstring" length="150" />
+			
 			<column name="CREATE_USER" property="createUser" dataType="char" length="50" />
 			<column name="CREATE_DATE" property="createDate" dataType="date" nullable="false" />
 			<column name="UPDATE_USER" property="updateUser" dataType="char" length="50" />

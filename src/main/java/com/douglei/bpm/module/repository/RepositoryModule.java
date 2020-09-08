@@ -2,7 +2,7 @@ package com.douglei.bpm.module.repository;
 
 import com.douglei.bpm.annotation.ProcessEngineBean;
 import com.douglei.bpm.annotation.ProcessEngineField;
-import com.douglei.bpm.module.repository.defined.ProcessDefinedService;
+import com.douglei.bpm.module.repository.deploy.ProcessDeployService;
 import com.douglei.bpm.module.repository.type.ProcessTypeService;
 
 /**
@@ -13,16 +13,16 @@ import com.douglei.bpm.module.repository.type.ProcessTypeService;
 public class RepositoryModule {
 	
 	@ProcessEngineField
-	private ProcessTypeService processTypeService;
+	private ProcessTypeService typeService;
 	
 	@ProcessEngineField
-	private ProcessDefinedService processDefinedService;
+	private ProcessDeployService deployService;
+
 	
-	
-	public ProcessTypeService getProcessTypeService() {
-		return processTypeService;
+	public ProcessTypeService getTypeService() {
+		return typeService;
 	}
-	public ProcessDefinedService getProcessDefinedService() {
-		return processDefinedService;
+	public ProcessDeployService getDeployService() {
+		return deployService;
 	}
 }

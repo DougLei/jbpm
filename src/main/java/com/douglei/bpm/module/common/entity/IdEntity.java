@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.common;
+package com.douglei.bpm.module.common.entity;
 
 /**
  * 

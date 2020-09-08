@@ -60,7 +60,9 @@ public class ProcessDeployService {
 	
 	// 启用定义的流程
 	private ExecutionResult enable(ProcessDefined processDefined, boolean activateAllRunProcessInstance) {
-		
+		// 1. 将状态改为启用
+		// 2. 解析流程的配置文件
+		// 3. 如果需要激活流程实例, 则要激活
 		return null;
 	}
 	
@@ -90,6 +92,8 @@ public class ProcessDeployService {
 		if(processDefined == null)
 			return new ExecutionResult("id", "禁用失败, 不存在id=%d的流程定义信息", "bpm.process.defined.disable.fail", processDefinedId);
 		
+		// 1.将状态改为启用
+		// 2. 如果需要挂起所有运行实例, 则要执行
 		return null;
 	}
 }

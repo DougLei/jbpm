@@ -58,42 +58,47 @@ public class ProcessDeployService {
 		return tableSession.uniqueQuery(ProcessDefined.class, "select " + tableSession.getColumnNames(ProcessDefined.class) + " from bpm_re_procdef where id=?", Arrays.asList(processDefinedId));
 	}
 	
-	// 启用定义的流程
-	private ExecutionResult enable(ProcessDefined processDefined, boolean activateAllRunProcessInstance) {
-		// 1. 将状态改为启用
-		// 2. 解析流程的配置文件
-		// 3. 如果需要激活流程实例, 则要激活
-		return null;
-	}
-	
 	/**
 	 * 启用定义的流程
 	 * @param processDefinedId 
-	 * @param activateAllRunProcessInstance 是否激活所有运行的流程实例
+	 * @param activateAllRunProcessInstance 是否激活所有与当前流程定义相关的运行的流程实例
 	 * @return
 	 */
 	@Transaction
 	public ExecutionResult enable(int processDefinedId, boolean activateAllRunProcessInstance) {
 		ProcessDefined processDefined = getProcessDefinedById(processDefinedId);
 		if(processDefined == null)
-			return new ExecutionResult("id", "启用失败, 不存在id=%d的流程定义信息", "bpm.process.defined.enable.fail", processDefinedId);
+			return new ExecutionResult("id", "启用失败, 不存在id=%d的流程定义信息", "bpm.process.defined.enable.fail.unexists", processDefinedId);
+		if(processDefined.isEnabled())
+			return new ExecutionResult("id", "启用失败, id=%d的流程定义已经启用", "bpm.process.defined.enable.fail.already.done", processDefinedId);
 		return enable(processDefined, activateAllRunProcessInstance);
+	}
+	
+	// 启用定义的流程
+	private ExecutionResult enable(ProcessDefined processDefined, boolean activateAllRunProcessInstance) {
+		SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set enabled=1 where id=?", Arrays.asList(processDefined.getId()));
+		if(activateAllRunProcessInstance)
+			return runtimeInstance.activateAllProcessInstance(processDefined.getId());
+		return null;
 	}
 	
 	/**
 	 * 禁用定义的流程
 	 * @param processDefinedId
-	 * @param suspendAllRunProcessInstance 是否挂起所有运行的流程实例
+	 * @param suspendAllRunProcessInstance 是否挂起所有与当前流程定义相关的运行的流程实例
 	 * @return
 	 */
 	@Transaction
 	public ExecutionResult disable(int processDefinedId, boolean suspendAllRunProcessInstance) {
 		ProcessDefined processDefined = getProcessDefinedById(processDefinedId);
 		if(processDefined == null)
-			return new ExecutionResult("id", "禁用失败, 不存在id=%d的流程定义信息", "bpm.process.defined.disable.fail", processDefinedId);
+			return new ExecutionResult("id", "禁用失败, 不存在id=%d的流程定义信息", "bpm.process.defined.disable.fail.unexists", processDefinedId);
+		if(!processDefined.isEnabled())
+			return new ExecutionResult("id", "禁用失败, id=%d的流程定义已经被禁用", "bpm.process.defined.disable.fail.already.done", processDefinedId);
 		
-		// 1.将状态改为启用
-		// 2. 如果需要挂起所有运行实例, 则要执行
+		SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set enabled=0 where id=?", Arrays.asList(processDefinedId));
+		if(suspendAllRunProcessInstance)
+			return runtimeInstance.suspendAllProcessInstance(processDefinedId);
 		return null;
 	}
 }

@@ -11,7 +11,7 @@ import com.douglei.orm.context.transaction.component.Transaction;
 public class HistoryInstanceService {
 	
 	@Transaction
-	public boolean existsInstance(int processDefinedId) {
+	public boolean existsInstance(int processDefinitionId) {
 		return true;
 	}
 }

@@ -8,9 +8,11 @@ import com.douglei.bpm.annotation.ProcessEngineTransactionBean;
 import com.douglei.bpm.module.common.service.ExecutionResult;
 import com.douglei.bpm.module.history.HistoryInstanceService;
 import com.douglei.bpm.module.runtime.RuntimeInstanceService;
+import com.douglei.orm.configuration.impl.util.XmlReaderContext;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
 import com.douglei.orm.sessionfactory.sessions.session.table.TableSession;
+import com.douglei.tools.utils.serialize.JdkSerializeProcessor;
 
 /**
  * 流程部署服务
@@ -27,17 +29,37 @@ public class ProcessDeployService {
 	
 	/**
 	 * 部署定义的流程
-	 * @param processDefined
+	 * @param processDefinition
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult deploy(ProcessDefined processDefined) {
-		List<ProcessDefined> list = SessionContext.getTableSession().query(ProcessDefined.class, "select id, builtin_version from bpm_re_procdef where code=? and version_=? order by builtin_version desc", Arrays.asList(processDefined.getCode(), processDefined.getVersion()));
-		ProcessDefined pd = list.isEmpty()?null:list.get(0);
+	public ExecutionResult deploy(ProcessDefinition processDefinition) {
+		List<ProcessDefinition> list = SessionContext.getTableSession().query(ProcessDefinition.class, "select id, builtin_version from bpm_re_procdef where code=? and version_=? order by builtin_version desc", Arrays.asList(processDefinition.getCode(), processDefinition.getVersion()));
+		ProcessDefinition pd = list.isEmpty()?null:list.get(0);
 		
-		if(pd == null) { // 一条新的流程定义信息
+		/**
+		 * 进行保存或更新的逻辑判断如下
+		 * 
+		 * 不存在同code和version的流程定义, 直接保存
+		 * 否则判断是否修改了content
+		 * 	如果没有修改content, 则就是基础信息的修改, 
+		 * 
+		 * */
+		
+		if(pd == null) {
 			SessionContext.getTableSession().save(processDefined); 
-		}else if(runtimeInstance.existsInstance(pd.getId()) || historyInstance.existsInstance(pd.getId())){ // 旧的流程定义信息, 存在实例, 则要更新内置版本后, 保存新的流程定义信息
+		} else {
+			// 判断是否修改了content, 修改了
+			
+			
+			
+			
+			
+		}
+		
+		
+		
+		if(runtimeInstance.existsInstance(pd.getId()) || historyInstance.existsInstance(pd.getId())){ // 旧的流程定义信息, 存在实例, 则要更新内置版本后, 保存新的流程定义信息
 			processDefined.setBuiltinVersion(pd.getBuiltinVersion()+1);
 			SessionContext.getTableSession().save(processDefined); 
 		}else { // 更新流程定义信息
@@ -46,6 +68,9 @@ public class ProcessDeployService {
 			SessionContext.getTableSession().update(processDefined); 
 		}
 		
+		// 解析流程配置文件
+		
+		
 		if(processDefined.isEnabled()) 
 			return enable(processDefined, false); // 启用流程定义
 		return null;
@@ -53,29 +78,29 @@ public class ProcessDeployService {
 	
 	
 	// 获取指定id的流程定义信息
-	private ProcessDefined getProcessDefinedById(int processDefinedId) {
+	private ProcessDefinition getProcessDefinedById(int processDefinitionId) {
 		TableSession tableSession = SessionContext.getTableSession();
-		return tableSession.uniqueQuery(ProcessDefined.class, "select " + tableSession.getColumnNames(ProcessDefined.class) + " from bpm_re_procdef where id=?", Arrays.asList(processDefinedId));
+		return tableSession.uniqueQuery(ProcessDefinition.class, "select " + tableSession.getColumnNames(ProcessDefinition.class) + " from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 	}
 	
 	/**
 	 * 启用定义的流程
-	 * @param processDefinedId 
+	 * @param processDefinitionId 
 	 * @param activateAllRunProcessInstance 是否激活所有与当前流程定义相关的运行的流程实例
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult enable(int processDefinedId, boolean activateAllRunProcessInstance) {
-		ProcessDefined processDefined = getProcessDefinedById(processDefinedId);
+	public ExecutionResult enable(int processDefinitionId, boolean activateAllRunProcessInstance) {
+		ProcessDefinition processDefined = getProcessDefinedById(processDefinitionId);
 		if(processDefined == null)
-			return new ExecutionResult("id", "启用失败, 不存在id=%d的流程定义信息", "bpm.process.defined.enable.fail.unexists", processDefinedId);
+			return new ExecutionResult("id", "启用失败, 不存在id=%d的流程定义信息", "bpm.process.defined.enable.fail.unexists", processDefinitionId);
 		if(processDefined.isEnabled())
-			return new ExecutionResult("id", "启用失败, id=%d的流程定义已经启用", "bpm.process.defined.enable.fail.already.done", processDefinedId);
+			return new ExecutionResult("id", "启用失败, id=%d的流程定义已经启用", "bpm.process.defined.enable.fail.already.done", processDefinitionId);
 		return enable(processDefined, activateAllRunProcessInstance);
 	}
 	
 	// 启用定义的流程
-	private ExecutionResult enable(ProcessDefined processDefined, boolean activateAllRunProcessInstance) {
+	private ExecutionResult enable(ProcessDefinition processDefined, boolean activateAllRunProcessInstance) {
 		SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set enabled=1 where id=?", Arrays.asList(processDefined.getId()));
 		if(activateAllRunProcessInstance)
 			return runtimeInstance.activateAllProcessInstance(processDefined.getId());
@@ -84,21 +109,21 @@ public class ProcessDeployService {
 	
 	/**
 	 * 禁用定义的流程
-	 * @param processDefinedId
+	 * @param processDefinitionId
 	 * @param suspendAllRunProcessInstance 是否挂起所有与当前流程定义相关的运行的流程实例
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult disable(int processDefinedId, boolean suspendAllRunProcessInstance) {
-		ProcessDefined processDefined = getProcessDefinedById(processDefinedId);
+	public ExecutionResult disable(int processDefinitionId, boolean suspendAllRunProcessInstance) {
+		ProcessDefinition processDefined = getProcessDefinedById(processDefinitionId);
 		if(processDefined == null)
-			return new ExecutionResult("id", "禁用失败, 不存在id=%d的流程定义信息", "bpm.process.defined.disable.fail.unexists", processDefinedId);
+			return new ExecutionResult("id", "禁用失败, 不存在id=%d的流程定义信息", "bpm.process.defined.disable.fail.unexists", processDefinitionId);
 		if(!processDefined.isEnabled())
-			return new ExecutionResult("id", "禁用失败, id=%d的流程定义已经被禁用", "bpm.process.defined.disable.fail.already.done", processDefinedId);
+			return new ExecutionResult("id", "禁用失败, id=%d的流程定义已经被禁用", "bpm.process.defined.disable.fail.already.done", processDefinitionId);
 		
-		SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set enabled=0 where id=?", Arrays.asList(processDefinedId));
+		SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set enabled=0 where id=?", Arrays.asList(processDefinitionId));
 		if(suspendAllRunProcessInstance)
-			return runtimeInstance.suspendAllProcessInstance(processDefinedId);
+			return runtimeInstance.suspendAllProcessInstance(processDefinitionId);
 		return null;
 	}
 }

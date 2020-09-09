@@ -5,9 +5,10 @@
 		1. 连线
 		2. 任务, 包含两种类型:
 			2.1. 手动任务, 需要用户手动处理, 来推动流程流转, 例如用户任务
-			2.2. 自动任务, 可以自行推动流程流转, 例如开始任务, 结束任务, 并行任务, 排他任务, 包容任务, 子流程任务, SQL脚本任务, 定时任务, 邮件任务等 
+			2.2. 自动任务, 可以自行推动流程流转, 例如开始任务, 结束任务, 子流程任务, SQL脚本任务, 定时任务, 邮件任务等
+		3. 网关: 并行网关, 排他网关, 包容网关 
 	-->
-	<process id="编码" version="用户自定义的版本" name="流程名称" titleExpression="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name">
+	<process code="编码" version="用户自定义的版本" titleExpression="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name">
 		<!-- 开始任务, 一个流程中只能有一个开始 -->
 		<startTask id="startTask" name=""></startTask>
 		<!-- 结束任务, 一个流程中可以有多个结束 -->
@@ -42,14 +43,11 @@
 			<option type="assist" name="协办">
 				<candidate></candidate>
 			</option>
-			<option type="extension" name="延长办理" times="可以延长办理几次, 默认值为1" maxDays="一次最多几天, 默认值为1" dayType="延长天数是工作日还是自然日, 默认值为工作日" >
-				<candidate></candidate>
-			</option>
+			<option type="extension" name="延长办理" times="可以延长办理几次, 默认值为1" maxDays="一次最多几天, 默认值为1" dayType="延长天数是工作日还是自然日, 默认值为工作日" ></option>
 			<option type="tracking" name="流程跟踪"></option>
 			<option type="terminate" name="流程终止"></option><!-- 另外的流程挂起与激活, 放到流程实例管理界面, 做为流程管理员功能提供 -->
-			<option type="urging" name="催办" auto="是否进行自动催办(一次), 默认为false"></option><!-- 在逾期后才会出现催办按钮 -->
-			<!-- 当用户提交后, 如果发现提交的有问题, 还可以自主选择撤回, 重新编辑后再提交 -->
-			<!-- times设置可以撤回的次数, 默认值为0, 配置的值在小于1时, 都表示不限制次数 -->
+			<option type="urging" name="催办" auto="是否进行自动催办(一次), 在逾期后自动发起一次, 默认为false"></option><!-- 在逾期后才会出现催办按钮 -->
+			<!-- 当用户提交后, 如果发现提交的有问题, 还可以自主选择撤回, 重新编辑后重新提交; times设置可以撤回的次数, 默认值为0, 配置的值在小于1时, 都表示不限制次数 -->
 			<option type="withdraw" name="撤回" times="0"></option>
 			
 			<!-- 前/后置监听器 -->
@@ -69,12 +67,12 @@
 		<emailTask id="emailTask1"></emailTask>
 		
 		
-		<!-- 并行任务 -->
-		<parallelTask id="parallelTask1" name=""></parallelTask>
-		<!-- 排他任务 -->
-		<exclusiveTask id="exclusiveTask1" name=""></exclusiveTask>
-		<!-- 包容任务 -->
-		<inclusiveTask id="inclusiveTask1" name=""></inclusiveTask>
+		<!-- 并行网关 -->
+		<parallelGateway id="parallelGateway1" name=""></parallelGateway>
+		<!-- 排他网关 -->
+		<exclusiveGateway id="exclusiveGateway1" name=""></exclusiveGateway>
+		<!-- 包容网关 -->
+		<inclusiveGateway id="inclusiveGateway1" name=""></inclusiveGateway>
 		
 		
 		<!-- 连线, 可配置条件 -->

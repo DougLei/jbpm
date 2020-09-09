@@ -12,27 +12,27 @@ import com.douglei.orm.context.transaction.component.Transaction;
 public class RuntimeInstanceService {
 	
 	@Transaction
-	public boolean existsInstance(int processDefinedId) {
+	public boolean existsInstance(int processDefinitionId) {
 		return true;
 	}
 
 	/**
 	 * 激活指定流程定义相关的所有流程实例
-	 * @param processDefinedId
+	 * @param processDefinitionId
 	 * @return
 	 */
-	public ExecutionResult activateAllProcessInstance(int processDefinedId) {
+	public ExecutionResult activateAllProcessInstance(int processDefinitionId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	/**
 	 * 挂起指定流程定义相关的所有流程实例
-	 * @param processDefinedId
+	 * @param processDefinitionId
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult suspendAllProcessInstance(int processDefinedId) {
+	public ExecutionResult suspendAllProcessInstance(int processDefinitionId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -11,7 +11,7 @@ import com.douglei.tools.instances.file.resources.reader.ResourcesReader;
  * 
  * @author DougLei
  */
-public class ProcessDefined extends BasicEntity{
+public class ProcessDefinition extends BasicEntity{
 	private int refTypeId;
 	private String name;
 	private String code;
@@ -29,39 +29,39 @@ public class ProcessDefined extends BasicEntity{
 		return enabled == 1;
 	}
 	
-	public ProcessDefined setRefTypeId(int refTypeId) {
+	public ProcessDefinition setRefTypeId(int refTypeId) {
 		this.refTypeId = refTypeId;
 		return this;
 	}
-	public ProcessDefined setDescription(String description) {
+	public ProcessDefinition setDescription(String description) {
 		this.description = description;
 		return this;
 	}
-	public ProcessDefined setEnabled(int enabled) {
+	public ProcessDefinition setEnabled(int enabled) {
 		this.enabled = enabled;
 		return this;
 	}
-	public ProcessDefined setCode(String code) {
+	public ProcessDefinition setCode(String code) {
 		this.code = code;
 		return this;
 	}
-	public ProcessDefined setVersion(String version) {
+	public ProcessDefinition setVersion(String version) {
 		this.version = version;
 		return this;
 	}
-	public ProcessDefined setBuiltinVersion(int builtinVersion) {
+	public ProcessDefinition setBuiltinVersion(int builtinVersion) {
 		this.builtinVersion = builtinVersion;
 		return this;
 	}
-	public ProcessDefined setName(String name) {
+	public ProcessDefinition setName(String name) {
 		this.name = name;
 		return this;
 	}
-	public ProcessDefined setContent(String content) {
+	public ProcessDefinition setContent(String content) {
 		this.content = content;
 		return this;
 	}
-	public ProcessDefined setContent(File file) throws FileNotFoundException {
+	public ProcessDefinition setContent(File file) throws FileNotFoundException {
 		this.content = new ResourcesReader(new FileInputStream(file)).readAll(500).toString();
 		return this;
 	}

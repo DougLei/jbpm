@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.repository.deploy;
+package com.douglei.bpm.module.repository.definition;
 
 import java.util.Arrays;
 import java.util.List;
@@ -8,18 +8,16 @@ import com.douglei.bpm.annotation.ProcessEngineTransactionBean;
 import com.douglei.bpm.module.common.service.ExecutionResult;
 import com.douglei.bpm.module.history.HistoryInstanceService;
 import com.douglei.bpm.module.runtime.RuntimeInstanceService;
-import com.douglei.orm.configuration.impl.util.XmlReaderContext;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
 import com.douglei.orm.sessionfactory.sessions.session.table.TableSession;
-import com.douglei.tools.utils.serialize.JdkSerializeProcessor;
 
 /**
  * 流程部署服务
  * @author DougLei
  */
 @ProcessEngineTransactionBean
-public class ProcessDeployService {
+public class ProcessDefinitionService {
 	
 	@ProcessEngineField
 	private RuntimeInstanceService runtimeInstance;
@@ -28,13 +26,13 @@ public class ProcessDeployService {
 	private HistoryInstanceService historyInstance;
 	
 	/**
-	 * 部署定义的流程
+	 * 保存流程定义信息
 	 * @param processDefinition
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult deploy(ProcessDefinition processDefinition) {
-		List<ProcessDefinition> list = SessionContext.getTableSession().query(ProcessDefinition.class, "select id, builtin_version from bpm_re_procdef where code=? and version_=? order by builtin_version desc", Arrays.asList(processDefinition.getCode(), processDefinition.getVersion()));
+	public ExecutionResult save(ProcessDefinition processDefinition) {
+		List<ProcessDefinition> list = SessionContext.getTableSession().query(ProcessDefinition.class, "select id, builtin_version from bpm_re_procdef where code=? and version_=? order by builtin_version desc", Arrays.asList(entity.getCode(), entity.getVersion()));
 		ProcessDefinition pd = list.isEmpty()?null:list.get(0);
 		
 		/**
@@ -47,7 +45,7 @@ public class ProcessDeployService {
 		 * */
 		
 		if(pd == null) {
-			SessionContext.getTableSession().save(processDefined); 
+			SessionContext.getTableSession().save(entity); 
 		} else {
 			// 判断是否修改了content, 修改了
 			
@@ -77,6 +75,33 @@ public class ProcessDeployService {
 	}
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// 获取指定id的流程定义信息
 	private ProcessDefinition getProcessDefinedById(int processDefinitionId) {
 		TableSession tableSession = SessionContext.getTableSession();
@@ -94,7 +119,7 @@ public class ProcessDeployService {
 		ProcessDefinition processDefined = getProcessDefinedById(processDefinitionId);
 		if(processDefined == null)
 			return new ExecutionResult("id", "启用失败, 不存在id=%d的流程定义信息", "bpm.process.defined.enable.fail.unexists", processDefinitionId);
-		if(processDefined.isEnabled())
+		if(processDefined.getEnabled() == 1)
 			return new ExecutionResult("id", "启用失败, id=%d的流程定义已经启用", "bpm.process.defined.enable.fail.already.done", processDefinitionId);
 		return enable(processDefined, activateAllRunProcessInstance);
 	}
@@ -118,7 +143,7 @@ public class ProcessDeployService {
 		ProcessDefinition processDefined = getProcessDefinedById(processDefinitionId);
 		if(processDefined == null)
 			return new ExecutionResult("id", "禁用失败, 不存在id=%d的流程定义信息", "bpm.process.defined.disable.fail.unexists", processDefinitionId);
-		if(!processDefined.isEnabled())
+		if(processDefined.getEnabled() == 0)
 			return new ExecutionResult("id", "禁用失败, id=%d的流程定义已经被禁用", "bpm.process.defined.disable.fail.already.done", processDefinitionId);
 		
 		SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set enabled=0 where id=?", Arrays.asList(processDefinitionId));

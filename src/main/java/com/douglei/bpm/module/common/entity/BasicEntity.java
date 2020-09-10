@@ -6,12 +6,19 @@ import java.util.Date;
  * 
  * @author DougLei
  */
-public abstract class BasicEntity extends IdEntity{
+public abstract class BasicEntity {
+	private int id;
 	private String createUser;
 	private Date createDate;
 	private String updateUser;
 	private Date updateDate;
 	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getCreateUser() {
 		return createUser;
 	}

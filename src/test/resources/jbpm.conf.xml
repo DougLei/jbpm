@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration id="default">
+<configuration id="defaultProcessEngine">
 	<environment>
 		<datasource class="com.alibaba.druid.pool.DruidDataSource" closeMethod="">
 			<property name="url" value="jdbc:sqlserver://localhost:1433;DatabaseName=jbpm"/>

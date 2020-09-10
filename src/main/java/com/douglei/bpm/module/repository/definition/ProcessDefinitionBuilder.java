@@ -3,8 +3,8 @@ package com.douglei.bpm.module.repository.definition;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Map;
 
-import com.douglei.tools.instances.file.reader.ClasspathFile;
 import com.douglei.tools.instances.file.reader.FileBufferedReader;
 
 /**
@@ -12,8 +12,10 @@ import com.douglei.tools.instances.file.reader.FileBufferedReader;
  * @author DougLei
  */
 public class ProcessDefinitionBuilder {
-	private ProcessDefinition processDefinition;
-
+	private String content;
+	private int typeId;
+	private String description;
+	
 	/**
 	 * 根据文件构建流程定义实例
 	 * @param file
@@ -36,11 +38,7 @@ public class ProcessDefinitionBuilder {
 	 * @param content
 	 */
 	public ProcessDefinitionBuilder(String content) {
-		// 解析content, 只获取name, code, version
-		
-		
-		
-		this.processDefinition = new ProcessDefinition();
+		this.content = content;
 	}
 	
 
@@ -49,8 +47,8 @@ public class ProcessDefinitionBuilder {
 	 * @param typeId
 	 * @return
 	 */
-	public ProcessDefinitionBuilder setRefTypeId(int typeId) {
-		processDefinition.setRefTypeId(typeId);
+	public ProcessDefinitionBuilder setTypeId(int typeId) {
+		this.typeId = typeId;
 		return this;
 	}
 	
@@ -60,15 +58,36 @@ public class ProcessDefinitionBuilder {
 	 * @return
 	 */
 	public ProcessDefinitionBuilder setDescription(String description) {
-		processDefinition.setDescription(description);
+		this.description = description;
 		return this;
 	}
 
 	/**
-	 * 获取流程定义实例
+	 * 构建流程定义实例
 	 * @return
 	 */
-	public ProcessDefinition getProcessDefinition() {
+	public ProcessDefinition buildProcessDefinition() {
+		ProcessDefinition processDefinition = new ProcessDefinition();
+		
+		// 获取name, code, version的值
+		char c;
+		for(int i=content.indexOf("<process ");;i++) {
+			c = content.charAt(i);
+			if(c == ' ' || c == '=' || c == '"' || c == '\'' || c == '\t' || c == '\n' || c == '\r')
+				continue;
+			if(c == '>')
+				break;
+			if(c == 'c')
+				i+=4;
+				processDefinition.setCode(code);
+			if(c == 'v')
+				processDefinition.setVersion(version);
+			if(c == 'n')
+				processDefinition.setName(name);
+		}
+		
+		processDefinition.setRefTypeId(typeId);
+		processDefinition.setDescription(description);
 		return processDefinition;
 	}
 }

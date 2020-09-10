@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import com.douglei.tools.instances.file.reader.ClasspathFile;
-import com.douglei.tools.instances.file.reader.ResourceReader;
+import com.douglei.tools.instances.file.reader.FileBufferedReader;
 
 /**
  * 流程定义的构建器
@@ -20,7 +20,7 @@ public class ProcessDefinitionBuilder {
 	 * @throws FileNotFoundException
 	 */
 	public ProcessDefinitionBuilder(File file) throws FileNotFoundException {
-		this(new ResourceReader(new FileInputStream(file)).readAll(1000).toString());
+		this(new FileBufferedReader(new FileInputStream(file)).readAll(1000).toString());
 	}
 	
 	/**
@@ -28,7 +28,7 @@ public class ProcessDefinitionBuilder {
 	 * @param file
 	 */
 	public ProcessDefinitionBuilder(ClasspathFile file) {
-		this(new ResourceReader(file.getName()).readAll(1000).toString());
+		this(new FileBufferedReader(file.getName()).readAll(1000).toString());
 	}
 	
 	/**

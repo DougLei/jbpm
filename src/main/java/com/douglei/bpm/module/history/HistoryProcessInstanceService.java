@@ -8,7 +8,7 @@ import com.douglei.orm.context.transaction.component.Transaction;
  * @author DougLei
  */
 @ProcessEngineTransactionBean
-public class HistoryInstanceService {
+public class HistoryProcessInstanceService {
 	
 	@Transaction
 	public boolean existsInstance(int processDefinitionId) {

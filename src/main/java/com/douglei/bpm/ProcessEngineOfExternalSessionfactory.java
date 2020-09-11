@@ -6,7 +6,7 @@ import java.util.List;
 import com.douglei.orm.configuration.environment.mapping.MappingEntity;
 import com.douglei.orm.configuration.impl.element.environment.mapping.DeleteMappingEntity;
 import com.douglei.orm.context.SessionFactoryRegister;
-import com.douglei.orm.core.dialect.mapping.MappingExecuteException;
+import com.douglei.orm.core.mapping.MappingExecuteException;
 import com.douglei.orm.sessionfactory.SessionFactory;
 
 /**

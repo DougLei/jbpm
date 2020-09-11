@@ -3,7 +3,7 @@ package com.douglei.bpm;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
-import com.douglei.orm.core.dialect.mapping.MappingExecuteException;
+import com.douglei.orm.core.mapping.MappingExecuteException;
 
 /**
  * 流程引擎

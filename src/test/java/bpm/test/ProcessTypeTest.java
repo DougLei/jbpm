@@ -46,6 +46,6 @@ public class ProcessTypeTest {
 	public void delete() {
 		ProcessType type = new ProcessType();
 		type.setId(3);
-		System.out.println(engine.getRepository().getTypeService().delete(type));
+		System.out.println(engine.getRepository().getTypeService().delete(type, false));
 	}
 }

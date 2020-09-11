@@ -7,12 +7,17 @@ import com.douglei.bpm.module.common.entity.BasicEntity;
  * @author DougLei
  */
 class ProcessDefinition extends BasicEntity{
+	public static int DISABLED = 0; // 禁用
+	public static int ENABLED = 1; // 启用
+	public static int DELETE = 2; // 删除
+	
 	private int refTypeId;
 	private String name;
 	private String code;
 	private String version;
 	private int subversion;
 	private String content;
+	private String signature;
 	private int state;
 	private String description;
 	
@@ -23,6 +28,8 @@ class ProcessDefinition extends BasicEntity{
 		this.refTypeId = refTypeId;
 	}
 	public String getName() {
+		if(name == null)
+			name = code + ":" + version;
 		return name;
 	}
 	public void setName(String name) {
@@ -51,6 +58,12 @@ class ProcessDefinition extends BasicEntity{
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public String getSignature() {
+		return signature;
+	}
+	public void setSignature(String signature) {
+		this.signature = signature;
 	}
 	public int getState() {
 		return state;

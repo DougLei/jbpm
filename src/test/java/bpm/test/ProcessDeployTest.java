@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
-import com.douglei.bpm.module.repository.definition.ProcessDefinition;
+import com.douglei.bpm.module.repository.definition.ProcessDefinitionBuilder;
 import com.douglei.orm.context.IdDuplicateException;
 
 public class ProcessDeployTest {
@@ -17,8 +17,8 @@ public class ProcessDeployTest {
 	}
 	
 	@Test
-	public void deploy() {
-		ProcessDefinition processDefinition = new ProcessDefinition("D:\\workspace4\\jbpm\\src\\test\\resources\\processTest.bpm.xml");
-		engine.getRepository().getDefinitionService().deploy(processDefinition);
+	public void save() {
+		ProcessDefinitionBuilder builder = new ProcessDefinitionBuilder("D:\\workspace4\\jbpm\\src\\test\\resources\\processTest.bpm.xml");
+		engine.getRepository().getDefinitionService().save(builder, false);
 	}
 }

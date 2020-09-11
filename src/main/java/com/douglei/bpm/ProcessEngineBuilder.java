@@ -15,7 +15,7 @@ import com.douglei.orm.configuration.impl.element.environment.mapping.AddOrCover
 import com.douglei.orm.context.IdDuplicateException;
 import com.douglei.orm.context.RegistrationResult;
 import com.douglei.orm.context.SessionFactoryRegister;
-import com.douglei.orm.core.dialect.mapping.MappingExecuteException;
+import com.douglei.orm.core.mapping.MappingExecuteException;
 import com.douglei.orm.sessionfactory.SessionFactory;
 import com.douglei.tools.instances.scanner.FileScanner;
 

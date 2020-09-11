@@ -5,11 +5,11 @@ import com.douglei.bpm.module.common.service.ExecutionResult;
 import com.douglei.orm.context.transaction.component.Transaction;
 
 /**
- * 运行实例服务
+ * 运行流程实例服务
  * @author DougLei
  */
 @ProcessEngineTransactionBean
-public class RuntimeInstanceService {
+public class RuntimeProcessInstanceService {
 	
 	@Transaction
 	public boolean existsInstance(int processDefinitionId) {

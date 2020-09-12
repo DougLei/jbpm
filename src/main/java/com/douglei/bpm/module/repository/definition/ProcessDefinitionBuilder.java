@@ -143,8 +143,9 @@ public class ProcessDefinitionBuilder {
 		return c == ' ' || c == '\t' || c == '\n' || c == '\r';
 	}
 	// 获取属性名, 这里做一个小优化, 如果属性名不是name,code,version, 就返回null
+	private static final String attributeNames = "name,code,version";
 	private String getAttributeName(String attributeName) {
-		if("name,code,version".indexOf(attributeName) > -1)
+		if(attributeNames.indexOf(attributeName) > -1)
 			return attributeName;
 		return null;
 	}

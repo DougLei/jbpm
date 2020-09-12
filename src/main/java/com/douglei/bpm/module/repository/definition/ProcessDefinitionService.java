@@ -9,7 +9,6 @@ import com.douglei.bpm.module.history.HistoryProcessInstanceService;
 import com.douglei.bpm.module.runtime.RuntimeProcessInstanceService;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
-import com.douglei.orm.sessionfactory.sessions.session.table.TableSession;
 import com.douglei.tools.utils.StringUtil;
 
 /**
@@ -35,15 +34,18 @@ public class ProcessDefinitionService {
 	public ExecutionResult save(ProcessDefinitionBuilder builder, boolean strict) {
 		ProcessDefinition processDefined = builder.buildProcessDefinition();
 		if(StringUtil.isEmpty(processDefined.getCode()))
-			return new ExecutionResult("code", "流程定义中的编码值不能为空", "bpm.process.defined.code.notnull");
+			return new ExecutionResult("code", "流程定义中的编码值不能为空", "bpm.process.defined.save.code.notnull");
 		if(StringUtil.isEmpty(processDefined.getVersion()))
-			return new ExecutionResult("version", "流程定义中的版本值不能为空", "bpm.process.defined.version.notnull");
+			return new ExecutionResult("version", "流程定义中的版本值不能为空", "bpm.process.defined.save.version.notnull");
 		
 		ProcessDefinition pd = SessionContext.getTableSession().queryFirst(ProcessDefinition.class, "select id, subversion, signature, state from bpm_re_procdef where code=? and version=? order by subversion desc", Arrays.asList(processDefined.getCode(), processDefined.getVersion()));
 		if(pd == null) {
 			// 新的流程定义, 进行save
 			SessionContext.getTableSession().save(processDefined); 
 		}else {
+			if(pd.getState() == ProcessDefinition.DELETE)
+				return new ExecutionResult(null, "code=%s, version=%s的标识, 已被其他流程定义使用", "bpm.process.defined.save.code.version.exists", processDefined.getCode(), processDefined.getVersion());
+			
 			if(pd.getSignature().equals(processDefined.getSignature())){
 				// 没有修改流程定义的内容, 进行update
 				processDefined.setId(pd.getId());
@@ -77,11 +79,33 @@ public class ProcessDefinitionService {
 		return null;
 	}
 	
-	// 获取指定id的流程定义信息
-	private ProcessDefinition getProcessDefinedById(int processDefinitionId) {
-		TableSession tableSession = SessionContext.getTableSession();
-		return tableSession.uniqueQuery(ProcessDefinition.class, "select " + tableSession.getColumnNames(ProcessDefinition.class) + " from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
+	/**
+	 * 删除流程定义信息
+	 * @param processDefinitionId
+	 * @param terminateAllRunProcessInstance 是否终止所有与当前流程定义相关的运行的流程实例
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult delete(int processDefinitionId, boolean terminateAllRunProcessInstance) {
+		ProcessDefinition processDefined = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
+		if(processDefined == null)
+			return new ExecutionResult("id", "删除失败, 不存在id=%d的流程定义信息", "bpm.process.defined.delete.fail.unexists", processDefinitionId);
+		if(processDefined.getState() == ProcessDefinition.DELETE)
+			return new ExecutionResult("id", "删除失败, id=%d的流程定义已经被删除", "bpm.process.defined.delete.fail.already.done", processDefinitionId);
+		
+		// TODO 如果有实例, 则进行逻辑删除, 如果有运行实例, 根据terminateAllRunProcessInstance参数看是否要终止
+		// 没有实例, 就直接进行删除
+		if(runtimeProcessInstanceService.existsInstance(processDefinitionId) || historyProcessInstanceService.existsInstance(processDefinitionId)) {
+			
+		}
+			
+		return null;
 	}
+	
+	
+	
+	
+	
 	
 	/**
 	 * 启用定义的流程
@@ -91,7 +115,7 @@ public class ProcessDefinitionService {
 	 */
 	@Transaction
 	public ExecutionResult enable(int processDefinitionId, boolean activateAllRunProcessInstance) {
-		ProcessDefinition processDefined = getProcessDefinedById(processDefinitionId);
+		ProcessDefinition processDefined = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, state, content_ from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefined == null)
 			return new ExecutionResult("id", "启用失败, 不存在id=%d的流程定义信息", "bpm.process.defined.enable.fail.unexists", processDefinitionId);
 		if(processDefined.getState() == ProcessDefinition.ENABLED)
@@ -115,7 +139,7 @@ public class ProcessDefinitionService {
 	 */
 	@Transaction
 	public ExecutionResult disable(int processDefinitionId, boolean suspendAllRunProcessInstance) {
-		ProcessDefinition processDefined = getProcessDefinedById(processDefinitionId);
+		ProcessDefinition processDefined = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefined == null)
 			return new ExecutionResult("id", "禁用失败, 不存在id=%d的流程定义信息", "bpm.process.defined.disable.fail.unexists", processDefinitionId);
 		if(processDefined.getState() == ProcessDefinition.DISABLED)

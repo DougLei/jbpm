@@ -57,8 +57,7 @@ class ProcessSerializationHandler {
 	 * @param process
 	 */
 	public void createFile(Process process) {
-		String filePath = getBpmFilePath(process.getCode(), process.getVersion(), process.getSubversion());
-		JdkSerializeProcessor.serialize2File(process, filePath);
+		JdkSerializeProcessor.serialize2File(process, getBpmFilePath(process.getCode(), process.getVersion(), process.getSubversion()));
 	}
 
 	/**
@@ -68,8 +67,7 @@ class ProcessSerializationHandler {
 	 * @param subversion
 	 */
 	public void deleteFile(String code, String version, int subversion) {
-		String filePath = getBpmFilePath(code, version, subversion);
-		File file = new File(filePath);
+		File file = new File(getBpmFilePath(code, version, subversion));
 		if(file.exists()) 
 			file.delete();
 	}

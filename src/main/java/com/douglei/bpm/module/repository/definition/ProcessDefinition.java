@@ -7,9 +7,9 @@ import com.douglei.bpm.module.common.entity.BasicEntity;
  * @author DougLei
  */
 class ProcessDefinition extends BasicEntity{
-	public static int DISABLED = 0; // 禁用
-	public static int ENABLED = 1; // 启用
-	public static int DELETE = 2; // 删除
+	public static int UNPUBLISHED = 0; // 未发布
+	public static int PUBLISHED = 1; // 已发布
+	public static int DELETE = 2; // 被删除
 	
 	private int refTypeId;
 	private String name;

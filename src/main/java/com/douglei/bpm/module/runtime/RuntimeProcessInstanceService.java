@@ -17,22 +17,12 @@ public class RuntimeProcessInstanceService {
 	}
 
 	/**
-	 * 激活指定流程定义相关的所有流程实例
+	 * 处理指定流程定义相关的所有实例
 	 * @param processDefinitionId
+	 * @param policy 对运行实例的处理策略
 	 * @return
 	 */
-	public ExecutionResult activateAllProcessInstance(int processDefinitionId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	/**
-	 * 挂起指定流程定义相关的所有流程实例
-	 * @param processDefinitionId
-	 * @return
-	 */
-	@Transaction
-	public ExecutionResult suspendAllProcessInstance(int processDefinitionId) {
+	public ExecutionResult processingAllInstance(int processDefinitionId, InstanceProcessingPolicy policy) {
 		// TODO Auto-generated method stub
 		return null;
 	}

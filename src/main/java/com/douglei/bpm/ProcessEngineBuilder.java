@@ -29,8 +29,10 @@ public class ProcessEngineBuilder {
 	private ProcessEngineBeanFactory beanFactory = new ProcessEngineBeanFactory(); // 引擎bean工厂
 	
 	private ProcessEngineBuilder() {}
-	private static ProcessEngineBuilder singleton = new ProcessEngineBuilder();
-	public static ProcessEngineBuilder getSingleton() {
+	private static ProcessEngineBuilder singleton;
+	public static synchronized ProcessEngineBuilder getSingleton() {
+		if(singleton == null)
+			singleton = new ProcessEngineBuilder();
 		return singleton;
 	}
 	

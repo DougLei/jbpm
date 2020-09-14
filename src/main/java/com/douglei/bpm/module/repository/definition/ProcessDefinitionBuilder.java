@@ -46,7 +46,7 @@ public class ProcessDefinitionBuilder {
 	}
 	
 	/**
-	 * 设置流程的类型id
+	 * 设置流程定义的类型id
 	 * @param typeId
 	 * @return
 	 */
@@ -56,7 +56,7 @@ public class ProcessDefinitionBuilder {
 	}
 	
 	/**
-	 * 设置流程的描述
+	 * 设置流程定义的描述
 	 * @param description
 	 * @return
 	 */
@@ -69,7 +69,7 @@ public class ProcessDefinitionBuilder {
 	 * 构建流程定义实例
 	 * @return
 	 */
-	ProcessDefinition buildProcessDefinition() {
+	public ProcessDefinition build() {
 		Map<String, String> attribute = getProcessAttribute();
 		
 		ProcessDefinition processDefinition = new ProcessDefinition();

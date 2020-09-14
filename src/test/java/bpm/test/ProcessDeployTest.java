@@ -19,6 +19,6 @@ public class ProcessDeployTest {
 	@Test
 	public void save() {
 		ProcessDefinitionBuilder builder = new ProcessDefinitionBuilder("D:\\workspace4\\jbpm\\src\\test\\resources\\processTest.bpm.xml");
-		engine.getRepository().getDefinitionService().save(builder, false);
+		engine.getRepository().getDefinitionService().save(builder.build(), false);
 	}
 }

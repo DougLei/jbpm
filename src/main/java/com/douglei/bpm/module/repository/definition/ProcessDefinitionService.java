@@ -26,13 +26,12 @@ public class ProcessDefinitionService {
 	
 	/**
 	 * 保存流程定义信息
-	 * @param builder
+	 * @param processDefined 使用 {@link ProcessDefinitionBuilder} 构建
 	 * @param strict 是否要强制保存流程定义; 针对保存的流程定义有实例的情况, 如果为true, 则会创建新的子版本信息保存, 否则会返回ExecutionResult
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult save(ProcessDefinitionBuilder builder, boolean strict) {
-		ProcessDefinition processDefined = builder.buildProcessDefinition();
+	public ExecutionResult save(ProcessDefinition processDefined, boolean strict) {
 		if(StringUtil.isEmpty(processDefined.getCode()))
 			return new ExecutionResult("code", "流程定义中的编码值不能为空", "bpm.process.defined.save.code.notnull");
 		if(StringUtil.isEmpty(processDefined.getVersion()))

@@ -9,7 +9,7 @@ public interface Validator<T> {
 	/**
 	 * 执行验证
 	 * @param t
-	 * @return
+	 * @return 如果验证通过, 返回null
 	 */
 	ExecutionResult validate(T t);
 }

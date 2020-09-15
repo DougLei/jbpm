@@ -1,5 +1,6 @@
 package com.douglei.bpm;
 
+import com.douglei.bpm.core.process.ProcessHandler;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
@@ -11,12 +12,15 @@ import com.douglei.orm.core.mapping.MappingExecuteException;
  */
 public abstract class ProcessEngine {
 	protected String id;
+	protected ProcessHandler processHandler;
+	
 	private RepositoryModule repository;
 	private RuntimeModule runtime;
 	private HistoryModule history;
 	
 	protected ProcessEngine(String id) {
 		this.id = id;
+		this.processHandler = new ProcessHandler(id);
 	}
 	
 	void setRepository(RepositoryModule repository) {

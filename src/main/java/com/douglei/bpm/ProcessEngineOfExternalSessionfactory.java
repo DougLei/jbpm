@@ -37,5 +37,6 @@ public class ProcessEngineOfExternalSessionfactory extends ProcessEngine {
 			entities.add(new DeleteMappingEntity(code, false));
 		}
 		sessionFactory.getMappingProcessor().execute(entities);
+		processHandler.destroy();
 	}
 }

@@ -26,7 +26,6 @@ public class ProcessDefinitionService {
 	@ProcessEngineField
 	private HistoryProcessInstanceService historyProcessInstanceService;
 	
-	@ProcessEngineField
 	private ProcessHandler processHandler;
 	
 	/**
@@ -182,6 +181,8 @@ public class ProcessDefinitionService {
 		ProcessDefinition processDefined = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, code, version, subversion from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefined == null)
 			return new ExecutionResult("id", "获取失败, 不存在id=%d的流程定义信息", "bpm.process.defined.get.fail.unexists", processDefinitionId);
+		if(processDefined.getState() == ProcessDefinition.UNPUBLISHED)
+			return new ExecutionResult("id", "获取失败, id=%d的流程定义信息还未发布", "bpm.process.defined.get.fail.unpublished", processDefinitionId);
 		return get(processDefined.getCode(), processDefined.getVersion(), processDefined.getSubversion());
 	}
 	

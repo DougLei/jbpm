@@ -21,6 +21,9 @@ public class ExecutionResult extends ValidationResult{
 	public boolean isSuccess() {
 		return success;
 	}
+	public boolean isFail() {
+		return !success;
+	}
 	public Object getObject() {
 		return object;
 	}

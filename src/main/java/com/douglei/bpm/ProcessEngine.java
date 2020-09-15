@@ -1,5 +1,6 @@
 package com.douglei.bpm;
 
+import com.douglei.bpm.bean.annotation.ProcessEngineField;
 import com.douglei.bpm.core.process.ProcessHandler;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
@@ -11,59 +12,37 @@ import com.douglei.orm.core.mapping.MappingExecuteException;
  * @author DougLei
  */
 public abstract class ProcessEngine {
-	protected String id;
+	protected String id; // 引擎id
+	
+	@ProcessEngineField
 	protected ProcessHandler processHandler;
 	
-	private RepositoryModule repository;
-	private RuntimeModule runtime;
-	private HistoryModule history;
+	@ProcessEngineField
+	protected RepositoryModule repository;
+	
+	@ProcessEngineField
+	protected RuntimeModule runtime;
+	
+	@ProcessEngineField
+	protected HistoryModule history;
+	
 	
 	protected ProcessEngine(String id) {
 		this.id = id;
-		this.processHandler = new ProcessHandler(id);
 	}
 	
-	void setRepository(RepositoryModule repository) {
-		this.repository = repository;
-	}
-	void setRuntime(RuntimeModule runtime) {
-		this.runtime = runtime;
-	}
-	void setHistory(HistoryModule history) {
-		this.history = history;
-	}
-
 	public String getId() {
 		return id;
 	}
-
-	/**
-	 * 获取Repository模块
-	 * @return
-	 */
 	public RepositoryModule getRepository() {
 		return repository;
 	}
-	
-	/**
-	 * 获取Runtime模块
-	 * @return
-	 */
 	public RuntimeModule getRuntime() {
 		return runtime;
 	}
-	
-	/**
-	 * 获取History模块
-	 * @return
-	 */
 	public HistoryModule getHistory() {
 		return history;
 	}
 	
-	/**
-	 * 销毁
-	 * @throws MappingExecuteException
-	 */
 	public abstract void destroy() throws MappingExecuteException;
 }

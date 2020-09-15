@@ -1,6 +1,6 @@
 package com.douglei.bpm.module.history;
 
-import com.douglei.bpm.annotation.ProcessEngineBean;
+import com.douglei.bpm.bean.annotation.ProcessEngineBean;
 
 /**
  * 

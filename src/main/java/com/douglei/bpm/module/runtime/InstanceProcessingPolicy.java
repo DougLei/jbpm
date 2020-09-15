@@ -7,6 +7,11 @@ package com.douglei.bpm.module.runtime;
 public enum InstanceProcessingPolicy {
 	
 	/**
+	 * 不进行任何处理
+	 */
+	NONE,
+	
+	/**
 	 * 激活
 	 */
 	ACTIVATE,

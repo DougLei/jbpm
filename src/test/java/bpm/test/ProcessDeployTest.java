@@ -13,7 +13,7 @@ public class ProcessDeployTest {
 	
 	@Before
 	public void init() throws IdDuplicateException {
-		engine = ProcessEngineBuilder.getSingleton().build();
+		engine = new ProcessEngineBuilder().build();
 	}
 	
 	@Test

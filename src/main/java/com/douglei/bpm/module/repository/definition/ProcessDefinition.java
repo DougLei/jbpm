@@ -6,7 +6,7 @@ import com.douglei.bpm.module.common.entity.BasicEntity;
  * 
  * @author DougLei
  */
-class ProcessDefinition extends BasicEntity{
+public class ProcessDefinition extends BasicEntity{
 	public static int UNPUBLISHED = 0; // 未发布
 	public static int PUBLISHED = 1; // 已发布
 	public static int DELETE = 2; // 被删除

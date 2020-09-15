@@ -13,7 +13,7 @@ public abstract class Service {
 	 * @return 
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected final ExecutionResult validate(Object obj, Validator...validators) {
+	protected final ExecutionResult<Object> validate(Object obj, Validator...validators) {
 		if(validators.length > 0) {
 			ExecutionResult result = null;
 			for (Validator validator : validators) {

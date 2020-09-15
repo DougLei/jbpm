@@ -1,7 +1,7 @@
 package com.douglei.bpm.module.repository;
 
-import com.douglei.bpm.annotation.ProcessEngineBean;
-import com.douglei.bpm.annotation.ProcessEngineField;
+import com.douglei.bpm.bean.annotation.ProcessEngineBean;
+import com.douglei.bpm.bean.annotation.ProcessEngineField;
 import com.douglei.bpm.module.repository.definition.ProcessDefinitionService;
 import com.douglei.bpm.module.repository.type.ProcessTypeService;
 

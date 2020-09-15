@@ -1,13 +1,13 @@
 package com.douglei.bpm.module.history;
 
-import com.douglei.bpm.annotation.ProcessEngineTransactionBean;
+import com.douglei.bpm.bean.annotation.ProcessEngineBean;
 import com.douglei.orm.context.transaction.component.Transaction;
 
 /**
  * 历史实例服务
  * @author DougLei
  */
-@ProcessEngineTransactionBean
+@ProcessEngineBean
 public class HistoryProcessInstanceService {
 	
 	@Transaction

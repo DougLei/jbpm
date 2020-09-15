@@ -1,16 +1,18 @@
 package com.douglei.bpm.module.common.service;
 
+import java.util.Arrays;
+
 import com.douglei.orm.core.metadata.validator.ValidationResult;
 
 /**
  * 执行结果
  * @author DougLei
  */
-public class ExecutionResult extends ValidationResult{
+public class ExecutionResult<T> extends ValidationResult{
 	private boolean success;
-	private Object object;
+	private T object;
 	
-	public ExecutionResult(boolean success, Object object) {
+	public ExecutionResult(boolean success, T object) {
 		this.success = success;
 		this.object = object;
 	}
@@ -24,7 +26,14 @@ public class ExecutionResult extends ValidationResult{
 	public boolean isFail() {
 		return !success;
 	}
-	public Object getObject() {
+	public T getObject() {
 		return object;
+	}
+	
+	@Override
+	public String toString() {
+		if(success)
+			return "ExecutionResult [success=true, object="+object+"]";
+		return "ExecutionResult [success=false, fieldName="+getFieldName()+", originMessage=" + getOriginMessage() + ", code=" + getCode() + ", params=" + Arrays.toString(getParams()) +"]";
 	}
 }

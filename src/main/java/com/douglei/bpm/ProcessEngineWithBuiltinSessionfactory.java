@@ -6,7 +6,7 @@ import com.douglei.orm.context.SessionFactoryRegister;
  * 内置SessionFactory的流程引擎, 在销毁时必须销毁SessionFactory
  * @author DougLei
  */
-public class ProcessEngineWithBuiltinSessionfactory extends ProcessEngine {
+class ProcessEngineWithBuiltinSessionfactory extends ProcessEngine {
 
 	ProcessEngineWithBuiltinSessionfactory(String id) {
 		super(id);

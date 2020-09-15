@@ -13,7 +13,7 @@ import com.douglei.orm.sessionfactory.SessionFactory;
  * 外置SessionFactory的流程引擎, 在销毁时不能销毁SessionFactory
  * @author DougLei
  */
-public class ProcessEngineOfExternalSessionfactory extends ProcessEngine {
+class ProcessEngineOfExternalSessionfactory extends ProcessEngine {
 	private boolean removeSessionFactory; // 销毁时, 是否要从SessionFactoryRegister中移除SessionFactory
 	private String[] mappingCodes = {
 			"BPM_RE_DELEGATION", "BPM_RE_LISTENER", "BPM_RE_PROCDEF", "BPM_RE_PROCTYPE", "BPM_RE_SUGGEST"

@@ -1,17 +1,15 @@
 package com.douglei.bpm.core.process;
 
+import com.douglei.bpm.bean.annotation.ProcessEngineBean;
 import com.douglei.bpm.core.process.executer.Process;
 
 /**
  * 流程处理程序
  * @author DougLei
  */
+@ProcessEngineBean
 public class ProcessHandler {
 	private ProcessSerializationHandler processSerializationHandler;
-	
-	public ProcessHandler(String processEngineId) {
-		processSerializationHandler = new ProcessSerializationHandler(processEngineId);
-	}
 	
 	/**
 	 * 根据配置内容, 解析流程实例

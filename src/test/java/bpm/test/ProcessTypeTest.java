@@ -17,7 +17,7 @@ public class ProcessTypeTest {
 	
 	@Before
 	public void init() throws IdDuplicateException {
-		engine = ProcessEngineBuilder.getSingleton().build();
+		engine = new ProcessEngineBuilder().build();
 	}
 	
 	@Test
@@ -26,7 +26,7 @@ public class ProcessTypeTest {
 		type.setCode("test_code123");
 		type.setName("测试类型");
 		type.setCreateDate(new Date());
-		ExecutionResult result = engine.getRepository().getTypeService().save(type);
+		ExecutionResult<Object> result = engine.getRepository().getTypeService().save(type);
 		System.out.println(result);
 		System.out.println(I18nContext.getMessage(result));
 		System.out.println(type.getId());

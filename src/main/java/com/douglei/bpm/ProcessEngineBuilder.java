@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import com.douglei.bpm.bean.BeanFactory;
 import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
 import com.douglei.orm.configuration.environment.mapping.MappingEntity;
@@ -24,16 +25,12 @@ import com.douglei.tools.instances.scanner.FileScanner;
  * @author DougLei
  */
 public class ProcessEngineBuilder {
-	private String DEFAULT_CONFIGURATION_FILE_PATH = "jbpm.conf.xml"; // 默认的配置文件路径
-	private String MAPPING_FILE_ROOT_PATH = "jbpm-mappings"; // 工作流引擎相关的mapping文件根路径
-	private ProcessEngineBeanFactory beanFactory = new ProcessEngineBeanFactory(); // 引擎bean工厂
+	private static final String DEFAULT_CONFIGURATION_FILE_PATH = "jbpm.conf.xml"; // 默认的配置文件路径
+	private static final String MAPPING_FILE_ROOT_PATH = "jbpm-mappings"; // 工作流引擎相关的mapping文件根路径
+	private BeanFactory beanFactory; // 引擎bean工厂
 	
-	private ProcessEngineBuilder() {}
-	private static ProcessEngineBuilder singleton;
-	public static synchronized ProcessEngineBuilder getSingleton() {
-		if(singleton == null)
-			singleton = new ProcessEngineBuilder();
-		return singleton;
+	public ProcessEngineBuilder() {
+		this.beanFactory = BeanFactory.getSingleton();
 	}
 	
 	/**
@@ -82,7 +79,7 @@ public class ProcessEngineBuilder {
 		
 		SessionFactory sessionFactory = configuration.buildSessionFactory();
 		registerSessionFactory(sessionFactory);
-		return beanFactory.initProcessEngineFields(new ProcessEngineWithBuiltinSessionfactory(sessionFactory.getId()));
+		return beanFactory.initEngineFields(new ProcessEngineWithBuiltinSessionfactory(sessionFactory.getId()));
 	}
 	
 	/**
@@ -99,7 +96,7 @@ public class ProcessEngineBuilder {
 		
 		SessionFactory sessionFactory = configuration.buildSessionFactory();
 		registerSessionFactory(sessionFactory);
-		return beanFactory.initProcessEngineFields(new ProcessEngineWithBuiltinSessionfactory(sessionFactory.getId()));
+		return beanFactory.initEngineFields(new ProcessEngineWithBuiltinSessionfactory(sessionFactory.getId()));
 	}
 	
 	/**
@@ -118,7 +115,7 @@ public class ProcessEngineBuilder {
 		externalSessionFactory.getMappingProcessor().execute(mappingEntities);
 		
 		RegistrationResult result = registerSessionFactory(externalSessionFactory);
-		return beanFactory.initProcessEngineFields(new ProcessEngineOfExternalSessionfactory(externalSessionFactory.getId(), result == RegistrationResult.SUCCESS));
+		return beanFactory.initEngineFields(new ProcessEngineOfExternalSessionfactory(externalSessionFactory.getId(), result == RegistrationResult.SUCCESS));
 	}
 	
 	/**

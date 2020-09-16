@@ -27,6 +27,8 @@ public abstract class BasicEntity {
 		setUpdateUser(createUser);
 	}
 	public Date getCreateDate() {
+		if(createDate == null)
+			return new Date();
 		return createDate;
 	}
 	public void setCreateDate(Date createDate) {

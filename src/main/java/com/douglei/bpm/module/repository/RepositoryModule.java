@@ -1,7 +1,7 @@
 package com.douglei.bpm.module.repository;
 
-import com.douglei.bpm.bean.annotation.ProcessEngineBean;
-import com.douglei.bpm.bean.annotation.ProcessEngineField;
+import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.bean.annotation.Attribute;
 import com.douglei.bpm.module.repository.definition.ProcessDefinitionService;
 import com.douglei.bpm.module.repository.type.ProcessTypeService;
 
@@ -9,13 +9,13 @@ import com.douglei.bpm.module.repository.type.ProcessTypeService;
  * 
  * @author DougLei
  */
-@ProcessEngineBean
+@Bean(transaction = false)
 public class RepositoryModule {
 	
-	@ProcessEngineField
+	@Attribute
 	private ProcessTypeService typeService;
 	
-	@ProcessEngineField
+	@Attribute
 	private ProcessDefinitionService definitionService;
 
 	

@@ -2,8 +2,8 @@ package com.douglei.bpm.module.repository.instance;
 
 import java.util.Arrays;
 
-import com.douglei.bpm.bean.annotation.ProcessEngineBean;
-import com.douglei.bpm.bean.annotation.ProcessEngineField;
+import com.douglei.bpm.bean.annotation.Attribute;
+import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.core.process.ProcessHandler;
 import com.douglei.bpm.core.process.executer.Process;
 import com.douglei.bpm.module.common.service.ExecutionResult;
@@ -15,10 +15,10 @@ import com.douglei.orm.context.transaction.component.Transaction;
  * 流程实例服务
  * @author DougLei
  */
-@ProcessEngineBean
+@Bean
 public class ProcessInstanceService {
 	
-	@ProcessEngineField
+	@Attribute
 	private ProcessHandler processHandler;
 	
 	/**

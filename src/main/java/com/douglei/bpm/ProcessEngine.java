@@ -1,7 +1,7 @@
 package com.douglei.bpm;
 
-import com.douglei.bpm.bean.annotation.ProcessEngineField;
-import com.douglei.bpm.core.process.ProcessHandler;
+import com.douglei.bpm.bean.annotation.Attribute;
+import com.douglei.bpm.core.process.ProcessSerializationFolderContainer;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
@@ -12,23 +12,20 @@ import com.douglei.orm.core.mapping.MappingExecuteException;
  * @author DougLei
  */
 public abstract class ProcessEngine {
-	protected String id; // 引擎id
+	protected String id; // 引擎id, 即SessionFactory的id, 所以也可以从SessionFactoryRegister.get().getId()来获取
 	
-	@ProcessEngineField
-	protected ProcessHandler processHandler;
-	
-	@ProcessEngineField
+	@Attribute
 	protected RepositoryModule repository;
 	
-	@ProcessEngineField
+	@Attribute
 	protected RuntimeModule runtime;
 	
-	@ProcessEngineField
+	@Attribute
 	protected HistoryModule history;
-	
 	
 	protected ProcessEngine(String id) {
 		this.id = id;
+		ProcessSerializationFolderContainer.createFolder(this.id);
 	}
 	
 	public String getId() {
@@ -44,5 +41,7 @@ public abstract class ProcessEngine {
 		return history;
 	}
 	
-	public abstract void destroy() throws MappingExecuteException;
+	protected void destroy() throws MappingExecuteException{
+		ProcessSerializationFolderContainer.deleteFolder(this.id);
+	}
 }

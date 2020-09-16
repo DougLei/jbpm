@@ -1,12 +1,12 @@
 package com.douglei.bpm.module.history;
 
-import com.douglei.bpm.bean.annotation.ProcessEngineBean;
+import com.douglei.bpm.bean.annotation.Bean;
 
 /**
  * 
  * @author DougLei
  */
-@ProcessEngineBean
+@Bean(transaction = false)
 public class HistoryModule {
 
 }

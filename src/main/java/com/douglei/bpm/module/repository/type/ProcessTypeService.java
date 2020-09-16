@@ -2,7 +2,7 @@ package com.douglei.bpm.module.repository.type;
 
 import java.util.Arrays;
 
-import com.douglei.bpm.bean.annotation.ProcessEngineBean;
+import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.common.service.ExecutionResult;
 import com.douglei.bpm.module.common.service.Service;
 import com.douglei.bpm.module.common.service.Validator;
@@ -13,7 +13,7 @@ import com.douglei.orm.context.transaction.component.Transaction;
  * 流程类型服务
  * @author DougLei
  */
-@ProcessEngineBean
+@Bean
 public class ProcessTypeService extends Service{
 	// code验证器, 验证code是否重复
 	private Validator<ProcessType> codeValidator = new Validator<ProcessType>() { 

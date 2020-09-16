@@ -1,15 +1,30 @@
 package com.douglei.bpm.core.process;
 
-import com.douglei.bpm.bean.annotation.ProcessEngineBean;
+import java.io.File;
+
+import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.core.process.executer.Process;
+import com.douglei.bpm.module.repository.definition.ProcessDefinition;
+import com.douglei.orm.context.SessionFactoryRegister;
+import com.douglei.tools.utils.serialize.JdkSerializeProcessor;
 
 /**
  * 流程处理程序
  * @author DougLei
  */
-@ProcessEngineBean
+@Bean(transaction = false)
 public class ProcessHandler {
-	private ProcessSerializationHandler processSerializationHandler;
+	private SessionFactoryRegister register = SessionFactoryRegister.getSingleton();
+	
+	// 获取对应的bpm序列化文件全路径
+	private String getBpmFilePath(String code, String version, int subversion) {
+		return ProcessSerializationFolderContainer.getFolder(register.get().getId()) + code + "." + version + "." + subversion;
+	}
+	
+	// 创建序列化文件
+	private void createFile(Process process) {
+		JdkSerializeProcessor.serialize2File(process, getBpmFilePath(process.getCode(), process.getVersion(), process.getSubversion()));
+	}
 	
 	/**
 	 * 根据配置内容, 解析流程实例
@@ -17,9 +32,19 @@ public class ProcessHandler {
 	 * @param subversion 
 	 */
 	public void parse(String content, int subversion) {
-		// TODO Auto-generated method stub
-
+		// TODO 根据content解析出Process实例
 		
+		createFile(null);
+	}
+	
+	/**
+	 * 删除流程实例
+	 * @param processDefinition
+	 */
+	public void delete(ProcessDefinition processDefinition) {
+		File file = new File(getBpmFilePath(processDefinition.getCode(), processDefinition.getVersion(), processDefinition.getSubversion()));
+		if(file.exists()) 
+			file.delete();
 	}
 	
 	/**
@@ -30,23 +55,6 @@ public class ProcessHandler {
 	 * @return
 	 */
 	public Process get(String code, String version, int subversion) {
-		return processSerializationHandler.deserialize(code, version, subversion);
-	}
-	
-	/**
-	 * 删除流程实例
-	 * @param code
-	 * @param version
-	 * @param subversion
-	 */
-	public void delete(String code, String version, int subversion) {
-		processSerializationHandler.deleteFile(code, version, subversion);
-	}
-
-	/**
-	 * 
-	 */
-	public void destroy() {
-		processSerializationHandler.deleteFolder();
+		return JdkSerializeProcessor.deserializeFromFile(Process.class, getBpmFilePath(code, version, subversion));
 	}
 }

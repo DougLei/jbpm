@@ -2,8 +2,8 @@ package com.douglei.bpm.module.repository.definition;
 
 import java.util.Arrays;
 
-import com.douglei.bpm.bean.annotation.ProcessEngineBean;
-import com.douglei.bpm.bean.annotation.ProcessEngineField;
+import com.douglei.bpm.bean.annotation.Attribute;
+import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.core.process.ProcessHandler;
 import com.douglei.bpm.module.common.service.ExecutionResult;
 import com.douglei.bpm.module.history.HistoryProcessInstanceService;
@@ -17,16 +17,16 @@ import com.douglei.tools.utils.StringUtil;
  * 流程定义服务
  * @author DougLei
  */
-@ProcessEngineBean
+@Bean()
 public class ProcessDefinitionService {
 
-	@ProcessEngineField
+	@Attribute
 	private RuntimeProcessInstanceService runtimeProcessInstanceService;
 	
-	@ProcessEngineField
+	@Attribute
 	private HistoryProcessInstanceService historyProcessInstanceService;
 	
-	@ProcessEngineField
+	@Attribute
 	private ProcessHandler processHandler;
 	
 	/**
@@ -134,7 +134,7 @@ public class ProcessDefinitionService {
 	 */
 	@Transaction
 	public ExecutionResult<Object> cancelPublishing(int processDefinitionId, InstanceProcessingPolicy policy) {
-		ProcessDefinition processDefined = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
+		ProcessDefinition processDefined = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, code, version, subversion, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefined == null || processDefined.getState() == ProcessDefinition.DELETE)
 			return new ExecutionResult<Object>("id", "取消发布失败, 不存在id=%d的流程定义信息", "bpm.process.defined.cancel.publishing.fail.unexists", processDefinitionId);
 		if(processDefined.getState() == ProcessDefinition.UNPUBLISHED)
@@ -146,7 +146,7 @@ public class ProcessDefinitionService {
 			runtimeProcessInstanceService.processingAllInstance(processDefined.getId(), policy);
 		}
 		
-		processHandler.delete(processDefined.getCode(), processDefined.getVersion(), processDefined.getSubversion());
+		processHandler.delete(processDefined);
 		updateState(processDefined.getId(), ProcessDefinition.UNPUBLISHED);
 		return null;
 	}
@@ -159,7 +159,7 @@ public class ProcessDefinitionService {
 	 */
 	@Transaction
 	public ExecutionResult<Object> delete(int processDefinitionId, InstanceProcessingPolicy policy) {
-		ProcessDefinition processDefined = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
+		ProcessDefinition processDefined = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, code, version, subversion, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefined == null || processDefined.getState() == ProcessDefinition.DELETE)
 			return new ExecutionResult<Object>("id", "删除失败, 不存在id=%d的流程定义信息", "bpm.process.defined.delete.fail.unexists", processDefinitionId);
 		
@@ -174,7 +174,7 @@ public class ProcessDefinitionService {
 			updateState(processDefinitionId, ProcessDefinition.DELETE);
 		} else {
 			SessionContext.getSqlSession().executeUpdate("delete bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
-			processHandler.delete(processDefined.getCode(), processDefined.getVersion(), processDefined.getSubversion());
+			processHandler.delete(processDefined);
 		}
 		return null;
 	}

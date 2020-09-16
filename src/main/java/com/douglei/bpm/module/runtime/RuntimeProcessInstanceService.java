@@ -1,6 +1,6 @@
 package com.douglei.bpm.module.runtime;
 
-import com.douglei.bpm.bean.annotation.ProcessEngineBean;
+import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.common.service.ExecutionResult;
 import com.douglei.orm.context.transaction.component.Transaction;
 
@@ -8,7 +8,7 @@ import com.douglei.orm.context.transaction.component.Transaction;
  * 运行流程实例服务
  * @author DougLei
  */
-@ProcessEngineBean
+@Bean
 public class RuntimeProcessInstanceService {
 	
 	@Transaction

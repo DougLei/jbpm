@@ -1,19 +1,12 @@
 package com.douglei.bpm.module.runtime;
 
-import com.douglei.bpm.bean.annotation.ProcessEngineBean;
-import com.douglei.orm.context.SessionContext;
-import com.douglei.orm.context.transaction.component.Transaction;
+import com.douglei.bpm.bean.annotation.Bean;
 
 /**
  * 
  * @author DougLei
  */
-@ProcessEngineBean
+@Bean(transaction = false)
 public class RuntimeModule{
 
-	@Transaction(beginTransaction=false)
-	public void test() {
-		System.out.println(SessionContext.getSession());
-		System.out.println(1);
-	}
 }

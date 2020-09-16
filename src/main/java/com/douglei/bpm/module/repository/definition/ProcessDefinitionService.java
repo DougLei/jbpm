@@ -17,7 +17,7 @@ import com.douglei.tools.utils.StringUtil;
  * 流程定义服务
  * @author DougLei
  */
-@Bean()
+@Bean
 public class ProcessDefinitionService {
 
 	@Attribute

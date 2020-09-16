@@ -16,9 +16,9 @@
 			<column name="DESCRIPTION" property="description" dataType="nstring" length="150" />
 			
 			<column name="CREATE_USER" property="createUser" dataType="char" length="50" />
-			<column name="CREATE_DATE" property="createDate" dataType="date" nullable="false" />
+			<column name="CREATE_DATE" property="createDate" dataType="date" />
 			<column name="UPDATE_USER" property="updateUser" dataType="char" length="50" />
-			<column name="UPDATE_DATE" property="updateDate" dataType="date" nullable="false" />
+			<column name="UPDATE_DATE" property="updateDate" dataType="date" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

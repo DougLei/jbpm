@@ -24,16 +24,12 @@ public abstract class BasicEntity {
 	}
 	public void setCreateUser(String createUser) {
 		this.createUser = createUser;
-		setUpdateUser(createUser);
 	}
 	public Date getCreateDate() {
-		if(createDate == null)
-			return new Date();
 		return createDate;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
-		setUpdateDate(createDate);
 	}
 	public String getUpdateUser() {
 		return updateUser;
@@ -42,8 +38,6 @@ public abstract class BasicEntity {
 		this.updateUser = updateUser;
 	}
 	public Date getUpdateDate() {
-		if(updateDate == null)
-			return new Date();
 		return updateDate;
 	}
 	public void setUpdateDate(Date updateDate) {

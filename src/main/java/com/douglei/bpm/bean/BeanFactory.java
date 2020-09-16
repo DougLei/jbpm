@@ -5,8 +5,8 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
+import com.douglei.aop.ProxyBean;
 import com.douglei.aop.ProxyBeanContext;
 import com.douglei.aop.ProxyMethod;
 import com.douglei.bpm.ProcessEngine;
@@ -64,7 +64,7 @@ public class BeanFactory {
 						}
 					}
 					if(transactionComponentEntity != null) {
-						BEAN_CONTAINER.put(loadClass, ProxyBeanContext.createProxy(loadClass, new TransactionProxyInterceptor(transactionComponentEntity.getTransactionComponentClass(), transactionComponentEntity.getTransactionMethods())).getProxy());
+						BEAN_CONTAINER.put(loadClass, ProxyBeanContext.createProxy(loadClass, new TransactionProxyInterceptor(transactionComponentEntity.getTransactionComponentClass(), transactionComponentEntity.getTransactionMethods())));
 						continue;
 					}
 				}
@@ -73,30 +73,47 @@ public class BeanFactory {
 		}
 	}
 	
+	// 给对象的属性赋值
+	private void setAttribute(Object object) throws IllegalArgumentException, IllegalAccessException {
+		Class<?> currentClass = (object instanceof ProxyBean)?((ProxyBean)object).getOriginObject().getClass():object.getClass();
+		do{
+			for (Field field : currentClass.getDeclaredFields()) {
+				if(field.getAnnotation(Attribute.class) != null)
+					setValue(object, field, BEAN_CONTAINER.get(field.getType()));
+			}
+			currentClass = currentClass.getSuperclass();
+		} while (currentClass != Object.class);
+	}
+	
+	// 给属性赋值
+	private void setValue(Object object, Field field, Object value) throws IllegalArgumentException, IllegalAccessException {
+		if(value == null)
+			return;
+		
+		field.setAccessible(true);
+		if(object instanceof ProxyBean) {
+			if(value instanceof ProxyBean) {
+				field.set(((ProxyBean)object).getOriginObject(), ((ProxyBean)value).getProxy());
+			}else {
+				field.set(((ProxyBean)object).getOriginObject(), value);
+			}
+		}else {
+			if(value instanceof ProxyBean) {
+				field.set(object, ((ProxyBean)value).getProxy());
+			}else {
+				field.set(object, value);
+			}
+		}
+		field.setAccessible(false);
+	}
+	
 	/**
 	 * 设置Bean容器中每个Bean的属性
 	 */
 	private void setBeanAttributes() {
 		try {
-			Class<?> currentClass;
-			Field[] fields;
-			Object instance = null;
-			for(Entry<Class<?>, Object> bean : BEAN_CONTAINER.entrySet()) {
-				currentClass = bean.getKey();
-				do{
-					fields = currentClass.getDeclaredFields();
-					if(fields.length > 0) {
-						for (Field field : fields) {
-							if(field.getAnnotation(Attribute.class) != null && (instance = BEAN_CONTAINER.get(field.getType())) != null) {
-								field.setAccessible(true);
-								field.set(bean.getValue(), instance);
-								field.setAccessible(false);
-							}
-						}
-					}
-					currentClass = currentClass.getSuperclass();
-				} while (currentClass != Object.class);
-			}
+			for(Object object : BEAN_CONTAINER.values())
+				setAttribute(object);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
@@ -109,14 +126,7 @@ public class BeanFactory {
 	 */
 	public ProcessEngine initEngineAttributes(ProcessEngine engine) {
 		try {
-			Field[] fields = engine.getClass().getSuperclass().getDeclaredFields();
-			for (Field field : fields) {
-				if(field.getAnnotation(Attribute.class) != null) {
-					field.setAccessible(true);
-					field.set(engine, BEAN_CONTAINER.get(field.getType()));
-					field.setAccessible(false);
-				}
-			}
+			setAttribute(engine);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 

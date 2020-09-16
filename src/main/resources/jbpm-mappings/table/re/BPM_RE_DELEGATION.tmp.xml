@@ -10,9 +10,9 @@
 			<column name="END_DATE" property="endDate" dataType="date" nullable="false" />
 			<column name="REASON" property="reason" dataType="nstring" length="100" nullable="false" />
 			<column name="CREATE_USER" property="createUser" dataType="char" length="50" />
-			<column name="CREATE_DATE" property="createDate" dataType="date" nullable="false" />
+			<column name="CREATE_DATE" property="createDate" dataType="date" />
 			<column name="UPDATE_USER" property="updateUser" dataType="char" length="50" />
-			<column name="UPDATE_DATE" property="updateDate" dataType="date" nullable="false" />
+			<column name="UPDATE_DATE" property="updateDate" dataType="date" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

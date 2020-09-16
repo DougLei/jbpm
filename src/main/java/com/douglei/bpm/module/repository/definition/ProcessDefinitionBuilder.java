@@ -3,6 +3,7 @@ package com.douglei.bpm.module.repository.definition;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -19,6 +20,11 @@ public class ProcessDefinitionBuilder {
 	private String content;
 	private int typeId;
 	private String description;
+	
+	private String createUser;
+	private Date createDate;
+	private String updateUser;
+	private Date updateDate;
 	
 	/**
 	 * 根据文件构建流程定义实例
@@ -64,6 +70,46 @@ public class ProcessDefinitionBuilder {
 		this.description = description;
 		return this;
 	}
+	
+	/**
+	 * 设置流程定义的创建用户
+	 * @param createUser
+	 * @return
+	 */
+	public ProcessDefinitionBuilder setCreateUser(String createUser) {
+		this.createUser = createUser;
+		return this;
+	}
+
+	/**
+	 * 设置流程定义的创建时间
+	 * @param createDate
+	 * @return
+	 */
+	public ProcessDefinitionBuilder setCreateDate(Date createDate) {
+		this.createDate = createDate;
+		return this;
+	}
+
+	/**
+	 * 设置流程定义的修改用户
+	 * @param updateUser
+	 * @return
+	 */
+	public ProcessDefinitionBuilder setUpdateUser(String updateUser) {
+		this.updateUser = updateUser;
+		return this;
+	}
+
+	/**
+	 * 设置流程定义的修改时间
+	 * @param updateDate
+	 * @return
+	 */
+	public ProcessDefinitionBuilder setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+		return this;
+	}
 
 	/**
 	 * 构建流程定义实例
@@ -82,6 +128,11 @@ public class ProcessDefinitionBuilder {
 		
 		processDefinition.setRefTypeId(typeId);
 		processDefinition.setDescription(description);
+		
+		processDefinition.setCreateUser(createUser);
+		processDefinition.setCreateDate(createDate);
+		processDefinition.setUpdateUser(updateUser);
+		processDefinition.setUpdateDate(updateDate);
 		return processDefinition;
 	}
 	

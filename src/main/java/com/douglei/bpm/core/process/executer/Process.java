@@ -16,9 +16,5 @@ public class Process {
 		return null;
 	}
 
-	public int getSubversion() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 	
 }

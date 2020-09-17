@@ -121,8 +121,8 @@ public class ProcessDefinitionService {
 			runtimeProcessInstanceService.processingAllInstance(processDefined.getId(), policy);
 		}
 		
-		processHandler.parse(processDefined.getContent(), processDefined.getSubversion());
 		updateState(processDefined.getId(), ProcessDefinition.PUBLISHED);
+		processHandler.parse(processDefined.getContent(), processDefined.getSubversion());
 		return null;
 	}
 	
@@ -146,8 +146,8 @@ public class ProcessDefinitionService {
 			runtimeProcessInstanceService.processingAllInstance(processDefined.getId(), policy);
 		}
 		
-		processHandler.delete(processDefined);
 		updateState(processDefined.getId(), ProcessDefinition.UNPUBLISHED);
+		processHandler.delete(processDefined);
 		return null;
 	}
 	
@@ -174,7 +174,6 @@ public class ProcessDefinitionService {
 			updateState(processDefinitionId, ProcessDefinition.DELETE);
 		} else {
 			SessionContext.getSqlSession().executeUpdate("delete bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
-			processHandler.delete(processDefined);
 		}
 		return null;
 	}

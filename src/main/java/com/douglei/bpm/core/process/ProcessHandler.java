@@ -2,8 +2,10 @@ package com.douglei.bpm.core.process;
 
 import java.io.File;
 
+import com.douglei.bpm.bean.annotation.Attribute;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.core.process.executer.Process;
+import com.douglei.bpm.core.process.parser.impl.ProcessParser;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
 import com.douglei.orm.context.SessionFactoryRegister;
 import com.douglei.tools.utils.serialize.JdkSerializeProcessor;
@@ -16,14 +18,17 @@ import com.douglei.tools.utils.serialize.JdkSerializeProcessor;
 public class ProcessHandler {
 	private SessionFactoryRegister register = SessionFactoryRegister.getSingleton();
 	
+	@Attribute
+	private ProcessParser processParser;
+	
 	// 获取对应的bpm序列化文件全路径
 	private String getBpmFilePath(String code, String version, int subversion) {
 		return ProcessSerializationFolderContainer.getFolder(register.get().getId()) + code + "." + version + "." + subversion;
 	}
 	
 	// 创建序列化文件
-	private void createFile(Process process) {
-		JdkSerializeProcessor.serialize2File(process, getBpmFilePath(process.getCode(), process.getVersion(), process.getSubversion()));
+	private void createFile(Process process, int subversion) {
+		JdkSerializeProcessor.serialize2File(process, getBpmFilePath(process.getCode(), process.getVersion(), subversion));
 	}
 	
 	/**
@@ -32,9 +37,7 @@ public class ProcessHandler {
 	 * @param subversion 
 	 */
 	public void parse(String content, int subversion) {
-		// TODO 根据content解析出Process实例
-		
-		createFile(null);
+		createFile(processParser.parse(content), subversion);
 	}
 	
 	/**

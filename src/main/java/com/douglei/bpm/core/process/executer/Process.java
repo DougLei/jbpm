@@ -1,5 +1,6 @@
 package com.douglei.bpm.core.process.executer;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import com.douglei.bpm.core.process.executer.task.Task;
@@ -9,7 +10,7 @@ import com.douglei.tools.utils.StringUtil;
  * 
  * @author DougLei
  */
-public class Process {
+public class Process implements Serializable {
 	private String name;
 	private String code;
 	private String version;

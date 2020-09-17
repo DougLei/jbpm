@@ -14,8 +14,7 @@ import com.douglei.bpm.core.process.executer.flow.Flow;
 public abstract class Task extends Node{
 	protected List<Flow> flows;
 	
-	
-	public void linkFlows(Flow flow) {
+	public void addFlow(Flow flow) {
 		if(flows == null) 
 			flows = new ArrayList<Flow>(4);
 		flows.add(flow);

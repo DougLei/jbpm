@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import com.douglei.bpm.core.process.executer.task.Task;
+import com.douglei.bpm.core.process.executer.task.event.StartEvent;
 import com.douglei.tools.utils.StringUtil;
 
 /**
@@ -16,7 +17,7 @@ public class Process implements Serializable {
 	private String version;
 	private String titleExpr;
 	
-	private Task start;
+	private StartEvent startEvent;
 	private Map<String, Task> tasks;
 	
 	public Process(String name, String code, String version, String titleExpr) {

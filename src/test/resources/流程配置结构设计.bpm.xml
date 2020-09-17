@@ -10,8 +10,7 @@
 		4. 事件: 开始事件, 结束事件
 	-->
 	
-	<!-- index属性是在可视化配置中使用, 可以自动生成各种元素的id值序列 -->
-	<process name="流程名称, 可以不配置, 如果不配置则使用code:version" code="编码, 唯一" version="用户自定义的版本" titleExpr="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name" index="1">
+	<process name="流程名称, 可以不配置, 如果不配置则使用code:version" code="编码, 唯一" version="用户自定义的版本" titleExpr="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name">
 		<!-- 开始事件, 一个流程中只能有一个开始 -->
 		<startEvent id="startEvent" name=""></startEvent>
 		<!-- 结束事件, 一个流程中可以有多个结束 -->
@@ -54,8 +53,8 @@
 			<option type="withdraw" name="撤回" times="0"></option>
 			
 			<!-- 前/后置监听器 -->
-			<listener type="pre" item="多个项之间用;(分号)分隔开"></listener>
-			<listener type="post" item="多个项之间用;(分号)分隔开"></listener>
+			<listener type="pre" item="多个项之间用;(分号)分隔开, 会按照配置的顺序执行"></listener>
+			<listener type="post" item="多个项之间用;(分号)分隔开, 会按照配置的顺序执行"></listener>
 		</userTask>
 		
 		<!-- 子流程任务 -->

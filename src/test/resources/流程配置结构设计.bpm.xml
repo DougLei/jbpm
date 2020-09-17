@@ -4,7 +4,7 @@
 		流程配置结构, 核心主要包括以下四种元素:
 		1. 连线
 		2. 任务, 包含两种类型:
-			2.1. 手动任务, 需要用户手动处理, 来推动流程流转, 例如用户任务
+			2.1. 手动任务, 需要用户手动处理, 来推动流程流转, 主要是用户任务
 			2.2. 自动任务, 可以自行推动流程流转, 例如子流程任务, SQL脚本任务, 定时任务, 邮件任务等
 		3. 网关: 并行网关, 排他网关, 包容网关 
 		4. 事件: 开始事件, 结束事件
@@ -17,7 +17,7 @@
 		
 		
 		<!-- 用户任务 -->
-		<userTask id="userTask2" name="任务名称" pageID="属于任务的页面标识, 优先级高于全局页面标识"  
+		<userTask id="userTask1" name="任务名称" pageID="属于任务的页面标识, 优先级高于全局页面标识"  
 			timeLimitExpr="办理时限的表达式(表达式中要能表达出是工作日还是自然日), 设置当前用户任务需要在多长时间内办理, 不配置则没有时限约束" autoProcessingWhenOverdue="逾期后是否自动办理, 默认值为false"
 			allowActivation="当流程结束后再激活时, 是否允许选择从当前用户任务进行激活, 默认值为true">
 			
@@ -57,15 +57,15 @@
 		</userTask>
 		
 		<!-- 子流程任务 -->
-		<processTask id="processTask1">
+		<processTask id="processTask1" name="">
 			<process></process>
 		</processTask>
 		<!-- SQL脚本任务 -->
-		<sqlTask id="sqlTask1"></sqlTask>
+		<sqlTask id="sqlTask1" name=""></sqlTask>
 		<!-- 定时任务 -->
-		<timerTask id="timerTask1" cronExpr=""></timerTask>
+		<timerTask id="timerTask1" name="" cronExpr=""></timerTask>
 		<!-- 邮件任务 -->
-		<emailTask id="emailTask1"></emailTask>
+		<emailTask id="emailTask1" name=""></emailTask>
 		
 		
 		<!-- 并行网关 -->
@@ -77,10 +77,10 @@
 		
 		
 		<!-- 连线, 可配置条件 -->
-		<flow id="flow1" name="启动流程" source="startEvent1" target="userTask1" conditionExpr="配置比较表达式" order="排序, 如果同一个source引出多条线, 可以通过order进行排序"></flow>
+		<flow id="flow1" name="" source="startEvent1" target="userTask1" conditionExpr="配置比较表达式" order="排序, 如果同一个source引出多条线, 可以通过order进行排序"></flow>
 	</process>
 	
-	<!-- 配置流程图的结构, 主要就是记录画布的长宽，以及各个节点的坐标，长宽 -->
+	<!-- 配置流程图的结构, 主要就是记录画布的长宽，以及各个节点的坐标，长宽等 -->
 	<process-img>
 	</process-img>
 </bpm-configuration>

@@ -6,6 +6,6 @@ import com.douglei.bpm.core.process.executer.task.Task;
  * 
  * @author DougLei
  */
-public class Gateway extends Task{
+public abstract class Gateway extends Task{
 
 }

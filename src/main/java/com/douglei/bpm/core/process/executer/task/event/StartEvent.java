@@ -6,6 +6,6 @@ import com.douglei.bpm.core.process.executer.task.Task;
  * 
  * @author DougLei
  */
-public class Event extends Task{
+public class StartEvent extends Task {
 
 }

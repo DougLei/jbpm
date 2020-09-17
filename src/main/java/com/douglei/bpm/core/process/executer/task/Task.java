@@ -11,7 +11,7 @@ import com.douglei.bpm.core.process.executer.flow.Flow;
  * 
  * @author DougLei
  */
-public class Task extends Node{
+public abstract class Task extends Node{
 	protected List<Flow> flows;
 	
 	

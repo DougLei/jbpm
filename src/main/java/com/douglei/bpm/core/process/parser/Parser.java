@@ -7,6 +7,12 @@ package com.douglei.bpm.core.process.parser;
 public interface Parser<P, R> {
 	
 	/**
+	 * 获取要解析的元素名称
+	 * @return
+	 */
+	String elementName();
+	
+	/**
 	 * 解析方法
 	 * @param parameter
 	 * @return

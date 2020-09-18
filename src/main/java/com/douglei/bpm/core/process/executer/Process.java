@@ -19,7 +19,7 @@ public class Process implements Serializable {
 	private String titleExpr;
 	
 	private StartEvent startEvent;
-	private Map<String, Task> tasks = new HashMap<String, Task>();
+	private Map<String, Task> taskMap = new HashMap<String, Task>();
 	
 	public Process(String name, String code, String version, String titleExpr) {
 		this.name = StringUtil.isEmpty(name)?(code+":"+version):name;
@@ -32,7 +32,8 @@ public class Process implements Serializable {
 		this.startEvent = startEvent;
 	}
 	public void addTask(Task task) {
-		tasks.put(task.getId(), task);
+		if(!taskMap.containsKey(task.getId()))
+			taskMap.put(task.getId(), task);
 	}
 	
 	public String getTitle(Object parameter) {

@@ -125,6 +125,7 @@ public class ProcessParser implements Parser<String, Process> {
 				process.addTask(targetTask);
 				
 				linkTaskAndFlow(targetTask, flowElements, taskMap, process);
+				i=-1;
 			}
 		}
 	}

@@ -1,9 +1,8 @@
 package com.douglei.bpm.core.process.parser.impl.flow;
 
-import org.dom4j.Element;
-
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.core.process.executer.flow.Flow;
+import com.douglei.bpm.core.process.parser.FlowElement;
 import com.douglei.bpm.core.process.parser.Parser;
 import com.douglei.bpm.core.process.parser.ProcessParseException;
 
@@ -12,7 +11,7 @@ import com.douglei.bpm.core.process.parser.ProcessParseException;
  * @author DougLei
  */
 @Bean(transaction = false)
-public class FlowParser implements Parser<Element, Flow> {
+public class FlowParser implements Parser<FlowElement, Flow> {
 
 	@Override
 	public String elementName() {
@@ -20,7 +19,7 @@ public class FlowParser implements Parser<Element, Flow> {
 	}
 
 	@Override
-	public Flow parse(Element parameter) throws ProcessParseException {
+	public Flow parse(FlowElement parameter) throws ProcessParseException {
 		// TODO Auto-generated method stub
 		return null;
 	}

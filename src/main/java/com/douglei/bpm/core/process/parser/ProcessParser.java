@@ -15,7 +15,6 @@ import org.dom4j.io.SAXReader;
 import com.douglei.bpm.bean.annotation.Attribute;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.core.process.executer.Process;
-import com.douglei.bpm.core.process.executer.flow.Flow;
 import com.douglei.bpm.core.process.executer.task.event.StartEvent;
 import com.douglei.bpm.core.process.parser.impl.flow.FlowParser;
 import com.douglei.bpm.core.process.parser.impl.task.event.StartEventParser;
@@ -70,8 +69,8 @@ public class ProcessParser implements Parser<String, Process>{
 	 */
 	private void buildProcessStruct(Process process, List<Element> elements) {
 		StartEvent startEvent = null;
+		List<FlowElement> flowElements = new ArrayList<FlowElement>(elements.size());
 		Map<String, Element> taskMap = new HashMap<String, Element>();
-		List<Flow> flows = new ArrayList<Flow>(elements.size());
 		
 		for (Element element : elements) {
 			if(element.getName().equals(startEventParser.elementName())) {
@@ -79,7 +78,7 @@ public class ProcessParser implements Parser<String, Process>{
 					throw new ProcessParseException("工作流中只能配置一个StartEvent");
 				startEvent = startEventParser.parse(element);
 			}else if(element.getName().equals(flowParser.elementName())) {
-				flows.add(flowParser.parse(element));
+				flowElements.add(new FlowElement(element));
 			}else {
 				taskMap.put(element.attributeValue("id"), element);
 			}
@@ -90,8 +89,12 @@ public class ProcessParser implements Parser<String, Process>{
 		process.setStartEvent(startEvent);
 		
 		
-		
-		
+		// TODO 
+		for (int i = 0; i < flowElements.size(); i++) {
+			if(startEvent.getId().equals(flowElements.get(i).getSource())) {
+				
+			}
+		}
 		
 		
 		
@@ -99,8 +102,8 @@ public class ProcessParser implements Parser<String, Process>{
 		
 		
 		taskMap.clear();
-		if(!flows.isEmpty())
-			flows.clear();
+		if(!flowElements.isEmpty())
+			flowElements.clear();
 	}
 
 	

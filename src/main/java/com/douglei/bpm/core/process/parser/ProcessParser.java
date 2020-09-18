@@ -15,6 +15,8 @@ import org.dom4j.io.SAXReader;
 import com.douglei.bpm.bean.annotation.Attribute;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.core.process.executer.Process;
+import com.douglei.bpm.core.process.executer.flow.Flow;
+import com.douglei.bpm.core.process.executer.task.Task;
 import com.douglei.bpm.core.process.executer.task.event.StartEvent;
 import com.douglei.bpm.core.process.parser.impl.flow.FlowParser;
 import com.douglei.bpm.core.process.parser.impl.task.event.StartEventParser;
@@ -25,12 +27,16 @@ import com.douglei.tools.utils.StringUtil;
  * @author DougLei
  */
 @Bean(transaction = false)
-public class ProcessParser implements Parser<String, Process>{
+public class ProcessParser implements Parser<String, Process> {
 	
 	@Attribute
 	private StartEventParser startEventParser;
+	
 	@Attribute
 	private FlowParser flowParser;
+	
+	@Attribute
+	private ParserContainer taskParserContainer;
 	
 	@Override
 	public String elementName() {
@@ -88,35 +94,52 @@ public class ProcessParser implements Parser<String, Process>{
 			throw new ProcessParseException("工作流中必须配置一个StartEvent");
 		process.setStartEvent(startEvent);
 		
-		
-		// TODO 
-		for (int i = 0; i < flowElements.size(); i++) {
-			if(startEvent.getId().equals(flowElements.get(i).getSource())) {
-				
-			}
-		}
-		
-		
-		
-		
-		
+		linkTaskAndFlow(startEvent, flowElements, taskMap, process);
 		
 		taskMap.clear();
 		if(!flowElements.isEmpty())
 			flowElements.clear();
 	}
 
-	
+	/**
+	 *  将任务和流进行连接
+	 * @param task
+	 * @param flowElements
+	 * @param taskMap
+	 * @param process
+	 */
+	private void linkTaskAndFlow(Task task, List<FlowElement> flowElements, Map<String, Element> taskMap, Process process) {
+		for (int i = 0; i < flowElements.size(); i++) {
+			if(task.getId().equals(flowElements.get(i).getSource())) {
+				FlowElement flowElement = flowElements.remove(i--);
+			
+				Element taskElement = taskMap.get(flowElement.getTarget());
+				if(taskElement == null)
+					throw new ProcessParseException("不存在id="+flowElement.getTarget()+"的任务/网关/事件");
+				
+				Flow flow = flowParser.parse(flowElement);
+				task.addFlow(flow);
+				
+				Task targetTask = taskParserContainer.parse(taskElement);
+				flow.setTargetTask(targetTask);
+				process.addTask(targetTask);
+				
+				linkTaskAndFlow(targetTask, flowElements, taskMap, process);
+			}
+		}
+	}
 	
 	
 	public static void main(String[] args) throws DocumentException {
 		Document document = new SAXReader().read(new File("D:\\workspace4\\jbpm\\src\\test\\resources\\流程配置结构设计.bpm.xml"));
 		Element processElement = document.getRootElement().element("process");
 		
-		List<Element> elements = processElement.elements();
-		for (Element element : elements) {
-			System.out.println(element.getName());
-		}
+//		List<Element> elements = processElement.elements();
+//		for (Element element : elements) {
+//			System.out.println(element.getName());
+//		}
+		
+		System.out.println(processElement.attributeValue("x") == null);
 		
 	}
 }

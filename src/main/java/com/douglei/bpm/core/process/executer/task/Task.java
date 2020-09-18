@@ -14,14 +14,16 @@ import com.douglei.bpm.core.process.executer.flow.Flow;
 public abstract class Task extends Node{
 	protected List<Flow> flows;
 	
+	protected Task(String id, String name) {
+		super(id, name);
+	}
 	
-	public Flow addFlow(Flow flow) {
+	public void addFlow(Flow flow) {
 		if(flows == null) 
 			flows = new ArrayList<Flow>(4);
 		flows.add(flow);
 		if(flows.size() > 1) 
 			flows.sort(flowComparator);
-		return flow;
 	}
 	
 	// 流排序的比较器

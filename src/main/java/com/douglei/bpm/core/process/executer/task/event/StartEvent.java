@@ -8,4 +8,9 @@ import com.douglei.bpm.core.process.executer.task.Task;
  */
 public class StartEvent extends Task {
 
+	protected StartEvent(String id, String name) {
+		super(id, name);
+		// TODO Auto-generated constructor stub
+	}
+
 }

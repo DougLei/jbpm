@@ -28,6 +28,9 @@ public class FlowElement {
 	public String getSource() {
 		return source;
 	}
+	public String getTarget() {
+		return target;
+	}
 	public Element getElement() {
 		return element;
 	}

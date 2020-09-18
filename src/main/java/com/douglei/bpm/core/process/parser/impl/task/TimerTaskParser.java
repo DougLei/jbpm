@@ -2,6 +2,7 @@ package com.douglei.bpm.core.process.parser.impl.task;
 
 import org.dom4j.Element;
 
+import com.douglei.bpm.bean.annotation.ParserBean;
 import com.douglei.bpm.core.process.executer.flow.Flow;
 import com.douglei.bpm.core.process.parser.Parser;
 import com.douglei.bpm.core.process.parser.ProcessParseException;
@@ -10,6 +11,7 @@ import com.douglei.bpm.core.process.parser.ProcessParseException;
  * 
  * @author DougLei
  */
+@ParserBean
 public class TimerTaskParser implements Parser<Element, Flow> {
 
 	@Override

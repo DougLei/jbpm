@@ -144,7 +144,7 @@ public class ProcessParser implements Parser<String, Process> {
 				}
 				
 				flow.setTargetTask(targetTask);
-				if(targetTask != taskObj) {
+				if(targetTask != taskObj) { // 证明targetTask是第一次解析
 					process.addTask(targetTask);
 					if(!(targetTask instanceof EndEvent || flowElements.isEmpty())) {
 						linkTaskAndFlow(targetTask, flowElements, taskMap, process);

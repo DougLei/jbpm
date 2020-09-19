@@ -17,7 +17,10 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.core.process.executer.Process;
 import com.douglei.bpm.core.process.executer.flow.Flow;
 import com.douglei.bpm.core.process.executer.task.Task;
+import com.douglei.bpm.core.process.executer.task.event.EndEvent;
 import com.douglei.bpm.core.process.executer.task.event.StartEvent;
+import com.douglei.bpm.core.process.parser.element.FlowElement;
+import com.douglei.bpm.core.process.parser.element.TaskElement;
 import com.douglei.bpm.core.process.parser.impl.flow.FlowParser;
 import com.douglei.bpm.core.process.parser.impl.task.event.StartEventParser;
 import com.douglei.tools.utils.StringUtil;
@@ -36,15 +39,15 @@ public class ProcessParser implements Parser<String, Process> {
 	private FlowParser flowParser;
 	
 	@Attribute
-	private ParserContainer taskParserContainer;
+	private ParserContainer parserContainer;
 	
 	@Override
 	public String elementName() {
 		return "process";
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public Process parse(String content) throws ProcessParseException {
 		Document document;
 		try {
@@ -76,22 +79,29 @@ public class ProcessParser implements Parser<String, Process> {
 	private void buildProcessStruct(Process process, List<Element> elements) {
 		StartEvent startEvent = null;
 		List<FlowElement> flowElements = new ArrayList<FlowElement>(elements.size());
-		Map<String, Element> taskMap = new HashMap<String, Element>();
+		Map<String, Object> taskMap = new HashMap<String, Object>();
 		
+		String id;
 		for (Element element : elements) {
+			id = element.attributeValue("id");
+			if(StringUtil.isEmpty(id))
+				throw new ProcessParseException("工作流中, 任务/网关/事件/连线的id值不能为空");
+			
 			if(element.getName().equals(startEventParser.elementName())) {
 				if(startEvent != null)
-					throw new ProcessParseException("工作流中只能配置一个StartEvent");
-				startEvent = startEventParser.parse(element);
+					throw new ProcessParseException("工作流中只能配置一个起始事件");
+				startEvent = startEventParser.parse(new TaskElement(id, element));
 			}else if(element.getName().equals(flowParser.elementName())) {
-				flowElements.add(new FlowElement(element));
+				flowElements.add(new FlowElement(id, element));
 			}else {
-				taskMap.put(element.attributeValue("id"), element);
+				if(taskMap.containsKey(id))
+					throw new ProcessParseException("工作流中的任务/网关/事件, 出现重复的id值: " + id);
+				taskMap.put(id, element);
 			}
 		}
 		
 		if(startEvent == null)
-			throw new ProcessParseException("工作流中必须配置一个StartEvent");
+			throw new ProcessParseException("工作流中必须配置起始事件");
 		process.setStartEvent(startEvent);
 		
 		linkTaskAndFlow(startEvent, flowElements, taskMap, process);
@@ -108,26 +118,41 @@ public class ProcessParser implements Parser<String, Process> {
 	 * @param taskMap
 	 * @param process
 	 */
-	private void linkTaskAndFlow(Task task, List<FlowElement> flowElements, Map<String, Element> taskMap, Process process) {
+	private void linkTaskAndFlow(Task task, List<FlowElement> flowElements, Map<String, Object> taskMap, Process process) {
+		boolean taskExistsFlow = false;
 		for (int i = 0; i < flowElements.size(); i++) {
 			if(task.getId().equals(flowElements.get(i).getSource())) {
-				FlowElement flowElement = flowElements.remove(i--);
+				taskExistsFlow = true;
+				FlowElement flowElement = flowElements.remove(i);
 			
-				Element taskElement = taskMap.get(flowElement.getTarget());
-				if(taskElement == null)
-					throw new ProcessParseException("不存在id="+flowElement.getTarget()+"的任务/网关/事件");
+				Object taskObj = taskMap.get(flowElement.getTarget());
+				if(taskObj == null)
+					throw new ProcessParseException("工作流中不存在id="+flowElement.getTarget()+"的任务/网关/事件");
 				
 				Flow flow = flowParser.parse(flowElement);
 				task.addFlow(flow);
 				
-				Task targetTask = taskParserContainer.parse(taskElement);
-				flow.setTargetTask(targetTask);
-				process.addTask(targetTask);
+				Task targetTask = null;
+				if(taskObj instanceof Element) {
+					targetTask = parserContainer.parse(new TaskElement(flowElement.getTarget(), (Element)taskObj));
+					taskMap.put(targetTask.getId(), targetTask);
+				}else {
+					targetTask = (Task) taskObj;
+				}
 				
-				linkTaskAndFlow(targetTask, flowElements, taskMap, process);
-				i=-1;
+				flow.setTargetTask(targetTask);
+				if(targetTask != taskObj) {
+					process.addTask(targetTask);
+					if(!(targetTask instanceof EndEvent || flowElements.isEmpty())) {
+						linkTaskAndFlow(targetTask, flowElements, taskMap, process);
+						i = -1;
+					}
+				}
 			}
 		}
+		
+		if(!taskExistsFlow)
+			throw new ProcessParseException("工作流中, " + task.getName() + "不是结束事件, 必须配置相应的连线");
 	}
 	
 	

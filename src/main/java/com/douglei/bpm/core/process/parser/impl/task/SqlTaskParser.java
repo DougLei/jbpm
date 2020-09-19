@@ -1,18 +1,17 @@
 package com.douglei.bpm.core.process.parser.impl.task;
 
-import org.dom4j.Element;
-
 import com.douglei.bpm.bean.annotation.ParserBean;
 import com.douglei.bpm.core.process.executer.flow.Flow;
 import com.douglei.bpm.core.process.parser.Parser;
 import com.douglei.bpm.core.process.parser.ProcessParseException;
+import com.douglei.bpm.core.process.parser.element.TaskElement;
 
 /**
  * 
  * @author DougLei
  */
 @ParserBean
-public class SqlTaskParser implements Parser<Element, Flow> {
+public class SqlTaskParser implements Parser<TaskElement, Flow> {
 
 	@Override
 	public String elementName() {
@@ -20,7 +19,7 @@ public class SqlTaskParser implements Parser<Element, Flow> {
 	}
 
 	@Override
-	public Flow parse(Element parameter) throws ProcessParseException {
+	public Flow parse(TaskElement taskElement) throws ProcessParseException {
 		// TODO Auto-generated method stub
 		return null;
 	}

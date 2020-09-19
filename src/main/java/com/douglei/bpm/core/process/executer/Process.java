@@ -32,8 +32,7 @@ public class Process implements Serializable {
 		this.startEvent = startEvent;
 	}
 	public void addTask(Task task) {
-		if(!taskMap.containsKey(task.getId()))
-			taskMap.put(task.getId(), task);
+		taskMap.put(task.getId(), task);
 	}
 	
 	public String getTitle(Object parameter) {

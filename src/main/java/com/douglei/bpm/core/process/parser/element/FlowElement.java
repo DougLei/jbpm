@@ -1,28 +1,28 @@
-package com.douglei.bpm.core.process.parser;
+package com.douglei.bpm.core.process.parser.element;
 
 import org.dom4j.Element;
 
+import com.douglei.bpm.core.process.parser.ProcessParseException;
 import com.douglei.tools.utils.StringUtil;
 
 /**
  * 
  * @author DougLei
  */
-public class FlowElement {
+public class FlowElement extends TaskElement{
 	private String source;
 	private String target;
-	private Element element;
 	
-	public FlowElement(Element element) {
+	public FlowElement(String id, Element element) {
+		super(id, element);
+		
 		this.source = element.attributeValue("source");
 		if(StringUtil.isEmpty(this.source))
-			throw new ProcessParseException("flow元素的source不能为空");
+			throw new ProcessParseException("工作流中, flow元素的source不能为空");
 		
 		this.target = element.attributeValue("target");
 		if(StringUtil.isEmpty(this.target))
-			throw new ProcessParseException("flow元素的target不能为空");
-		
-		this.element = element;
+			throw new ProcessParseException("工作流中, flow元素的target不能为空");
 	}
 
 	public String getSource() {
@@ -30,8 +30,5 @@ public class FlowElement {
 	}
 	public String getTarget() {
 		return target;
-	}
-	public Element getElement() {
-		return element;
 	}
 }

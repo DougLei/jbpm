@@ -4,11 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.dom4j.Element;
-
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.bean.annotation.ParserBean;
 import com.douglei.bpm.core.process.executer.task.Task;
+import com.douglei.bpm.core.process.parser.element.TaskElement;
 import com.douglei.bpm.core.process.parser.impl.flow.FlowParser;
 import com.douglei.bpm.core.process.parser.impl.task.event.StartEventParser;
 import com.douglei.tools.instances.scanner.ClassScanner;
@@ -22,7 +21,7 @@ import com.douglei.tools.utils.reflect.ConstructorUtil;
  */
 @Bean(transaction = false)
 public class ParserContainer {
-	private Map<String, Parser<Element, ? extends Task>> parserMap = new HashMap<String, Parser<Element,? extends Task>>();
+	private Map<String, Parser<TaskElement, ? extends Task>> parserMap = new HashMap<String, Parser<TaskElement,? extends Task>>();
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" } )
 	public ParserContainer() {
@@ -38,13 +37,13 @@ public class ParserContainer {
 	
 	/**
 	 * 解析
-	 * @param element
+	 * @param taskElement
 	 * @return
 	 */
-	public Task parse(Element element) {
-		Parser<Element, ? extends Task> parser = parserMap.get(element.getName());
+	public Task parse(TaskElement taskElement) {
+		Parser<TaskElement, ? extends Task> parser = parserMap.get(taskElement.getElement().getName());
 		if(parser == null)
-			throw new ProcessParseException("无法解析<"+element.getName()+">元素");
-		return parser.parse(element);
+			throw new ProcessParseException("无法解析<"+taskElement.getElement().getName()+">标签");
+		return parser.parse(taskElement);
 	}
 }

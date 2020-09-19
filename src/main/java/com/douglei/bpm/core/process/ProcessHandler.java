@@ -5,7 +5,7 @@ import java.io.File;
 import com.douglei.bpm.bean.annotation.Attribute;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.core.process.executer.Process;
-import com.douglei.bpm.core.process.parser.ProcessParser;
+import com.douglei.bpm.core.process.parser.impl.ProcessParser;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
 import com.douglei.orm.context.SessionFactoryRegister;
 import com.douglei.tools.utils.serialize.JdkSerializeProcessor;

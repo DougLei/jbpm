@@ -8,6 +8,7 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.bean.annotation.ParserBean;
 import com.douglei.bpm.core.process.executer.task.Task;
 import com.douglei.bpm.core.process.parser.element.TaskElement;
+import com.douglei.bpm.core.process.parser.impl.ProcessParser;
 import com.douglei.bpm.core.process.parser.impl.flow.FlowParser;
 import com.douglei.bpm.core.process.parser.impl.task.event.StartEventParser;
 import com.douglei.tools.instances.scanner.ClassScanner;

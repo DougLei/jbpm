@@ -20,13 +20,6 @@ public class StartEventParser implements Parser<TaskElement, StartEvent> {
 
 	@Override
 	public StartEvent parse(TaskElement taskElement) throws ProcessParseException {
-		// TODO Auto-generated method stub
-		
-		taskElement.getId();
-		taskElement.getName();
-		taskElement.getElement();
-		
-		
-		return null;
+		return new StartEvent(taskElement.getId(), taskElement.getName());
 	}
 }

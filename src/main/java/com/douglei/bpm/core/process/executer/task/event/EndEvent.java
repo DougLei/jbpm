@@ -8,7 +8,7 @@ import com.douglei.bpm.core.process.executer.task.Task;
  */
 public class EndEvent extends Task {
 
-	protected EndEvent(String id, String name) {
+	public EndEvent(String id, String name) {
 		super(id, name);
 		// TODO Auto-generated constructor stub
 	}

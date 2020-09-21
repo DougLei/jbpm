@@ -79,7 +79,7 @@ public class ProcessEngineBuilder {
 		
 		SessionFactory sessionFactory = configuration.buildSessionFactory();
 		registerSessionFactory(sessionFactory);
-		return beanFactory.initEngineAttributes(new ProcessEngineWithBuiltinSessionfactory(sessionFactory.getId()));
+		return beanFactory.initEngineAttributes(new ProcessEngineWithBuiltinSessionFactory(sessionFactory.getId()));
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public class ProcessEngineBuilder {
 		
 		SessionFactory sessionFactory = configuration.buildSessionFactory();
 		registerSessionFactory(sessionFactory);
-		return beanFactory.initEngineAttributes(new ProcessEngineWithBuiltinSessionfactory(sessionFactory.getId()));
+		return beanFactory.initEngineAttributes(new ProcessEngineWithBuiltinSessionFactory(sessionFactory.getId()));
 	}
 	
 	/**
@@ -115,7 +115,7 @@ public class ProcessEngineBuilder {
 		externalSessionFactory.getMappingProcessor().execute(mappingEntities);
 		
 		RegistrationResult result = registerSessionFactory(externalSessionFactory);
-		return beanFactory.initEngineAttributes(new ProcessEngineOfExternalSessionfactory(externalSessionFactory.getId(), result == RegistrationResult.SUCCESS));
+		return beanFactory.initEngineAttributes(new ProcessEngineOfExternalSessionFactory(externalSessionFactory.getId(), result == RegistrationResult.SUCCESS));
 	}
 	
 	/**

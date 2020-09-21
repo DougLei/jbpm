@@ -7,9 +7,9 @@ import com.douglei.orm.core.mapping.MappingExecuteException;
  * 内置SessionFactory的流程引擎, 在销毁时必须销毁SessionFactory
  * @author DougLei
  */
-class ProcessEngineWithBuiltinSessionfactory extends ProcessEngine {
+class ProcessEngineWithBuiltinSessionFactory extends ProcessEngine {
 
-	ProcessEngineWithBuiltinSessionfactory(String id) {
+	ProcessEngineWithBuiltinSessionFactory(String id) {
 		super(id);
 	}
 

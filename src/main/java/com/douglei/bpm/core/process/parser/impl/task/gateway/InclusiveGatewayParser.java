@@ -1,7 +1,7 @@
 package com.douglei.bpm.core.process.parser.impl.task.gateway;
 
 import com.douglei.bpm.bean.annotation.ParserBean;
-import com.douglei.bpm.core.process.executer.flow.Flow;
+import com.douglei.bpm.core.process.executer.task.gateway.InclusiveGateway;
 import com.douglei.bpm.core.process.parser.Parser;
 import com.douglei.bpm.core.process.parser.ProcessParseException;
 import com.douglei.bpm.core.process.parser.element.TaskElement;
@@ -11,7 +11,7 @@ import com.douglei.bpm.core.process.parser.element.TaskElement;
  * @author DougLei
  */
 @ParserBean
-public class InclusiveGatewayParser implements Parser<TaskElement, Flow> {
+public class InclusiveGatewayParser implements Parser<TaskElement, InclusiveGateway> {
 
 	@Override
 	public String elementName() {
@@ -19,8 +19,7 @@ public class InclusiveGatewayParser implements Parser<TaskElement, Flow> {
 	}
 
 	@Override
-	public Flow parse(TaskElement taskElement) throws ProcessParseException {
-		// TODO Auto-generated method stub
-		return null;
+	public InclusiveGateway parse(TaskElement taskElement) throws ProcessParseException {
+		return new InclusiveGateway(taskElement.getId(), taskElement.getName());
 	}
 }

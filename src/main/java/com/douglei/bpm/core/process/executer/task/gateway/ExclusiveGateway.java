@@ -6,9 +6,7 @@ package com.douglei.bpm.core.process.executer.task.gateway;
  */
 public class ExclusiveGateway extends Gateway {
 
-	protected ExclusiveGateway(String id, String name) {
+	public ExclusiveGateway(String id, String name) {
 		super(id, name);
-		// TODO Auto-generated constructor stub
 	}
-
 }

@@ -10,7 +10,5 @@ public abstract class Gateway extends Task{
 
 	protected Gateway(String id, String name) {
 		super(id, name);
-		// TODO Auto-generated constructor stub
 	}
-
 }

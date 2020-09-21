@@ -12,15 +12,13 @@ import com.douglei.bpm.core.process.executer.flow.Flow;
  * @author DougLei
  */
 public abstract class Task extends Node{
-	protected List<Flow> flows;
+	protected List<Flow> flows = new ArrayList<Flow>(4);
 	
 	protected Task(String id, String name) {
 		super(id, name);
 	}
 	
 	public void addFlow(Flow flow) {
-		if(flows == null) 
-			flows = new ArrayList<Flow>(4);
 		flows.add(flow);
 		if(flows.size() > 1) 
 			flows.sort(flowComparator);

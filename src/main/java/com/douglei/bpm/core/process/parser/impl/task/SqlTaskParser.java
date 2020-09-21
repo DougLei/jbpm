@@ -1,7 +1,7 @@
 package com.douglei.bpm.core.process.parser.impl.task;
 
 import com.douglei.bpm.bean.annotation.ParserBean;
-import com.douglei.bpm.core.process.executer.flow.Flow;
+import com.douglei.bpm.core.process.executer.task.impl.SqlTask;
 import com.douglei.bpm.core.process.parser.Parser;
 import com.douglei.bpm.core.process.parser.ProcessParseException;
 import com.douglei.bpm.core.process.parser.element.TaskElement;
@@ -11,7 +11,7 @@ import com.douglei.bpm.core.process.parser.element.TaskElement;
  * @author DougLei
  */
 @ParserBean
-public class SqlTaskParser implements Parser<TaskElement, Flow> {
+public class SqlTaskParser implements Parser<TaskElement, SqlTask> {
 
 	@Override
 	public String elementName() {
@@ -19,8 +19,7 @@ public class SqlTaskParser implements Parser<TaskElement, Flow> {
 	}
 
 	@Override
-	public Flow parse(TaskElement taskElement) throws ProcessParseException {
-		// TODO Auto-generated method stub
+	public SqlTask parse(TaskElement taskElement) throws ProcessParseException {
 		return null;
 	}
 }

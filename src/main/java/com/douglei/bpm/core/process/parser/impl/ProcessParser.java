@@ -69,7 +69,7 @@ public class ProcessParser implements Parser<String, Process> {
 		if(StringUtil.isEmpty(version))
 			throw new ProcessParseException("工作流中的版本值不能为空");
 		
-		Process process = new Process(processElement.attributeValue("name"), code, version, processElement.attributeValue("titleExpr"));
+		Process process = new Process(processElement.attributeValue("name"), code, version, processElement.attributeValue("titleExpr"), processElement.attributeValue("pageID"));
 		buildProcessStruct(process, processElement.elements());
 		return process;
 	}

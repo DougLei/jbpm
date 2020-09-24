@@ -108,7 +108,7 @@ public class ProcessEngineBuilder {
 	 * @throws IdDuplicateException 
 	 */
 	public ProcessEngine build(SessionFactory externalSessionFactory) throws ParseMappingException, MappingExecuteException, IdDuplicateException{
-		List<String> mappingFiles = new FileScanner(MappingType.getMappingFileSuffixs()).scan(MAPPING_FILE_ROOT_PATH);
+		List<String> mappingFiles = new FileScanner(MappingType.getFileSuffixes()).scan(MAPPING_FILE_ROOT_PATH);
 		List<MappingEntity> mappingEntities = new ArrayList<MappingEntity>(mappingFiles.size());
 		for (String mappingFile : mappingFiles) 
 			mappingEntities.add(new AddOrCoverMappingEntity(mappingFile));

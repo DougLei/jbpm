@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping-configuration>
 	<!-- 流程类型表 -->
-	<table name="BPM_RE_PROCTYPE" class="com.douglei.bpm.module.repository.type.ProcessType" forceCreateMode="create">
+	<table name="BPM_RE_PROCTYPE" class="com.douglei.bpm.module.repository.type.ProcessType" createMode="create" strict="true">
 		<columns>
 			<column name="ID" property="id" dataType="integer" primaryKey="true" length="20" />
 			<column name="CODE" property="code" dataType="string" length="50" nullable="false" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping-configuration>
 	<!-- 流程委托表 -->
-	<table name="BPM_RE_DELEGATION" forceCreateMode="create">
+	<table name="BPM_RE_DELEGATION" createMode="create" strict="true">
 		<columns>
 			<column name="ID" property="id" dataType="integer" primaryKey="true" length="20" />
 			<column name="CLIENT" property="client" dataType="char" length="50" nullable="false" />

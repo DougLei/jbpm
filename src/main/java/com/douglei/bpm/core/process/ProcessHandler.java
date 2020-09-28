@@ -7,7 +7,7 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.core.process.executer.Process;
 import com.douglei.bpm.core.process.parser.impl.ProcessParser;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
-import com.douglei.orm.context.SessionFactoryRegister;
+import com.douglei.orm.context.SessionFactoryContainer;
 import com.douglei.tools.utils.serialize.JdkSerializeProcessor;
 
 /**
@@ -16,14 +16,14 @@ import com.douglei.tools.utils.serialize.JdkSerializeProcessor;
  */
 @Bean(transaction = false)
 public class ProcessHandler {
-	private SessionFactoryRegister register = SessionFactoryRegister.getSingleton();
+	private SessionFactoryContainer container = SessionFactoryContainer.getSingleton();
 	
 	@Attribute
 	private ProcessParser processParser;
 	
 	// 获取对应的bpm序列化文件全路径
 	private String getBpmFilePath(String code, String version, int subversion) {
-		return ProcessSerializationFolderContainer.getFolder(register.get().getId()) + code + "." + version + "." + subversion;
+		return ProcessSerializationFolderContainer.getFolder(container.get().getId()) + code + "." + version + "." + subversion;
 	}
 	
 	// 创建序列化文件

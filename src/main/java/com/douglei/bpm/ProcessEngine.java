@@ -12,7 +12,7 @@ import com.douglei.orm.core.mapping.MappingExecuteException;
  * @author DougLei
  */
 public abstract class ProcessEngine {
-	protected String id; // 引擎id, 即SessionFactory的id, 所以也可以从SessionFactoryRegister.get().getId()来获取
+	protected String id; // 引擎id, 即SessionFactory的id, 所以也可以从SessionFactoryContainer.get().getId()来获取
 	
 	@Attribute
 	private RepositoryModule repository;

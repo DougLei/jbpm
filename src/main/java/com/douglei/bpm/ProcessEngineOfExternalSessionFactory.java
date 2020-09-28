@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.douglei.orm.configuration.environment.mapping.MappingEntity;
 import com.douglei.orm.configuration.impl.element.environment.mapping.DeleteMappingEntity;
-import com.douglei.orm.context.SessionFactoryRegister;
+import com.douglei.orm.context.SessionFactoryContainer;
 import com.douglei.orm.core.mapping.MappingExecuteException;
 import com.douglei.orm.sessionfactory.SessionFactory;
 
@@ -14,7 +14,7 @@ import com.douglei.orm.sessionfactory.SessionFactory;
  * @author DougLei
  */
 class ProcessEngineOfExternalSessionFactory extends ProcessEngine {
-	private boolean removeSessionFactory; // 销毁时, 是否要从SessionFactoryRegister中移除SessionFactory
+	private boolean removeSessionFactory; // 销毁时, 是否要从SessionFactoryContainer中移除SessionFactory
 	private String[] mappingCodes = {
 			"BPM_RE_DELEGATION", "BPM_RE_LISTENER", "BPM_RE_PROCDEF", "BPM_RE_PROCTYPE", "BPM_RE_SUGGEST"
 			}; // 流程的映射code数组, 在销毁时, 从SessionFactory中移除
@@ -28,9 +28,9 @@ class ProcessEngineOfExternalSessionFactory extends ProcessEngine {
 	public void destroy() throws MappingExecuteException {
 		SessionFactory sessionFactory = null;
 		if(removeSessionFactory) 
-			sessionFactory = SessionFactoryRegister.getSingleton().remove(id, false);
+			sessionFactory = SessionFactoryContainer.getSingleton().remove(id, false);
 		if(sessionFactory == null)
-			sessionFactory = SessionFactoryRegister.getSingleton().get(id);
+			sessionFactory = SessionFactoryContainer.getSingleton().get(id);
 		
 		List<MappingEntity> entities = new ArrayList<MappingEntity>(mappingCodes.length);
 		for (String code : mappingCodes) {

@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.douglei.tools.utils.IOUtil;
+import com.douglei.tools.utils.FileUtil;
 
 /**
  * 
@@ -33,7 +33,7 @@ public class ProcessSerializationFolderContainer {
 			if(list != null && list.length > 1) {
 				for (String f : list) {
 					if(!f.equals(VERSION)) {
-						IOUtil.delete(new File(parentFolder.getAbsolutePath() + File.separatorChar + f));
+						FileUtil.delete(new File(parentFolder.getAbsolutePath() + File.separatorChar + f));
 					}
 				}
 			}
@@ -47,7 +47,7 @@ public class ProcessSerializationFolderContainer {
 	public static synchronized void deleteFolder(String processEngineId) {
 		String folder = FOLDER_MAP.remove(processEngineId);
 		if(folder != null)
-			IOUtil.delete(new File(folder).getParentFile());
+			FileUtil.delete(new File(folder).getParentFile());
 	}
 	
 	/**

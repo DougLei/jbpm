@@ -18,7 +18,7 @@ import com.douglei.orm.context.RegistrationResult;
 import com.douglei.orm.context.SessionFactoryContainer;
 import com.douglei.orm.core.mapping.MappingExecuteException;
 import com.douglei.orm.sessionfactory.SessionFactory;
-import com.douglei.tools.instances.scanner.FileScanner;
+import com.douglei.tools.instances.scanner.impl.ResourceScanner;
 
 /**
  * 流程引擎构建器
@@ -108,7 +108,7 @@ public class ProcessEngineBuilder {
 	 * @throws IdDuplicateException 
 	 */
 	public ProcessEngine build(SessionFactory externalSessionFactory) throws ParseMappingException, MappingExecuteException, IdDuplicateException{
-		List<String> mappingFiles = new FileScanner(MappingType.getFileSuffixes()).scan(MAPPING_FILE_ROOT_PATH);
+		List<String> mappingFiles = new ResourceScanner(MappingType.getFileSuffixes()).scan(MAPPING_FILE_ROOT_PATH);
 		List<MappingEntity> mappingEntities = new ArrayList<MappingEntity>(mappingFiles.size());
 		for (String mappingFile : mappingFiles) 
 			mappingEntities.add(new AddOrCoverMappingEntity(mappingFile));

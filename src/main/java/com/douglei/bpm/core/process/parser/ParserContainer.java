@@ -11,7 +11,7 @@ import com.douglei.bpm.core.process.parser.element.TaskElement;
 import com.douglei.bpm.core.process.parser.impl.ProcessParser;
 import com.douglei.bpm.core.process.parser.impl.flow.FlowParser;
 import com.douglei.bpm.core.process.parser.impl.task.event.StartEventParser;
-import com.douglei.tools.instances.scanner.impl.ClassScanner;
+import com.douglei.tools.instances.resource.scanner.impl.ClassScanner;
 import com.douglei.tools.utils.reflect.ClassLoadUtil;
 import com.douglei.tools.utils.reflect.ConstructorUtil;
 

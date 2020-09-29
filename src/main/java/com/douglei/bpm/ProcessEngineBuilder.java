@@ -18,7 +18,7 @@ import com.douglei.orm.context.RegistrationResult;
 import com.douglei.orm.context.SessionFactoryContainer;
 import com.douglei.orm.core.mapping.MappingExecuteException;
 import com.douglei.orm.sessionfactory.SessionFactory;
-import com.douglei.tools.instances.scanner.impl.ResourceScanner;
+import com.douglei.tools.instances.resource.scanner.impl.ResourceScanner;
 
 /**
  * 流程引擎构建器

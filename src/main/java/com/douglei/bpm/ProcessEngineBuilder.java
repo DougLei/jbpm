@@ -6,17 +6,16 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import com.douglei.bpm.bean.BeanFactory;
-import com.douglei.orm.configuration.Configuration;
-import com.douglei.orm.configuration.ExternalDataSource;
-import com.douglei.orm.configuration.environment.mapping.MappingEntity;
-import com.douglei.orm.configuration.environment.mapping.MappingType;
-import com.douglei.orm.configuration.environment.mapping.ParseMappingException;
-import com.douglei.orm.configuration.impl.ConfigurationImpl;
-import com.douglei.orm.configuration.impl.element.environment.mapping.AddOrCoverMappingEntity;
+import com.douglei.orm.Configuration;
+import com.douglei.orm.ExternalDataSource;
 import com.douglei.orm.context.IdDuplicateException;
 import com.douglei.orm.context.RegistrationResult;
 import com.douglei.orm.context.SessionFactoryContainer;
-import com.douglei.orm.core.mapping.MappingExecuteException;
+import com.douglei.orm.mapping.execute.MappingExecuteException;
+import com.douglei.orm.mapping.execute.ParseMappingException;
+import com.douglei.orm.mapping.execute.entity.AddOrCoverMappingEntity;
+import com.douglei.orm.mapping.execute.entity.MappingEntity;
+import com.douglei.orm.mapping.type.MappingTypeHandler;
 import com.douglei.orm.sessionfactory.SessionFactory;
 import com.douglei.tools.instances.resource.scanner.impl.ResourceScanner;
 
@@ -75,9 +74,9 @@ public class ProcessEngineBuilder {
 	 * @throws IdDuplicateException 
 	 */
 	public ProcessEngine build(String configurationFilePath) throws IdDuplicateException {
-		Configuration configuration = new ConfigurationImpl(configurationFilePath);
+		Configuration configuration = new Configuration(configurationFilePath);
 		
-		SessionFactory sessionFactory = configuration.buildSessionFactory();
+		SessionFactory sessionFactory = configuration.getSessionFactory();
 		registerSessionFactory(sessionFactory);
 		return beanFactory.initEngineAttributes(new ProcessEngineWithBuiltinSessionFactory(sessionFactory.getId()));
 	}
@@ -90,11 +89,11 @@ public class ProcessEngineBuilder {
 	 * @throws IdDuplicateException
 	 */
 	public ProcessEngine build(String engineId, DataSource dataSource) throws IdDuplicateException {
-		Configuration configuration = new ConfigurationImpl(DEFAULT_CONFIGURATION_FILE_PATH);
+		Configuration configuration = new Configuration(DEFAULT_CONFIGURATION_FILE_PATH);
 		configuration.setId(engineId);
 		configuration.setExternalDataSource(new ExternalDataSource(dataSource));
 		
-		SessionFactory sessionFactory = configuration.buildSessionFactory();
+		SessionFactory sessionFactory = configuration.getSessionFactory();
 		registerSessionFactory(sessionFactory);
 		return beanFactory.initEngineAttributes(new ProcessEngineWithBuiltinSessionFactory(sessionFactory.getId()));
 	}
@@ -108,11 +107,11 @@ public class ProcessEngineBuilder {
 	 * @throws IdDuplicateException 
 	 */
 	public ProcessEngine build(SessionFactory externalSessionFactory) throws ParseMappingException, MappingExecuteException, IdDuplicateException{
-		List<String> mappingFiles = new ResourceScanner(MappingType.getFileSuffixes()).scan(MAPPING_FILE_ROOT_PATH);
+		List<String> mappingFiles = new ResourceScanner(MappingTypeHandler.getFileSuffixes().toArray(new String[MappingTypeHandler.getFileSuffixes().size()])).scan(MAPPING_FILE_ROOT_PATH);
 		List<MappingEntity> mappingEntities = new ArrayList<MappingEntity>(mappingFiles.size());
 		for (String mappingFile : mappingFiles) 
 			mappingEntities.add(new AddOrCoverMappingEntity(mappingFile));
-		externalSessionFactory.getMappingProcessor().execute(mappingEntities);
+		externalSessionFactory.getMappingHandler().execute(mappingEntities);
 		
 		RegistrationResult result = registerSessionFactory(externalSessionFactory);
 		return beanFactory.initEngineAttributes(new ProcessEngineOfExternalSessionFactory(externalSessionFactory.getId(), result == RegistrationResult.SUCCESS));

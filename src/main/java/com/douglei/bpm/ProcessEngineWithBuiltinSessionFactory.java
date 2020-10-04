@@ -1,7 +1,7 @@
 package com.douglei.bpm;
 
 import com.douglei.orm.context.SessionFactoryContainer;
-import com.douglei.orm.core.mapping.MappingExecuteException;
+import com.douglei.orm.mapping.execute.MappingExecuteException;
 
 /**
  * 内置SessionFactory的流程引擎, 在销毁时必须销毁SessionFactory

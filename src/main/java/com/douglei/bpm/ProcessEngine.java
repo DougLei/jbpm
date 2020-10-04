@@ -5,7 +5,7 @@ import com.douglei.bpm.core.process.ProcessSerializationFolderContainer;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
-import com.douglei.orm.core.mapping.MappingExecuteException;
+import com.douglei.orm.mapping.execute.MappingExecuteException;
 
 /**
  * 流程引擎

@@ -3,10 +3,10 @@ package com.douglei.bpm;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.douglei.orm.configuration.environment.mapping.MappingEntity;
-import com.douglei.orm.configuration.impl.element.environment.mapping.DeleteMappingEntity;
 import com.douglei.orm.context.SessionFactoryContainer;
-import com.douglei.orm.core.mapping.MappingExecuteException;
+import com.douglei.orm.mapping.execute.MappingExecuteException;
+import com.douglei.orm.mapping.execute.entity.DeleteMappingEntity;
+import com.douglei.orm.mapping.execute.entity.MappingEntity;
 import com.douglei.orm.sessionfactory.SessionFactory;
 
 /**
@@ -36,7 +36,7 @@ class ProcessEngineOfExternalSessionFactory extends ProcessEngine {
 		for (String code : mappingCodes) {
 			entities.add(new DeleteMappingEntity(code, false));
 		}
-		sessionFactory.getMappingProcessor().execute(entities);
+		sessionFactory.getMappingHandler().execute(entities);
 		super.destroy();
 	}
 }

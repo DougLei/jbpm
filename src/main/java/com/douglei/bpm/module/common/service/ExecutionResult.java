@@ -2,7 +2,7 @@ package com.douglei.bpm.module.common.service;
 
 import java.util.Arrays;
 
-import com.douglei.orm.core.metadata.validator.ValidationResult;
+import com.douglei.orm.mapping.metadata.validator.ValidationResult;
 
 /**
  * 执行结果

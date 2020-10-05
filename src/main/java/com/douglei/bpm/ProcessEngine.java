@@ -5,7 +5,7 @@ import com.douglei.bpm.core.process.ProcessSerializationFolderContainer;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
-import com.douglei.orm.mapping.execute.MappingExecuteException;
+import com.douglei.orm.mapping.handler.MappingHandlerException;
 
 /**
  * 流程引擎
@@ -41,7 +41,7 @@ public abstract class ProcessEngine {
 		return history;
 	}
 	
-	protected void destroy() throws MappingExecuteException{
+	protected void destroy() throws MappingHandlerException{
 		ProcessSerializationFolderContainer.deleteFolder(this.id);
 	}
 }

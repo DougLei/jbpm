@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.douglei.orm.context.SessionFactoryContainer;
-import com.douglei.orm.mapping.execute.MappingExecuteException;
-import com.douglei.orm.mapping.execute.entity.DeleteMappingEntity;
-import com.douglei.orm.mapping.execute.entity.MappingEntity;
+import com.douglei.orm.mapping.handler.MappingHandlerException;
+import com.douglei.orm.mapping.handler.entity.DeleteMappingEntity;
+import com.douglei.orm.mapping.handler.entity.MappingEntity;
 import com.douglei.orm.sessionfactory.SessionFactory;
 
 /**
@@ -25,7 +25,7 @@ class ProcessEngineOfExternalSessionFactory extends ProcessEngine {
 	}
 	
 	@Override
-	public void destroy() throws MappingExecuteException {
+	public void destroy() throws MappingHandlerException {
 		SessionFactory sessionFactory = null;
 		if(removeSessionFactory) 
 			sessionFactory = SessionFactoryContainer.getSingleton().remove(id, false);

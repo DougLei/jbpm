@@ -15,7 +15,7 @@ import com.douglei.orm.mapping.handler.MappingHandlerException;
 import com.douglei.orm.mapping.handler.entity.AddOrCoverMappingEntity;
 import com.douglei.orm.mapping.handler.entity.MappingEntity;
 import com.douglei.orm.mapping.handler.entity.ParseMappingException;
-import com.douglei.orm.mapping.type.MappingTypeHandler;
+import com.douglei.orm.mapping.type.MappingTypeContainer;
 import com.douglei.orm.sessionfactory.SessionFactory;
 import com.douglei.tools.instances.resource.scanner.impl.ResourceScanner;
 
@@ -107,7 +107,7 @@ public class ProcessEngineBuilder {
 	 * @throws IdDuplicateException 
 	 */
 	public ProcessEngine build(SessionFactory externalSessionFactory) throws ParseMappingException, MappingHandlerException, IdDuplicateException{
-		List<String> mappingFiles = new ResourceScanner(MappingTypeHandler.getFileSuffixes().toArray(new String[MappingTypeHandler.getFileSuffixes().size()])).scan(MAPPING_FILE_ROOT_PATH);
+		List<String> mappingFiles = new ResourceScanner(MappingTypeContainer.getFileSuffixes().toArray(new String[MappingTypeContainer.getFileSuffixes().size()])).scan(MAPPING_FILE_ROOT_PATH);
 		List<MappingEntity> mappingEntities = new ArrayList<MappingEntity>(mappingFiles.size());
 		for (String mappingFile : mappingFiles) 
 			mappingEntities.add(new AddOrCoverMappingEntity(mappingFile));

@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.douglei.orm.context.SessionFactoryContainer;
 import com.douglei.orm.mapping.handler.MappingHandlerException;
-import com.douglei.orm.mapping.handler.entity.DeleteMappingEntity;
 import com.douglei.orm.mapping.handler.entity.MappingEntity;
+import com.douglei.orm.mapping.handler.entity.impl.DeleteMappingEntity;
 import com.douglei.orm.sessionfactory.SessionFactory;
 
 /**

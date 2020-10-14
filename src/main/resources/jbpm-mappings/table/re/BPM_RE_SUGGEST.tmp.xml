@@ -3,13 +3,13 @@
 	<!-- 流程常用意见表 -->
 	<table name="BPM_RE_SUGGEST" createMode="create" strict="true">
 		<columns>
-			<column name="ID" property="id" dataType="integer" primaryKey="true" length="20" />
-			<column name="USER_" property="user_" dataType="char" length="50" />
+			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
+			<column name="USER_" property="user_" dataType="nstring" length="50" />
 			<column name="CONTENT" property="content" dataType="nstring" length="300" nullable="false" />
-			<column name="CREATE_USER" property="createUser" dataType="char" length="50" />
-			<column name="CREATE_DATE" property="createDate" dataType="date" />
-			<column name="UPDATE_USER" property="updateUser" dataType="char" length="50" />
-			<column name="UPDATE_DATE" property="updateDate" dataType="date" />
+			<column name="CREATE_USER" property="createUser" dataType="nstring" length="50" />
+			<column name="CREATE_DATE" property="createDate" dataType="datetime" />
+			<column name="UPDATE_USER" property="updateUser" dataType="nstring" length="50" />
+			<column name="UPDATE_DATE" property="updateDate" dataType="datetime" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

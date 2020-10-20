@@ -34,6 +34,6 @@ public class ExecutionResult<T> extends ValidationResult{
 	public String toString() {
 		if(success)
 			return "ExecutionResult [success=true, object="+object+"]";
-		return "ExecutionResult [success=false, fieldName="+getFieldName()+", originMessage=" + getOriginMessage() + ", code=" + getCode() + ", params=" + Arrays.toString(getParams()) +"]";
+		return "ExecutionResult [success=false, name="+getName()+", originMessage=" + getOriginMessage() + ", code=" + getCode() + ", params=" + Arrays.toString(getParams()) +"]";
 	}
 }

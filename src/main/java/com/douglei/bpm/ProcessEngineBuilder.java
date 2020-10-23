@@ -6,8 +6,8 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import com.douglei.bpm.bean.BeanFactory;
-import com.douglei.orm.Configuration;
-import com.douglei.orm.ExternalDataSource;
+import com.douglei.orm.configuration.Configuration;
+import com.douglei.orm.configuration.ExternalDataSource;
 import com.douglei.orm.context.IdDuplicateException;
 import com.douglei.orm.context.RegistrationResult;
 import com.douglei.orm.context.SessionFactoryContainer;

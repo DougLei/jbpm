@@ -7,16 +7,11 @@ package com.douglei.bpm.module.repository.definition;
 public class ClasspathFile {
 	private String name; // 资源名称
 
-	public ClasspathFile() {}
 	public ClasspathFile(String name) {
-		setName(name);
+		this.name = name;
 	}
 	
 	public String getName() {
 		return name;
-	}
-	public ClasspathFile setName(String name) {
-		this.name = name;
-		return this;
 	}
 }

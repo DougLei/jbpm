@@ -17,14 +17,7 @@ import com.douglei.tools.instances.file.reader.FileBufferedReader;
  * @author DougLei
  */
 public class ProcessDefinitionBuilder {
-	private String content;
-	private int typeId;
-	private String description;
-	
-	private String createUser;
-	private Date createDate;
-	private String updateUser;
-	private Date updateDate;
+	private ProcessDefinition processDefinition;
 	
 	/**
 	 * 根据文件构建流程定义实例
@@ -48,96 +41,15 @@ public class ProcessDefinitionBuilder {
 	 * @param content
 	 */
 	public ProcessDefinitionBuilder(String content) {
-		this.content = content;
-	}
-	
-	/**
-	 * 设置流程定义的类型id
-	 * @param typeId
-	 * @return
-	 */
-	public ProcessDefinitionBuilder setTypeId(int typeId) {
-		this.typeId = typeId;
-		return this;
-	}
-	
-	/**
-	 * 设置流程定义的描述
-	 * @param description
-	 * @return
-	 */
-	public ProcessDefinitionBuilder setDescription(String description) {
-		this.description = description;
-		return this;
-	}
-	
-	/**
-	 * 设置流程定义的创建用户
-	 * @param createUser
-	 * @return
-	 */
-	public ProcessDefinitionBuilder setCreateUser(String createUser) {
-		this.createUser = createUser;
-		return this;
-	}
-
-	/**
-	 * 设置流程定义的创建时间
-	 * @param createDate
-	 * @return
-	 */
-	public ProcessDefinitionBuilder setCreateDate(Date createDate) {
-		this.createDate = createDate;
-		return this;
-	}
-
-	/**
-	 * 设置流程定义的修改用户
-	 * @param updateUser
-	 * @return
-	 */
-	public ProcessDefinitionBuilder setUpdateUser(String updateUser) {
-		this.updateUser = updateUser;
-		return this;
-	}
-
-	/**
-	 * 设置流程定义的修改时间
-	 * @param updateDate
-	 * @return
-	 */
-	public ProcessDefinitionBuilder setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-		return this;
-	}
-
-	/**
-	 * 构建流程定义实例
-	 * @return
-	 */
-	public ProcessDefinition build() {
-		Map<String, String> attribute = getProcessAttribute();
+		Map<String, String> attribute = getProcessAttribute(content);
+		this.processDefinition = new ProcessDefinition(attribute.get("name"), attribute.get("code"), attribute.get("version"));
 		
-		ProcessDefinition processDefinition = new ProcessDefinition();
-		processDefinition.setName(attribute.get("name"));
-		processDefinition.setCode(attribute.get("code"));
-		processDefinition.setVersion(attribute.get("version"));
-		
-		processDefinition.setContent(content);
-		processDefinition.setSignature(DigestUtils.md5Hex(content));
-		
-		processDefinition.setRefTypeId(typeId);
-		processDefinition.setDescription(description);
-		
-		processDefinition.setCreateUser(createUser);
-		processDefinition.setCreateDate(createDate);
-		processDefinition.setUpdateUser(updateUser);
-		processDefinition.setUpdateDate(updateDate);
-		return processDefinition;
+		this.processDefinition.setContent(content);
+		this.processDefinition.setSignature(DigestUtils.md5Hex(content));
 	}
 	
 	// 获取<process>的属性
-	private Map<String, String> getProcessAttribute() {
+	private Map<String, String> getProcessAttribute(String content) {
 		Map<String, String> attribute = new HashMap<String, String>(8);
 		
 		LinkedList<Character> chars = new LinkedList<Character>();
@@ -199,5 +111,74 @@ public class ProcessDefinitionBuilder {
 		if(attributeNames.indexOf(attributeName) > -1)
 			return attributeName;
 		return null;
+	}
+	
+	
+	/**
+	 * 设置流程定义的类型id
+	 * @param typeId
+	 * @return
+	 */
+	public ProcessDefinitionBuilder setTypeId(int typeId) {
+		processDefinition.setRefTypeId(typeId);
+		return this;
+	}
+	
+	/**
+	 * 设置流程定义的描述
+	 * @param description
+	 * @return
+	 */
+	public ProcessDefinitionBuilder setDescription(String description) {
+		processDefinition.setDescription(description);
+		return this;
+	}
+	
+	/**
+	 * 设置流程定义的创建用户
+	 * @param createUser
+	 * @return
+	 */
+	public ProcessDefinitionBuilder setCreateUser(String createUser) {
+		processDefinition.setCreateUser(createUser);
+		return this;
+	}
+
+	/**
+	 * 设置流程定义的创建时间
+	 * @param createDate
+	 * @return
+	 */
+	public ProcessDefinitionBuilder setCreateDate(Date createDate) {
+		processDefinition.setCreateDate(createDate);
+		return this;
+	}
+
+	/**
+	 * 设置流程定义的修改用户
+	 * @param updateUser
+	 * @return
+	 */
+	public ProcessDefinitionBuilder setUpdateUser(String updateUser) {
+		processDefinition.setUpdateUser(updateUser);
+		return this;
+	}
+
+	/**
+	 * 设置流程定义的修改时间
+	 * @param updateDate
+	 * @return
+	 */
+	public ProcessDefinitionBuilder setUpdateDate(Date updateDate) {
+		processDefinition.setUpdateDate(updateDate);
+		return this;
+	}
+
+	/**
+	 * 构建流程定义实例
+	 * @return
+	 */
+	public ProcessDefinition build() {
+		return processDefinition;
 	}
 }

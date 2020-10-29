@@ -12,20 +12,14 @@ public class ExecutionResult<T> extends ValidationResult{
 	private boolean success;
 	private T object;
 	
-	public ExecutionResult(boolean success, T object) {
-		this.success = success;
+	public ExecutionResult(T object) {
+		this.success = true;
 		this.object = object;
 	}
 	public ExecutionResult(String fieldName, String originMessage, String code, Object... params) {
 		super(fieldName, originMessage, code, params);
 	}
 	
-	public boolean isSuccess() {
-		return success;
-	}
-	public boolean isFail() {
-		return !success;
-	}
 	public T getObject() {
 		return object;
 	}

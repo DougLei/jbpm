@@ -4,7 +4,7 @@ package com.douglei.bpm.module.runtime;
  * 针对流程运行实例的处理策略
  * @author DougLei
  */
-public enum InstanceProcessingPolicy {
+public enum RuntimeInstanceProcessingPolicy {
 	
 	/**
 	 * 不进行任何处理

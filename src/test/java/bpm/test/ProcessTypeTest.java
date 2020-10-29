@@ -23,7 +23,7 @@ public class ProcessTypeTest {
 	@Test
 	public void save() {
 		ProcessType type = new ProcessType();
-		type.setCode("test_code123");
+		type.setCode("test_code");
 		type.setName("测试类型");
 		type.setCreateDate(new Date());
 		ExecutionResult<Object> result = engine.getRepository().getTypeService().save(type);

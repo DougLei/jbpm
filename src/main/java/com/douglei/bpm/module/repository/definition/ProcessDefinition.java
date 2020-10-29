@@ -21,6 +21,12 @@ public class ProcessDefinition extends BasicEntity{
 	private int state;
 	private String description;
 	
+	public ProcessDefinition(String name, String code, String version) {
+		this.name = name;
+		this.code = code;
+		this.version = version;
+	}
+	
 	public int getRefTypeId() {
 		return refTypeId;
 	}
@@ -32,20 +38,11 @@ public class ProcessDefinition extends BasicEntity{
 			name = code + ":" + version;
 		return name;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
 	public String getCode() {
 		return code;
 	}
-	public void setCode(String code) {
-		this.code = code;
-	}
 	public String getVersion() {
 		return version;
-	}
-	public void setVersion(String version) {
-		this.version = version;
 	}
 	public int getSubversion() {
 		return subversion;

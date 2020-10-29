@@ -9,13 +9,11 @@
 		3. 网关: 并行网关, 排他网关, 包容网关 
 		4. 事件: 开始事件, 结束事件
 	-->
-	
 	<process name="流程名称, 可以不配置, 如果不配置则使用code:version" code="编码, 唯一" version="用户自定义的版本" titleExpr="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name" pageID="全局页面标识">
 		<!-- 开始事件, 一个流程中只能有一个开始 -->
 		<startEvent id="startEvent" name=""></startEvent>
 		<!-- 结束事件, 一个流程中可以有多个结束 -->
 		<endEvent id="endEvent1" name=""></endEvent>
-		
 		
 		<!-- 用户任务 -->
 		<userTask id="userTask1" name="任务名称" pageID="属于任务的页面标识, 优先级高于全局页面标识"  

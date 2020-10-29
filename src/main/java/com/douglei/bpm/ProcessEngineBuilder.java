@@ -59,7 +59,7 @@ public class ProcessEngineBuilder {
 	
 	
 	/**
-	 * 使用默认的jdb-orm配置文件, 构建引擎
+	 * 使用默认的jbpm.conf.xml配置文件, 构建引擎
 	 * @return 
 	 * @throws IdDuplicateException 
 	 */
@@ -68,7 +68,7 @@ public class ProcessEngineBuilder {
 	}
 	
 	/**
-	 * 根据指定name的jdb-orm配置文件, 构建引擎
+	 * 根据指定name的jbpm.conf.xml配置文件, 构建引擎
 	 * @param configurationFilePath 配置文件路径
 	 * @return 
 	 * @throws IdDuplicateException 

@@ -20,9 +20,9 @@ public class RuntimeProcessInstanceService {
 	 * 处理指定流程定义相关的所有实例
 	 * @param processDefinitionId
 	 * @param policy 对运行实例的处理策略
-	 * @return
+	 * @return 返回null表示操作成功
 	 */
-	public ExecutionResult<Object> processingAllInstance(int processDefinitionId, InstanceProcessingPolicy policy) {
+	public ExecutionResult<Object> processingAllInstance(int processDefinitionId, RuntimeInstanceProcessingPolicy policy) {
 		// TODO Auto-generated method stub
 			
 			

@@ -4,11 +4,11 @@ import java.util.Arrays;
 
 import com.douglei.bpm.bean.annotation.Attribute;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.core.process.ProcessHandler;
 import com.douglei.bpm.module.common.service.ExecutionResult;
 import com.douglei.bpm.module.history.HistoryProcessInstanceService;
 import com.douglei.bpm.module.runtime.RuntimeInstanceProcessingPolicy;
 import com.douglei.bpm.module.runtime.RuntimeProcessInstanceService;
+import com.douglei.bpm.process.ProcessHandler;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
 import com.douglei.tools.utils.StringUtil;

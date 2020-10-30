@@ -33,10 +33,8 @@ class ProcessEngineOfExternalSessionFactory extends ProcessEngine {
 			sessionFactory = SessionFactoryContainer.getSingleton().get(id);
 		
 		List<MappingEntity> entities = new ArrayList<MappingEntity>(mappingCodes.length);
-		for (String code : mappingCodes) {
+		for (String code : mappingCodes) 
 			entities.add(new DeleteMappingEntity(code, false));
-		}
 		sessionFactory.getMappingHandler().execute(entities);
-		super.destroy();
 	}
 }

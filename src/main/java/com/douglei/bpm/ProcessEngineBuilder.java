@@ -6,9 +6,11 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import com.douglei.bpm.bean.BeanFactory;
+import com.douglei.bpm.process.container.ProcessContainer;
+import com.douglei.bpm.process.container.impl.ApplicationProcessContainer;
 import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
-import com.douglei.orm.context.IdDuplicateException;
+import com.douglei.orm.context.IdRepeatedException;
 import com.douglei.orm.context.RegistrationResult;
 import com.douglei.orm.context.SessionFactoryContainer;
 import com.douglei.orm.mapping.handler.MappingHandlerException;
@@ -20,20 +22,17 @@ import com.douglei.orm.sessionfactory.SessionFactory;
 import com.douglei.tools.instances.resource.scanner.impl.ResourceScanner;
 
 /**
- * 流程引擎构建器
+ * 流程引擎构建器, 一个构建器只能构建一个引擎
  * @author DougLei
  */
 public class ProcessEngineBuilder {
 	private static final String DEFAULT_CONFIGURATION_FILE_PATH = "jbpm.conf.xml"; // 默认的配置文件路径
-	private static final String MAPPING_FILE_ROOT_PATH = "jbpm-mappings"; // 工作流引擎相关的mapping文件根路径
-	private BeanFactory beanFactory; // 引擎bean工厂
-	
-	public ProcessEngineBuilder() {
-		this.beanFactory = BeanFactory.getSingleton();
-	}
+	private boolean isBuild;
+	private ProcessEngine engine;
+	private ProcessContainer container;
 	
 	/**
-	 * - 关于以下四种build功能的介绍
+	 * - 关于以下四种构建函数的介绍
 	 * 
 	 * -------------------------------------------------------------------------------------------------
 	 * jbpm流程引擎单独作为服务, 有以下两种方式构建:
@@ -54,80 +53,84 @@ public class ProcessEngineBuilder {
 	 *    - 反之会将流程引擎相关的mapping从externalSessionFactory中移除, 并将externalSessionFactory从 {@link SessionFactoryContainer} 中移除
 	 *    
 	 * -------------------------------------------------------------------------------------------------
-	 * 特别说明, 以上四种build方式构建出的流程引擎, 在销毁的时候, 都不会对流程相关的表结构和其中的数据产生影响
+	 * 特别说明, 构建出的流程引擎, 在销毁的时候, 都不会对流程相关的表结构和其中的数据产生影响
 	 */
-	
 	
 	/**
 	 * 使用默认的jbpm.conf.xml配置文件, 构建引擎
-	 * @return 
-	 * @throws IdDuplicateException 
+	 * @throws IdRepeatedException 
 	 */
-	public ProcessEngine build() throws IdDuplicateException {
-		return build(DEFAULT_CONFIGURATION_FILE_PATH);
+	public ProcessEngineBuilder() throws IdRepeatedException {
+		this(DEFAULT_CONFIGURATION_FILE_PATH); // 默认的配置文件路径
 	}
 	
 	/**
 	 * 根据指定name的jbpm.conf.xml配置文件, 构建引擎
 	 * @param configurationFilePath 配置文件路径
-	 * @return 
-	 * @throws IdDuplicateException 
+	 * @throws IdRepeatedException 
 	 */
-	public ProcessEngine build(String configurationFilePath) throws IdDuplicateException {
+	public ProcessEngineBuilder(String configurationFilePath) throws IdRepeatedException {
 		Configuration configuration = new Configuration(configurationFilePath);
 		
 		SessionFactory sessionFactory = configuration.buildSessionFactory();
-		registerSessionFactory(sessionFactory);
-		return beanFactory.initEngineAttributes(new ProcessEngineWithBuiltinSessionFactory(sessionFactory.getId()));
+		SessionFactoryContainer.getSingleton().register(sessionFactory);
+		this.engine = new ProcessEngineWithBuiltinSessionFactory(sessionFactory.getId());
 	}
 	
 	/**
 	 * 通过外部的数据源, 构建引擎
 	 * @param engineId 引擎的唯一标识, 在多数据源情况中必须传入; 当只有一个数据源时, 该参数可传入null, 使用默认值defaultProcessEngine
 	 * @param dataSource 外部的数据源实例
-	 * @return 
-	 * @throws IdDuplicateException
+	 * @throws IdRepeatedException
 	 */
-	public ProcessEngine build(String engineId, DataSource dataSource) throws IdDuplicateException {
+	public ProcessEngineBuilder(String engineId, DataSource dataSource) throws IdRepeatedException {
 		Configuration configuration = new Configuration(DEFAULT_CONFIGURATION_FILE_PATH);
 		configuration.setId(engineId);
 		configuration.setExternalDataSource(new ExternalDataSource(dataSource));
 		
 		SessionFactory sessionFactory = configuration.buildSessionFactory();
-		registerSessionFactory(sessionFactory);
-		return beanFactory.initEngineAttributes(new ProcessEngineWithBuiltinSessionFactory(sessionFactory.getId()));
+		SessionFactoryContainer.getSingleton().register(sessionFactory);
+		this.engine = new ProcessEngineWithBuiltinSessionFactory(sessionFactory.getId());
 	}
 	
 	/**
 	 * 使用外部的 {@link SessionFactory}实例, 构建引擎
 	 * @param externalSessionFactory 外部的 {@link SessionFactory} 实例
-	 * @return 
 	 * @throws ParseMappingException
 	 * @throws MappingHandlerException
-	 * @throws IdDuplicateException 
+	 * @throws IdRepeatedException 
 	 */
-	public ProcessEngine build(SessionFactory externalSessionFactory) throws ParseMappingException, MappingHandlerException, IdDuplicateException{
-		List<String> mappingFiles = new ResourceScanner(MappingTypeContainer.getFileSuffixes().toArray(new String[MappingTypeContainer.getFileSuffixes().size()])).scan(MAPPING_FILE_ROOT_PATH);
+	public ProcessEngineBuilder(SessionFactory externalSessionFactory) throws ParseMappingException, MappingHandlerException, IdRepeatedException{
+		List<String> mappingFiles = new ResourceScanner(MappingTypeContainer.getFileSuffixes().toArray(new String[MappingTypeContainer.getFileSuffixes().size()])).scan("jbpm-mappings");// 工作流引擎相关的mapping文件根路径
 		List<MappingEntity> mappingEntities = new ArrayList<MappingEntity>(mappingFiles.size());
 		for (String mappingFile : mappingFiles) 
 			mappingEntities.add(new AddOrCoverMappingEntity(mappingFile));
 		externalSessionFactory.getMappingHandler().execute(mappingEntities);
 		
-		RegistrationResult result = registerSessionFactory(externalSessionFactory);
-		return beanFactory.initEngineAttributes(new ProcessEngineOfExternalSessionFactory(externalSessionFactory.getId(), result == RegistrationResult.SUCCESS));
+		RegistrationResult result = SessionFactoryContainer.getSingleton().register(externalSessionFactory);
+		this.engine = new ProcessEngineOfExternalSessionFactory(externalSessionFactory.getId(), result == RegistrationResult.SUCCESS);
 	}
 	
 	/**
-	 * 注册SessionFactory
-	 * @param sessionFactory
-	 * @return 
-	 * @throws IdDuplicateException 
+	 * 设置流程容器
+	 * @param container
 	 */
-	private RegistrationResult registerSessionFactory(SessionFactory sessionFactory) throws IdDuplicateException {
-		try {
-			return SessionFactoryContainer.getSingleton().register(sessionFactory);
-		} catch (IdDuplicateException e) {
-			throw new IdDuplicateException("已经存在id为"+sessionFactory.getId()+"的流程引擎");
-		}
+	public void setContainer(ProcessContainer container) {
+		this.container = container;
+	}
+
+	/**
+	 * 构建流程引擎
+	 * @return
+	 */
+	public ProcessEngine build() {
+		if(isBuild)
+			return engine;
+		
+		if(container == null)
+			container = new ApplicationProcessContainer();
+		new BeanFactory(container).setEngineAttributes(engine);
+		isBuild = true;
+		return engine;
 	}
 }

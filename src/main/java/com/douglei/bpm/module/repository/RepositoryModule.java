@@ -18,7 +18,6 @@ public class RepositoryModule {
 	@Attribute
 	private ProcessDefinitionService definitionService;
 
-	
 	public ProcessTypeService getTypeService() {
 		return typeService;
 	}

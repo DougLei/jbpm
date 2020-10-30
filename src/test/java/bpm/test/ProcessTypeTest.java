@@ -10,20 +10,20 @@ import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.common.service.ExecutionResult;
 import com.douglei.bpm.module.repository.type.ProcessType;
 import com.douglei.i18n.I18nContext;
-import com.douglei.orm.context.IdDuplicateException;
+import com.douglei.orm.context.IdRepeatedException;
 
 public class ProcessTypeTest {
 	private ProcessEngine engine;
 	
 	@Before
-	public void init() throws IdDuplicateException {
+	public void init() throws IdRepeatedException {
 		engine = new ProcessEngineBuilder().build();
 	}
 	
 	@Test
 	public void save() {
 		ProcessType type = new ProcessType();
-		type.setCode("test_code");
+		type.setCode("test_code2");
 		type.setName("测试类型");
 		type.setCreateDate(new Date());
 		ExecutionResult<Object> result = engine.getRepository().getTypeService().save(type);

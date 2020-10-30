@@ -16,6 +16,5 @@ class ProcessEngineWithBuiltinSessionFactory extends ProcessEngine {
 	@Override
 	public void destroy() throws MappingHandlerException {
 		SessionFactoryContainer.getSingleton().remove(id, true); // 通过外部数据源创建的流程引擎, 在销毁时, 可以直接销毁
-		super.destroy();
 	}
 }

@@ -1,7 +1,6 @@
 package com.douglei.bpm;
 
 import com.douglei.bpm.bean.annotation.Attribute;
-import com.douglei.bpm.core.process.ProcessSerializationFolderContainer;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
@@ -25,7 +24,6 @@ public abstract class ProcessEngine {
 	
 	protected ProcessEngine(String id) {
 		this.id = id;
-		ProcessSerializationFolderContainer.createFolder(this.id);
 	}
 	
 	public String getId() {
@@ -41,7 +39,9 @@ public abstract class ProcessEngine {
 		return history;
 	}
 	
-	protected void destroy() throws MappingHandlerException{
-		ProcessSerializationFolderContainer.deleteFolder(this.id);
-	}
+	/**
+	 * 销毁引擎
+	 * @throws MappingHandlerException
+	 */
+	protected abstract void destroy() throws MappingHandlerException;
 }

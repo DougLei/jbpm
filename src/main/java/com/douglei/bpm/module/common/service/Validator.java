@@ -11,5 +11,5 @@ public interface Validator<T> {
 	 * @param t
 	 * @return 如果验证通过, 返回null
 	 */
-	ExecutionResult<T> validate(T t);
+	ExecutionResult validate(T t);
 }

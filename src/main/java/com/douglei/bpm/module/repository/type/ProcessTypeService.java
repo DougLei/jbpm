@@ -4,8 +4,6 @@ import java.util.Arrays;
 
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.common.service.ExecutionResult;
-import com.douglei.bpm.module.common.service.Service;
-import com.douglei.bpm.module.common.service.Validator;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
 
@@ -14,28 +12,12 @@ import com.douglei.orm.context.transaction.component.Transaction;
  * @author DougLei
  */
 @Bean
-public class ProcessTypeService extends Service{
-	// code验证器, 验证code是否重复
-	private Validator<ProcessType> codeValidator = new Validator<ProcessType>() { 
-		@Override
-		public ExecutionResult<ProcessType> validate(ProcessType type) {
-			Object[] oa = SessionContext.getSqlSession().uniqueQuery_("select id from bpm_re_proctype where code = ?", Arrays.asList(type.getCode()));
-			if(oa != null && Integer.parseInt(oa[0].toString()) != type.getId())
-				return new ExecutionResult<ProcessType>("code", "流程类型的编码值[%s]已存在", "bpm.process.type.code.exists", type.getCode());
-			return null;
-		}
-	};
-	// 关联的流程验证器, 验证指定的类型, 是否有关联流程
-	private Validator<ProcessType> refProcessValidator = new Validator<ProcessType>() { 
-		@Override
-		public ExecutionResult<ProcessType> validate(ProcessType type) {
-			Object[] oa = SessionContext.getSqlSession().uniqueQuery_("select count(id) from bpm_re_procdef where ref_type_id = ?", Arrays.asList(type.getId()));
-			int refProcessCount = Integer.parseInt(oa[0].toString());
-			if(refProcessCount > 0)
-				return new ExecutionResult<ProcessType>(null, "该类型下关联了[%d]条流程, 无法删除", "bpm.process.type.delete.fail", refProcessCount);
-			return null;
-		}
-	};
+public class ProcessTypeService {
+	
+	// 根据流程类型code, 获取对应的id
+	private Object[] getIdByCode(String code) {
+		return SessionContext.getSqlSession().uniqueQuery_("select id from bpm_re_proctype where code = ?", Arrays.asList(code));
+	}
 	
 	/**
 	 * 保存类型
@@ -43,11 +25,12 @@ public class ProcessTypeService extends Service{
 	 * @return 返回null表示操作成功
 	 */
 	@Transaction
-	public ExecutionResult<Object> save(ProcessType type) {
-		ExecutionResult<Object> result = validate(type, codeValidator);
-		if(result == null)
-			SessionContext.getTableSession().save(type);
-		return result;
+	public ExecutionResult save(ProcessType type) {
+		if(getIdByCode(type.getCode()) != null)
+			return new ExecutionResult("code", "已存在编码为[%s]的流程类型", "bpm.process.type.code.exists", type.getCode());
+		
+		SessionContext.getTableSession().save(type);
+		return null;
 	}
 	
 	/**
@@ -56,11 +39,13 @@ public class ProcessTypeService extends Service{
 	 * @return 返回null表示操作成功
 	 */
 	@Transaction
-	public ExecutionResult<Object> edit(ProcessType type) {
-		ExecutionResult<Object> result = validate(type, codeValidator);
-		if(result == null)
-			SessionContext.getTableSession().update(type);
-		return result;
+	public ExecutionResult update(ProcessType type) {
+		Object[] obj = getIdByCode(type.getCode());
+		if(obj != null && type.getId() != Integer.parseInt(obj[0].toString())) 
+			return new ExecutionResult("code", "已存在编码为[%s]的流程类型", "bpm.process.type.code.exists", type.getCode());
+		
+		SessionContext.getTableSession().update(type);
+		return null;
 	}
 	
 	/**
@@ -70,16 +55,14 @@ public class ProcessTypeService extends Service{
 	 * @return 返回null表示操作成功
 	 */
 	@Transaction
-	public ExecutionResult<Object> delete(ProcessType type, boolean strict) {
-		ExecutionResult<Object> result = validate(type, refProcessValidator);
-		if(result != null && !strict)
-			return result;
+	public ExecutionResult delete(ProcessType type, boolean strict) {
+		int count = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_("select count(id) from bpm_re_procdef where ref_type_id = ?", Arrays.asList(type.getId()))[0].toString());
+		if(count > 0 && !strict)
+			return new ExecutionResult(null, "该流程类型关联了[%d]条流程, 无法删除", "bpm.process.type.delete.fail", count);
 
 		SessionContext.getTableSession().delete(type);
-		if(result != null) {
+		if(count > 0) 
 			SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set ref_type_id=0 where ref_type_id=?", Arrays.asList(type.getId()));
-			return null;
-		}
-		return result;
+		return null;
 	}
 }

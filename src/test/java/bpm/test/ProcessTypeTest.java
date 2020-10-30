@@ -26,20 +26,20 @@ public class ProcessTypeTest {
 		type.setCode("test_code2");
 		type.setName("测试类型");
 		type.setCreateDate(new Date());
-		ExecutionResult<Object> result = engine.getRepository().getTypeService().save(type);
+		ExecutionResult result = engine.getRepository().getTypeService().save(type);
 		System.out.println(result);
 		System.out.println(I18nContext.getMessage(result));
 		System.out.println(type.getId());
 	}
 	
 	@Test
-	public void edit() {
+	public void update() {
 		ProcessType type = new ProcessType();
-		type.setId(1);
-		type.setCode("aa");
-		type.setName("测试类型1111111111111111");
+		type.setId(4);
+		type.setCode("test_code2");
+		type.setName("测试类型xxxx");
 		type.setUpdateDate(new Date());
-		System.out.println(engine.getRepository().getTypeService().edit(type));
+		System.out.println(engine.getRepository().getTypeService().update(type));
 	}
 	
 	@Test

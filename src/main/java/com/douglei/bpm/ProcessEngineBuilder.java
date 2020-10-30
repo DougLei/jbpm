@@ -114,9 +114,11 @@ public class ProcessEngineBuilder {
 	/**
 	 * 设置流程容器
 	 * @param container
+	 * @return
 	 */
-	public void setContainer(ProcessContainer container) {
+	public ProcessEngineBuilder setContainer(ProcessContainer container) {
 		this.container = container;
+		return this;
 	}
 
 	/**

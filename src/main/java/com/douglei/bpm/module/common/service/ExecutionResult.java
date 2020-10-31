@@ -8,7 +8,7 @@ import com.douglei.orm.mapping.metadata.validator.ValidationResult;
  */
 public class ExecutionResult extends ValidationResult{
 	
-	public ExecutionResult(String fieldName, String originMessage, String code, Object... params) {
-		super(fieldName, originMessage, code, params);
+	public ExecutionResult(String name, String originMessage, String code, Object... params) {
+		super(name, originMessage, code, params);
 	}
 }

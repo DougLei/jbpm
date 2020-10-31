@@ -3,11 +3,11 @@ package com.douglei.bpm.process;
 import com.douglei.bpm.bean.annotation.Attribute;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
-import com.douglei.bpm.process.executer.Process;
+import com.douglei.bpm.process.container.ProcessContainer;
 import com.douglei.bpm.process.parser.impl.ProcessParser;
 
 /**
- * 流程处理程序
+ * 流程处理器
  * @author DougLei
  */
 @Bean(transaction = false)
@@ -16,29 +16,24 @@ public class ProcessHandler {
 	@Attribute
 	private ProcessParser processParser;
 	
+	@Attribute
+	private ProcessContainer container;
+	
 	/**
-	 * 根据配置内容, 解析流程实例
-	 * @param content
-	 * @param subversion 
+	 * 发布流程
+	 * @param processDefined
 	 */
-	public void parse(String content, int subversion) {
+	public void publish(ProcessDefinition processDefined) {
+		// TODO 解析流程定义, 并放到容器中
+		
 	}
 	
 	/**
-	 * 删除流程实例
+	 * 取消发布流程
 	 * @param processDefinition
 	 */
-	public void delete(ProcessDefinition processDefinition) {
-	}
-	
-	/**
-	 * 获取流程实例
-	 * @param code
-	 * @param version
-	 * @param subversion
-	 * @return
-	 */
-	public Process get(String code, String version, int subversion) {
-		return null;
+	public void cancelPublish(ProcessDefinition processDefinition) {
+		// TODO 从容器中移除流程定义即可
+		
 	}
 }

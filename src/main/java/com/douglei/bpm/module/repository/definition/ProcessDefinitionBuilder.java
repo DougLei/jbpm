@@ -43,7 +43,6 @@ public class ProcessDefinitionBuilder {
 	public ProcessDefinitionBuilder(String content) {
 		Map<String, String> attribute = getProcessAttribute(content);
 		this.processDefinition = new ProcessDefinition(attribute.get("name"), attribute.get("code"), attribute.get("version"));
-		
 		this.processDefinition.setContent(content);
 		this.processDefinition.setSignature(DigestUtils.md5Hex(content));
 	}
@@ -178,7 +177,7 @@ public class ProcessDefinitionBuilder {
 	 * 构建流程定义实例
 	 * @return
 	 */
-	public ProcessDefinition build() {
+	ProcessDefinition build() {
 		return processDefinition;
 	}
 }

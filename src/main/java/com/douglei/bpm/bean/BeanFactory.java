@@ -27,17 +27,16 @@ import com.douglei.tools.utils.reflect.ConstructorUtil;
 public class BeanFactory {
 	private Map<Class<?>, Object> beans = new HashMap<Class<?>, Object>(64);
 	
-	public BeanFactory(ProcessContainer container) {
-		this.beans.put(ProcessContainer.class, container);
-		
-		initBeanContainer();
+	public BeanFactory(ProcessContainer processContainerBean) {
+		initBeanContainer(processContainerBean);
 		setBeanAttributes();
 	}
 	
 	/**
 	 * 初始化Bean容器
+	 * @param processContainerBean
 	 */
-	private void initBeanContainer() {
+	private void initBeanContainer(ProcessContainer processContainerBean) {
 		List<String> classes = new ClassScanner().scan("com.douglei.bpm"); // 扫描指定路径下的所有class
 		Class<?> loadClass = null;
 		Bean beanAnno = null;
@@ -66,6 +65,9 @@ public class BeanFactory {
 				beans.put(loadClass, ConstructorUtil.newInstance(loadClass));
 			}
 		}
+		
+		// 将流程容器Bean也放到Bean容器中
+		this.beans.put(ProcessContainer.class, processContainerBean);
 	}
 	
 	// 给对象的属性赋值

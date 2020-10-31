@@ -1,16 +1,13 @@
 package com.douglei.bpm.module.repository.definition;
 
 import com.douglei.bpm.module.common.entity.BasicEntity;
+import com.douglei.tools.utils.StringUtil;
 
 /**
  * 
  * @author DougLei
  */
 public class ProcessDefinition extends BasicEntity{
-	public static int UNPUBLISHED = 0; // 未发布
-	public static int PUBLISHED = 1; // 已发布
-	public static int DELETE = 2; // 被删除
-	
 	private int refTypeId;
 	private String name;
 	private String code;
@@ -22,6 +19,10 @@ public class ProcessDefinition extends BasicEntity{
 	private String description;
 	
 	public ProcessDefinition(String name, String code, String version) {
+		if(StringUtil.isEmpty(code))
+			throw new NullPointerException("流程定义中的编码值不能为空");
+		if(StringUtil.isEmpty(version))
+			throw new NullPointerException("流程定义中的版本值不能为空");
 		this.name = name;
 		this.code = code;
 		this.version = version;

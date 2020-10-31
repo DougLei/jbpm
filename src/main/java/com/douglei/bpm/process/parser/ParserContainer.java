@@ -1,11 +1,9 @@
 package com.douglei.bpm.process.parser;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.bean.annotation.ParserBean;
 import com.douglei.bpm.process.executer.task.Task;
 import com.douglei.bpm.process.parser.element.TaskElement;
 import com.douglei.bpm.process.parser.impl.ProcessParser;
@@ -26,9 +24,8 @@ public class ParserContainer {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" } )
 	public ParserContainer() {
-		List<String> classes = new ClassScanner().scan(ParserContainer.class.getPackage().getName() + ".impl");
 		Parser parser;
-		for (String clazz : classes) {
+		for (String clazz : new ClassScanner().scan(getClass().getPackage().getName() + ".impl")) {
 			if(ClassLoadUtil.loadClass(clazz).getAnnotation(ParserBean.class) != null) {
 				parser = (Parser) ConstructorUtil.newInstance(clazz);
 				parserMap.put(parser.elementName(), parser);

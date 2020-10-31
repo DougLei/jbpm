@@ -59,7 +59,7 @@ public class ProcessDefinitionService {
 				SessionContext.getTableSession().update(processDefined); 
 				
 				if(processDefined.getState() == StateConstants.PUBLISHED) 
-					processHandler.publish(processDefined);
+					processHandler.put(processDefined);
 			}else { // 修改了内容, 且旧的流程定义存在实例, 根据参数strict的值, 进行save, 或提示操作失败
 				if(!strict) 
 					return new ExecutionResult(null, "操作失败, 流程[%s]已经存在实例", "bpm.process.defined.instance.exists", processDefined.getName());
@@ -69,7 +69,7 @@ public class ProcessDefinitionService {
 				SessionContext.getTableSession().save(processDefined); 
 				
 				if(processDefined.getState() == StateConstants.PUBLISHED) 
-					processHandler.publish(processDefined);
+					processHandler.put(processDefined);
 			}
 		}
 		return null;
@@ -102,7 +102,7 @@ public class ProcessDefinitionService {
 			runtimeInstanceService.processInstances(processDefined.getId(), runtimeInstancePolicy);
 		
 		updateState(processDefined.getId(), StateConstants.PUBLISHED);
-		processHandler.publish(processDefined);
+		processHandler.put(processDefined);
 		return null;
 	}
 	
@@ -128,7 +128,7 @@ public class ProcessDefinitionService {
 			historyInstanceService.processInstances(processDefinitionId, historyInstancePolicy);
 		
 		updateState(processDefined.getId(), StateConstants.UNPUBLISHED);
-		processHandler.cancelPublish(processDefined);
+		processHandler.remove(processDefined);
 		return null;
 	}
 	

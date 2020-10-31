@@ -53,13 +53,9 @@ public class Process implements Serializable {
 	public String getPageID() {
 		return pageID;
 	}
-	
-	/**
-	 * 获取流程id
-	 * @return
-	 */
-	public String getId() {
-		// TODO
-		return null;
+
+	public int getId() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

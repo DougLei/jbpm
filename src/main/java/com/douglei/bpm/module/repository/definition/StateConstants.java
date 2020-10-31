@@ -4,7 +4,7 @@ package com.douglei.bpm.module.repository.definition;
  * 流程定义状态
  * @author DougLei
  */
-class StateConstants {
+public class StateConstants {
 	
 	/**
 	 * 未发布: 0

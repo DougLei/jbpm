@@ -42,7 +42,7 @@ public class ProcessDefinitionService {
 			// 新的流程定义, 进行save
 			SessionContext.getTableSession().save(processDefined); 
 		}else {
-			if(pd.getState() == State.DELETE.value())
+			if(pd.getState() == StateConstants.DELETE)
 				return new ExecutionResult(null, "已存在code为[%s], version为[%s]的流程定义", "bpm.process.defined.code.version.exists", processDefined.getCode(), processDefined.getVersion());
 			
 			if(pd.getSignature().equals(processDefined.getSignature())){ // 没有修改流程定义的内容, 进行update
@@ -58,7 +58,7 @@ public class ProcessDefinitionService {
 				processDefined.setState(pd.getState());
 				SessionContext.getTableSession().update(processDefined); 
 				
-				if(processDefined.getState() == State.PUBLISHED.value()) 
+				if(processDefined.getState() == StateConstants.PUBLISHED) 
 					processHandler.publish(processDefined);
 			}else { // 修改了内容, 且旧的流程定义存在实例, 根据参数strict的值, 进行save, 或提示操作失败
 				if(!strict) 
@@ -68,7 +68,7 @@ public class ProcessDefinitionService {
 				processDefined.setState(pd.getState());
 				SessionContext.getTableSession().save(processDefined); 
 				
-				if(processDefined.getState() == State.PUBLISHED.value()) 
+				if(processDefined.getState() == StateConstants.PUBLISHED) 
 					processHandler.publish(processDefined);
 			}
 		}
@@ -78,10 +78,10 @@ public class ProcessDefinitionService {
 	/**
 	 * 更新流程定义的状态
 	 * @param processDefinitionId
-	 * @param state
+	 * @param state {@link StateConstants}
 	 */
-	private void updateState(int processDefinitionId, State state) {
-		SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set state=? where id=?", Arrays.asList(state.value(), processDefinitionId));
+	private void updateState(int processDefinitionId, byte state) {
+		SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set state=? where id=?", Arrays.asList(state, processDefinitionId));
 	}
 	
 	/**
@@ -93,15 +93,15 @@ public class ProcessDefinitionService {
 	@Transaction
 	public ExecutionResult publish(int processDefinitionId, ProcessInstanceHandlePolicy runtimeInstancePolicy) {
 		ProcessDefinition processDefined = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, state, content_ from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
-		if(processDefined == null || processDefined.getState() == State.DELETE.value())
+		if(processDefined == null || processDefined.getState() == StateConstants.DELETE)
 			return new ExecutionResult("id", "操作失败, 不存在id为[%d]的流程定义", "bpm.process.defined.id.unexists", processDefinitionId);
-		if(processDefined.getState() == State.PUBLISHED.value())
+		if(processDefined.getState() == StateConstants.PUBLISHED)
 			return new ExecutionResult("id", "操作失败, id为[%d]的流程定义已经发布", "bpm.process.defined.already.publish", processDefinitionId);
 		
 		if(runtimeInstancePolicy != null && runtimeInstanceService.exists(processDefinitionId))
 			runtimeInstanceService.processInstances(processDefined.getId(), runtimeInstancePolicy);
 		
-		updateState(processDefined.getId(), State.PUBLISHED);
+		updateState(processDefined.getId(), StateConstants.PUBLISHED);
 		processHandler.publish(processDefined);
 		return null;
 	}
@@ -116,9 +116,9 @@ public class ProcessDefinitionService {
 	@Transaction
 	public ExecutionResult cancelPublish(int processDefinitionId, ProcessInstanceHandlePolicy runtimeInstancePolicy, ProcessInstanceHandlePolicy historyInstancePolicy) {
 		ProcessDefinition processDefined = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, code, version, subversion, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
-		if(processDefined == null || processDefined.getState() == State.DELETE.value())
+		if(processDefined == null || processDefined.getState() == StateConstants.DELETE)
 			return new ExecutionResult("id", "操作失败, 不存在id为[%d]的流程定义", "bpm.process.defined.id.unexists", processDefinitionId);
-		if(processDefined.getState() == State.UNPUBLISHED.value())
+		if(processDefined.getState() == StateConstants.UNPUBLISHED)
 			return new ExecutionResult("id", "操作失败, id为[%d]的流程定义已经处于未发布状态", "bpm.process.defined.already.unpublish", processDefinitionId);
 		
 		if(runtimeInstancePolicy != null && runtimeInstanceService.exists(processDefinitionId)) 
@@ -127,7 +127,7 @@ public class ProcessDefinitionService {
 		if(historyInstancePolicy != null && historyInstanceService.exists(processDefinitionId)) 
 			historyInstanceService.processInstances(processDefinitionId, historyInstancePolicy);
 		
-		updateState(processDefined.getId(), State.UNPUBLISHED);
+		updateState(processDefined.getId(), StateConstants.UNPUBLISHED);
 		processHandler.cancelPublish(processDefined);
 		return null;
 	}
@@ -141,15 +141,15 @@ public class ProcessDefinitionService {
 	@Transaction
 	public ExecutionResult delete(int processDefinitionId, boolean strict) {
 		ProcessDefinition processDefined = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select name, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
-		if(processDefined == null || processDefined.getState() == State.DELETE.value())
+		if(processDefined == null || processDefined.getState() == StateConstants.DELETE)
 			return new ExecutionResult("id", "操作失败, 不存在id为[%d]的流程定义", "bpm.process.defined.id.unexists", processDefinitionId);
-		if(processDefined.getState() == State.PUBLISHED.value())
+		if(processDefined.getState() == StateConstants.PUBLISHED)
 			return new ExecutionResult("id", "操作失败, id为[%d]的流程定义已经发布, 请先取消发布", "bpm.process.defined.cancel.publish.first", processDefinitionId);
 		
 		if(runtimeInstanceService.exists(processDefinitionId) || historyInstanceService.exists(processDefinitionId)) {
 			if(!strict)
 				return new ExecutionResult("id", "操作失败, 流程[%s]已经存在实例", "bpm.process.defined.instance.exists", processDefined.getName());
-			updateState(processDefinitionId, State.DELETE);
+			updateState(processDefinitionId, StateConstants.DELETE);
 		} else {
 			SessionContext.getSqlSession().executeUpdate("delete bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		}

@@ -1,10 +1,10 @@
-package com.douglei.bpm.module.repository.instance;
+package com.douglei.bpm.module.common;
 
 /**
  * 流程实例的处理策略
  * @author DougLei
  */
-public enum ProcessInstanceHandlePolicy {
+public enum InstanceHandlePolicy {
 	
 	/**
 	 * 激活

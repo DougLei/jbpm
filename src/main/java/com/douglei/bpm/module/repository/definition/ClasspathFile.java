@@ -10,7 +10,6 @@ public class ClasspathFile {
 	public ClasspathFile(String name) {
 		this.name = name;
 	}
-	
 	public String getName() {
 		return name;
 	}

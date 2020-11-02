@@ -14,13 +14,13 @@ public abstract class ProcessEngine {
 	protected String id; // 引擎id, 即SessionFactory的id, 所以也可以从SessionFactoryContainer.get().getId()来获取
 	
 	@Attribute
-	private RepositoryModule repository;
+	private RepositoryModule repositoryModule;
 	
 	@Attribute
-	private RuntimeModule runtime;
+	private RuntimeModule runtimeModule;
 	
 	@Attribute
-	private HistoryModule history;
+	private HistoryModule historyModule;
 	
 	protected ProcessEngine(String id) {
 		this.id = id;
@@ -29,14 +29,14 @@ public abstract class ProcessEngine {
 	public String getId() {
 		return id;
 	}
-	public RepositoryModule getRepository() {
-		return repository;
+	public RepositoryModule getRepositoryModule() {
+		return repositoryModule;
 	}
-	public RuntimeModule getRuntime() {
-		return runtime;
+	public RuntimeModule getRuntimeModule() {
+		return runtimeModule;
 	}
-	public HistoryModule getHistory() {
-		return history;
+	public HistoryModule getHistoryModule() {
+		return historyModule;
 	}
 	
 	/**

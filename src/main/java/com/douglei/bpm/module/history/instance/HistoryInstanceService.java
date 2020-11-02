@@ -1,7 +1,7 @@
-package com.douglei.bpm.module.history;
+package com.douglei.bpm.module.history.instance;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.repository.instance.ProcessInstanceHandlePolicy;
+import com.douglei.bpm.module.common.InstanceHandlePolicy;
 import com.douglei.orm.context.transaction.component.Transaction;
 
 /**
@@ -27,7 +27,8 @@ public class HistoryInstanceService {
 	 * @param processDefinitionId
 	 * @param policy 对实例的处理策略
 	 */
-	public void processInstances(int processDefinitionId, ProcessInstanceHandlePolicy policy) {
+	@Transaction
+	public void process(int processDefinitionId, InstanceHandlePolicy policy) {
 		// TODO Auto-generated method stub
 			
 			

@@ -26,7 +26,7 @@ public class ProcessTypeTest {
 		type.setCode("test_code2");
 		type.setName("测试类型");
 		type.setCreateDate(new Date());
-		ExecutionResult result = engine.getRepository().getTypeService().save(type);
+		ExecutionResult result = engine.getRepositoryModule().getTypeService().save(type);
 		System.out.println(result);
 		System.out.println(I18nContext.getMessage(result));
 		System.out.println(type.getId());
@@ -39,13 +39,13 @@ public class ProcessTypeTest {
 		type.setCode("test_code2");
 		type.setName("测试类型xxxx");
 		type.setUpdateDate(new Date());
-		System.out.println(engine.getRepository().getTypeService().update(type));
+		System.out.println(engine.getRepositoryModule().getTypeService().update(type));
 	}
 	
 	@Test
 	public void delete() {
 		ProcessType type = new ProcessType();
 		type.setId(3);
-		System.out.println(engine.getRepository().getTypeService().delete(type, false));
+		System.out.println(engine.getRepositoryModule().getTypeService().delete(type, false));
 	}
 }

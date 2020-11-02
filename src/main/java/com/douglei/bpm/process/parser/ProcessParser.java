@@ -1,7 +1,6 @@
 package com.douglei.bpm.process.parser;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -148,19 +147,5 @@ public class ProcessParser {
 		
 		if(!taskExistsFlow)
 			throw new ProcessParseException("工作流中, " + sourceTask.getName() + "不是结束事件, 必须配置相应的连线");
-	}
-	
-	
-	public static void main(String[] args) throws DocumentException {
-		Document document = new SAXReader().read(new File("D:\\workspace4\\jbpm\\src\\test\\resources\\流程配置结构设计.bpm.xml"));
-		Element processElement = document.getRootElement().element("process");
-		
-//		List<Element> elements = processElement.elements();
-//		for (Element element : elements) {
-//			System.out.println(element.getName());
-//		}
-		
-		System.out.println(processElement.attributeValue("x") == null);
-		
 	}
 }

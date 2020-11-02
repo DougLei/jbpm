@@ -21,6 +21,6 @@ public class ProcessDeployTest {
 	@Test
 	public void save() throws ProcessParseException {
 		ProcessDefinitionBuilder builder = new ProcessDefinitionBuilder(new ClasspathFile("processTest.bpm.xml"));
-		engine.getRepository().getDefinitionService().save(builder, false);
+		engine.getRepositoryModule().getDefinitionService().save(builder, false);
 	}
 }

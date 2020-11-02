@@ -1,6 +1,9 @@
 package com.douglei.bpm.module.runtime;
 
+import com.douglei.bpm.bean.annotation.Attribute;
 import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.module.runtime.instance.RuntimeInstanceService;
+import com.douglei.bpm.module.runtime.task.RuntimeTaskService;
 
 /**
  * 
@@ -8,5 +11,17 @@ import com.douglei.bpm.bean.annotation.Bean;
  */
 @Bean(transaction = false)
 public class RuntimeModule{
+	
+	@Attribute
+	private RuntimeInstanceService runtimeInstanceService;
+	
+	@Attribute
+	private RuntimeTaskService runtimeTaskService;
 
+	public RuntimeInstanceService getRuntimeInstanceService() {
+		return runtimeInstanceService;
+	}
+	public RuntimeTaskService getRuntimeTaskService() {
+		return runtimeTaskService;
+	}
 }

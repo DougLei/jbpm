@@ -13,8 +13,7 @@ import com.douglei.tools.utils.reflect.ClassLoadUtil;
 import com.douglei.tools.utils.reflect.ConstructorUtil;
 
 /**
- * 解析器容器
- * 这里不包含{@link StartEventParser}和{@link FlowParser}两个解析器, 它们在中{@link ProcessParser}独立使用
+ * 解析器容器, 这里不包含{@link StartEventParser}和{@link FlowParser}两个解析器, 它们在中{@link ProcessParser}独立使用
  * @author DougLei
  */
 @Bean(transaction = false)

@@ -5,7 +5,7 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
 import com.douglei.bpm.process.container.ProcessContainer;
 import com.douglei.bpm.process.executer.Process;
-import com.douglei.bpm.process.parser.impl.ProcessParser;
+import com.douglei.bpm.process.parser.ProcessParser;
 
 /**
  * 流程处理器
@@ -26,26 +26,25 @@ public class ProcessHandler {
 	 * @return 返回解析出的流程实例
 	 */
 	public Process put(ProcessDefinition processDefined) {
-		// TODO 解析流程定义, 并放到容器中
-		
-		return null;
+		Process process = processParser.parse(processDefined.getId(), processDefined.getContent());
+		container.addProcess(process);
+		return process;
 	}
 	
 	/**
 	 * 删除流程
-	 * @param processDefinition
+	 * @param processId
 	 */
-	public void remove(ProcessDefinition processDefinition) {
-		// TODO 从容器中移除流程定义即可
-		
+	public void remove(int processId) {
+		container.deleteProcess(processId);
 	}
 
 	/**
 	 * 获取流程
-	 * @param processDefinitionId
+	 * @param processId
 	 * @return
 	 */
-	public Process get(int processDefinitionId) {
-		return container.getProcess(processDefinitionId);
+	public Process get(int processId) {
+		return container.getProcess(processId);
 	}
 }

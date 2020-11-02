@@ -99,9 +99,9 @@ public class ProcessDefinitionService {
 			return new ExecutionResult("id", "操作失败, id为[%d]的流程定义已经发布", "bpm.process.defined.already.publish", processDefinitionId);
 		
 		if(runtimeInstancePolicy != null && runtimeInstanceService.exists(processDefinitionId))
-			runtimeInstanceService.processInstances(processDefined.getId(), runtimeInstancePolicy);
+			runtimeInstanceService.processInstances(processDefinitionId, runtimeInstancePolicy);
 		
-		updateState(processDefined.getId(), StateConstants.PUBLISHED);
+		updateState(processDefinitionId, StateConstants.PUBLISHED);
 		processHandler.put(processDefined);
 		return null;
 	}
@@ -122,13 +122,13 @@ public class ProcessDefinitionService {
 			return new ExecutionResult("id", "操作失败, id为[%d]的流程定义已经处于未发布状态", "bpm.process.defined.already.unpublish", processDefinitionId);
 		
 		if(runtimeInstancePolicy != null && runtimeInstanceService.exists(processDefinitionId)) 
-			runtimeInstanceService.processInstances(processDefined.getId(), runtimeInstancePolicy);
+			runtimeInstanceService.processInstances(processDefinitionId, runtimeInstancePolicy);
 		
 		if(historyInstancePolicy != null && historyInstanceService.exists(processDefinitionId)) 
 			historyInstanceService.processInstances(processDefinitionId, historyInstancePolicy);
 		
-		updateState(processDefined.getId(), StateConstants.UNPUBLISHED);
-		processHandler.remove(processDefined);
+		updateState(processDefinitionId, StateConstants.UNPUBLISHED);
+		processHandler.remove(processDefinitionId);
 		return null;
 	}
 	

@@ -13,19 +13,21 @@ import com.douglei.tools.utils.StringUtil;
  * @author DougLei
  */
 public class Process implements Serializable {
-	private String name;
+	private int id;
 	private String code;
 	private String version;
+	private String name;
 	private String titleExpr;
 	private String pageID;
 	
 	private StartEvent startEvent;
 	private Map<String, Task> taskMap = new HashMap<String, Task>();
 	
-	public Process(String name, String code, String version, String titleExpr, String pageID) {
-		this.name = StringUtil.isEmpty(name)?(code+":"+version):name;
+	public Process(int id, String code, String version, String name, String titleExpr, String pageID) {
+		this.id = id;
 		this.code = code;
 		this.version = version;
+		this.name = StringUtil.isEmpty(name)?(code+":"+version):name;
 		this.titleExpr = StringUtil.isEmpty(titleExpr)?this.name:titleExpr;
 		this.pageID = pageID;
 	}
@@ -41,6 +43,9 @@ public class Process implements Serializable {
 		return titleExpr;
 	}
 	
+	public int getId() {
+		return id;
+	}
 	public String getName() {
 		return name;
 	}
@@ -52,10 +57,5 @@ public class Process implements Serializable {
 	}
 	public String getPageID() {
 		return pageID;
-	}
-
-	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }

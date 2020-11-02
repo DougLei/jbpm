@@ -6,7 +6,6 @@ import java.util.Map;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.executer.task.Task;
 import com.douglei.bpm.process.parser.element.TaskElement;
-import com.douglei.bpm.process.parser.impl.ProcessParser;
 import com.douglei.bpm.process.parser.impl.flow.FlowParser;
 import com.douglei.bpm.process.parser.impl.task.event.StartEventParser;
 import com.douglei.tools.instances.resource.scanner.impl.ClassScanner;
@@ -19,13 +18,12 @@ import com.douglei.tools.utils.reflect.ConstructorUtil;
  * @author DougLei
  */
 @Bean(transaction = false)
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class ParserContainer {
-	private Map<String, Parser<TaskElement, ? extends Task>> parserMap = new HashMap<String, Parser<TaskElement,? extends Task>>();
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" } )
-	public ParserContainer() {
+	private static Map<String, Parser<TaskElement, ? extends Task>> parserMap = new HashMap<String, Parser<TaskElement,? extends Task>>();
+	static {
 		Parser parser;
-		for (String clazz : new ClassScanner().scan(getClass().getPackage().getName() + ".impl")) {
+		for (String clazz : new ClassScanner().scan(ParserContainer.class.getPackage().getName() + ".impl")) {
 			if(ClassLoadUtil.loadClass(clazz).getAnnotation(ParserBean.class) != null) {
 				parser = (Parser) ConstructorUtil.newInstance(clazz);
 				parserMap.put(parser.elementName(), parser);

@@ -19,7 +19,7 @@ public class TaskElement {
 	 * 获取xml元素中, 属性id的值
 	 * @return
 	 */
-	public String getId() {
+	public final String getId() {
 		return id;
 	}
 	
@@ -27,7 +27,7 @@ public class TaskElement {
 	 * 获取xml元素中, 属性name的值
 	 * @return
 	 */
-	public String getName() {
+	public final String getName() {
 		return element.attributeValue("name");
 	}
 	
@@ -35,7 +35,7 @@ public class TaskElement {
 	 * 获取xml元素
 	 * @return
 	 */
-	public Element getElement() {
+	public final Element getElement() {
 		return element;
 	}
 }

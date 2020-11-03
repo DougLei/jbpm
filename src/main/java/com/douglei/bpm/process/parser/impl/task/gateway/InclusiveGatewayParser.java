@@ -20,6 +20,6 @@ public class InclusiveGatewayParser implements Parser<TaskElement, InclusiveGate
 
 	@Override
 	public InclusiveGateway parse(TaskElement taskElement) throws ProcessParseException {
-		return new InclusiveGateway(taskElement.getId(), taskElement.getName());
+		return new InclusiveGateway(taskElement.getId(), taskElement.getElement().attributeValue("name"));
 	}
 }

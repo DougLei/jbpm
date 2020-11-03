@@ -20,6 +20,6 @@ public class ExclusiveGatewayParser implements Parser<TaskElement, ExclusiveGate
 
 	@Override
 	public ExclusiveGateway parse(TaskElement taskElement) throws ProcessParseException {
-		return new ExclusiveGateway(taskElement.getId(), taskElement.getName());
+		return new ExclusiveGateway(taskElement.getId(), taskElement.getElement().attributeValue("name"));
 	}
 }

@@ -58,7 +58,7 @@ public class ProcessParser {
 		if(StringUtil.isEmpty(version))
 			throw new ProcessParseException("工作流中的版本值不能为空");
 		
-		Process process = new Process(id, code, version, processElement.attributeValue("name"), processElement.attributeValue("titleExpr"), processElement.attributeValue("pageID"));
+		Process process = new Process(id, code, version, processElement.attributeValue("name"), processElement.attributeValue("title"), processElement.attributeValue("pageID"));
 		buildProcessStruct(process, processElement.elements());
 		return process;
 	}

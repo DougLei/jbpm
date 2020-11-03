@@ -17,18 +17,18 @@ public class Process implements Serializable {
 	private String code;
 	private String version;
 	private String name;
-	private String titleExpr;
+	private String title;
 	private String pageID;
 	
 	private StartEvent startEvent;
 	private Map<String, Task> taskMap = new HashMap<String, Task>();
 	
-	public Process(int id, String code, String version, String name, String titleExpr, String pageID) {
+	public Process(int id, String code, String version, String name, String title, String pageID) {
 		this.id = id;
 		this.code = code;
 		this.version = version;
 		this.name = StringUtil.isEmpty(name)?(code+":"+version):name;
-		this.titleExpr = StringUtil.isEmpty(titleExpr)?this.name:titleExpr;
+		this.title = StringUtil.isEmpty(title)?this.name:title;
 		this.pageID = pageID;
 	}
 	
@@ -40,7 +40,8 @@ public class Process implements Serializable {
 	}
 	
 	public String getTitle(Object parameter) {
-		return titleExpr;
+		// TODO 
+		return title;
 	}
 	
 	public int getId() {

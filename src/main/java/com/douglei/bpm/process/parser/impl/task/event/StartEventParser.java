@@ -20,6 +20,6 @@ public class StartEventParser implements Parser<TaskElement, StartEvent> {
 
 	@Override
 	public StartEvent parse(TaskElement taskElement) throws ProcessParseException {
-		return new StartEvent(taskElement.getId(), taskElement.getName());
+		return new StartEvent(taskElement.getId(), taskElement.getElement().attributeValue("name"));
 	}
 }

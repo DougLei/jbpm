@@ -25,10 +25,9 @@ public class FlowParser implements Parser<FlowElement, Flow> {
 	@Override
 	public Flow parse(FlowElement flowElement) throws ProcessParseException {
 		Element element = flowElement.getElement();
-		String attributeValue;
 		
 		int order = 0;
-		attributeValue = element.attributeValue("order");
+		String attributeValue = element.attributeValue("order");
 		if(VerifyTypeMatchUtil.isInteger(attributeValue))
 			order = Integer.parseInt(attributeValue);
 		
@@ -36,6 +35,6 @@ public class FlowParser implements Parser<FlowElement, Flow> {
 		if(StringUtil.isEmpty(conditionExpr))
 			conditionExpr = null;
 		
-		return new Flow(flowElement.getId(), flowElement.getName(), order, conditionExpr);
+		return new Flow(flowElement.getId(), element.attributeValue("name"), order, conditionExpr);
 	}
 }

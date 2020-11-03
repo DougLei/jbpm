@@ -9,7 +9,7 @@
 		3. 网关: 并行网关, 排他网关, 包容网关 
 		4. 事件: 开始事件, 结束事件
 	-->
-	<process code="编码, 唯一" version="用户自定义的版本" name="流程名称, 可以不配置, 如果不配置则使用code:version" titleExpr="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name" pageID="全局页面标识">
+	<process code="编码, 唯一" version="用户自定义的版本" name="流程名称, 可以不配置, 如果不配置则使用code:version" title="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name" pageID="全局页面标识">
 		<!-- 开始事件, 一个流程中只能有一个开始 -->
 		<startEvent id="startEvent" name=""></startEvent>
 		<!-- 结束事件, 一个流程中可以有多个结束 -->
@@ -17,17 +17,17 @@
 		
 		<!-- 用户任务 -->
 		<userTask id="userTask1" name="任务名称" pageID="属于任务的页面标识, 优先级高于全局页面标识"  
-			timeLimitExpr="办理时限的表达式, 设置当前用户任务需要在多长时间内办理, 不配置则没有时限约束" autoProcessingWhenOverdue="逾期后是否自动办理, 默认值为false"
-			allowActivation="当流程结束后再激活时, 是否允许选择从当前用户任务进行激活, 默认值为true">
+			timeLimit="办理时限的表达式, 设置当前用户任务需要在多长时间内办理, 不配置则没有时限约束, 这里的表达式还要体现出工作日/自然日" 
+			supportAuto="是否支持自动办理, 默认值为false" supportActivation="当流程结束后再激活时, 是否支持从当前用户任务进行激活, 默认值为true">
 			
 			<!-- 当前任务候选人相关配置 -->
 			<candidate>
 				<!-- 候选人指派策略 -->
 				<assignPolicy mode="指派候选人模式(只能选择一个候选人, 可以选择多个候选人)" expr="指派候选人的表达式, 多个表达式用;(分号)分隔开" 
-					auto="是否自动指派候选人" autoValue="自动选人时, 选择多少个人, 配置的值如果小于1, 或数量大于可选的人数, 则全部选择, 否则选择指定的数量候选人, 默认值为1"></assignPolicy>
+					autoAssign="是否自动指派候选人" autoValue="自动选人时, 选择多少个人, 配置的值如果小于1, 或数量大于可选的人数, 则全部选择, 否则选择指定的数量候选人, 默认值为1"></assignPolicy>
 				<!-- 候选人审批策略 -->
 				<approvalPolicy mode="具体审批的模式(单人操作, 多人按百分比操作, 多人按人数操作)" modeValue="审批模式对应的配置值(百分比, 人数)" 
-					mandatoryDeclaration="是否需要强制表态"></approvalPolicy>
+					strict="是否需要强制表态, 默认值为false"></approvalPolicy>
 			</candidate>
 			
 			<!-- 在当前任务时, 可以执行的操作 -->
@@ -55,15 +55,15 @@
 			<listener type="post" item="多个项之间用;(分号)分隔开, 会按照配置的顺序执行"></listener>
 		</userTask>
 		
-		<!-- 子流程任务 -->
+		<!-- 子流程任务, 暂不实现 -->
 		<processTask id="processTask1" name="">
 			<process></process>
 		</processTask>
-		<!-- SQL脚本任务 -->
+		<!-- SQL脚本任务, 暂不实现 -->
 		<sqlTask id="sqlTask1" name=""></sqlTask>
-		<!-- 定时任务 -->
+		<!-- 定时任务, 暂不实现 -->
 		<timerTask id="timerTask1" name="" cronExpr=""></timerTask>
-		<!-- 邮件任务 -->
+		<!-- 邮件任务, 暂不实现 -->
 		<emailTask id="emailTask1" name=""></emailTask>
 		
 		

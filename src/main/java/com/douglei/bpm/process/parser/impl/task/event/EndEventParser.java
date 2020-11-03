@@ -20,6 +20,6 @@ public class EndEventParser implements Parser<TaskElement, EndEvent> {
 
 	@Override
 	public EndEvent parse(TaskElement taskElement) throws ProcessParseException {
-		return new EndEvent(taskElement.getId(), taskElement.getName());
+		return new EndEvent(taskElement.getId(), taskElement.getElement().attributeValue("name"));
 	}
 }

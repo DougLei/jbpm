@@ -20,6 +20,6 @@ public class ParallelGatewayParser implements Parser<TaskElement, ParallelGatewa
 
 	@Override
 	public ParallelGateway parse(TaskElement taskElement) throws ProcessParseException {
-		return new ParallelGateway(taskElement.getId(), taskElement.getName());
+		return new ParallelGateway(taskElement.getId(), taskElement.getElement().attributeValue("name"));
 	}
 }

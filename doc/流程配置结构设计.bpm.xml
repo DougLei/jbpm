@@ -11,23 +11,22 @@
 	-->
 	<process code="编码, 唯一" version="用户自定义的版本" name="流程名称, 可以不配置, 如果不配置则使用code:version" title="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name" pageID="全局页面标识">
 		<!-- 开始事件, 一个流程中只能有一个开始 -->
-		<startEvent id="startEvent" name=""></startEvent>
+		<startEvent id="startEvent" name="">
+			<!-- 启动策略, 即流程的启动条件, 目前考虑的策略包括: 启动的人, 启动的时间(区间); 不配置表示支持无条件启动, 任何人在任何时候都可以发起流程 -->
+			<policy expr="启动策略的表达式"></policy>
+		</startEvent>
 		<!-- 结束事件, 一个流程中可以有多个结束 -->
 		<endEvent id="endEvent1" name=""></endEvent>
 		
 		<!-- 用户任务 -->
-		<userTask id="userTask1" name="任务名称" pageID="属于任务的页面标识, 优先级高于全局页面标识"  
-			timeLimit="办理时限的表达式, 设置当前用户任务需要在多长时间内办理, 不配置则没有时限约束, 这里的表达式还要体现出工作日/自然日" 
-			supportAuto="是否支持自动办理, 默认值为false" supportActivation="当流程结束后再激活时, 是否支持从当前用户任务进行激活, 默认值为true">
+		<userTask id="userTask1" name="任务名称" pageID="属于任务的页面标识, 优先级高于全局页面标识" timeLimit="办理时限的表达式, 设置当前用户任务需要在多长时间内办理, 不配置则没有时限约束, 这里的表达式还要体现出工作日/自然日">
 			
 			<!-- 当前任务候选人相关配置 -->
 			<candidate>
-				<!-- 候选人指派策略 -->
-				<assignPolicy mode="指派候选人模式(只能选择一个候选人, 可以选择多个候选人)" expr="指派候选人的表达式, 多个表达式用;(分号)分隔开" 
-					autoAssign="是否自动指派候选人" autoValue="自动选人时, 选择多少个人, 配置的值如果小于1, 或数量大于可选的人数, 则全部选择, 否则选择指定的数量候选人, 默认值为1"></assignPolicy>
-				<!-- 候选人审批策略 -->
-				<approvalPolicy mode="具体审批的模式(单人操作, 多人按百分比操作, 多人按人数操作)" modeValue="审批模式对应的配置值(百分比, 人数)" 
-					strict="是否需要强制表态, 默认值为false"></approvalPolicy>
+				<!-- 候选人指派策略(从上一环节进入当前环节时指派候选人的策略) -->
+				<assignPolicy mode="指派候选人模式(只能选择一个候选人, 可以选择多个候选人)" expr="指派候选人的表达式, 多个表达式用;(分号)分隔开"></assignPolicy>
+				<!-- 候选人审批策略(在当前环节办理人的审批策略) -->
+				<approvalPolicy mode="审批模式(单人审批, 多人按百分比审批, 多人按人数审批)" modeValue="审批模式对应的配置值(百分比, 人数)" strict="是否需要强制表态, 默认值为false"></approvalPolicy>
 			</candidate>
 			
 			<!-- 在当前任务时, 可以执行的操作 -->
@@ -43,12 +42,11 @@
 			<option type="assist" name="协办">
 				<candidate></candidate>
 			</option>
-			<option type="extension" name="延长办理" times="可以延长办理几次, 默认值为1" maxDays="一次最多几天, 默认值为1" dayType="延长天数是工作日还是自然日, 默认值为工作日" ></option>
+			<option type="extension" name="延长办理" times="可申请延长办理的次数, 默认值为1" maxDays="一次最多几天, 默认值为1" dayType="延长天数是工作日还是自然日, 默认值为工作日" ></option>
 			<option type="tracking" name="流程跟踪"></option>
 			<option type="terminate" name="流程终止"></option><!-- 另外的流程挂起与激活, 放到流程实例管理界面, 做为流程管理员功能提供 -->
-			<option type="urging" name="催办" auto="是否进行自动催办(一次), 在逾期后自动发起一次, 默认为false"></option><!-- 在逾期后才会出现催办按钮 -->
-			<!-- 当用户提交后, 如果发现提交的有问题, 还可以自主选择撤回, 重新编辑后重新提交; times设置可以撤回的次数, 默认值为0, 配置的值在小于1时, 都表示不限制次数 -->
-			<option type="withdraw" name="撤回" times="0"></option>
+			<option type="urging" name="催办"></option><!-- 在逾期后才会出现催办按钮 -->
+			<option type="withdraw" name="撤回" times="0"></option><!-- 当用户提交后, 如果发现提交的有问题, 还可以自主选择撤回, 重新编辑后重新提交; times设置可以撤回的次数, 默认值为0, 配置的值在小于1时, 都表示不限制次数 -->
 			
 			<!-- 前/后置监听器 -->
 			<listener type="pre" item="多个项之间用;(分号)分隔开, 会按照配置的顺序执行"></listener>

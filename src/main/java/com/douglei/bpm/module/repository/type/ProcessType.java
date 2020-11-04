@@ -1,15 +1,20 @@
 package com.douglei.bpm.module.repository.type;
 
-import com.douglei.bpm.module.common.entity.BasicEntity;
-
 /**
  * 流程类型实体
  * @author DougLei
  */
-public class ProcessType extends BasicEntity{
+public class ProcessType {
+	private int id;
 	private String code;
 	private String name;
 
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getCode() {
 		return code;
 	}

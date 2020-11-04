@@ -6,10 +6,6 @@
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
 			<column name="USER_" property="user_" dataType="nstring" length="50" />
 			<column name="CONTENT" property="content" dataType="nstring" length="300" nullable="false" />
-			<column name="CREATE_USER" property="createUser" dataType="nstring" length="50" />
-			<column name="CREATE_DATE" property="createDate" dataType="datetime" />
-			<column name="UPDATE_USER" property="updateUser" dataType="nstring" length="50" />
-			<column name="UPDATE_DATE" property="updateDate" dataType="datetime" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

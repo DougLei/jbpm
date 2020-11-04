@@ -7,10 +7,6 @@
 			<column name="NAME" property="name" dataType="nstring" length="60" nullable="false" />
 			<column name="TYPE" property="type" dataType="number" length="2" nullable="false" />
 			<column name="TERM" property="term" dataType="string" length="150" nullable="false" />
-			<column name="CREATE_USER" property="createUser" dataType="nstring" length="50" />
-			<column name="CREATE_DATE" property="createDate" dataType="datetime" />
-			<column name="UPDATE_USER" property="updateUser" dataType="nstring" length="50" />
-			<column name="UPDATE_DATE" property="updateDate" dataType="datetime" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

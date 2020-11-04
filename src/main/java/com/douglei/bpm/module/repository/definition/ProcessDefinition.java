@@ -1,13 +1,13 @@
 package com.douglei.bpm.module.repository.definition;
 
-import com.douglei.bpm.module.common.entity.BasicEntity;
 import com.douglei.tools.utils.StringUtil;
 
 /**
  * 
  * @author DougLei
  */
-public class ProcessDefinition extends BasicEntity{
+public class ProcessDefinition {
+	private int id;
 	private int refTypeId;
 	private String name;
 	private String code;
@@ -28,6 +28,12 @@ public class ProcessDefinition extends BasicEntity{
 		this.version = version;
 	}
 	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public int getRefTypeId() {
 		return refTypeId;
 	}
@@ -75,5 +81,4 @@ public class ProcessDefinition extends BasicEntity{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
 }

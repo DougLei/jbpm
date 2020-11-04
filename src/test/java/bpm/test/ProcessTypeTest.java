@@ -1,7 +1,5 @@
 package bpm.test;
 
-import java.util.Date;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,7 +23,6 @@ public class ProcessTypeTest {
 		ProcessType type = new ProcessType();
 		type.setCode("test_code2");
 		type.setName("测试类型");
-		type.setCreateDate(new Date());
 		ExecutionResult result = engine.getRepositoryModule().getTypeService().save(type);
 		System.out.println(result);
 		System.out.println(I18nContext.getMessage(result));
@@ -38,7 +35,6 @@ public class ProcessTypeTest {
 		type.setId(4);
 		type.setCode("test_code2");
 		type.setName("测试类型xxxx");
-		type.setUpdateDate(new Date());
 		System.out.println(engine.getRepositoryModule().getTypeService().update(type));
 	}
 	

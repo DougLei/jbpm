@@ -3,7 +3,6 @@ package com.douglei.bpm.module.repository.definition;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -133,46 +132,6 @@ public class ProcessDefinitionBuilder {
 		return this;
 	}
 	
-	/**
-	 * 设置流程定义的创建用户
-	 * @param createUser
-	 * @return
-	 */
-	public ProcessDefinitionBuilder setCreateUser(String createUser) {
-		processDefinition.setCreateUser(createUser);
-		return this;
-	}
-
-	/**
-	 * 设置流程定义的创建时间
-	 * @param createDate
-	 * @return
-	 */
-	public ProcessDefinitionBuilder setCreateDate(Date createDate) {
-		processDefinition.setCreateDate(createDate);
-		return this;
-	}
-
-	/**
-	 * 设置流程定义的修改用户
-	 * @param updateUser
-	 * @return
-	 */
-	public ProcessDefinitionBuilder setUpdateUser(String updateUser) {
-		processDefinition.setUpdateUser(updateUser);
-		return this;
-	}
-
-	/**
-	 * 设置流程定义的修改时间
-	 * @param updateDate
-	 * @return
-	 */
-	public ProcessDefinitionBuilder setUpdateDate(Date updateDate) {
-		processDefinition.setUpdateDate(updateDate);
-		return this;
-	}
-
 	/**
 	 * 构建流程定义实例
 	 * @return

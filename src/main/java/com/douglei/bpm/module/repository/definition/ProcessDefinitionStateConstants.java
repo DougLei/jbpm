@@ -1,10 +1,10 @@
 package com.douglei.bpm.module.repository.definition;
 
 /**
- * 流程定义状态
+ * 流程定义状态常量
  * @author DougLei
  */
-public class StateConstants {
+public class ProcessDefinitionStateConstants {
 	
 	/**
 	 * 未发布: 0

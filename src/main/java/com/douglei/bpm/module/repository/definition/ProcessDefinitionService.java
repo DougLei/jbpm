@@ -42,7 +42,7 @@ public class ProcessDefinitionService {
 			// 新的流程定义, 进行save
 			SessionContext.getTableSession().save(processDefinition); 
 		}else {
-			if(pd.getState() == StateConstants.DELETE)
+			if(pd.getState() == ProcessDefinitionStateConstants.DELETE)
 				return new ExecutionResult(null, "已存在code为[%s], version为[%s]的流程定义", "bpm.process.defined.code.version.exists", processDefinition.getCode(), processDefinition.getVersion());
 			
 			if(pd.getSignature().equals(processDefinition.getSignature())){ // 没有修改流程定义的内容, 进行update
@@ -58,7 +58,7 @@ public class ProcessDefinitionService {
 				processDefinition.setState(pd.getState());
 				SessionContext.getTableSession().update(processDefinition); 
 				
-				if(processDefinition.getState() == StateConstants.PUBLISHED) 
+				if(processDefinition.getState() == ProcessDefinitionStateConstants.PUBLISHED) 
 					processHandler.put(processDefinition);
 			}else { // 修改了内容, 且旧的流程定义存在实例, 根据参数strict的值, 进行save, 或提示操作失败
 				if(!strict) 
@@ -68,7 +68,7 @@ public class ProcessDefinitionService {
 				processDefinition.setState(pd.getState());
 				SessionContext.getTableSession().save(processDefinition); 
 				
-				if(processDefinition.getState() == StateConstants.PUBLISHED) 
+				if(processDefinition.getState() == ProcessDefinitionStateConstants.PUBLISHED) 
 					processHandler.put(processDefinition);
 			}
 		}
@@ -78,7 +78,7 @@ public class ProcessDefinitionService {
 	/**
 	 * 更新流程定义的状态
 	 * @param processDefinitionId
-	 * @param state {@link StateConstants}
+	 * @param state {@link ProcessDefinitionStateConstants}
 	 */
 	private void updateState(int processDefinitionId, byte state) {
 		SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set state=? where id=?", Arrays.asList(state, processDefinitionId));
@@ -93,15 +93,15 @@ public class ProcessDefinitionService {
 	@Transaction
 	public ExecutionResult publish(int processDefinitionId, InstanceHandlePolicy runtimeInstancePolicy) {
 		ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, state, content_ from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
-		if(processDefinition == null || processDefinition.getState() == StateConstants.DELETE)
+		if(processDefinition == null || processDefinition.getState() == ProcessDefinitionStateConstants.DELETE)
 			return new ExecutionResult("id", "操作失败, 不存在id为[%d]的流程定义", "bpm.process.defined.id.unexists", processDefinitionId);
-		if(processDefinition.getState() == StateConstants.PUBLISHED)
+		if(processDefinition.getState() == ProcessDefinitionStateConstants.PUBLISHED)
 			return new ExecutionResult("id", "操作失败, id为[%d]的流程定义已经发布", "bpm.process.defined.already.publish", processDefinitionId);
 		
 		if(runtimeInstancePolicy != null && runtimeInstanceService.exists(processDefinitionId))
 			runtimeInstanceService.process(processDefinitionId, runtimeInstancePolicy);
 		
-		updateState(processDefinitionId, StateConstants.PUBLISHED);
+		updateState(processDefinitionId, ProcessDefinitionStateConstants.PUBLISHED);
 		processHandler.put(processDefinition);
 		return null;
 	}
@@ -116,9 +116,9 @@ public class ProcessDefinitionService {
 	@Transaction
 	public ExecutionResult cancelPublish(int processDefinitionId, InstanceHandlePolicy runtimeInstancePolicy, InstanceHandlePolicy historyInstancePolicy) {
 		ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, code, version, subversion, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
-		if(processDefinition == null || processDefinition.getState() == StateConstants.DELETE)
+		if(processDefinition == null || processDefinition.getState() == ProcessDefinitionStateConstants.DELETE)
 			return new ExecutionResult("id", "操作失败, 不存在id为[%d]的流程定义", "bpm.process.defined.id.unexists", processDefinitionId);
-		if(processDefinition.getState() == StateConstants.UNPUBLISHED)
+		if(processDefinition.getState() == ProcessDefinitionStateConstants.UNPUBLISHED)
 			return new ExecutionResult("id", "操作失败, id为[%d]的流程定义已经处于未发布状态", "bpm.process.defined.already.unpublish", processDefinitionId);
 		
 		if(runtimeInstancePolicy != null && runtimeInstanceService.exists(processDefinitionId)) 
@@ -127,7 +127,7 @@ public class ProcessDefinitionService {
 		if(historyInstancePolicy != null && historyInstanceService.exists(processDefinitionId)) 
 			historyInstanceService.process(processDefinitionId, historyInstancePolicy);
 		
-		updateState(processDefinitionId, StateConstants.UNPUBLISHED);
+		updateState(processDefinitionId, ProcessDefinitionStateConstants.UNPUBLISHED);
 		processHandler.remove(processDefinitionId);
 		return null;
 	}
@@ -141,15 +141,15 @@ public class ProcessDefinitionService {
 	@Transaction
 	public ExecutionResult delete(int processDefinitionId, boolean strict) {
 		ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select name, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
-		if(processDefinition == null || processDefinition.getState() == StateConstants.DELETE)
+		if(processDefinition == null || processDefinition.getState() == ProcessDefinitionStateConstants.DELETE)
 			return new ExecutionResult("id", "操作失败, 不存在id为[%d]的流程定义", "bpm.process.defined.id.unexists", processDefinitionId);
-		if(processDefinition.getState() == StateConstants.PUBLISHED)
+		if(processDefinition.getState() == ProcessDefinitionStateConstants.PUBLISHED)
 			return new ExecutionResult("id", "操作失败, id为[%d]的流程定义已经发布, 请先取消发布", "bpm.process.defined.cancel.publish.first", processDefinitionId);
 		
 		if(runtimeInstanceService.exists(processDefinitionId) || historyInstanceService.exists(processDefinitionId)) {
 			if(!strict)
 				return new ExecutionResult("id", "操作失败, 流程[%s]已经存在实例", "bpm.process.defined.instance.exists", processDefinition.getName());
-			updateState(processDefinitionId, StateConstants.DELETE);
+			updateState(processDefinitionId, ProcessDefinitionStateConstants.DELETE);
 		} else {
 			SessionContext.getSqlSession().executeUpdate("delete bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		}

@@ -7,7 +7,7 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.common.InstanceHandlePolicy;
 import com.douglei.bpm.module.common.service.ExecutionResult;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
-import com.douglei.bpm.module.repository.definition.StateConstants;
+import com.douglei.bpm.module.repository.definition.ProcessDefinitionStateConstants;
 import com.douglei.bpm.process.ProcessHandler;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
@@ -55,7 +55,7 @@ public class RuntimeInstanceService {
 		ProcessDefinition processDefined = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select code, version, subversion from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefined == null)
 			throw new NullPointerException("操作失败, 不存在id为["+processDefinitionId+"]的流程定义");
-		if(processDefined.getState() == StateConstants.UNPUBLISHED)
+		if(processDefined.getState() == ProcessDefinitionStateConstants.UNPUBLISHED)
 			throw new IllegalArgumentException("操作失败, id为["+processDefinitionId+"]的流程定义还未发布");
 		
 		// TODO
@@ -73,7 +73,7 @@ public class RuntimeInstanceService {
 		ProcessDefinition processDefined = SessionContext.getTableSession().queryFirst(ProcessDefinition.class, "select code, version, subversion from bpm_re_procdef where code=? and version=? order by subversion desc", Arrays.asList(code, version));
 		if(processDefined == null)
 			throw new NullPointerException("操作失败, 不存在code为["+code+"], version为["+version+"]的流程定义");
-		if(processDefined.getState() == StateConstants.UNPUBLISHED)
+		if(processDefined.getState() == ProcessDefinitionStateConstants.UNPUBLISHED)
 			throw new IllegalArgumentException("操作失败, code为["+code+"], version为["+version+"]的流程定义还未发布");
 		
 		// TODO

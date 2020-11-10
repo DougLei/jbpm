@@ -20,13 +20,12 @@
 		
 		<!-- 用户任务 -->
 		<userTask id="userTask1" name="任务名称" pageID="属于任务的页面标识, 优先级高于全局页面标识" timeLimit="办理时限的表达式, 设置当前用户任务需要在多长时间内办理, 不配置则没有时限约束, 这里的表达式还要体现出工作日/自然日">
-			
 			<!-- 当前任务候选人相关配置 -->
 			<candidate>
 				<!-- 候选人指派策略(从上一环节进入当前环节时指派候选人的策略) -->
 				<assignPolicy mode="指派候选人模式(只能选择一个候选人, 可以选择多个候选人)" expr="指派候选人的表达式, 多个表达式用;(分号)分隔开"></assignPolicy>
-				<!-- 候选人审批策略(在当前环节办理人的审批策略) -->
-				<approvalPolicy mode="审批模式(单人审批, 多人按百分比审批, 多人按人数审批)" modeValue="审批模式对应的配置值(百分比, 人数)" strict="是否需要强制表态, 默认值为false"></approvalPolicy>
+				<!-- 候选人办理策略(在当前环节办理人的办理策略) -->
+				<handlePolicy mode="办理模式(单人办理, 多人按百分比办理, 多人按人数办理)" modeValue="办理模式对应的配置值(百分比, 人数)" strict="是否需要强制表态, 默认值为false"></handlePolicy>
 			</candidate>
 			
 			<!-- 在当前任务时, 可以执行的操作 -->
@@ -44,13 +43,15 @@
 			</option>
 			<option type="extension" name="延长办理" times="可申请延长办理的次数, 默认值为1" maxDays="一次最多几天, 默认值为1" dayType="延长天数是工作日还是自然日, 默认值为工作日" ></option>
 			<option type="tracking" name="流程跟踪"></option>
-			<option type="terminate" name="流程终止"></option><!-- 另外的流程挂起与激活, 放到流程实例管理界面, 做为流程管理员功能提供 -->
-			<option type="urging" name="催办"></option><!-- 在逾期后才会出现催办按钮 -->
+			<option type="urging" name="催办" moment="可催办的时机表达式, 例如在逾期后催办, 在提交的一天后催办等, 尽量也体现出工作日和自然日"></option><!-- 可配置在何时出现催办按钮 -->
 			<option type="withdraw" name="撤回" times="0"></option><!-- 当用户提交后, 如果发现提交的有问题, 还可以自主选择撤回, 重新编辑后重新提交; times设置可以撤回的次数, 默认值为0, 配置的值在小于1时, 都表示不限制次数 -->
-			
-			<!-- 前/后置监听器 -->
-			<listener type="pre" item="多个项之间用;(分号)分隔开, 会按照配置的顺序执行"></listener>
-			<listener type="post" item="多个项之间用;(分号)分隔开, 会按照配置的顺序执行"></listener>
+			<!-- 流程挂起, 终止, 激活, 均放到流程实例管理界面, 做为流程管理员的功能提供 -->
+						
+			<!-- 监听器, 按照配置的顺序依次执行 -->
+			<listeners>
+				<listener type="pre" value="" /><!-- 前置 -->
+				<listener type="post" value="" /><!-- 后置 -->
+			</listeners>
 		</userTask>
 		
 		<!-- 子流程任务, 暂不实现 -->
@@ -64,7 +65,6 @@
 		<!-- 邮件任务, 暂不实现 -->
 		<emailTask id="emailTask1" name=""></emailTask>
 		
-		
 		<!-- 并行网关 -->
 		<parallelGateway id="parallelGateway1" name=""></parallelGateway>
 		<!-- 排他网关 -->
@@ -72,9 +72,8 @@
 		<!-- 包容网关 -->
 		<inclusiveGateway id="inclusiveGateway1" name=""></inclusiveGateway>
 		
-		
 		<!-- 连线, 可配置条件 -->
-		<flow id="flow1" name="" source="startEvent1" target="userTask1" conditionExpr="配置比较表达式" order="0, 默认值为0, 排序, 如果同一个source引出多条线, 可以通过order进行排序"></flow>
+		<flow id="flow1" name="" source="startEvent1" target="userTask1" conditionExpr="配置比较表达式, 根据表达式决定是否会走该flow" order="0, 默认值为0, 排序, 当同一个source引出多条线, 通过order进行排序"></flow>
 	</process>
 	
 	<!-- 配置流程图的结构, 主要就是记录画布的长宽，以及各个节点的坐标，长宽等 -->

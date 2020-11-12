@@ -14,8 +14,14 @@ import java.lang.annotation.Target;
 public @interface Bean {
 	
 	/**
-	 * 是否有事物
+	 * bean对应的class, 默认Object.class
 	 * @return
 	 */
-	boolean transaction() default true;
+	Class<?> clazz() default Object.class;
+	
+	/**
+	 * 是否是事物Bean, 默认是true
+	 * @return
+	 */
+	boolean isTransaction() default true;
 }

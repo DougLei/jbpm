@@ -7,7 +7,6 @@ import javax.sql.DataSource;
 
 import com.douglei.bpm.bean.BeanFactory;
 import com.douglei.bpm.process.container.ProcessContainer;
-import com.douglei.bpm.process.container.impl.ApplicationProcessContainer;
 import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
 import com.douglei.orm.context.IdRepeatedException;
@@ -29,7 +28,7 @@ public class ProcessEngineBuilder {
 	private static final String DEFAULT_CONFIGURATION_FILE_PATH = "jbpm.conf.xml"; // 默认的配置文件路径
 	private boolean isBuild;
 	private ProcessEngine engine;
-	private ProcessContainer container;
+	private BeanFactory beanFactory = new BeanFactory();
 	
 	/**
 	 * - 关于以下四种构建函数的介绍
@@ -117,10 +116,10 @@ public class ProcessEngineBuilder {
 	 * @return
 	 */
 	public ProcessEngineBuilder setContainer(ProcessContainer container) {
-		this.container = container;
+		beanFactory.registerCustomImplBean(ProcessContainer.class, container);
 		return this;
 	}
-
+	
 	/**
 	 * 构建流程引擎
 	 * @return
@@ -129,9 +128,8 @@ public class ProcessEngineBuilder {
 		if(isBuild)
 			return engine;
 		
-		if(container == null)
-			container = new ApplicationProcessContainer();
-		new BeanFactory(container).setEngineAttributes(engine);
+		beanFactory.registerCustomImplBean(ProcessEngine.class, engine);
+		beanFactory.setBeanAttributes();
 		isBuild = true;
 		return engine;
 	}

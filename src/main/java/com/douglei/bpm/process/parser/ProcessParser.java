@@ -28,7 +28,7 @@ import com.douglei.tools.utils.StringUtil;
  * process解析器
  * @author DougLei
  */
-@Bean(transaction = false)
+@Bean(isTransaction = false)
 public class ProcessParser {
 	
 	@Attribute

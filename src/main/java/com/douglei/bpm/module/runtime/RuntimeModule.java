@@ -9,7 +9,7 @@ import com.douglei.bpm.module.runtime.task.RuntimeTaskService;
  * 
  * @author DougLei
  */
-@Bean(transaction = false)
+@Bean(isTransaction = false)
 public class RuntimeModule{
 	
 	@Attribute

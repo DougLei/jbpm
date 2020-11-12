@@ -10,7 +10,7 @@ import com.douglei.bpm.process.parser.element.TaskElement;
  * 
  * @author DougLei
  */
-@Bean(transaction = false)
+@Bean(isTransaction = false)
 public class StartEventParser implements Parser<TaskElement, StartEvent> {
 
 	@Override

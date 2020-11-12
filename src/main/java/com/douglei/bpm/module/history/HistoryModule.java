@@ -9,7 +9,7 @@ import com.douglei.bpm.module.history.task.HistoryTaskService;
  * 
  * @author DougLei
  */
-@Bean(transaction = false)
+@Bean(isTransaction = false)
 public class HistoryModule {
 	
 	@Attribute

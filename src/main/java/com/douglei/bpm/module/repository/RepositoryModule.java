@@ -9,7 +9,7 @@ import com.douglei.bpm.module.repository.type.ProcessTypeService;
  * 
  * @author DougLei
  */
-@Bean(transaction = false)
+@Bean(isTransaction = false)
 public class RepositoryModule {
 	
 	@Attribute

@@ -3,16 +3,13 @@ package com.douglei.bpm.bean;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.douglei.aop.ProxyBean;
 import com.douglei.aop.ProxyBeanContext;
 import com.douglei.aop.ProxyMethod;
-import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.bean.annotation.Attribute;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.process.container.ProcessContainer;
 import com.douglei.orm.context.TransactionProxyInterceptor;
 import com.douglei.orm.context.transaction.component.Transaction;
 import com.douglei.orm.context.transaction.component.TransactionComponentEntity;
@@ -25,49 +22,64 @@ import com.douglei.tools.utils.reflect.ConstructorUtil;
  * @author DougLei
  */
 public class BeanFactory {
-	private Map<Class<?>, Object> beans = new HashMap<Class<?>, Object>(64);
+	private Map<Class<?>, Object> beanContainer = new HashMap<Class<?>, Object>(128);
 	
-	public BeanFactory(ProcessContainer processContainerBean) {
-		initBeanContainer(processContainerBean);
-		setBeanAttributes();
+	public BeanFactory() {
+		initBeanContainer();
 	}
 	
 	/**
 	 * 初始化Bean容器
-	 * @param processContainerBean
 	 */
-	private void initBeanContainer(ProcessContainer processContainerBean) {
-		List<String> classes = new ClassScanner().scan("com.douglei.bpm"); // 扫描指定路径下的所有class
+	private void initBeanContainer() {
 		Class<?> loadClass = null;
 		Bean beanAnno = null;
 		Method[] declareMethods = null;
-		for (String clz : classes) {
+		for (String clz : new ClassScanner().scan("com.douglei.bpm")) { // 扫描指定路径下的所有class
 			loadClass = ClassLoadUtil.loadClass(clz);
 			beanAnno = loadClass.getAnnotation(Bean.class);
 			
 			if(beanAnno != null) {
-				if(beanAnno.transaction()) {
-					TransactionComponentEntity transactionComponentEntity = null;
+				if(beanAnno.isTransaction()) {
+					TransactionComponentEntity entity = null;
 					
 					declareMethods = loadClass.getDeclaredMethods();
 					for (Method method : declareMethods) {
 						if(method.getAnnotation(Transaction.class) != null) {
-							if(transactionComponentEntity == null)
-								transactionComponentEntity = new TransactionComponentEntity(loadClass, declareMethods.length);
-							transactionComponentEntity.addMethod(new ProxyMethod(method));
+							if(entity == null)
+								entity = new TransactionComponentEntity(loadClass, declareMethods.length);
+							entity.addMethod(new ProxyMethod(method));
 						}
 					}
-					if(transactionComponentEntity != null) {
-						beans.put(loadClass, ProxyBeanContext.createProxy(loadClass, new TransactionProxyInterceptor(transactionComponentEntity.getTransactionComponentClass(), transactionComponentEntity.getTransactionMethods())));
+					if(entity != null) {
+						beanContainer.put(beanAnno.clazz()==Object.class?loadClass:beanAnno.clazz(), ProxyBeanContext.createProxy(loadClass, new TransactionProxyInterceptor(entity.getClazz(), entity.getMethods())));
 						continue;
 					}
 				}
-				beans.put(loadClass, ConstructorUtil.newInstance(loadClass));
+				beanContainer.put(beanAnno.clazz()==Object.class?loadClass:beanAnno.clazz(), ConstructorUtil.newInstance(loadClass));
 			}
 		}
-		
-		// 将流程容器Bean也放到Bean容器中
-		this.beans.put(ProcessContainer.class, processContainerBean);
+	}
+	
+	/**
+	 * 将自定义的实现Bean注册到BeanFactory的Bean容器中, 用来覆盖引擎默认的实现Bean
+	 * @param beanClass bean对应的class
+	 * @param beanObject bean的实例
+	 */
+	public void registerCustomImplBean(Class<?> beanClass, Object beanObject) {
+		beanContainer.put(beanClass, beanObject);
+	}
+	
+	/**
+	 * 设置Bean容器中每个Bean的属性
+	 */
+	public void setBeanAttributes() {
+		try {
+			for(Object object : beanContainer.values())
+				setAttribute(object);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 	}
 	
 	// 给对象的属性赋值
@@ -76,7 +88,7 @@ public class BeanFactory {
 		do{
 			for (Field field : currentClass.getDeclaredFields()) {
 				if(field.getAnnotation(Attribute.class) != null)
-					setValue(object, field, beans.get(field.getType()));
+					setValue(object, field, beanContainer.get(field.getType()));
 			}
 			currentClass = currentClass.getSuperclass();
 		} while (currentClass != Object.class);
@@ -102,29 +114,5 @@ public class BeanFactory {
 			}
 		}
 		field.setAccessible(false);
-	}
-	
-	/**
-	 * 设置Bean容器中每个Bean的属性
-	 */
-	private void setBeanAttributes() {
-		try {
-			for(Object object : beans.values())
-				setAttribute(object);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-	}
-	
-	/**
-	 * 设置引擎中的属性
-	 * @param engine
-	 */
-	public void setEngineAttributes(ProcessEngine engine) {
-		try {
-			setAttribute(engine);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
 	}
 }

@@ -16,7 +16,7 @@ import com.douglei.tools.utils.reflect.ConstructorUtil;
  * 解析器容器, 这里不包含{@link StartEventParser}和{@link FlowParser}两个解析器, 它们在中{@link ProcessParser}独立使用
  * @author DougLei
  */
-@Bean(transaction = false)
+@Bean(isTransaction = false)
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ParserContainer {
 	private static Map<String, Parser<TaskElement, ? extends Task>> parserMap = new HashMap<String, Parser<TaskElement,? extends Task>>();

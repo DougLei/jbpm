@@ -14,7 +14,7 @@ import com.douglei.tools.utils.datatype.VerifyTypeMatchUtil;
  * 
  * @author DougLei
  */
-@Bean(transaction = false)
+@Bean(isTransaction = false)
 public class FlowParser implements Parser<FlowElement, Flow> {
 
 	@Override

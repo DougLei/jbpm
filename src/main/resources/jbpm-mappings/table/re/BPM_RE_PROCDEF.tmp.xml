@@ -4,7 +4,6 @@
 	<table name="BPM_RE_PROCDEF" class="com.douglei.bpm.module.repository.definition.ProcessDefinition" createMode="create" strict="true">
 		<columns>
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
-			
 			<column name="REF_TYPE_ID" property="refTypeId" dataType="number" length="10" nullable="false" defaultValue="0"/>
 			<column name="NAME" property="name" dataType="nstring" length="50" nullable="false" />
 			<column name="CODE" property="code" dataType="string" length="50" nullable="false" />

@@ -1,6 +1,7 @@
 package com.douglei.bpm.process.parser;
 
 import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +45,7 @@ public class ProcessParser {
 	public Process parse(int id, String content) throws ProcessParseException {
 		Document document;
 		try {
-			document = new SAXReader().read(new ByteArrayInputStream(content.getBytes()));
+			document = new SAXReader().read(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
 		} catch (DocumentException e) {
 			throw new ProcessParseException("读取工作流配置内容时出现异常", e);
 		}
@@ -78,6 +79,8 @@ public class ProcessParser {
 			id = element.attributeValue("id");
 			if(StringUtil.isEmpty(id))
 				throw new ProcessParseException("工作流中, 连线/任务/网关/事件的id值不能为空");
+			if(idExists4FlowElements(id, flowElements) || (!taskMap.isEmpty() && taskMap.containsKey(id)) || (startEvent != null && startEvent.getId().equals(id)))
+				throw new ProcessParseException("工作流中, 连线/任务/网关/事件, 出现重复的id值: " + id);
 			
 			elementName = element.getName();
 			if(elementName.equals(startEventParser.elementName())) {
@@ -87,8 +90,6 @@ public class ProcessParser {
 			}else if(elementName.equals(flowParser.elementName())) {
 				flowElements.add(new FlowElement(id, element));
 			}else { 
-				if(taskMap.containsKey(id))
-					throw new ProcessParseException("工作流中的任务/网关/事件, 出现重复的id值: " + id);
 				taskMap.put(id, element);
 			}
 		}
@@ -99,13 +100,30 @@ public class ProcessParser {
 		
 		linkTaskAndFlow(startEvent, flowElements, taskMap, process);
 		
+		if(!flowElements.isEmpty())
+			flowElements.clear();
 		taskMap.clear();
-		flowElements.clear();
+	}
+	
+	/**
+	 * 判断id是否已经存在于flowElements集合中
+	 * @param id
+	 * @param flowElements
+	 * @return
+	 */
+	private boolean idExists4FlowElements(String id, List<FlowElement> flowElements) {
+		if(!flowElements.isEmpty()) {
+			for (FlowElement flowElement : flowElements) {
+				if(flowElement.getId().equals(id)) 
+					return true;
+			}
+		}
+		return false;
 	}
 
 	/**
 	 *  将任务和流进行连接
-	 * @param sourceTask
+	 * @param sourceTask 
 	 * @param flowElements
 	 * @param taskMap
 	 * @param process
@@ -120,7 +138,7 @@ public class ProcessParser {
 					
 					Object taskObj = taskMap.get(flowElement.getTarget());
 					if(taskObj == null)
-						throw new ProcessParseException("工作流中不存在id="+flowElement.getTarget()+"的任务/网关/事件");
+						throw new ProcessParseException("工作流中不存在id=["+flowElement.getTarget()+"]的任务/网关/事件");
 					
 					Flow flow = flowParser.parse(flowElement);
 					sourceTask.addFlow(flow);
@@ -146,6 +164,6 @@ public class ProcessParser {
 		}
 		
 		if(!taskExistsFlow)
-			throw new ProcessParseException("工作流中, " + sourceTask.getName() + "不是结束事件, 必须配置相应的连线");
+			throw new ProcessParseException("工作流中, [" + sourceTask.getName() + "]不是结束事件, 必须配置相应的连线");
 	}
 }

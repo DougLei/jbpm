@@ -37,38 +37,38 @@ public class ProcessDefinitionService {
 	@Transaction
 	public ExecutionResult save(ProcessDefinitionBuilder builder, boolean strict) {
 		ProcessDefinition processDefinition = builder.build();
-		ProcessDefinition pd = SessionContext.getTableSession().queryFirst(ProcessDefinition.class, "select id, subversion, signature, state from bpm_re_procdef where code=? and version=? order by subversion desc", Arrays.asList(processDefinition.getCode(), processDefinition.getVersion()));
-		if(pd == null) {
+		ProcessDefinition exProcessDefinition = SessionContext.getTableSession().queryFirst(ProcessDefinition.class, "select id, subversion, signature, state from bpm_re_procdef where code=? and version=? order by subversion desc", Arrays.asList(processDefinition.getCode(), processDefinition.getVersion()));
+		if(exProcessDefinition == null) {
 			// 新的流程定义, 进行save
 			SessionContext.getTableSession().save(processDefinition); 
 		}else {
-			if(pd.getState() == ProcessDefinitionStateConstants.DELETE)
+			if(exProcessDefinition.getState() == ProcessDefinitionStateConstants.DELETE)
 				return new ExecutionResult(null, "已存在code为[%s], version为[%s]的流程定义", "bpm.process.defined.code.version.exists", processDefinition.getCode(), processDefinition.getVersion());
 			
-			if(pd.getSignature().equals(processDefinition.getSignature())){ // 没有修改流程定义的内容, 进行update
-				processDefinition.setId(pd.getId());
-				processDefinition.setSubversion(pd.getSubversion());
-				processDefinition.setState(pd.getState());
+			if(exProcessDefinition.getSignature().equals(processDefinition.getSignature())){ // 没有修改流程定义的内容, 进行update
+				processDefinition.setId(exProcessDefinition.getId());
+				processDefinition.setSubversion(exProcessDefinition.getSubversion());
+				processDefinition.setState(exProcessDefinition.getState());
 				processDefinition.setContent(null);
 				processDefinition.setSignature(null);
 				SessionContext.getTableSession().update(processDefinition);
-			}else if(!runtimeInstanceService.exists(pd.getId()) && !historyInstanceService.exists(pd.getId())) { // 修改了内容, 但旧的流程定义不存在实例, 进行update
-				processDefinition.setId(pd.getId());
-				processDefinition.setSubversion(pd.getSubversion());
-				processDefinition.setState(pd.getState());
+			}else if(!runtimeInstanceService.exists(exProcessDefinition.getId()) && !historyInstanceService.exists(exProcessDefinition.getId())) { // 修改了内容, 但旧的流程定义不存在实例, 进行update
+				processDefinition.setId(exProcessDefinition.getId());
+				processDefinition.setSubversion(exProcessDefinition.getSubversion());
+				processDefinition.setState(exProcessDefinition.getState());
 				SessionContext.getTableSession().update(processDefinition); 
 				
-				if(processDefinition.getState() == ProcessDefinitionStateConstants.PUBLISHED) 
+				if(exProcessDefinition.getState() == ProcessDefinitionStateConstants.PUBLISHED) 
 					processHandler.put(processDefinition);
 			}else { // 修改了内容, 且旧的流程定义存在实例, 根据参数strict的值, 进行save, 或提示操作失败
 				if(!strict) 
 					return new ExecutionResult(null, "操作失败, 流程[%s]已经存在实例", "bpm.process.defined.instance.exists", processDefinition.getName());
 				
-				processDefinition.setSubversion(pd.getSubversion()+1);
-				processDefinition.setState(pd.getState());
+				processDefinition.setSubversion(exProcessDefinition.getSubversion()+1);
+				processDefinition.setState(exProcessDefinition.getState());
 				SessionContext.getTableSession().save(processDefinition); 
 				
-				if(processDefinition.getState() == ProcessDefinitionStateConstants.PUBLISHED) 
+				if(exProcessDefinition.getState() == ProcessDefinitionStateConstants.PUBLISHED) 
 					processHandler.put(processDefinition);
 			}
 		}

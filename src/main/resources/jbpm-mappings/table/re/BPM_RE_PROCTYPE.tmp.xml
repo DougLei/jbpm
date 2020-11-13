@@ -5,7 +5,7 @@
 		<columns>
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
 			<column name="CODE" property="code" dataType="string" length="50" nullable="false" />
-			<column name="NAME" property="name" dataType="nstring" length="30" nullable="false" />
+			<column name="NAME" property="name" dataType="nstring" length="100" nullable="false" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

@@ -20,6 +20,8 @@ public class StartEventParser implements Parser<TaskElement, StartEvent> {
 
 	@Override
 	public StartEvent parse(TaskElement taskElement) throws ProcessParseException {
+		// TODO 没有解析启动策略
+		
 		return new StartEvent(taskElement.getId(), taskElement.getElement().attributeValue("name"));
 	}
 }

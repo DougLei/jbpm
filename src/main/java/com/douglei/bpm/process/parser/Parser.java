@@ -13,7 +13,7 @@ public interface Parser<P, R> {
 	String elementName();
 	
 	/**
-	 * 解析方法
+	 * 解析
 	 * @param parameter
 	 * @return
 	 * @throws ProcessParseException

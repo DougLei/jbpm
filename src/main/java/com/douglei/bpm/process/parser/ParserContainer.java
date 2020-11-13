@@ -5,9 +5,9 @@ import java.util.Map;
 
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.executer.task.Task;
-import com.douglei.bpm.process.parser.element.TaskElement;
-import com.douglei.bpm.process.parser.impl.flow.FlowParser;
-import com.douglei.bpm.process.parser.impl.task.event.StartEventParser;
+import com.douglei.bpm.process.parser.flow.FlowParser;
+import com.douglei.bpm.process.parser.task.TaskMetadata;
+import com.douglei.bpm.process.parser.task.event.StartEventParser;
 import com.douglei.tools.instances.resource.scanner.impl.ClassScanner;
 import com.douglei.tools.utils.reflect.ClassLoadUtil;
 import com.douglei.tools.utils.reflect.ConstructorUtil;
@@ -19,7 +19,7 @@ import com.douglei.tools.utils.reflect.ConstructorUtil;
 @Bean(isTransaction = false)
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ParserContainer {
-	private static Map<String, Parser<TaskElement, ? extends Task>> parserMap = new HashMap<String, Parser<TaskElement,? extends Task>>();
+	private static Map<String, Parser<TaskMetadata, ? extends Task>> parserMap = new HashMap<String, Parser<TaskMetadata,? extends Task>>();
 	static {
 		Parser parser;
 		for (String clazz : new ClassScanner().scan(ParserContainer.class.getPackage().getName() + ".impl")) {
@@ -32,13 +32,13 @@ public class ParserContainer {
 	
 	/**
 	 * 解析
-	 * @param taskElement
+	 * @param taskMetadata
 	 * @return
 	 */
-	public Task parse(TaskElement taskElement) {
-		Parser<TaskElement, ? extends Task> parser = parserMap.get(taskElement.getElement().getName());
+	public Task parse(TaskMetadata taskMetadata) {
+		Parser<TaskMetadata, ? extends Task> parser = parserMap.get(taskMetadata.getElement().getName());
 		if(parser == null)
-			throw new ProcessParseException("无法解析<"+taskElement.getElement().getName()+">标签");
-		return parser.parse(taskElement);
+			throw new ProcessParseException("无法解析<"+taskMetadata.getElement().getName()+">标签");
+		return parser.parse(taskMetadata);
 	}
 }

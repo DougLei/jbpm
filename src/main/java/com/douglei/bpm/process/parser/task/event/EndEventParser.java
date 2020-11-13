@@ -1,17 +1,17 @@
-package com.douglei.bpm.process.parser.impl.task.event;
+package com.douglei.bpm.process.parser.task.event;
 
 import com.douglei.bpm.process.executer.task.event.EndEvent;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ParserBean;
 import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.bpm.process.parser.element.TaskElement;
+import com.douglei.bpm.process.parser.task.TaskMetadata;
 
 /**
  * 
  * @author DougLei
  */
 @ParserBean
-public class EndEventParser implements Parser<TaskElement, EndEvent> {
+public class EndEventParser implements Parser<TaskMetadata, EndEvent> {
 
 	@Override
 	public String elementName() {
@@ -19,7 +19,7 @@ public class EndEventParser implements Parser<TaskElement, EndEvent> {
 	}
 
 	@Override
-	public EndEvent parse(TaskElement taskElement) throws ProcessParseException {
-		return new EndEvent(taskElement.getId(), taskElement.getElement().attributeValue("name"));
+	public EndEvent parse(TaskMetadata taskMetadata) throws ProcessParseException {
+		return new EndEvent(taskMetadata.getId(), taskMetadata.getElement().attributeValue("name"));
 	}
 }

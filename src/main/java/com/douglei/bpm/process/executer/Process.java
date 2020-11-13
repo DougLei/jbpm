@@ -36,12 +36,7 @@ public class Process implements Serializable {
 		this.startEvent = startEvent;
 	}
 	public void addTask(Task task) {
-		taskMap.put(task.getId(), task);
-	}
-	
-	public String getTitle(Object parameter) {
-		// TODO 
-		return title;
+		this.taskMap.put(task.getId(), task);
 	}
 	
 	public int getId() {

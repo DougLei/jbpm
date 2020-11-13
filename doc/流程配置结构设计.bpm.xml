@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpm-configuration>
 	<!-- 
-		流程配置结构, 核心主要包括以下四种元素:
+		流程配置结构, 核心主要包括以下两种节点类型:
 		1. 连线
 		2. 任务, 包含两种类型:
 			2.1. 手动任务, 需要用户手动处理, 来推动流程流转, 主要是用户任务
-			2.2. 自动任务, 可以自行推动流程流转, 例如子流程任务, SQL脚本任务, 定时任务, 邮件任务等
-		3. 网关: 并行网关, 排他网关, 包容网关 
-		4. 事件: 开始事件, 结束事件
+			2.2. 自动任务, 可以自行推动流程流转, 例如开始/结束事件, 网关任务, 子流程任务, SQL脚本任务, 定时任务, 邮件任务等
 	-->
 	<process code="编码, 唯一" version="用户自定义的版本" name="流程名称, 可以不配置, 如果不配置则使用code:version" title="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name" pageID="全局页面标识">
 		<!-- 开始事件, 一个流程中只能有一个开始 -->
-		<startEvent id="startEvent" name="">
-			<!-- 启动策略, 即流程的启动条件, 目前考虑的策略包括: 启动的人, 启动的时间(区间); 不配置表示支持无条件启动, 任何人在任何时候都可以发起流程 -->
-			<policy expr="启动策略的表达式"></policy>
-		</startEvent>
+		<startEvent id="startEvent" name="" conditionExpr="流程的启动条件表达式, 目前考虑的策略包括: 启动的人, 启动的时间(区间); 可不配置, 默认表示支持无条件启动, 任何人在任何时候都可以发起流程"></startEvent>
 		<!-- 结束事件, 一个流程中可以有多个结束 -->
 		<endEvent id="endEvent1" name=""></endEvent>
 		
@@ -80,18 +75,18 @@
 		<!-- 邮件任务, 暂不实现 -->
 		<emailTask id="emailTask1" name=""></emailTask>
 		
-		<!-- 并行网关 -->
-		<parallelGateway id="parallelGateway1" name=""></parallelGateway>
 		<!-- 排他网关 -->
 		<exclusiveGateway id="exclusiveGateway1" name=""></exclusiveGateway>
+		<!-- 并行网关 -->
+		<parallelGateway id="parallelGateway1" name=""></parallelGateway>
 		<!-- 包容网关 -->
 		<inclusiveGateway id="inclusiveGateway1" name=""></inclusiveGateway>
 		
 		<!-- 连线, 可配置条件 -->
 		<flow id="flow1" name="" order="0, 排序值, 默认为0" 
-			mode="parallel/exclusive/inclusive, 可不配置, 默认值为exclusive; 流转模式, 针对一个source中直接引出多条flow的情况; 且同一个source引出的多条flow的mode值, 必须一样, 否则在解析时会抛出异常" 
+			mode="exclusive/parallel/inclusive, 可不配置, 默认值为exclusive; 流转模式, 针对一个source中直接引出多条flow的情况; 且同一个source引出的多条flow的mode值, 必须一样, 否则在解析时会抛出异常" 
 			source="startEvent1" target="userTask1" 
-			conditionExpr="配置比较表达式, 根据表达式决定是否可以走该flow"></flow>
+			conditionExpr="配置比较表达式, 根据表达式决定是否可以走该flow; 可不配置, 默认比较结果为true" />
 	</process>
 	
 	<!-- 配置流程图的结构, 主要就是记录画布的长宽，以及各个节点的坐标，长宽等 -->

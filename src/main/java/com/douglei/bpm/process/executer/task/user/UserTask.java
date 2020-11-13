@@ -1,9 +1,9 @@
-package com.douglei.bpm.process.executer.task.impl.usertask;
+package com.douglei.bpm.process.executer.task.user;
 
 import java.util.List;
 
 import com.douglei.bpm.process.executer.task.Task;
-import com.douglei.bpm.process.executer.task.impl.usertask.option.Option;
+import com.douglei.bpm.process.executer.task.user.option.Option;
 
 /**
  * 
@@ -12,10 +12,6 @@ import com.douglei.bpm.process.executer.task.impl.usertask.option.Option;
 public class UserTask extends Task {
 	private String pageID;
 	private String timeLimitExpr;
-	
-	
-	
-	private boolean allowActivation = true;
 	
 	
 	private Candidate candidate;

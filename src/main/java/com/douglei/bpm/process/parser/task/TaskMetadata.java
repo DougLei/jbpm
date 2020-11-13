@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.parser.element;
+package com.douglei.bpm.process.parser.task;
 
 import org.dom4j.Element;
 
@@ -6,11 +6,11 @@ import org.dom4j.Element;
  * 
  * @author DougLei
  */
-public class TaskElement {
+public class TaskMetadata {
 	private String id;
 	private Element element;
 	
-	public TaskElement(String id, Element element) {
+	public TaskMetadata(String id, Element element) {
 		this.id = id;
 		this.element = element;
 	}

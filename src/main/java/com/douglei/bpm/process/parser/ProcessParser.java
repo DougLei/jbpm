@@ -47,17 +47,17 @@ public class ProcessParser {
 		try {
 			document = new SAXReader().read(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
 		} catch (DocumentException e) {
-			throw new ProcessParseException("读取工作流配置内容时出现异常", e);
+			throw new ProcessParseException("读取流程配置内容时出现异常", e);
 		}
 		
 		Element processElement = document.getRootElement().element("process");
 		String code = processElement.attributeValue("code");
 		if(StringUtil.isEmpty(code))
-			throw new ProcessParseException("工作流中的编码值不能为空");
+			throw new ProcessParseException("流程的编码值不能为空");
 		
 		String version = processElement.attributeValue("version");
 		if(StringUtil.isEmpty(version))
-			throw new ProcessParseException("工作流中的版本值不能为空");
+			throw new ProcessParseException("流程的版本值不能为空");
 		
 		Process process = new Process(id, code, version, processElement.attributeValue("name"), processElement.attributeValue("title"), processElement.attributeValue("pageID"));
 		buildProcessStruct(process, processElement.elements());
@@ -78,14 +78,14 @@ public class ProcessParser {
 		for (Element element : elements) {
 			id = element.attributeValue("id");
 			if(StringUtil.isEmpty(id))
-				throw new ProcessParseException("工作流中, 连线/任务/网关/事件的id值不能为空");
+				throw new ProcessParseException("流程中连线/任务的id值不能为空");
 			if(idExists4flowMetadatas(id, flowMetadatas) || (!taskMap.isEmpty() && taskMap.containsKey(id)) || (startEvent != null && startEvent.getId().equals(id)))
-				throw new ProcessParseException("工作流中, 连线/任务/网关/事件, 出现重复的id值: " + id);
+				throw new ProcessParseException("流程中连线/任务的id值出现重复: " + id);
 			
 			elementName = element.getName();
 			if(elementName.equals(startEventParser.elementName())) {
 				if(startEvent != null)
-					throw new ProcessParseException("工作流中只能配置一个起始事件");
+					throw new ProcessParseException("流程中只能配置一个起始事件");
 				startEvent = startEventParser.parse(new TaskMetadata(id, element));
 			}else if(elementName.equals(flowParser.elementName())) {
 				flowMetadatas.add(new FlowMetadata(id, element));
@@ -95,7 +95,7 @@ public class ProcessParser {
 		}
 		
 		if(startEvent == null)
-			throw new ProcessParseException("工作流中必须配置起始事件");
+			throw new ProcessParseException("流程中必须配置起始事件");
 		process.setStartEvent(startEvent);
 		
 		linkTaskAndFlow(startEvent, flowMetadatas, taskMap, process);
@@ -138,7 +138,7 @@ public class ProcessParser {
 					
 					Object taskObj = taskMap.get(flowMetadata.getTarget());
 					if(taskObj == null)
-						throw new ProcessParseException("工作流中不存在id=["+flowMetadata.getTarget()+"]的任务/网关/事件");
+						throw new ProcessParseException("流程中不存在id=["+flowMetadata.getTarget()+"]的任务");
 					
 					Flow flow = flowParser.parse(flowMetadata);
 					sourceTask.addFlow(flow);
@@ -164,6 +164,6 @@ public class ProcessParser {
 		}
 		
 		if(!taskExistsFlow)
-			throw new ProcessParseException("工作流中, [" + sourceTask.getName() + "]不是结束事件, 必须配置相应的连线");
+			throw new ProcessParseException("流程中id=[" + sourceTask.getId() + "]的任务, 不是结束事件, 必须配置相应的连线");
 	}
 }

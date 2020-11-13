@@ -27,7 +27,7 @@ public abstract class Task extends ProcessNode{
 		if(!flows.isEmpty()) {
 			flows.forEach(f -> {
 				if(flow.getMode() != f.getMode())
-					throw new ProcessParseException("在id为["+id+"], name为["+name+"]的["+getClass().getSimpleName()+"]中, 引出的多条flow存在不同的mode值["+flow.getMode()+", "+f.getMode()+"]");
+					throw new ProcessParseException("流程中id=["+id+"]的任务, 引出的多条flow存在不同的mode值["+flow.getMode()+", "+f.getMode()+"]");
 			});
 		}
 		

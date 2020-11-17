@@ -9,7 +9,7 @@
 	-->
 	<process code="编码, 唯一" version="用户自定义的版本" name="流程名称, 可以不配置, 如果不配置则使用code:version" title="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name" pageID="全局页面标识">
 		<!-- 开始事件, 一个流程中只能有一个开始 -->
-		<startEvent id="startEvent" name="" conditionExpr="流程的启动条件表达式, 目前考虑的策略包括: 启动的人, 启动的时间(区间); 可不配置, 默认表示支持无条件启动, 任何人在任何时候都可以发起流程"></startEvent>
+		<startEvent id="startEvent" name=""></startEvent>
 		<!-- 结束事件, 一个流程中可以有多个结束 -->
 		<endEvent id="endEvent1" name=""></endEvent>
 		

@@ -4,8 +4,8 @@
 	<table name="BPM_RE_DELEGATION" createMode="create" strict="true">
 		<columns>
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
-			<column name="CLIENT" property="client" dataType="nstring" length="50" nullable="false" />
-			<column name="TRUSTEE" property="trustee" dataType="nstring" length="50" nullable="false" />
+			<column name="CLIENT" property="client" dataType="nstring" length="150" nullable="false" />
+			<column name="TRUSTEE" property="trustee" dataType="nstring" length="150" nullable="false" />
 			<column name="START_DATE" property="startDate" dataType="datetime" nullable="false" />
 			<column name="END_DATE" property="endDate" dataType="datetime" nullable="false" />
 			<column name="REASON" property="reason" dataType="nstring" length="300" nullable="false" />

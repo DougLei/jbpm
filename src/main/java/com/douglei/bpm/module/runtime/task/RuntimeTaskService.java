@@ -2,7 +2,7 @@ package com.douglei.bpm.module.runtime.task;
 
 import com.douglei.bpm.bean.annotation.Attribute;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.common.service.ExecutionResult;
+import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.process.ProcessHandler;
 import com.douglei.orm.context.transaction.component.Transaction;
 

@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.tools.instances.file.reader.FileBufferedReader;
 
 /**
@@ -118,7 +119,7 @@ public class ProcessDefinitionBuilder {
 	 * @return
 	 */
 	public ProcessDefinitionBuilder setTypeId(int typeId) {
-		processDefinition.setRefTypeId(typeId);
+		processDefinition.setTypeId(typeId);
 		return this;
 	}
 	

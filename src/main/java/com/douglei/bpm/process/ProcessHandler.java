@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 import com.douglei.bpm.bean.annotation.Attribute;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.repository.definition.ProcessDefinition;
+import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.bpm.process.container.ProcessContainer;
-import com.douglei.bpm.process.executer.Process;
+import com.douglei.bpm.process.executor.Process;
 import com.douglei.bpm.process.parser.ProcessParser;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;

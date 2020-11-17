@@ -3,7 +3,7 @@ package com.douglei.bpm.process.parser.task.event;
 import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.process.executer.task.event.StartEvent;
+import com.douglei.bpm.process.executor.task.event.StartEvent;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.bpm.process.parser.task.TaskMetadata;

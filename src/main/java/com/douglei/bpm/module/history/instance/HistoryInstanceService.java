@@ -1,7 +1,7 @@
 package com.douglei.bpm.module.history.instance;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.common.InstanceHandlePolicy;
+import com.douglei.bpm.module.components.instance.InstanceHandlePolicy;
 import com.douglei.orm.context.transaction.component.Transaction;
 
 /**

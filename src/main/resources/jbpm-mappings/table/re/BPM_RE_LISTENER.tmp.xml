@@ -4,7 +4,7 @@
 	<table name="BPM_RE_LISTENER" createMode="create" strict="true">
 		<columns>
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
-			<column name="NAME" property="name" dataType="nstring" length="100" nullable="false" />
+			<column name="NAME" property="name" dataType="nstring" length="150" nullable="false" />
 			<column name="TYPE" property="type" dataType="number" length="2" nullable="false" />
 			<column name="TERM" property="term" dataType="string" length="300" nullable="false" />
 		</columns>

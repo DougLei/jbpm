@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.parser.task.gateway;
 
-import com.douglei.bpm.process.executer.task.gateway.ParallelGateway;
+import com.douglei.bpm.process.executor.task.gateway.ParallelGateway;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ParserBean;
 import com.douglei.bpm.process.parser.ProcessParseException;

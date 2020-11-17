@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.process.executer.task.Task;
+import com.douglei.bpm.process.executor.task.Task;
 import com.douglei.bpm.process.parser.flow.FlowParser;
 import com.douglei.bpm.process.parser.task.TaskMetadata;
 import com.douglei.bpm.process.parser.task.event.StartEventParser;

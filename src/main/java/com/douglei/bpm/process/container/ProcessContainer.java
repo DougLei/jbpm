@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.container;
 
-import com.douglei.bpm.process.executer.Process;
+import com.douglei.bpm.process.executor.Process;
 
 /**
  * 流程容器

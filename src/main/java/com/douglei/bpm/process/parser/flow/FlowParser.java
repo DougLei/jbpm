@@ -3,8 +3,8 @@ package com.douglei.bpm.process.parser.flow;
 import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.process.executer.flow.Flow;
-import com.douglei.bpm.process.executer.flow.FlowMode;
+import com.douglei.bpm.process.executor.flow.Flow;
+import com.douglei.bpm.process.executor.flow.FlowMode;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.tools.utils.datatype.VerifyTypeMatchUtil;

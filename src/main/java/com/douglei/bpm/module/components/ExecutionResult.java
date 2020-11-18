@@ -1,5 +1,7 @@
 package com.douglei.bpm.module.components;
 
+import java.util.Arrays;
+
 import com.douglei.i18n.Result;
 
 /**
@@ -31,5 +33,12 @@ public class ExecutionResult<T> extends Result{
 	}
 	public Object[] getExtendObjects() {
 		return extendObjects;
+	}
+	
+	@Override
+	public String toString() {
+		if(success)
+			return getClass().getSimpleName() + " [success=true, object=" + object + ", extendObjects=" + Arrays.toString(extendObjects) +"]";
+		return getClass().getSimpleName() + " [success=false, originMessage=" + getOriginMessage() + ", code=" + getCode() + ", params=" + Arrays.toString(getParams()) +"]";
 	}
 }

@@ -7,7 +7,6 @@ import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.repository.type.entity.ProcessType;
-import com.douglei.i18n.I18nContext;
 import com.douglei.orm.context.IdRepeatedException;
 
 public class ProcessTypeTest {
@@ -21,11 +20,10 @@ public class ProcessTypeTest {
 	@Test
 	public void save() {
 		ProcessType type = new ProcessType();
-		type.setCode("test_code2");
+		type.setCode("test_code");
 		type.setName("测试类型");
 		ExecutionResult<ProcessType> result = engine.getRepositoryModule().getTypeService().save(type);
 		System.out.println(result);
-		System.out.println(I18nContext.getMessage(result));
 		System.out.println(type.getId());
 	}
 	

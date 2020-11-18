@@ -92,7 +92,7 @@ public class BeanFactory {
 		Class<?> currentClass = (object instanceof ProxyBean)?((ProxyBean)object).getOriginObject().getClass():object.getClass();
 		do{
 			for (Field field : currentClass.getDeclaredFields()) {
-				if(field.getAnnotation(Attribute.class) != null)
+				if(field.getAnnotation(Autowire.class) != null)
 					setValue(object, field, beanContainer.get(field.getType()));
 			}
 			currentClass = currentClass.getSuperclass();

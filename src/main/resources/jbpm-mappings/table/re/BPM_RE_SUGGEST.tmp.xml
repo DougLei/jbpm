@@ -4,8 +4,9 @@
 	<table name="BPM_RE_SUGGEST" createMode="create" strict="true">
 		<columns>
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
-			<column name="USER_" property="user_" dataType="nstring" length="150" />
-			<column name="CONTENT" property="content" dataType="nstring" length="300" nullable="false" />
+			<column name="USER_ID" property="userId" dataType="nstring" length="150" />
+			<column name="CONTENT_" property="content" dataType="nstring" length="300" nullable="false" />
+			<column name="TENANT_ID" property="tenantId" dataType="nstring" length="150" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

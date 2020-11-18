@@ -7,6 +7,7 @@
 			<column name="NAME" property="name" dataType="nstring" length="150" nullable="false" />
 			<column name="TYPE" property="type" dataType="number" length="2" nullable="false" />
 			<column name="TERM" property="term" dataType="string" length="300" nullable="false" />
+			<column name="TENANT_ID" property="tenantId" dataType="nstring" length="150" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

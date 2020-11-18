@@ -9,10 +9,10 @@ import com.douglei.bpm.module.repository.definition.entity.ProcessDefinitionStat
 import com.douglei.orm.sessionfactory.sessions.sqlsession.SqlSession;
 
 /**
- * 流程启动器
+ * 流程的启动参数
  * @author DougLei
  */
-public class ProcessStarter {
+public class StartParameter {
 	private int processDefinitionId; // 流程定义的id
 	
 	private String code; // 流程code
@@ -22,30 +22,30 @@ public class ProcessStarter {
 	private String startUser; // 启动人
 	private Map<String, Variable> variables; // 流程变量map集合
 	
-	public ProcessStarter(int processDefinitionId) {
+	public StartParameter(int processDefinitionId) {
 		this.processDefinitionId = processDefinitionId;
 	}
-	public ProcessStarter(String code, String version) {
+	public StartParameter(String code, String version) {
 		this.code = code;
 		this.version = version;
 	}
 	
-	public ProcessStarter setBusinessId(String businessId) {
+	public StartParameter setBusinessId(String businessId) {
 		this.businessId = businessId;
 		return this;
 	}
-	public ProcessStarter setStartUser(String startUser) {
+	public StartParameter setStartUser(String startUser) {
 		this.startUser = startUser;
 		return this;
 	}
 	
-	public ProcessStarter addVariable(String name, Object value) {
+	public StartParameter addVariable(String name, Object value) {
 		if(this.variables == null)
 			this.variables = new HashMap<String, Variable>();
 		this.variables.put(name, new Variable(name, value));
 		return this;
 	}
-	public ProcessStarter addVariables(Map<String, Object> variables) {
+	public StartParameter addVariables(Map<String, Object> variables) {
 		if(this.variables == null)
 			this.variables = new HashMap<String, Variable>();
 		
@@ -53,6 +53,9 @@ public class ProcessStarter {
 		return this;
 	}
 	
+	public int getProcessDefinitionId() {
+		return processDefinitionId;
+	}
 	public String getBusinessId() {
 		return businessId;
 	}
@@ -64,11 +67,11 @@ public class ProcessStarter {
 	}
 	
 	/**
-	 * 获取验证后的流程定义id值
+	 * 获取在数据库验证后的流程定义id值
 	 * @param session
 	 * @return
 	 */
-	int getProcessDefinitionIdAfterValidate(SqlSession session) {
+	int getProcessDefinitionIdAfterDBValidate(SqlSession session) {
 		if(processDefinitionId > 0) {
 			Object[] processDefinition = session.uniqueQuery_("select state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 			if(processDefinition == null || Byte.parseByte(processDefinition[0].toString()) == ProcessDefinitionStateConstants.DELETE)

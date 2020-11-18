@@ -8,8 +8,9 @@
 			<column name="TITLE" property="title" dataType="nstring" length="200" nullable="false"/>
 			<column name="BUSINESS_ID" property="businessId" dataType="string" length="100"/>
 			<column name="STATE" property="state" dataType="number" length="1" defaultValue="0" nullable="false"/>
-			<column name="START_USER" property="startUser" dataType="nstring" length="150" />
+			<column name="START_USER_ID" property="startUserId" dataType="nstring" length="150" />
 			<column name="START_TIME" property="startTime" dataType="datetime" nullable="false" />
+			<column name="TENANT_ID" property="tenantId" dataType="nstring" length="150" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

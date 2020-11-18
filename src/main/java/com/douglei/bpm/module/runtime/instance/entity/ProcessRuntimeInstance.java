@@ -12,8 +12,9 @@ public class ProcessRuntimeInstance {
 	protected String title;
 	protected String businessId;
 	protected int state;
-	protected String startUser;
+	protected String startUserId;
 	protected Date startTime;
+	private String tenantId;
 	
 	public int getId() {
 		return id;
@@ -45,16 +46,22 @@ public class ProcessRuntimeInstance {
 	public void setState(int state) {
 		this.state = state;
 	}
-	public String getStartUser() {
-		return startUser;
+	public String getStartUserId() {
+		return startUserId;
 	}
-	public void setStartUser(String startUser) {
-		this.startUser = startUser;
+	public void setStartUserId(String startUserId) {
+		this.startUserId = startUserId;
 	}
 	public Date getStartTime() {
 		return startTime;
 	}
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
+	}
+	public String getTenantId() {
+		return tenantId;
+	}
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 }

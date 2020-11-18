@@ -8,6 +8,7 @@ public class ProcessType {
 	private int id;
 	private String code;
 	private String name;
+	private String tenantId;
 
 	public int getId() {
 		return id;
@@ -26,5 +27,11 @@ public class ProcessType {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getTenantId() {
+		return tenantId;
+	}
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 }

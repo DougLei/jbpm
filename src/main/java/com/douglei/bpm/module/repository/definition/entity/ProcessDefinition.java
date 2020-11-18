@@ -17,6 +17,7 @@ public class ProcessDefinition {
 	private String signature;
 	private int state;
 	private String description;
+	private String tenantId;
 	
 	public ProcessDefinition(String name, String code, String version) {
 		if(StringUtil.isEmpty(code))
@@ -80,5 +81,11 @@ public class ProcessDefinition {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public String getTenantId() {
+		return tenantId;
+	}
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 }

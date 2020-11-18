@@ -2,10 +2,10 @@ package com.douglei.bpm.process.parser.flow;
 
 import org.dom4j.Element;
 
-import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.process.executor.flow.Flow;
 import com.douglei.bpm.process.executor.flow.FlowMode;
 import com.douglei.bpm.process.parser.Parser;
+import com.douglei.bpm.process.parser.ParserBean;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.tools.utils.datatype.VerifyTypeMatchUtil;
 
@@ -13,7 +13,7 @@ import com.douglei.tools.utils.datatype.VerifyTypeMatchUtil;
  * 
  * @author DougLei
  */
-@Bean(isTransaction = false)
+@ParserBean
 public class FlowParser implements Parser<FlowMetadata, Flow> {
 
 	@Override

@@ -1,6 +1,6 @@
 package com.douglei.bpm;
 
-import com.douglei.bpm.bean.Attribute;
+import com.douglei.bpm.bean.Autowire;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
@@ -13,13 +13,13 @@ import com.douglei.orm.mapping.handler.MappingHandlerException;
 public abstract class ProcessEngine {
 	protected String id; // 引擎id, 即SessionFactory的id, 所以也可以从SessionFactoryContainer.get().getId()来获取
 	
-	@Attribute
+	@Autowire
 	private RepositoryModule repositoryModule;
 	
-	@Attribute
+	@Autowire
 	private RuntimeModule runtimeModule;
 	
-	@Attribute
+	@Autowire
 	private HistoryModule historyModule;
 	
 	protected ProcessEngine(String id) {

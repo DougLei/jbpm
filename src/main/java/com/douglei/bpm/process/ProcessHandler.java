@@ -2,7 +2,7 @@ package com.douglei.bpm.process;
 
 import java.util.Arrays;
 
-import com.douglei.bpm.bean.Attribute;
+import com.douglei.bpm.bean.Autowire;
 import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.bpm.process.container.ProcessContainer;
@@ -18,44 +18,44 @@ import com.douglei.orm.context.transaction.component.Transaction;
 @Bean
 public class ProcessHandler {
 	
-	@Attribute
-	private ProcessParser processParser;
+	@Autowire
+	private ProcessParser parser;
 	
-	@Attribute
+	@Autowire
 	private ProcessContainer container;
 	
 	/**
-	 * 添加流程
+	 * 添加指定id的流程
 	 * @param processDefinition
 	 * @return 返回解析出的流程执行器实例
 	 */
-	public Process put(ProcessDefinition processDefinition) {
-		Process process = processParser.parse(processDefinition.getId(), processDefinition.getContent());
+	public Process add(ProcessDefinition processDefinition) {
+		Process process = parser.parse(processDefinition);
 		container.addProcess(process);
 		return process;
 	}
 	
 	/**
-	 * 移除流程
-	 * @param processDefinitionId
+	 * 删除指定key的流程
+	 * @param key
 	 */
-	public void remove(int processDefinitionId) {
-		container.deleteProcess(processDefinitionId);
+	public void delete(String key) {
+		container.deleteProcess(key);
 	}
 
 	/**
-	 * 获取流程
-	 * @param processDefinitionId
+	 * 获取指定id的流程
+	 * @param id
 	 * @return
 	 */
 	@Transaction
-	public Process get(int processDefinitionId) {
-		Process process =  container.getProcess(processDefinitionId);
+	public Process get(String id) {
+		Process process =  container.getProcess(id);
 		if(process == null) {
 			ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, content_ from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 			if(processDefinition == null)
-				throw new NullPointerException("不存在id为["+processDefinitionId+"]的流程定义");
-			process = put(processDefinition);
+				throw new NullPointerException("不存在id为["+id+"]的流程定义");
+			process = add(processDefinition);
 		}
 		return process;
 	}

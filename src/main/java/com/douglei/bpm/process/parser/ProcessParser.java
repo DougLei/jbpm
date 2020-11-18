@@ -12,8 +12,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import com.douglei.bpm.bean.Attribute;
 import com.douglei.bpm.bean.Bean;
+import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.bpm.process.executor.Process;
 import com.douglei.bpm.process.executor.flow.Flow;
 import com.douglei.bpm.process.executor.task.Task;
@@ -23,29 +23,41 @@ import com.douglei.bpm.process.parser.flow.FlowMetadata;
 import com.douglei.bpm.process.parser.flow.FlowParser;
 import com.douglei.bpm.process.parser.task.TaskMetadata;
 import com.douglei.bpm.process.parser.task.event.StartEventParser;
+import com.douglei.tools.instances.resource.scanner.impl.ClassScanner;
 import com.douglei.tools.utils.StringUtil;
+import com.douglei.tools.utils.reflect.ClassLoadUtil;
+import com.douglei.tools.utils.reflect.ConstructorUtil;
 
 /**
  * process解析器
  * @author DougLei
  */
 @Bean(isTransaction = false)
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class ProcessParser {
-	
-	@Attribute
-	private StartEventParser startEventParser;
-	
-	@Attribute
-	private FlowParser flowParser;
-	
-	@Attribute
-	private ParserContainer parserContainer;
+	private static Map<String, Parser<TaskMetadata, ? extends Task>> parserMap = new HashMap<String, Parser<TaskMetadata,? extends Task>>();
+	private static StartEventParser startEventParser;
+	private static FlowParser flowParser;
+	static {
+		new ClassScanner().scan(ProcessParser.class.getPackage().getName()).forEach(classpath -> {
+			Class<?> clazz = ClassLoadUtil.loadClass(classpath);
+			if(clazz.getAnnotation(ParserBean.class) != null) {
+				Parser parser = (Parser) ConstructorUtil.newInstance(clazz);
+				if("startEvent".equals(parser.elementName())) {
+					startEventParser = (StartEventParser)parser;
+				}else if("flow".equals(parser.elementName())) {
+					flowParser = (FlowParser)parser;
+				}
+				parserMap.put(parser.elementName(), parser);
+			}
+		});
+	}
 	
 	@SuppressWarnings("unchecked")
-	public Process parse(int processDefinitionId, String content) throws ProcessParseException {
+	public Process parse(ProcessDefinition processDefinition) throws ProcessParseException {
 		Document document;
 		try {
-			document = new SAXReader().read(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
+			document = new SAXReader().read(new ByteArrayInputStream(processDefinition.getContent().getBytes(StandardCharsets.UTF_8)));
 		} catch (DocumentException e) {
 			throw new ProcessParseException("读取流程配置内容时出现异常", e);
 		}
@@ -74,22 +86,25 @@ public class ProcessParser {
 		List<FlowMetadata> flowMetadatas = new ArrayList<FlowMetadata>(elements.size());
 		Map<String, Object> taskMap = new HashMap<String, Object>();
 		
-		String id, elementName;
+		String elementName, id;
 		for (Element element : elements) {
+			elementName = element.getName();
+			if(!parserMap.containsKey(elementName))
+				throw new ProcessParseException("流程引擎不支持解析<"+elementName+">标签");
+			
 			id = element.attributeValue("id");
 			if(StringUtil.isEmpty(id))
 				throw new ProcessParseException("流程中连线/任务的id值不能为空");
 			if(idExists4flowMetadatas(id, flowMetadatas) || (!taskMap.isEmpty() && taskMap.containsKey(id)) || (startEvent != null && startEvent.getId().equals(id)))
 				throw new ProcessParseException("流程中连线/任务的id值出现重复: " + id);
 			
-			elementName = element.getName();
-			if(elementName.equals(startEventParser.elementName())) {
+			if(startEventParser.elementName().equals(elementName)) {
 				if(startEvent != null)
 					throw new ProcessParseException("流程中只能配置一个起始事件");
 				startEvent = startEventParser.parse(new TaskMetadata(id, element));
-			}else if(elementName.equals(flowParser.elementName())) {
+			}else if(flowParser.elementName().equals(elementName)) {
 				flowMetadatas.add(new FlowMetadata(id, element));
-			}else { 
+			}else {
 				taskMap.put(id, element);
 			}
 		}
@@ -145,7 +160,7 @@ public class ProcessParser {
 					
 					Task targetTask = null;
 					if(taskObj instanceof Element) {
-						targetTask = parserContainer.parse(new TaskMetadata(flowMetadata.getTarget(), (Element)taskObj));
+						targetTask = parserMap.get(((Element)taskObj).getName()).parse(new TaskMetadata(flowMetadata.getTarget(), (Element)taskObj));
 						taskMap.put(targetTask.getId(), targetTask);
 					}else {
 						targetTask = (Task) taskObj;

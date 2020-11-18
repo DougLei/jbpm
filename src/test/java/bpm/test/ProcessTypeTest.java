@@ -7,13 +7,12 @@ import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.repository.type.entity.ProcessType;
-import com.douglei.orm.context.IdRepeatedException;
 
 public class ProcessTypeTest {
 	private ProcessEngine engine;
 	
 	@Before
-	public void init() throws IdRepeatedException {
+	public void init() {
 		engine = new ProcessEngineBuilder().build();
 	}
 	

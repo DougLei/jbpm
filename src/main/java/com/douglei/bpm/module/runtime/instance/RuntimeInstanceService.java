@@ -2,7 +2,7 @@ package com.douglei.bpm.module.runtime.instance;
 
 import java.util.Arrays;
 
-import com.douglei.bpm.bean.Attribute;
+import com.douglei.bpm.bean.Autowire;
 import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.components.instance.InstanceHandlePolicy;
@@ -19,7 +19,7 @@ import com.douglei.orm.context.transaction.component.Transaction;
 @Bean
 public class RuntimeInstanceService {
 	
-	@Attribute
+	@Autowire
 	private ProcessHandler processHandler;
 	
 	/**
@@ -45,12 +45,12 @@ public class RuntimeInstanceService {
 	
 	/**
 	 * 启动流程
-	 * @param starter
+	 * @param parameter
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult<ProcessRuntimeInstance> start(ProcessStarter starter) {
-		int processDefinitionId = starter.getProcessDefinitionIdAfterValidate(SessionContext.getSqlSession());
+	public ExecutionResult<ProcessRuntimeInstance> start(StartParameter parameter) {
+		int processDefinitionId = parameter.getProcessDefinitionIdAfterDBValidate(SessionContext.getSqlSession());
 		Process process = processHandler.get(processDefinitionId);
 		
 		// TODO 

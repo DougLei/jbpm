@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.douglei.bpm.module.components.ExecutionResult;
-import com.douglei.bpm.module.runtime.instance.ProcessStarter;
+import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessRuntimeInstance;
 import com.douglei.bpm.process.executor.task.Task;
 import com.douglei.bpm.process.executor.task.event.StartEvent;
@@ -42,8 +42,9 @@ public class Process implements Serializable {
 		this.taskMap.put(task.getId(), task);
 	}
 	
-	public int getId() {
-		return id;
+	public String getId() {
+		// TODO
+		return null;
 	}
 	public String getName() {
 		return name;
@@ -63,7 +64,7 @@ public class Process implements Serializable {
 	 * @param starter
 	 * @return
 	 */
-	public ExecutionResult<ProcessRuntimeInstance> start(ProcessStarter starter) {
+	public ExecutionResult<ProcessRuntimeInstance> start(StartParameter starter) {
 		// TODO Auto-generated method stub
 		
 		

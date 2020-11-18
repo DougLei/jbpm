@@ -1,5 +1,6 @@
 package com.douglei.bpm;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,15 +14,14 @@ import com.douglei.orm.sessionfactory.SessionFactory;
  * 外置SessionFactory的流程引擎, 在销毁时不能销毁SessionFactory
  * @author DougLei
  */
-class ProcessEngineOfExternalSessionFactory extends ProcessEngine {
+class ProcessEngineByExternalSessionFactory extends ProcessEngine {
 	private boolean removeSessionFactory; // 销毁时, 是否要从SessionFactoryContainer中移除SessionFactory
-	private String[] mappingCodes = {
-			"BPM_RE_DELEGATION", "BPM_RE_LISTENER", "BPM_RE_PROCDEF", "BPM_RE_PROCTYPE", "BPM_RE_SUGGEST"
-			}; // 流程的映射code数组, 在销毁时, 从SessionFactory中移除
+	private List<String> mappingFiles;// 流程的映射文件集合, 在销毁时, 根据文件获取映射的code, 并从SessionFactory中移除
 
-	ProcessEngineOfExternalSessionFactory(String id, boolean removeSessionFactory) {
+	ProcessEngineByExternalSessionFactory(String id, boolean removeSessionFactory, List<String> mappingFiles) {
 		super(id);
 		this.removeSessionFactory = removeSessionFactory;
+		this.mappingFiles = mappingFiles;
 	}
 	
 	@Override
@@ -29,12 +29,14 @@ class ProcessEngineOfExternalSessionFactory extends ProcessEngine {
 		SessionFactory sessionFactory = null;
 		if(removeSessionFactory) 
 			sessionFactory = SessionFactoryContainer.getSingleton().remove(id, false);
-		if(sessionFactory == null)
+		else
 			sessionFactory = SessionFactoryContainer.getSingleton().get(id);
 		
-		List<MappingEntity> entities = new ArrayList<MappingEntity>(mappingCodes.length);
-		for (String code : mappingCodes) 
-			entities.add(new DeleteMappingEntity(code, false));
+		List<MappingEntity> entities = new ArrayList<MappingEntity>(mappingFiles.size());
+		mappingFiles.forEach(mappingFile -> {
+			String filename = mappingFile.substring(mappingFile.lastIndexOf(File.separatorChar)+1);
+			entities.add(new DeleteMappingEntity(filename.substring(0, filename.indexOf(".")), false));
+		});
 		sessionFactory.getMappingHandler().execute(entities);
 	}
 }

@@ -3,7 +3,7 @@ package com.douglei.bpm.module.repository.definition;
 import java.util.Arrays;
 import java.util.List;
 
-import com.douglei.bpm.bean.Attribute;
+import com.douglei.bpm.bean.Autowire;
 import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.components.instance.InstanceHandlePolicy;
@@ -22,13 +22,13 @@ import com.douglei.orm.context.transaction.component.Transaction;
 @Bean
 public class ProcessDefinitionService {
 
-	@Attribute
+	@Autowire
 	private RuntimeInstanceService runtimeInstanceService;
 	
-	@Attribute
+	@Autowire
 	private HistoryInstanceService historyInstanceService;
 	
-	@Attribute
+	@Autowire
 	private ProcessHandler processHandler;
 	
 	/**
@@ -105,7 +105,7 @@ public class ProcessDefinitionService {
 			runtimeInstanceService.process(processDefinitionId, runtimeInstancePolicy);
 		
 		updateState(processDefinitionId, ProcessDefinitionStateConstants.PUBLISHED);
-		processHandler.put(processDefinition);
+		processHandler.add(processDefinition);
 		return new ExecutionResult<Integer>(processDefinitionId, runtimeInstancePolicy);
 	}
 	

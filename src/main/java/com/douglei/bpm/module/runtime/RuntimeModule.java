@@ -1,6 +1,6 @@
 package com.douglei.bpm.module.runtime;
 
-import com.douglei.bpm.bean.Attribute;
+import com.douglei.bpm.bean.Autowire;
 import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.module.runtime.instance.RuntimeInstanceService;
 import com.douglei.bpm.module.runtime.task.RuntimeTaskService;
@@ -12,10 +12,10 @@ import com.douglei.bpm.module.runtime.task.RuntimeTaskService;
 @Bean(isTransaction = false)
 public class RuntimeModule{
 	
-	@Attribute
+	@Autowire
 	private RuntimeInstanceService runtimeInstanceService;
 	
-	@Attribute
+	@Autowire
 	private RuntimeTaskService runtimeTaskService;
 
 	public RuntimeInstanceService getRuntimeInstanceService() {

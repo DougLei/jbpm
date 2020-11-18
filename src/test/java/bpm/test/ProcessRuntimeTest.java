@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
-import com.douglei.bpm.module.runtime.instance.ProcessStarter;
+import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.orm.context.IdRepeatedException;
 
@@ -19,7 +19,7 @@ public class ProcessRuntimeTest {
 	
 	@Test
 	public void start() throws ProcessParseException {
-		ProcessStarter starter = new ProcessStarter(1);
+		StartParameter starter = new StartParameter(1);
 		engine.getRuntimeModule().getRuntimeInstanceService().start(starter );
 	}
 }

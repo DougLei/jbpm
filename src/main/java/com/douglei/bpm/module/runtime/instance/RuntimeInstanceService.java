@@ -29,7 +29,7 @@ public class RuntimeInstanceService {
 	 */
 	@Transaction
 	public boolean exists(int processDefinitionId) {
-		return SessionContext.getSqlSession().countQuery("select count(id) from bpm_ru_procinst where procdef_id=?", Arrays.asList(processDefinitionId)) > 0;
+		return Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_("select count(id) from bpm_ru_procinst where procdef_id=?", Arrays.asList(processDefinitionId))[0].toString()) > 0;
 	}
 
 	/**
@@ -52,6 +52,8 @@ public class RuntimeInstanceService {
 	public ExecutionResult<ProcessRuntimeInstance> start(ProcessStarter starter) {
 		int processDefinitionId = starter.getProcessDefinitionIdAfterValidate(SessionContext.getSqlSession());
 		Process process = processHandler.get(processDefinitionId);
+		
+		// TODO 
 		return process.start(starter);
 	}
 	

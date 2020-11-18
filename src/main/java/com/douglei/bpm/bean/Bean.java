@@ -1,4 +1,4 @@
-package com.douglei.bpm.bean.annotation;
+package com.douglei.bpm.bean;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 public @interface Bean {
 	
 	/**
-	 * bean对应的class, 默认Object.class
+	 * bean对应的class, 默认是Object.class
 	 * @return
 	 */
 	Class<?> clazz() default Object.class;
@@ -24,4 +24,10 @@ public @interface Bean {
 	 * @return
 	 */
 	boolean isTransaction() default true;
+	
+	/**
+	 * 是否懒加载, 默认是false
+	 * @return
+	 */
+	boolean isLazy() default false;
 }

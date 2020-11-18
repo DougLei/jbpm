@@ -10,7 +10,7 @@ public class ProcessRuntimeInstance {
 	protected int id;
 	protected int procdefId;
 	protected String title;
-	protected String busiId;
+	protected String businessId;
 	protected int state;
 	protected String startUser;
 	protected Date startTime;
@@ -33,11 +33,11 @@ public class ProcessRuntimeInstance {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getBusiId() {
-		return busiId;
+	public String getBusinessId() {
+		return businessId;
 	}
-	public void setBusiId(String busiId) {
-		this.busiId = busiId;
+	public void setBusinessId(String businessId) {
+		this.businessId = businessId;
 	}
 	public int getState() {
 		return state;

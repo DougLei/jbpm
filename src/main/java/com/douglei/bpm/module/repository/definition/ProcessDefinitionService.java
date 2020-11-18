@@ -3,8 +3,8 @@ package com.douglei.bpm.module.repository.definition;
 import java.util.Arrays;
 import java.util.List;
 
-import com.douglei.bpm.bean.annotation.Attribute;
-import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.bean.Attribute;
+import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.components.instance.InstanceHandlePolicy;
 import com.douglei.bpm.module.history.instance.HistoryInstanceService;

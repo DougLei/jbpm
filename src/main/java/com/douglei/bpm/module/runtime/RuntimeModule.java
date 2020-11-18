@@ -1,7 +1,7 @@
 package com.douglei.bpm.module.runtime;
 
-import com.douglei.bpm.bean.annotation.Attribute;
-import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.bean.Attribute;
+import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.module.runtime.instance.RuntimeInstanceService;
 import com.douglei.bpm.module.runtime.task.RuntimeTaskService;
 

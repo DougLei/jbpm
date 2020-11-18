@@ -6,7 +6,7 @@
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
 			<column name="PROCDEF_ID" property="procdefId" dataType="number" length="10" nullable="false"/>
 			<column name="TITLE" property="title" dataType="nstring" length="200" nullable="false"/>
-			<column name="BUSI_ID" property="busiId" dataType="string" length="100"/>
+			<column name="BUSINESS_ID" property="businessId" dataType="string" length="100"/>
 			<column name="STATE" property="state" dataType="number" length="1" defaultValue="0" nullable="false"/>
 			<column name="START_USER" property="startUser" dataType="nstring" length="150" />
 			<column name="START_TIME" property="startTime" dataType="datetime" nullable="false" />

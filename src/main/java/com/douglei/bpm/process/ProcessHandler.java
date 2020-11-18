@@ -2,8 +2,8 @@ package com.douglei.bpm.process;
 
 import java.util.Arrays;
 
-import com.douglei.bpm.bean.annotation.Attribute;
-import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.bean.Attribute;
+import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.bpm.process.container.ProcessContainer;
 import com.douglei.bpm.process.executor.Process;
@@ -12,7 +12,7 @@ import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
 
 /**
- * 流程处理器
+ * 
  * @author DougLei
  */
 @Bean
@@ -25,9 +25,9 @@ public class ProcessHandler {
 	private ProcessContainer container;
 	
 	/**
-	 * 保存流程
+	 * 添加流程
 	 * @param processDefinition
-	 * @return 返回解析出的流程实例
+	 * @return 返回解析出的流程执行器实例
 	 */
 	public Process put(ProcessDefinition processDefinition) {
 		Process process = processParser.parse(processDefinition.getId(), processDefinition.getContent());
@@ -36,7 +36,7 @@ public class ProcessHandler {
 	}
 	
 	/**
-	 * 删除流程
+	 * 移除流程
 	 * @param processDefinitionId
 	 */
 	public void remove(int processDefinitionId) {

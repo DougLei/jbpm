@@ -2,14 +2,13 @@ package com.douglei.bpm.bean;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.douglei.aop.ProxyBean;
 import com.douglei.aop.ProxyBeanContext;
-import com.douglei.aop.ProxyMethod;
-import com.douglei.bpm.bean.annotation.Attribute;
-import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.orm.context.TransactionProxyInterceptor;
 import com.douglei.orm.context.transaction.component.Transaction;
 import com.douglei.orm.context.transaction.component.TransactionComponentEntity;
@@ -23,42 +22,40 @@ import com.douglei.tools.utils.reflect.ConstructorUtil;
  */
 public class BeanFactory {
 	private Map<Class<?>, Object> beanContainer = new HashMap<Class<?>, Object>(128);
+	private List<LazyBean> lazyBeanContainer = new ArrayList<LazyBean>(10);
 	
 	public BeanFactory() {
-		initBeanContainer();
+		Class<?> loadClass = null;
+		Bean beanAnnotation = null;
+		for (String clz : new ClassScanner().scan(true, "com.douglei.bpm")) { // 扫描指定路径下的所有class
+			loadClass = ClassLoadUtil.loadClass(clz);
+			if((beanAnnotation = loadClass.getAnnotation(Bean.class)) == null)
+				continue;
+			
+			if(beanAnnotation.isLazy()) 
+				lazyBeanContainer.add(new LazyBean(beanAnnotation, loadClass));
+			else
+				putInstance2BeanContainer(beanAnnotation.isTransaction(), (beanAnnotation.clazz()==Object.class)?loadClass:beanAnnotation.clazz(), loadClass);
+		}
 	}
 	
-	/**
-	 * 初始化Bean容器
-	 */
-	private void initBeanContainer() {
-		Class<?> loadClass = null;
-		Bean beanAnno = null;
-		Method[] declareMethods = null;
-		for (String clz : new ClassScanner().scan("com.douglei.bpm")) { // 扫描指定路径下的所有class
-			loadClass = ClassLoadUtil.loadClass(clz);
-			beanAnno = loadClass.getAnnotation(Bean.class);
-			
-			if(beanAnno != null) {
-				if(beanAnno.isTransaction()) {
-					TransactionComponentEntity entity = null;
-					
-					declareMethods = loadClass.getDeclaredMethods();
-					for (Method method : declareMethods) {
-						if(method.getAnnotation(Transaction.class) != null) {
-							if(entity == null)
-								entity = new TransactionComponentEntity(loadClass, declareMethods.length);
-							entity.addMethod(new ProxyMethod(method));
-						}
-					}
-					if(entity != null) {
-						beanContainer.put(beanAnno.clazz()==Object.class?loadClass:beanAnno.clazz(), ProxyBeanContext.createProxy(loadClass, new TransactionProxyInterceptor(entity.getClazz(), entity.getMethods())));
-						continue;
-					}
+	// 将bean实例put到Bean容器中
+	private void putInstance2BeanContainer(boolean isTransactionBean, Class<?> key, Class<?> loadClass) {
+		if(isTransactionBean) {
+			TransactionComponentEntity entity = null;
+			for (Method method : loadClass.getDeclaredMethods()) {
+				if(method.getAnnotation(Transaction.class) != null) {
+					if(entity == null)
+						entity = new TransactionComponentEntity(loadClass);
+					entity.addMethod(method);
 				}
-				beanContainer.put(beanAnno.clazz()==Object.class?loadClass:beanAnno.clazz(), ConstructorUtil.newInstance(loadClass));
+			}
+			if(entity != null) {
+				beanContainer.put(key, ProxyBeanContext.createProxy(loadClass, new TransactionProxyInterceptor(entity.getClazz(), entity.getMethods())));
+				return;
 			}
 		}
+		beanContainer.put(key, ConstructorUtil.newInstance(loadClass));
 	}
 	
 	/**
@@ -75,11 +72,19 @@ public class BeanFactory {
 	 */
 	public void setBeanAttributes() {
 		try {
+			lazyBeanContainer.forEach(lazyBean -> {
+				if(!beanContainer.containsKey(lazyBean.getKey()))
+					putInstance2BeanContainer(lazyBean.isTransactionBean(), lazyBean.getKey(), lazyBean.getLoadClass());
+			});
+			
 			for(Object object : beanContainer.values())
 				setAttribute(object);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		} finally {
+			beanContainer.clear();
+			lazyBeanContainer.clear();
+		}
 	}
 	
 	// 给对象的属性赋值

@@ -18,7 +18,7 @@ public class ProcessStarter {
 	private String code; // 流程code
 	private String version; // 流程版本
 	
-	private String busiId; // (主)业务标识
+	private String businessId; // (主)业务标识
 	private String startUser; // 启动人
 	private Map<String, Variable> variables; // 流程变量map集合
 	
@@ -30,8 +30,8 @@ public class ProcessStarter {
 		this.version = version;
 	}
 	
-	public ProcessStarter setBusiId(String busiId) {
-		this.busiId = busiId;
+	public ProcessStarter setBusinessId(String businessId) {
+		this.businessId = businessId;
 		return this;
 	}
 	public ProcessStarter setStartUser(String startUser) {
@@ -53,8 +53,8 @@ public class ProcessStarter {
 		return this;
 	}
 	
-	public String getBusiId() {
-		return busiId;
+	public String getBusinessId() {
+		return businessId;
 	}
 	public String getStartUser() {
 		return startUser;
@@ -75,14 +75,14 @@ public class ProcessStarter {
 				throw new NullPointerException("启动失败, 不存在id为["+processDefinitionId+"]的流程定义");
 			if(Byte.parseByte(processDefinition[0].toString()) == ProcessDefinitionStateConstants.UNPUBLISHED)
 				throw new IllegalArgumentException("启动失败, id为["+processDefinitionId+"]的流程定义还未发布");
-			return this.processDefinitionId;
+		}else {
+			Object[] processDefinition = session.queryFirst_("select state, id from bpm_re_procdef where code=? and version=? order by subversion desc", Arrays.asList(code, version));
+			if(processDefinition == null || Byte.parseByte(processDefinition[0].toString()) == ProcessDefinitionStateConstants.DELETE)
+				throw new NullPointerException("启动失败, 不存在code为["+code+"], version为["+version+"]的流程定义");
+			if(Byte.parseByte(processDefinition[0].toString()) == ProcessDefinitionStateConstants.UNPUBLISHED)
+				throw new IllegalArgumentException("启动失败, code为["+code+"], version为["+version+"]的流程定义还未发布");
+			this.processDefinitionId = Integer.parseInt(processDefinition[1].toString());
 		}
-		
-		Object[] processDefinition = session.queryFirst_("select state, id from bpm_re_procdef where code=? and version=? order by subversion desc", Arrays.asList(code, version));
-		if(processDefinition == null || Byte.parseByte(processDefinition[0].toString()) == ProcessDefinitionStateConstants.DELETE)
-			throw new NullPointerException("启动失败, 不存在code为["+code+"], version为["+version+"]的流程定义");
-		if(Byte.parseByte(processDefinition[0].toString()) == ProcessDefinitionStateConstants.UNPUBLISHED)
-			throw new IllegalArgumentException("启动失败, code为["+code+"], version为["+version+"]的流程定义还未发布");
-		return Integer.parseInt(processDefinition[1].toString());
+		return this.processDefinitionId;
 	}
 }

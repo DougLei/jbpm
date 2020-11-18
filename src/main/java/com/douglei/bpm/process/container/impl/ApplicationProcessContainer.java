@@ -3,7 +3,7 @@ package com.douglei.bpm.process.container.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.process.container.ProcessContainer;
 import com.douglei.bpm.process.executor.Process;
 
@@ -11,9 +11,9 @@ import com.douglei.bpm.process.executor.Process;
  * 
  * @author DougLei
  */
-@Bean(isTransaction=false, clazz=ProcessContainer.class)
+@Bean(clazz=ProcessContainer.class, isTransaction=false, isLazy=true)
 public class ApplicationProcessContainer implements ProcessContainer {
-	private Map<Integer, Process> container = new HashMap<Integer, Process>(64);
+	private final Map<Integer, Process> container = new HashMap<Integer, Process>(64);
 
 	@Override
 	public void clear() {

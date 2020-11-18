@@ -3,7 +3,7 @@ package com.douglei.bpm.process.parser;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.process.executor.task.Task;
 import com.douglei.bpm.process.parser.flow.FlowParser;
 import com.douglei.bpm.process.parser.task.TaskMetadata;

@@ -1,4 +1,4 @@
-package com.douglei.bpm.bean.annotation;
+package com.douglei.bpm.bean;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

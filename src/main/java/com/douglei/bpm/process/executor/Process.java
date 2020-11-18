@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.douglei.bpm.module.components.ExecutionResult;
+import com.douglei.bpm.module.runtime.instance.ProcessStarter;
+import com.douglei.bpm.module.runtime.instance.entity.ProcessRuntimeInstance;
 import com.douglei.bpm.process.executor.task.Task;
 import com.douglei.bpm.process.executor.task.event.StartEvent;
 import com.douglei.tools.utils.StringUtil;
@@ -14,7 +16,7 @@ import com.douglei.tools.utils.StringUtil;
  * @author DougLei
  */
 public class Process implements Serializable {
-	private int id;
+	private int id; // 即流程定义id
 	private String code;
 	private String version;
 	private String name;
@@ -24,8 +26,8 @@ public class Process implements Serializable {
 	private StartEvent startEvent;
 	private Map<String, Task> taskMap = new HashMap<String, Task>();
 	
-	public Process(int id, String code, String version, String name, String title, String pageID) {
-		this.id = id;
+	public Process(int processDefinitionId, String code, String version, String name, String title, String pageID) {
+		this.id = processDefinitionId;
 		this.code = code;
 		this.version = version;
 		this.name = StringUtil.isEmpty(name)?(code+":"+version):name;
@@ -56,12 +58,18 @@ public class Process implements Serializable {
 		return pageID;
 	}
 
-	
-	
-	
-	public ExecutionResult executeStart() {
+	/**
+	 * 启动流程
+	 * @param starter
+	 * @return
+	 */
+	public ExecutionResult<ProcessRuntimeInstance> start(ProcessStarter starter) {
 		// TODO Auto-generated method stub
 		
-		return this.startEvent.execute();
+		
+		startEvent.execute();
+		
+		
+		return null;
 	}
 }

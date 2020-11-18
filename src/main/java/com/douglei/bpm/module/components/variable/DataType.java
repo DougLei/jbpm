@@ -22,11 +22,10 @@ public enum DataType {
 		this.value = value;
 		this.supportClasses = supportClasses;
 	}
-
 	public int getValue() {
 		return value;
 	}
-
+	
 	/**
 	 * 根据值获取对应的数据类型
 	 * @param value

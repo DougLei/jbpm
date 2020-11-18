@@ -12,8 +12,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import com.douglei.bpm.bean.annotation.Attribute;
-import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.bean.Attribute;
+import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.process.executor.Process;
 import com.douglei.bpm.process.executor.flow.Flow;
 import com.douglei.bpm.process.executor.task.Task;
@@ -42,7 +42,7 @@ public class ProcessParser {
 	private ParserContainer parserContainer;
 	
 	@SuppressWarnings("unchecked")
-	public Process parse(int id, String content) throws ProcessParseException {
+	public Process parse(int processDefinitionId, String content) throws ProcessParseException {
 		Document document;
 		try {
 			document = new SAXReader().read(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
@@ -59,7 +59,7 @@ public class ProcessParser {
 		if(StringUtil.isEmpty(version))
 			throw new ProcessParseException("流程的版本值不能为空");
 		
-		Process process = new Process(id, code, version, processElement.attributeValue("name"), processElement.attributeValue("title"), processElement.attributeValue("pageID"));
+		Process process = new Process(processDefinitionId, code, version, processElement.attributeValue("name"), processElement.attributeValue("title"), processElement.attributeValue("pageID"));
 		buildProcessStruct(process, processElement.elements());
 		return process;
 	}

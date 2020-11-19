@@ -21,8 +21,8 @@ import com.douglei.tools.utils.reflect.ConstructorUtil;
  * @author DougLei
  */
 public class BeanFactory {
+	private List<LazyBean> lazyBeanContainer = new ArrayList<LazyBean>(15);
 	private Map<Class<?>, Object> beanContainer = new HashMap<Class<?>, Object>(128);
-	private List<LazyBean> lazyBeanContainer = new ArrayList<LazyBean>(10);
 	
 	public BeanFactory() {
 		Class<?> loadClass = null;
@@ -68,7 +68,7 @@ public class BeanFactory {
 	}
 	
 	/**
-	 * 设置Bean容器中每个Bean的属性
+	 * 设置Bean容器中每个Bean的属性(自动装配)
 	 */
 	public void setBeanAttributes() {
 		try {
@@ -82,8 +82,8 @@ public class BeanFactory {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			beanContainer.clear();
 			lazyBeanContainer.clear();
+			beanContainer.clear();
 		}
 	}
 	

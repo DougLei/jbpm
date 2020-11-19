@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.executor;
+package com.douglei.bpm.process.node;
 
 import java.io.Serializable;
 

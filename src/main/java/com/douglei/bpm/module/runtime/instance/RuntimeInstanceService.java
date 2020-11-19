@@ -7,8 +7,8 @@ import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.components.instance.InstanceHandlePolicy;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessRuntimeInstance;
+import com.douglei.bpm.module.runtime.instance.start.StartParameter;
 import com.douglei.bpm.process.ProcessHandler;
-import com.douglei.bpm.process.executor.Process;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
 
@@ -38,7 +38,7 @@ public class RuntimeInstanceService {
 	 * @param policy 对实例的处理策略
 	 */
 	@Transaction
-	public void process(int processDefinitionId, InstanceHandlePolicy policy) {
+	public void handle(int processDefinitionId, InstanceHandlePolicy policy) {
 		// TODO 处理指定id的流程定义, 相关的所有运行实例
 		
 	}
@@ -50,11 +50,12 @@ public class RuntimeInstanceService {
 	 */
 	@Transaction
 	public ExecutionResult<ProcessRuntimeInstance> start(StartParameter parameter) {
-		int processDefinitionId = parameter.getProcessDefinitionIdAfterDBValidate(SessionContext.getSqlSession());
-		Process process = processHandler.get(processDefinitionId);
-		
-		// TODO 
-		return process.start(starter);
+//		int processDefinitionId = parameter.getProcessDefinitionIdAfterDBValidate(SessionContext.getSqlSession());
+//		Process process = processHandler.get(processDefinitionId);
+//		
+//		// TODO 
+//		return process.start(starter);
+		return null;
 	}
 	
 //	/**

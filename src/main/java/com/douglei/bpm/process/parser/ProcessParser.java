@@ -13,12 +13,11 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import com.douglei.bpm.bean.Bean;
-import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
-import com.douglei.bpm.process.executor.Process;
-import com.douglei.bpm.process.executor.flow.Flow;
-import com.douglei.bpm.process.executor.task.Task;
-import com.douglei.bpm.process.executor.task.event.EndEvent;
-import com.douglei.bpm.process.executor.task.event.StartEvent;
+import com.douglei.bpm.process.node.Process;
+import com.douglei.bpm.process.node.flow.Flow;
+import com.douglei.bpm.process.node.task.Task;
+import com.douglei.bpm.process.node.task.event.EndEvent;
+import com.douglei.bpm.process.node.task.event.StartEvent;
 import com.douglei.bpm.process.parser.flow.FlowMetadata;
 import com.douglei.bpm.process.parser.flow.FlowParser;
 import com.douglei.bpm.process.parser.task.TaskMetadata;
@@ -35,45 +34,37 @@ import com.douglei.tools.utils.reflect.ConstructorUtil;
 @Bean(isTransaction = false)
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ProcessParser {
-	private static Map<String, Parser<TaskMetadata, ? extends Task>> parserMap = new HashMap<String, Parser<TaskMetadata,? extends Task>>();
-	private static StartEventParser startEventParser;
-	private static FlowParser flowParser;
-	static {
+	private Map<String, Parser<TaskMetadata, ? extends Task>> parserMap = new HashMap<String, Parser<TaskMetadata,? extends Task>>();
+	private StartEventParser startEventParser;
+	private FlowParser flowParser;
+	
+	public ProcessParser() {
 		new ClassScanner().scan(ProcessParser.class.getPackage().getName()).forEach(classpath -> {
 			Class<?> clazz = ClassLoadUtil.loadClass(classpath);
 			if(clazz.getAnnotation(ParserBean.class) != null) {
 				Parser parser = (Parser) ConstructorUtil.newInstance(clazz);
-				if("startEvent".equals(parser.elementName())) {
+				if(clazz == StartEventParser.class) {
 					startEventParser = (StartEventParser)parser;
-				}else if("flow".equals(parser.elementName())) {
+				}else if(clazz == FlowParser.class) {
 					flowParser = (FlowParser)parser;
 				}
 				parserMap.put(parser.elementName(), parser);
 			}
 		});
 	}
-	
-	@SuppressWarnings("unchecked")
-	public Process parse(ProcessDefinition processDefinition) throws ProcessParseException {
-		Document document;
+
+	public Process parse(int processDefinitionId, String content) throws ProcessParseException {
 		try {
-			document = new SAXReader().read(new ByteArrayInputStream(processDefinition.getContent().getBytes(StandardCharsets.UTF_8)));
+			Document document = new SAXReader().read(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
+			Element processElement = document.getRootElement().element("process");
+			Process process = new Process(processDefinitionId, 
+					processElement.attributeValue("code"), processElement.attributeValue("version"), processElement.attributeValue("name"), 
+					processElement.attributeValue("title"), processElement.attributeValue("pageID"));
+			buildProcessStruct(process, processElement.elements());
+			return process;
 		} catch (DocumentException e) {
 			throw new ProcessParseException("读取流程配置内容时出现异常", e);
 		}
-		
-		Element processElement = document.getRootElement().element("process");
-		String code = processElement.attributeValue("code");
-		if(StringUtil.isEmpty(code))
-			throw new ProcessParseException("流程的编码值不能为空");
-		
-		String version = processElement.attributeValue("version");
-		if(StringUtil.isEmpty(version))
-			throw new ProcessParseException("流程的版本值不能为空");
-		
-		Process process = new Process(processDefinitionId, code, version, processElement.attributeValue("name"), processElement.attributeValue("title"), processElement.attributeValue("pageID"));
-		buildProcessStruct(process, processElement.elements());
-		return process;
 	}
 	
 	/**

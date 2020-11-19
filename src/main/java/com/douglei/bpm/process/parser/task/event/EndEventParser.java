@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.parser.task.event;
 
-import com.douglei.bpm.process.executor.task.event.EndEvent;
+import com.douglei.bpm.process.node.task.event.EndEvent;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ParserBean;
 import com.douglei.bpm.process.parser.ProcessParseException;

@@ -1,14 +1,14 @@
-package com.douglei.bpm.process.executor;
+package com.douglei.bpm.process.node;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.douglei.bpm.module.components.ExecutionResult;
-import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessRuntimeInstance;
-import com.douglei.bpm.process.executor.task.Task;
-import com.douglei.bpm.process.executor.task.event.StartEvent;
+import com.douglei.bpm.module.runtime.instance.start.StartParameter;
+import com.douglei.bpm.process.node.task.Task;
+import com.douglei.bpm.process.node.task.event.StartEvent;
 import com.douglei.tools.utils.StringUtil;
 
 /**
@@ -16,7 +16,7 @@ import com.douglei.tools.utils.StringUtil;
  * @author DougLei
  */
 public class Process implements Serializable {
-	private int id; // 即流程定义id
+	private int id; 
 	private String code;
 	private String version;
 	private String name;
@@ -42,9 +42,8 @@ public class Process implements Serializable {
 		this.taskMap.put(task.getId(), task);
 	}
 	
-	public String getId() {
-		// TODO
-		return null;
+	public int getId() {
+		return id;
 	}
 	public String getName() {
 		return name;

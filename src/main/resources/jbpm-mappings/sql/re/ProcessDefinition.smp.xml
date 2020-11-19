@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping-configuration>
+	<sql namespace="ProcessDefinition">
+		
+		<!-- 保存时查询流程定义 -->
+		<content name="queryProcessDefinition4Save" type="select">
+			select id, subversion, signature, state from bpm_re_procdef where code = #{code} and version = #{version} 
+			
+			<if test="tenantId != null and tenantId != ''">
+				and tenant_id = #{tenantId}
+			</if>
+			
+				order by subversion desc
+		</content>
+		
+	</sql>
+</mapping-configuration>

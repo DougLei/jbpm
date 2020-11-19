@@ -7,14 +7,14 @@ package com.douglei.bpm.module.repository.definition.entity;
 public class ProcessDefinitionStateConstants {
 	
 	/**
-	 * 未发布: 0
+	 * 未部署: 0
 	 */
-	public static final byte UNPUBLISHED = 0;
+	public static final byte UNDEPLOY = 0;
 	
 	/**
-	 * 已发布:  1
+	 * 已部署:  1
 	 */
-	public static final byte PUBLISHED = 1;
+	public static final byte DEPLOY = 1;
 	
 	/**
 	 * 被删除: 2

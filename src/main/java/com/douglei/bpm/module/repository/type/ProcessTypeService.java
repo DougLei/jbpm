@@ -16,11 +16,6 @@ import com.douglei.orm.context.transaction.component.Transaction;
 @Bean
 public class ProcessTypeService {
 	
-	// 根据流程类型code, 获取对应的id
-	private Object[] getIdByCode(String code) {
-		return SessionContext.getSqlSession().uniqueQuery_("select id from bpm_re_proctype where code = ?", Arrays.asList(code));
-	}
-	
 	/**
 	 * 保存类型
 	 * @param type
@@ -28,7 +23,7 @@ public class ProcessTypeService {
 	 */
 	@Transaction
 	public ExecutionResult<ProcessType> save(ProcessType type) {
-		if(getIdByCode(type.getCode()) != null)
+		if(SessionContext.getSQLSession().uniqueQuery_("ProcessType", "query4ValidateCodeExists", type) != null)
 			return new ExecutionResult<ProcessType>("已存在编码为[%s]的流程类型", "bpm.process.type.code.exists", type.getCode());
 		
 		SessionContext.getTableSession().save(type);
@@ -42,7 +37,7 @@ public class ProcessTypeService {
 	 */
 	@Transaction
 	public ExecutionResult<ProcessType> update(ProcessType type) {
-		Object[] obj = getIdByCode(type.getCode());
+		Object[] obj = SessionContext.getSQLSession().uniqueQuery_("ProcessType", "query4ValidateCodeExists", type);
 		if(obj != null && type.getId() != Integer.parseInt(obj[0].toString())) 
 			return new ExecutionResult<ProcessType>("已存在编码为[%s]的流程类型", "bpm.process.type.code.exists", type.getCode());
 		

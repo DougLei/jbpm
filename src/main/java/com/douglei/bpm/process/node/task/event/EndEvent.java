@@ -1,6 +1,6 @@
-package com.douglei.bpm.process.executor.task.event;
+package com.douglei.bpm.process.node.task.event;
 
-import com.douglei.bpm.process.executor.task.Task;
+import com.douglei.bpm.process.node.task.Task;
 
 /**
  * 

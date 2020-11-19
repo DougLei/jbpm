@@ -1,7 +1,7 @@
-package com.douglei.bpm.process.executor.flow;
+package com.douglei.bpm.process.node.flow;
 
-import com.douglei.bpm.process.executor.ProcessNode;
-import com.douglei.bpm.process.executor.task.Task;
+import com.douglei.bpm.process.node.ProcessNode;
+import com.douglei.bpm.process.node.task.Task;
 
 /**
  * 

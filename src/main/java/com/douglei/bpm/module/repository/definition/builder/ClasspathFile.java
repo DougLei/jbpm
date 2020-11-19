@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.repository.definition;
+package com.douglei.bpm.module.repository.definition.builder;
 
 /**
  * 类路径下的资源文件

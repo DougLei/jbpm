@@ -2,8 +2,8 @@ package com.douglei.bpm.process.parser.flow;
 
 import org.dom4j.Element;
 
-import com.douglei.bpm.process.executor.flow.Flow;
-import com.douglei.bpm.process.executor.flow.FlowMode;
+import com.douglei.bpm.process.node.flow.Flow;
+import com.douglei.bpm.process.node.flow.FlowMode;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ParserBean;
 import com.douglei.bpm.process.parser.ProcessParseException;

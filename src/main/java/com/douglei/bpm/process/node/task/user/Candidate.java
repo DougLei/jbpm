@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.executor.task.user;
+package com.douglei.bpm.process.node.task.user;
 
 /**
  * 

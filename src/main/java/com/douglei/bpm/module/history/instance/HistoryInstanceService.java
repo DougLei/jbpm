@@ -28,7 +28,7 @@ public class HistoryInstanceService {
 	 * @param policy 对实例的处理策略
 	 */
 	@Transaction
-	public void process(int processDefinitionId, InstanceHandlePolicy policy) {
+	public void handle(int processDefinitionId, InstanceHandlePolicy policy) {
 		// TODO Auto-generated method stub
 			
 			

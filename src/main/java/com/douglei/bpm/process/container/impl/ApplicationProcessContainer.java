@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.process.container.ProcessContainer;
-import com.douglei.bpm.process.executor.Process;
+import com.douglei.bpm.process.node.Process;
 
 /**
  * 

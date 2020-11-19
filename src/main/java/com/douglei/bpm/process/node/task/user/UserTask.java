@@ -1,9 +1,9 @@
-package com.douglei.bpm.process.executor.task.user;
+package com.douglei.bpm.process.node.task.user;
 
 import java.util.List;
 
-import com.douglei.bpm.process.executor.task.Task;
-import com.douglei.bpm.process.executor.task.user.option.Option;
+import com.douglei.bpm.process.node.task.Task;
+import com.douglei.bpm.process.node.task.user.option.Option;
 
 /**
  * 

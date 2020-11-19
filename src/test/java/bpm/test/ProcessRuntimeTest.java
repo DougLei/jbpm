@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
-import com.douglei.bpm.module.runtime.instance.StartParameter;
+import com.douglei.bpm.module.runtime.instance.start.StartParameter;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.orm.context.IdRepeatedException;
 

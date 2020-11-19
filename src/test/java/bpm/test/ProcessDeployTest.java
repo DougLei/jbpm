@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
-import com.douglei.bpm.module.repository.definition.ClasspathFile;
-import com.douglei.bpm.module.repository.definition.ProcessDefinitionBuilder;
+import com.douglei.bpm.module.repository.definition.builder.ClasspathFile;
+import com.douglei.bpm.module.repository.definition.builder.ProcessDefinitionBuilder;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.orm.context.IdRepeatedException;
 

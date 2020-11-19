@@ -1,7 +1,5 @@
 package com.douglei.bpm.module.repository.definition.entity;
 
-import com.douglei.tools.utils.StringUtil;
-
 /**
  * 
  * @author DougLei
@@ -19,11 +17,8 @@ public class ProcessDefinition {
 	private String description;
 	private String tenantId;
 	
+	public ProcessDefinition() {}
 	public ProcessDefinition(String name, String code, String version) {
-		if(StringUtil.isEmpty(code))
-			throw new NullPointerException("流程定义中的编码值不能为空");
-		if(StringUtil.isEmpty(version))
-			throw new NullPointerException("流程定义中的版本值不能为空");
 		this.name = name;
 		this.code = code;
 		this.version = version;
@@ -46,11 +41,20 @@ public class ProcessDefinition {
 			name = code + ":" + version;
 		return name;
 	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public String getCode() {
 		return code;
 	}
+	public void setCode(String code) {
+		this.code = code;
+	}
 	public String getVersion() {
 		return version;
+	}
+	public void setVersion(String version) {
+		this.version = version;
 	}
 	public int getSubversion() {
 		return subversion;

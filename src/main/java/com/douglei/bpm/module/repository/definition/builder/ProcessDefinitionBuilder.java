@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.repository.definition;
+package com.douglei.bpm.module.repository.definition.builder;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,7 +10,9 @@ import java.util.Map;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
+import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.tools.instances.file.reader.FileBufferedReader;
+import com.douglei.tools.utils.StringUtil;
 
 /**
  * 流程定义的构建器
@@ -41,22 +43,22 @@ public class ProcessDefinitionBuilder {
 	 * @param content
 	 */
 	public ProcessDefinitionBuilder(String content) {
-		Map<String, String> attribute = getProcessAttribute(content);
+		Map<String, String> attribute = getProcessAttributeMap(content);
 		this.processDefinition = new ProcessDefinition(attribute.get("name"), attribute.get("code"), attribute.get("version"));
 		this.processDefinition.setContent(content);
 		this.processDefinition.setSignature(DigestUtils.md5Hex(content));
 	}
 	
-	// 获取<process>的属性
-	private Map<String, String> getProcessAttribute(String content) {
-		Map<String, String> attribute = new HashMap<String, String>(8);
+	// 获取<process>的基础属性map
+	private Map<String, String> getProcessAttributeMap(String content) {
+		Map<String, String> attributeMap = new HashMap<String, String>(8);
 		
 		LinkedList<Character> chars = new LinkedList<Character>();
 		StringBuilder string = new StringBuilder(50);
 		
 		// 解析属性, 通过两层循环嵌套处理, 第一层处理name, 第二层使用两个同层循环处理value
 		char c, mark; // mark用来记录属性值是由单引号还是双引号包裹的
-		String attributeName;
+		ProcessAttribute attribute;
 		for(int i = content.indexOf("<process ")+9;;i++) {
 			c = content.charAt(i);
 			if(c == '>')  // <process 元素结尾, 结束循环
@@ -71,7 +73,7 @@ public class ProcessDefinitionBuilder {
 			// 记录属性名, 并重置StringBuilder
 			while(!chars.isEmpty())
 				string.append(chars.removeFirst());
-			attributeName = getAttributeName(string.toString());
+			attribute = getProcessAttribute(string.toString());
 			string.setLength(0);
 			
 			for(++i;;i++) {
@@ -85,33 +87,37 @@ public class ProcessDefinitionBuilder {
 			for(++i;;i++) {
 				c = content.charAt(i);
 				if(c == mark) {
-					if(attributeName != null) {
+					if(attribute != null) {
 						while(!chars.isEmpty())
 							string.append(chars.removeFirst());
-						attribute.put(attributeName, string.toString());
+						
+						if(StringUtil.isEmpty(string) && attribute.required)
+							throw new ProcessParseException("流程定义中的["+attribute.name+"]属性值不能为空");
+						attributeMap.put(attribute.name, string.toString());
 						string.setLength(0);
 					}
 					break;
-				}else {
-					if(attributeName != null)
-						chars.add(c);
+				}else if(attribute != null){
+					chars.add(c);
 				}
 			}
 		}
-		return attribute;
+		return attributeMap;
 	}
 	// 指定字符是否是空白字符
 	private boolean isBlank(char c) {
 		return c == ' ' || c == '\t' || c == '\n' || c == '\r';
 	}
-	// 获取属性名, 这里做一个小优化, 如果属性名不是name,code,version, 就返回null
-	private static final String attributeNames = "name,code,version";
-	private String getAttributeName(String attributeName) {
-		if(attributeNames.indexOf(attributeName) > -1)
-			return attributeName;
+	// 根据解析出的属性名, 获取对应的ProcessAttribute枚举实例
+	private ProcessAttribute getProcessAttribute(String attributeName) {
+		if(ProcessAttribute.NAME.name.equals(attributeName))
+			return ProcessAttribute.NAME;
+		if(ProcessAttribute.CODE.name.equals(attributeName))
+			return ProcessAttribute.CODE;
+		if(ProcessAttribute.VERSION.name.equals(attributeName))
+			return ProcessAttribute.VERSION;
 		return null;
 	}
-	
 	
 	/**
 	 * 设置流程定义的类型id
@@ -134,10 +140,20 @@ public class ProcessDefinitionBuilder {
 	}
 	
 	/**
+	 * 设置流程定义的租户
+	 * @param description
+	 * @return
+	 */
+	public ProcessDefinitionBuilder setTenantId(String tenantId) {
+		processDefinition.setTenantId(tenantId);
+		return this;
+	}
+	
+	/**
 	 * 构建流程定义实例
 	 * @return
 	 */
-	ProcessDefinition build() {
+	public ProcessDefinition build() {
 		return processDefinition;
 	}
 }

@@ -1,12 +1,12 @@
-package com.douglei.bpm.process.executor.task;
+package com.douglei.bpm.process.node.task;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import com.douglei.bpm.module.components.ExecutionResult;
-import com.douglei.bpm.process.executor.ProcessNode;
-import com.douglei.bpm.process.executor.flow.Flow;
+import com.douglei.bpm.process.node.ProcessNode;
+import com.douglei.bpm.process.node.flow.Flow;
 import com.douglei.bpm.process.parser.ProcessParseException;
 
 /**

@@ -6,7 +6,6 @@ import com.douglei.bpm.bean.Autowire;
 import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.components.instance.InstanceHandlePolicy;
-import com.douglei.bpm.module.repository.definition.entity.ProcessDefinitionStateConstants;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessRuntimeInstance;
 import com.douglei.bpm.module.runtime.instance.start.StartParameter;
 import com.douglei.bpm.process.ProcessHandler;
@@ -22,27 +21,6 @@ public class RuntimeInstanceService {
 	
 	@Autowire
 	private ProcessHandler processHandler;
-	
-	/**
-	 * 判断指定id的流程定义, 是否存在运行实例
-	 * @param processDefinitionId
-	 * @return
-	 */
-	@Transaction
-	public boolean exists(int processDefinitionId) {
-		return Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_("select count(id) from bpm_ru_procinst where procdef_id=?", Arrays.asList(processDefinitionId))[0].toString()) > 0;
-	}
-
-	/**
-	 * 处理指定id的流程定义, 相关的所有运行实例
-	 * @param processDefinitionId
-	 * @param policy 对实例的处理策略
-	 */
-	@Transaction
-	public void handle(int processDefinitionId, InstanceHandlePolicy policy) {
-		// TODO 处理指定id的流程定义, 相关的所有运行实例
-		
-	}
 	
 	/**
 	 * 启动流程
@@ -91,51 +69,73 @@ public class RuntimeInstanceService {
 		return null;
 	}
 	
-//	/**
-//	 * 激活指定id的流程实例
-//	 * @param instanceId
-//	 * @return 返回null表示操作成功
-//	 */
-//	@Transaction
-//	public ExecutionResult activate(int instanceId) {
-//		// TODO 
-//		
-//		return null;
-//	}
-//	
-//	/**
-//	 * 挂起指定id的流程实例
-//	 * @param instanceId
-//	 * @return 返回null表示操作成功
-//	 */
-//	@Transaction
-//	public ExecutionResult suspend(int instanceId) {
-//		// TODO 
-//		
-//		return null;
-//	}
-//	
-//	/**
-//	 * 终止指定id的流程实例
-//	 * @param instanceId
-//	 * @return 返回null表示操作成功
-//	 */
-//	@Transaction
-//	public ExecutionResult terminate(int instanceId) {
-//		// TODO 
-//		
-//		return null;
-//	}
-//	
-//	/**
-//	 * 删除指定id的流程实例
-//	 * @param instanceId
-//	 * @return 返回null表示操作成功
-//	 */
-//	@Transaction
-//	public ExecutionResult delete(int instanceId) {
-//		// TODO 
-//		
-//		return null;
-//	}
+	
+	/**
+	 * 判断指定id的流程定义, 是否存在运行实例
+	 * @param processDefinitionId
+	 * @return
+	 */
+	@Transaction
+	public boolean exists(int processDefinitionId) {
+		return Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_("select count(id) from bpm_ru_procinst where procdef_id=?", Arrays.asList(processDefinitionId))[0].toString()) > 0;
+	}
+
+	/**
+	 * 处理指定id的流程定义, 相关的所有运行实例
+	 * @param processDefinitionId
+	 * @param policy 对实例的处理策略
+	 */
+	@Transaction
+	public void handle(int processDefinitionId, InstanceHandlePolicy policy) {
+		// TODO 处理指定id的流程定义, 相关的所有运行实例
+		
+	}
+	
+	/**
+	 * 激活指定id的流程实例
+	 * @param instanceId
+	 * @return 返回null表示操作成功
+	 */
+	@Transaction
+	public ExecutionResult<Integer> activate(int instanceId) {
+		// TODO 
+		
+		return null;
+	}
+	
+	/**
+	 * 挂起指定id的流程实例
+	 * @param instanceId
+	 * @return 返回null表示操作成功
+	 */
+	@Transaction
+	public ExecutionResult<Integer> suspend(int instanceId) {
+		// TODO 
+		
+		return null;
+	}
+	
+	/**
+	 * 终止指定id的流程实例
+	 * @param instanceId
+	 * @return 返回null表示操作成功
+	 */
+	@Transaction
+	public ExecutionResult<Integer> terminate(int instanceId) {
+		// TODO 
+		
+		return null;
+	}
+	
+	/**
+	 * 删除指定id的流程实例
+	 * @param instanceId
+	 * @return 返回null表示操作成功
+	 */
+	@Transaction
+	public ExecutionResult<Integer> delete(int instanceId) {
+		// TODO 
+		
+		return null;
+	}
 }

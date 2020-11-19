@@ -1,12 +1,10 @@
 package com.douglei.bpm.process.parser;
 
-import com.douglei.bpm.JBPMException;
-
 /**
  * 
  * @author DougLei
  */
-public class ProcessParseException extends JBPMException{
+public class ProcessParseException extends RuntimeException{
 	
 	public ProcessParseException(String message) {
 		super(message);

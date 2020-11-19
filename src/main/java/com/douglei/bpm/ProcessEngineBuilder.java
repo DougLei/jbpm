@@ -75,7 +75,7 @@ public class ProcessEngineBuilder {
 			this.engine = new ProcessEngineByBuiltinSessionFactory(sessionFactory.getId());
 		} catch (Exception e) {
 			logger.error("构建流程引擎时出现异常: {}", ExceptionUtil.getExceptionDetailMessage(e));
-			throw new JBPMException("构建流程引擎时出现异常", e);
+			throw new ProcessEngineBuildException("构建流程引擎时出现异常", e);
 		}
 	}
 	
@@ -102,7 +102,7 @@ public class ProcessEngineBuilder {
 			this.engine = new ProcessEngineByBuiltinSessionFactory(sessionFactory.getId());
 		} catch (Exception e) {
 			logger.error("构建流程引擎时出现异常: {}", ExceptionUtil.getExceptionDetailMessage(e));
-			throw new JBPMException("构建流程引擎时出现异常", e);
+			throw new ProcessEngineBuildException("构建流程引擎时出现异常", e);
 		}
 	}
 	
@@ -121,7 +121,7 @@ public class ProcessEngineBuilder {
 			this.engine = new ProcessEngineByExternalSessionFactory(externalSessionFactory.getId(), result == RegistrationResult.SUCCESS, mappingFiles);
 		} catch (Exception e) {
 			logger.error("构建流程引擎时出现异常: {}", ExceptionUtil.getExceptionDetailMessage(e));
-			throw new JBPMException("构建流程引擎时出现异常", e);
+			throw new ProcessEngineBuildException("构建流程引擎时出现异常", e);
 		}
 	}
 	

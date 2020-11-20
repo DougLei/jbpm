@@ -77,6 +77,7 @@ public class BeanFactory {
 					putInstance2BeanContainer(lazyBean.isTransactionBean(), lazyBean.getKey(), lazyBean.getLoadClass());
 			});
 			
+			beanContainer.put(BeanFactory.class, this);
 			for(Object object : beanContainer.values())
 				setAttribute(object);
 		} catch (Exception e) {

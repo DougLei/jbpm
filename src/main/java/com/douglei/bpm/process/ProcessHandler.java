@@ -54,7 +54,7 @@ public class ProcessHandler {
 	}
 
 	/**
-	 * 获取流程
+	 * 根据id获取流程
 	 * @param id
 	 * @return
 	 */

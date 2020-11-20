@@ -7,10 +7,12 @@ import com.douglei.bpm.bean.Autowire;
 import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.components.instance.InstanceHandlePolicy;
+import com.douglei.bpm.module.history.instance.HistoryInstanceQueryService;
 import com.douglei.bpm.module.history.instance.HistoryInstanceService;
 import com.douglei.bpm.module.repository.definition.builder.ProcessDefinitionBuilder;
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinitionStateConstants;
+import com.douglei.bpm.module.runtime.instance.RuntimeInstanceQueryService;
 import com.douglei.bpm.module.runtime.instance.RuntimeInstanceService;
 import com.douglei.bpm.process.ProcessHandler;
 import com.douglei.orm.context.SessionContext;
@@ -24,7 +26,13 @@ import com.douglei.orm.context.transaction.component.Transaction;
 public class ProcessDefinitionService {
 
 	@Autowire
+	private RuntimeInstanceQueryService runtimeInstanceQueryService;
+	
+	@Autowire
 	private RuntimeInstanceService runtimeInstanceService;
+	
+	@Autowire
+	private HistoryInstanceQueryService historyInstanceQueryService;
 	
 	@Autowire
 	private HistoryInstanceService historyInstanceService;
@@ -56,7 +64,7 @@ public class ProcessDefinitionService {
 				processDefinition.setContent(null);
 				processDefinition.setSignature(null);
 				SessionContext.getTableSession().update(processDefinition);
-			}else if(!runtimeInstanceService.exists(exProcessDefinition.getId()) && !historyInstanceService.exists(exProcessDefinition.getId())) { // 修改了内容, 但旧的流程定义不存在实例, 进行update
+			}else if(!runtimeInstanceQueryService.exists(exProcessDefinition.getId()) && !historyInstanceQueryService.exists(exProcessDefinition.getId())) { // 修改了内容, 但旧的流程定义不存在实例, 进行update
 				processDefinition.setId(exProcessDefinition.getId());
 				processDefinition.setSubversion(exProcessDefinition.getSubversion());
 				processDefinition.setState(exProcessDefinition.getState());
@@ -102,7 +110,7 @@ public class ProcessDefinitionService {
 		if(processDefinition.getState() == ProcessDefinitionStateConstants.DEPLOY)
 			return new ExecutionResult<Integer>("操作失败, 当前流程已部署", "bpm.process.defined.already.deploy", processDefinitionId);
 		
-		if(runtimeInstancePolicy != null && runtimeInstanceService.exists(processDefinitionId))
+		if(runtimeInstancePolicy != null && runtimeInstanceQueryService.exists(processDefinitionId))
 			runtimeInstanceService.handle(processDefinitionId, runtimeInstancePolicy);
 		
 		updateState(processDefinitionId, ProcessDefinitionStateConstants.DEPLOY);
@@ -125,10 +133,10 @@ public class ProcessDefinitionService {
 		if(processDefinition.getState() == ProcessDefinitionStateConstants.UNDEPLOY)
 			return new ExecutionResult<Integer>("操作失败, 当前流程未部署", "bpm.process.defined.undeploy", processDefinitionId);
 		
-		if(runtimeInstancePolicy != null && runtimeInstanceService.exists(processDefinitionId)) 
+		if(runtimeInstancePolicy != null && runtimeInstanceQueryService.exists(processDefinitionId)) 
 			runtimeInstanceService.handle(processDefinitionId, runtimeInstancePolicy);
 		
-		if(historyInstancePolicy != null && historyInstanceService.exists(processDefinitionId)) 
+		if(historyInstancePolicy != null && historyInstanceQueryService.exists(processDefinitionId)) 
 			historyInstanceService.handle(processDefinitionId, historyInstancePolicy);
 		
 		updateState(processDefinitionId, ProcessDefinitionStateConstants.UNDEPLOY);
@@ -152,7 +160,7 @@ public class ProcessDefinitionService {
 		if(processDefinition.getState() == ProcessDefinitionStateConstants.DEPLOY)
 			return new ExecutionResult<Integer>("操作失败, 当前流程已部署, 请先取消部署", "bpm.process.defined.undeploy.first", processDefinitionId);
 		
-		if(runtimeInstanceService.exists(processDefinitionId) || historyInstanceService.exists(processDefinitionId)) {
+		if(runtimeInstanceQueryService.exists(processDefinitionId) || historyInstanceQueryService.exists(processDefinitionId)) {
 			if(!strict)
 				return new ExecutionResult<Integer>("操作失败, 当前流程已存在实例", "bpm.process.defined.instance.exists");
 			updateState(processDefinitionId, ProcessDefinitionStateConstants.DELETE);

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.douglei.bpm.bean.BeanFactory;
+import com.douglei.bpm.module.components.command.interceptor.Interceptor;
 import com.douglei.bpm.process.container.ProcessContainer;
 import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
@@ -126,12 +127,22 @@ public class ProcessEngineBuilder {
 	}
 	
 	/**
-	 * 设置流程容器
+	 * 设置自定义的流程容器
 	 * @param container
 	 * @return
 	 */
-	public ProcessEngineBuilder setContainer(ProcessContainer container) {
+	public ProcessEngineBuilder setProcessContainer(ProcessContainer container) {
 		beanFactory.registerCustomImplBean(ProcessContainer.class, container);
+		return this;
+	}
+	
+	/**
+	 * 设置自定义的命令拦截器
+	 * @param interceptor
+	 * @return
+	 */
+	public ProcessEngineBuilder setCommandInterceptor(Interceptor interceptor) {
+		beanFactory.registerCustomImplBean(Interceptor.class, interceptor);
 		return this;
 	}
 	
@@ -144,7 +155,7 @@ public class ProcessEngineBuilder {
 			return engine;
 		
 		beanFactory.registerCustomImplBean(ProcessEngine.class, engine);
-		beanFactory.setBeanAttributes();
+		beanFactory.executeAutowire();
 		isBuild = true;
 		return engine;
 	}

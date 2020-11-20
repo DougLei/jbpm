@@ -12,47 +12,52 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import com.douglei.bpm.bean.Autowire;
 import com.douglei.bpm.bean.Bean;
+import com.douglei.bpm.bean.BeanFactory;
 import com.douglei.bpm.process.node.Process;
 import com.douglei.bpm.process.node.flow.Flow;
 import com.douglei.bpm.process.node.task.Task;
 import com.douglei.bpm.process.node.task.event.EndEvent;
 import com.douglei.bpm.process.node.task.event.StartEvent;
-import com.douglei.bpm.process.parser.flow.FlowMetadata;
 import com.douglei.bpm.process.parser.flow.FlowParser;
-import com.douglei.bpm.process.parser.task.TaskMetadata;
+import com.douglei.bpm.process.parser.flow.FlowTemporaryData;
+import com.douglei.bpm.process.parser.task.TaskTemporaryData;
 import com.douglei.bpm.process.parser.task.event.StartEventParser;
-import com.douglei.tools.instances.resource.scanner.impl.ClassScanner;
 import com.douglei.tools.utils.StringUtil;
-import com.douglei.tools.utils.reflect.ClassLoadUtil;
-import com.douglei.tools.utils.reflect.ConstructorUtil;
 
 /**
  * process解析器
  * @author DougLei
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 @Bean(isTransaction = false)
-@SuppressWarnings({ "rawtypes", "unchecked" })
 public class ProcessParser {
-	private Map<String, Parser<TaskMetadata, ? extends Task>> parserMap = new HashMap<String, Parser<TaskMetadata,? extends Task>>();
-	private StartEventParser startEventParser;
+	private Map<String, Parser> parserMap = new HashMap<String, Parser>();
+	private StartEventParser startEventParser; // 冗余
 	private FlowParser flowParser;
 	
+	@Autowire
+	private BeanFactory beanFactory;
+	
 	public ProcessParser() {
-		new ClassScanner().scan(ProcessParser.class.getPackage().getName()).forEach(classpath -> {
-			Class<?> clazz = ClassLoadUtil.loadClass(classpath);
-			if(clazz.getAnnotation(ParserBean.class) != null) {
-				Parser parser = (Parser) ConstructorUtil.newInstance(clazz);
-				if(clazz == StartEventParser.class) {
-					startEventParser = (StartEventParser)parser;
-				}else if(clazz == FlowParser.class) {
-					flowParser = (FlowParser)parser;
-				}
-				parserMap.put(parser.elementName(), parser);
+		beanFactory.getInstances(Parser.class).forEach(parser -> {
+			if(parser.getClass() == StartEventParser.class) {
+				startEventParser = (StartEventParser) parser;
+			}else if(parser.getClass() == FlowParser.class) {
+				flowParser = (FlowParser) parser;
 			}
+			parserMap.put(parser.elementName(), parser);
 		});
 	}
 
+	/**
+	 * 解析流程
+	 * @param processDefinitionId
+	 * @param content
+	 * @return
+	 * @throws ProcessParseException
+	 */
 	public Process parse(int processDefinitionId, String content) throws ProcessParseException {
 		try {
 			Document document = new SAXReader().read(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
@@ -74,7 +79,7 @@ public class ProcessParser {
 	 */
 	private void buildProcessStruct(Process process, List<Element> elements) {
 		StartEvent startEvent = null;
-		List<FlowMetadata> flowMetadatas = new ArrayList<FlowMetadata>(elements.size());
+		List<FlowTemporaryData> flowTemporaryDatas = new ArrayList<FlowTemporaryData>(elements.size());
 		Map<String, Object> taskMap = new HashMap<String, Object>();
 		
 		String elementName, id;
@@ -86,15 +91,15 @@ public class ProcessParser {
 			id = element.attributeValue("id");
 			if(StringUtil.isEmpty(id))
 				throw new ProcessParseException("流程中连线/任务的id值不能为空");
-			if(idExists4flowMetadatas(id, flowMetadatas) || (!taskMap.isEmpty() && taskMap.containsKey(id)) || (startEvent != null && startEvent.getId().equals(id)))
+			if(idExists4flowTemporaryDatas(id, flowTemporaryDatas) || (!taskMap.isEmpty() && taskMap.containsKey(id)) || (startEvent != null && startEvent.getId().equals(id)))
 				throw new ProcessParseException("流程中连线/任务的id值出现重复: " + id);
 			
 			if(startEventParser.elementName().equals(elementName)) {
 				if(startEvent != null)
 					throw new ProcessParseException("流程中只能配置一个起始事件");
-				startEvent = startEventParser.parse(new TaskMetadata(id, element));
+				startEvent = startEventParser.parse(new TaskTemporaryData(id, element));
 			}else if(flowParser.elementName().equals(elementName)) {
-				flowMetadatas.add(new FlowMetadata(id, element));
+				flowTemporaryDatas.add(new FlowTemporaryData(id, element));
 			}else {
 				taskMap.put(id, element);
 			}
@@ -104,23 +109,23 @@ public class ProcessParser {
 			throw new ProcessParseException("流程中必须配置起始事件");
 		process.setStartEvent(startEvent);
 		
-		linkTaskAndFlow(startEvent, flowMetadatas, taskMap, process);
+		linkTaskAndFlow(startEvent, flowTemporaryDatas, taskMap, process);
 		
-		if(!flowMetadatas.isEmpty())
-			flowMetadatas.clear();
+		if(!flowTemporaryDatas.isEmpty())
+			flowTemporaryDatas.clear();
 		taskMap.clear();
 	}
 	
 	/**
-	 * 判断id是否已经存在于flowMetadatas集合中
+	 * 判断id是否已经存在于flowTemporaryDatas集合中
 	 * @param id
-	 * @param flowMetadatas
+	 * @param flowTemporaryDatas
 	 * @return
 	 */
-	private boolean idExists4flowMetadatas(String id, List<FlowMetadata> flowMetadatas) {
-		if(!flowMetadatas.isEmpty()) {
-			for (FlowMetadata fm : flowMetadatas) {
-				if(fm.getId().equals(id)) 
+	private boolean idExists4flowTemporaryDatas(String id, List<FlowTemporaryData> flowTemporaryDatas) {
+		if(!flowTemporaryDatas.isEmpty()) {
+			for (FlowTemporaryData td : flowTemporaryDatas) {
+				if(td.getId().equals(id)) 
 					return true;
 			}
 		}
@@ -130,28 +135,29 @@ public class ProcessParser {
 	/**
 	 *  将任务和流进行连接
 	 * @param sourceTask 
-	 * @param flowMetadatas
+	 * @param flowTemporaryDatas
 	 * @param taskMap
 	 * @param process
 	 */
-	private void linkTaskAndFlow(Task sourceTask, List<FlowMetadata> flowMetadatas, Map<String, Object> taskMap, Process process) {
+	private void linkTaskAndFlow(Task sourceTask, List<FlowTemporaryData> flowTemporaryDatas, Map<String, Object> taskMap, Process process) {
 		boolean taskExistsFlow = false;
-		if(!flowMetadatas.isEmpty()) {
-			for (int i = 0; i < flowMetadatas.size(); i++) {
-				if(sourceTask.getId().equals(flowMetadatas.get(i).getSource())) {
+		if(!flowTemporaryDatas.isEmpty()) {
+			for (int i = 0; i < flowTemporaryDatas.size(); i++) {
+				if(sourceTask.getId().equals(flowTemporaryDatas.get(i).getSource())) {
 					taskExistsFlow = true;
-					FlowMetadata flowMetadata = flowMetadatas.remove(i--);
+					FlowTemporaryData flowTemporaryData = flowTemporaryDatas.remove(i--);
 					
-					Object taskObj = taskMap.get(flowMetadata.getTarget());
+					Object taskObj = taskMap.get(flowTemporaryData.getTarget());
 					if(taskObj == null)
-						throw new ProcessParseException("流程中不存在id=["+flowMetadata.getTarget()+"]的任务");
+						throw new ProcessParseException("流程中不存在id=["+flowTemporaryData.getTarget()+"]的任务");
 					
-					Flow flow = flowParser.parse(flowMetadata);
+					Flow flow = flowParser.parse(flowTemporaryData);
 					sourceTask.addFlow(flow);
 					
 					Task targetTask = null;
 					if(taskObj instanceof Element) {
-						targetTask = parserMap.get(((Element)taskObj).getName()).parse(new TaskMetadata(flowMetadata.getTarget(), (Element)taskObj));
+						Element element = (Element) taskObj;
+						targetTask = (Task) parserMap.get(element.getName()).parse(new TaskTemporaryData(flowTemporaryData.getTarget(), element));
 						taskMap.put(targetTask.getId(), targetTask);
 					}else {
 						targetTask = (Task) taskObj;
@@ -161,7 +167,7 @@ public class ProcessParser {
 					if(targetTask != taskObj) { // 证明targetTask是第一次解析
 						process.addTask(targetTask);
 						if(!(targetTask instanceof EndEvent)) {
-							linkTaskAndFlow(targetTask, flowMetadatas, taskMap, process);
+							linkTaskAndFlow(targetTask, flowTemporaryDatas, taskMap, process);
 							i = -1;
 						}
 					}

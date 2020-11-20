@@ -3,18 +3,18 @@ package com.douglei.bpm.process.parser.flow;
 import org.dom4j.Element;
 
 import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.bpm.process.parser.task.TaskMetadata;
+import com.douglei.bpm.process.parser.task.TaskTemporaryData;
 import com.douglei.tools.utils.StringUtil;
 
 /**
  * 
  * @author DougLei
  */
-public class FlowMetadata extends TaskMetadata{
+public class FlowTemporaryData extends TaskTemporaryData{
 	private String source;
 	private String target;
 	
-	public FlowMetadata(String id, Element element) {
+	public FlowTemporaryData(String id, Element element) {
 		super(id, element);
 		
 		this.source = element.attributeValue("source");

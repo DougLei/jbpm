@@ -6,11 +6,11 @@ import org.dom4j.Element;
  * 
  * @author DougLei
  */
-public class TaskMetadata {
+public class TaskTemporaryData {
 	private String id;
 	private Element element;
 	
-	public TaskMetadata(String id, Element element) {
+	public TaskTemporaryData(String id, Element element) {
 		this.id = id;
 		this.element = element;
 	}

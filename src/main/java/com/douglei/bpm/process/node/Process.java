@@ -35,6 +35,10 @@ public class Process implements Serializable {
 		this.pageID = pageID;
 	}
 	
+	
+	public StartEvent getStartEvent() {
+		return startEvent;
+	}
 	public void setStartEvent(StartEvent startEvent) {
 		this.startEvent = startEvent;
 	}

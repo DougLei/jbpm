@@ -20,14 +20,14 @@ public @interface Bean {
 	Class<?> clazz() default Object.class;
 	
 	/**
+	 * 当前class在容器中是否支持多实例, 默认是false
+	 * @return
+	 */
+	boolean supportMultiInstance() default false;
+	
+	/**
 	 * 是否是事物Bean, 默认是true
 	 * @return
 	 */
 	boolean isTransaction() default true;
-	
-	/**
-	 * 是否懒加载, 默认是false
-	 * @return
-	 */
-	boolean isLazy() default false;
 }

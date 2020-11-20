@@ -11,7 +11,7 @@ import com.douglei.bpm.process.node.Process;
  * 
  * @author DougLei
  */
-@Bean(clazz=ProcessContainer.class, isTransaction=false, isLazy=true)
+@Bean(clazz=ProcessContainer.class, isTransaction=false)
 public class ApplicationProcessContainer implements ProcessContainer {
 	private final Map<Integer, Process> container = new HashMap<Integer, Process>(64);
 

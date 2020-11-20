@@ -21,71 +21,43 @@ import com.douglei.tools.utils.reflect.ConstructorUtil;
  * @author DougLei
  */
 public class BeanFactory {
-	private List<LazyBean> lazyBeanContainer = new ArrayList<LazyBean>(15);
 	private Map<Class<?>, Object> beanContainer = new HashMap<Class<?>, Object>(128);
 	
 	public BeanFactory() {
-		Class<?> loadClass = null;
-		Bean beanAnnotation = null;
-		for (String clz : new ClassScanner().scan(true, "com.douglei.bpm")) { // 扫描指定路径下的所有class
-			loadClass = ClassLoadUtil.loadClass(clz);
-			if((beanAnnotation = loadClass.getAnnotation(Bean.class)) == null)
+		Class<?> clazz = null;
+		Bean bean = null;
+		for (String classpath : new ClassScanner().scan(true, "com.douglei.bpm")) { // 扫描指定路径下的所有class
+			clazz = ClassLoadUtil.loadClass(classpath);
+			bean = clazz.getAnnotation(Bean.class);
+			if(bean == null)
 				continue;
 			
-			if(beanAnnotation.isLazy()) 
-				lazyBeanContainer.add(new LazyBean(beanAnnotation, loadClass));
+			if(bean.isLazy()) 
+				lazyBeanContainer.add(new LazyBean(bean, clazz));
 			else
-				putInstance2BeanContainer(beanAnnotation.isTransaction(), (beanAnnotation.clazz()==Object.class)?loadClass:beanAnnotation.clazz(), loadClass);
+				putInstance2BeanContainer(bean, clazz);
 		}
 	}
 	
 	// 将bean实例put到Bean容器中
-	private void putInstance2BeanContainer(boolean isTransactionBean, Class<?> key, Class<?> loadClass) {
-		if(isTransactionBean) {
+	private void putInstance2BeanContainer(Bean bean, Class<?> clazz) {
+		Class<?> key = (bean.clazz()==Object.class)?clazz:bean.clazz();
+		
+		if(bean.isTransaction()) {
 			TransactionComponentEntity entity = null;
-			for (Method method : loadClass.getDeclaredMethods()) {
+			for (Method method : clazz.getDeclaredMethods()) {
 				if(method.getAnnotation(Transaction.class) != null) {
 					if(entity == null)
-						entity = new TransactionComponentEntity(loadClass);
+						entity = new TransactionComponentEntity(clazz);
 					entity.addMethod(method);
 				}
 			}
 			if(entity != null) {
-				beanContainer.put(key, ProxyBeanContext.createProxy(loadClass, new TransactionProxyInterceptor(entity.getClazz(), entity.getMethods())));
+				beanContainer.put(key, ProxyBeanContext.createProxy(clazz, new TransactionProxyInterceptor(entity.getClazz(), entity.getMethods())));
 				return;
 			}
 		}
-		beanContainer.put(key, ConstructorUtil.newInstance(loadClass));
-	}
-	
-	/**
-	 * 将自定义的实现Bean注册到BeanFactory的Bean容器中, 用来覆盖引擎默认的实现Bean
-	 * @param beanClass bean对应的class
-	 * @param beanObject bean的实例
-	 */
-	public void registerCustomImplBean(Class<?> beanClass, Object beanObject) {
-		beanContainer.put(beanClass, beanObject);
-	}
-	
-	/**
-	 * 设置Bean容器中每个Bean的属性(自动装配)
-	 */
-	public void setBeanAttributes() {
-		try {
-			lazyBeanContainer.forEach(lazyBean -> {
-				if(!beanContainer.containsKey(lazyBean.getKey()))
-					putInstance2BeanContainer(lazyBean.isTransactionBean(), lazyBean.getKey(), lazyBean.getLoadClass());
-			});
-			
-			beanContainer.put(BeanFactory.class, this);
-			for(Object object : beanContainer.values())
-				setAttribute(object);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			lazyBeanContainer.clear();
-			beanContainer.clear();
-		}
+		beanContainer.put(key, ConstructorUtil.newInstance(clazz));
 	}
 	
 	// 给对象的属性赋值
@@ -120,5 +92,42 @@ public class BeanFactory {
 			}
 		}
 		field.setAccessible(false);
+	}
+
+	/**
+	 * 将自定义的实现Bean注册到BeanFactory的Bean容器中, 用来覆盖引擎默认的实现Bean
+	 * @param beanClass bean对应的class
+	 * @param beanObject bean的实例
+	 */
+	public void registerCustomImplBean(Class<?> beanClass, Object beanObject) {
+		beanContainer.put(beanClass, beanObject);
+	}
+	
+	/**
+	 * 执行自动装配
+	 */
+	public void executeAutowire() {
+		try {
+			beanContainer.put(BeanFactory.class, this);
+			for(Object object : beanContainer.values())
+				setAttribute(object);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			beanContainer.clear();
+		}
+	}
+	
+	/**
+	 * 获取指定类型的实例集合
+	 * @param clazz
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> List<T> getInstances(Class<T> clazz) {
+		Object list = beanContainer.get(clazz);
+		if(list == null)
+			throw new NullPointerException("Bean容器中不存在class为["+clazz+"]的实例集合");
+		return (List<T>) list;
 	}
 }

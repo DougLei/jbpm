@@ -1,41 +1,45 @@
 package com.douglei.bpm;
 
-import com.douglei.bpm.bean.Autowire;
+import com.douglei.bpm.bean.Autowired;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
 import com.douglei.orm.mapping.handler.MappingHandlerException;
+import com.douglei.orm.sessionfactory.SessionFactory;
 
 /**
  * 流程引擎
  * @author DougLei
  */
 public abstract class ProcessEngine {
-	protected String id; // 引擎id, 即SessionFactory的id, 所以也可以从SessionFactoryContainer.get().getId()来获取
+	protected final SessionFactory sessionFactory; // 引擎id, 即SessionFactory的id, 所以也可以从SessionFactoryContainer.get().getId()来获取
 	
-	@Autowire
+	@Autowired
 	private RepositoryModule repositoryModule;
 	
-	@Autowire
+	@Autowired
 	private RuntimeModule runtimeModule;
 	
-	@Autowire
+	@Autowired
 	private HistoryModule historyModule;
 	
-	protected ProcessEngine(String id) {
-		this.id = id;
+	protected ProcessEngine(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
 	}
 	
-	public String getId() {
-		return id;
+	public final String getId() {
+		return sessionFactory.getId();
 	}
-	public RepositoryModule getRepositoryModule() {
+	public final SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+	public final RepositoryModule getRepositoryModule() {
 		return repositoryModule;
 	}
-	public RuntimeModule getRuntimeModule() {
+	public final RuntimeModule getRuntimeModule() {
 		return runtimeModule;
 	}
-	public HistoryModule getHistoryModule() {
+	public final HistoryModule getHistoryModule() {
 		return historyModule;
 	}
 	

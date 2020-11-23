@@ -6,13 +6,13 @@ import com.douglei.bpm.module.runtime.instance.entity.ProcessRuntimeInstance;
 import com.douglei.bpm.module.runtime.instance.start.StartParameter;
 
 /**
- * 
+ * 启动流程命令
  * @author DougLei
  */
-public class ProcessStartCommand implements Command<ProcessRuntimeInstance> {
+public class StartProcessCommand implements Command<ProcessRuntimeInstance> {
 	private StartParameter parameter;
 	
-	public ProcessStartCommand(StartParameter parameter) {
+	public StartProcessCommand(StartParameter parameter) {
 		this.parameter = parameter;
 	}
 

@@ -1,6 +1,6 @@
 package com.douglei.bpm.module.history;
 
-import com.douglei.bpm.bean.Autowire;
+import com.douglei.bpm.bean.Autowired;
 import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.module.history.instance.HistoryInstanceService;
 import com.douglei.bpm.module.history.task.HistoryTaskService;
@@ -9,13 +9,13 @@ import com.douglei.bpm.module.history.task.HistoryTaskService;
  * 
  * @author DougLei
  */
-@Bean(isTransaction = false)
+@Bean
 public class HistoryModule {
 	
-	@Autowire
+	@Autowired
 	private HistoryInstanceService historyInstanceService;
 	
-	@Autowire
+	@Autowired
 	private HistoryTaskService historyTaskService;
 
 	public HistoryInstanceService getHistoryInstanceService() {

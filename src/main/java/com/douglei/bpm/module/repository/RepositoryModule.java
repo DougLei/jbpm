@@ -1,6 +1,6 @@
 package com.douglei.bpm.module.repository;
 
-import com.douglei.bpm.bean.Autowire;
+import com.douglei.bpm.bean.Autowired;
 import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.module.repository.definition.ProcessDefinitionService;
 import com.douglei.bpm.module.repository.type.ProcessTypeService;
@@ -9,13 +9,13 @@ import com.douglei.bpm.module.repository.type.ProcessTypeService;
  * 
  * @author DougLei
  */
-@Bean(isTransaction = false)
+@Bean
 public class RepositoryModule {
 	
-	@Autowire
+	@Autowired
 	private ProcessTypeService typeService;
 	
-	@Autowire
+	@Autowired
 	private ProcessDefinitionService definitionService;
 
 	public ProcessTypeService getTypeService() {

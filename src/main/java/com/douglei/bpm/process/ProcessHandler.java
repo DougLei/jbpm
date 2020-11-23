@@ -1,15 +1,11 @@
 package com.douglei.bpm.process;
 
-import java.util.Arrays;
-
-import com.douglei.bpm.bean.Autowire;
+import com.douglei.bpm.bean.Autowired;
 import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.bpm.process.container.ProcessContainer;
 import com.douglei.bpm.process.node.Process;
 import com.douglei.bpm.process.parser.ProcessParser;
-import com.douglei.orm.context.SessionContext;
-import com.douglei.orm.context.transaction.component.Transaction;
 
 /**
  * 
@@ -18,10 +14,10 @@ import com.douglei.orm.context.transaction.component.Transaction;
 @Bean
 public class ProcessHandler {
 	
-	@Autowire
+	@Autowired
 	private ProcessParser parser;
 	
-	@Autowire
+	@Autowired
 	private ProcessContainer container;
 	
 	/**
@@ -58,14 +54,13 @@ public class ProcessHandler {
 	 * @param id
 	 * @return
 	 */
-	@Transaction
 	public Process getProcess(int id) {
 		Process process =  container.getProcess(id);
 		if(process == null) {
-			Object[] processDefinition = SessionContext.getSqlSession().uniqueQuery_("select content_ from bpm_re_procdef where id=?", Arrays.asList(id));
-			if(processDefinition == null)
-				throw new NullPointerException("不存在id为["+id+"]的流程");
-			process = addProcess(id, processDefinition[0].toString());
+//			Object[] processDefinition = SessionContext.getSqlSession().uniqueQuery_("select content_ from bpm_re_procdef where id=?", Arrays.asList(id));
+//			if(processDefinition == null)
+//				throw new NullPointerException("不存在id为["+id+"]的流程");
+//			process = addProcess(id, processDefinition[0].toString());
 		}
 		return process;
 	}

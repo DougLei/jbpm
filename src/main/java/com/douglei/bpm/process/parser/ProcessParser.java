@@ -12,9 +12,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import com.douglei.bpm.bean.Autowire;
 import com.douglei.bpm.bean.Bean;
-import com.douglei.bpm.bean.BeanFactory;
+import com.douglei.bpm.bean.CustomAutowired;
 import com.douglei.bpm.process.node.Process;
 import com.douglei.bpm.process.node.flow.Flow;
 import com.douglei.bpm.process.node.task.Task;
@@ -31,17 +30,15 @@ import com.douglei.tools.utils.StringUtil;
  * @author DougLei
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-@Bean(isTransaction = false)
-public class ProcessParser {
+@Bean
+public class ProcessParser implements CustomAutowired{
 	private Map<String, Parser> parserMap = new HashMap<String, Parser>();
-	private StartEventParser startEventParser; // 冗余
+	private StartEventParser startEventParser;
 	private FlowParser flowParser;
 	
-	@Autowire
-	private BeanFactory beanFactory;
-	
-	public ProcessParser() {
-		beanFactory.getInstances(Parser.class).forEach(parser -> {
+	@Override
+	public void setFields(Map<Class<?>, Object> beanContainer) {
+		((List<Parser>)beanContainer.get(Parser.class)).forEach(parser -> {
 			if(parser.getClass() == StartEventParser.class) {
 				startEventParser = (StartEventParser) parser;
 			}else if(parser.getClass() == FlowParser.class) {
@@ -50,7 +47,7 @@ public class ProcessParser {
 			parserMap.put(parser.elementName(), parser);
 		});
 	}
-
+	
 	/**
 	 * 解析流程
 	 * @param processDefinitionId

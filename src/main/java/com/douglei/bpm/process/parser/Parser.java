@@ -1,9 +1,12 @@
 package com.douglei.bpm.process.parser;
 
+import com.douglei.bpm.bean.MultiInstance;
+
 /**
  * 解析器
  * @author DougLei
  */
+@MultiInstance
 public interface Parser<P, R> {
 	
 	/**

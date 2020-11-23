@@ -12,7 +12,7 @@ import com.douglei.bpm.module.components.command.interceptor.Interceptor;
  * 
  * @author DougLei
  */
-@Bean(clazz=Interceptor.class, supportMultiInstance=true)
+@Bean(clazz=Interceptor.class)
 public class LogInterceptor extends Interceptor{
 	private static final Logger logger = LoggerFactory.getLogger(LogInterceptor.class);
 	

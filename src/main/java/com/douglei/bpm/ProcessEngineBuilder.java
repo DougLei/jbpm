@@ -9,12 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.douglei.bpm.bean.BeanFactory;
-import com.douglei.bpm.module.components.command.interceptor.Interceptor;
 import com.douglei.bpm.process.container.ProcessContainer;
 import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
-import com.douglei.orm.context.RegistrationResult;
-import com.douglei.orm.context.SessionFactoryContainer;
 import com.douglei.orm.mapping.handler.entity.MappingEntity;
 import com.douglei.orm.mapping.handler.entity.impl.AddOrCoverMappingEntity;
 import com.douglei.orm.mapping.type.MappingTypeContainer;
@@ -72,8 +69,7 @@ public class ProcessEngineBuilder {
 		try {
 			Configuration configuration = new Configuration(configurationFilePath);
 			SessionFactory sessionFactory = configuration.buildSessionFactory();
-			SessionFactoryContainer.getSingleton().register(sessionFactory);
-			this.engine = new ProcessEngineByBuiltinSessionFactory(sessionFactory.getId());
+			this.engine = new ProcessEngineByBuiltinSessionFactory(sessionFactory);
 		} catch (Exception e) {
 			logger.error("构建流程引擎时出现异常: {}", ExceptionUtil.getExceptionDetailMessage(e));
 			throw new ProcessEngineBuildException("构建流程引擎时出现异常", e);
@@ -99,8 +95,7 @@ public class ProcessEngineBuilder {
 			configuration.setExternalDataSource(new ExternalDataSource(dataSource));
 			
 			SessionFactory sessionFactory = configuration.buildSessionFactory();
-			SessionFactoryContainer.getSingleton().register(sessionFactory);
-			this.engine = new ProcessEngineByBuiltinSessionFactory(sessionFactory.getId());
+			this.engine = new ProcessEngineByBuiltinSessionFactory(sessionFactory);
 		} catch (Exception e) {
 			logger.error("构建流程引擎时出现异常: {}", ExceptionUtil.getExceptionDetailMessage(e));
 			throw new ProcessEngineBuildException("构建流程引擎时出现异常", e);
@@ -118,8 +113,7 @@ public class ProcessEngineBuilder {
 			mappingFiles.forEach(mappingFile -> mappingEntities.add(new AddOrCoverMappingEntity(mappingFile)));
 			externalSessionFactory.getMappingHandler().execute(mappingEntities);
 			
-			RegistrationResult result = SessionFactoryContainer.getSingleton().register(externalSessionFactory);
-			this.engine = new ProcessEngineByExternalSessionFactory(externalSessionFactory.getId(), result == RegistrationResult.SUCCESS, mappingFiles);
+			this.engine = new ProcessEngineByExternalSessionFactory(externalSessionFactory, mappingFiles);
 		} catch (Exception e) {
 			logger.error("构建流程引擎时出现异常: {}", ExceptionUtil.getExceptionDetailMessage(e));
 			throw new ProcessEngineBuildException("构建流程引擎时出现异常", e);
@@ -131,18 +125,8 @@ public class ProcessEngineBuilder {
 	 * @param container
 	 * @return
 	 */
-	public ProcessEngineBuilder setProcessContainer(ProcessContainer container) {
-		beanFactory.registerCustomImplBean(ProcessContainer.class, container);
-		return this;
-	}
-	
-	/**
-	 * 设置自定义的命令拦截器
-	 * @param interceptor
-	 * @return
-	 */
-	public ProcessEngineBuilder setCommandInterceptor(Interceptor interceptor) {
-		beanFactory.registerCustomImplBean(Interceptor.class, interceptor);
+	public ProcessEngineBuilder setCustomProcessContainer(ProcessContainer container) {
+		beanFactory.registerCustomBean(ProcessContainer.class, container);
 		return this;
 	}
 	
@@ -154,8 +138,8 @@ public class ProcessEngineBuilder {
 		if(isBuild)
 			return engine;
 		
-		beanFactory.registerCustomImplBean(ProcessEngine.class, engine);
-		beanFactory.executeAutowire();
+		beanFactory.registerCustomBean(ProcessEngine.class, engine);
+		beanFactory.executeAutowired();
 		isBuild = true;
 		return engine;
 	}

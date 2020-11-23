@@ -5,8 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.douglei.bpm.module.repository.RepositoryModule;
+import com.douglei.bpm.process.container.impl.ApplicationProcessContainer;
+
 /**
- * 
+ * 需要被BeanFactory扫描的类
  * @author DougLei
  */
 @Target(ElementType.TYPE) // 表示注解的作用对象，ElementType.TYPE表示类，ElementType.METHOD表示方法...
@@ -14,20 +17,12 @@ import java.lang.annotation.Target;
 public @interface Bean {
 	
 	/**
-	 * bean对应的class, 默认是Object.class
+	 * <pre>
+	 * 对应实际的class
+	 * 例如 {@link ApplicationProcessContainer}的class为 {@link ProcesContainer}, 因为在其它类中, 如果需要依赖{@link ApplicationProcessContainer}, 肯定使用的是{@link ProcesContainer}类型作为属性; 
+	 * 而一般类, 例如 {@link RepositoryModule}, class与自身的类相同, 因为在其它类中, 如果需要依赖{@link RepositoryModule}, 肯定使用的是{@link RepositoryModule}类型作为属性;
+	 * </pre>
 	 * @return
 	 */
 	Class<?> clazz() default Object.class;
-	
-	/**
-	 * 当前class在容器中是否支持多实例, 默认是false
-	 * @return
-	 */
-	boolean supportMultiInstance() default false;
-	
-	/**
-	 * 是否是事物Bean, 默认是true
-	 * @return
-	 */
-	boolean isTransaction() default true;
 }

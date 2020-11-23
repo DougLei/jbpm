@@ -12,7 +12,7 @@ import com.douglei.bpm.process.parser.task.TaskTemporaryData;
  * 
  * @author DougLei
  */
-@Bean(clazz=Parser.class, supportMultiInstance=true)
+@Bean(clazz=Parser.class)
 public class StartEventParser implements Parser<TaskTemporaryData, StartEvent> {
 	
 	@Override

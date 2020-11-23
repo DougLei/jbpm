@@ -8,13 +8,12 @@ import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.repository.definition.builder.ClasspathFile;
 import com.douglei.bpm.module.repository.definition.builder.ProcessDefinitionBuilder;
 import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.orm.context.IdRepeatedException;
 
 public class ProcessDeployTest {
 	private ProcessEngine engine;
 	
 	@Before
-	public void init() throws IdRepeatedException {
+	public void init() {
 		engine = new ProcessEngineBuilder().build();
 	}
 	

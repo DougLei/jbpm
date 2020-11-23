@@ -1,11 +1,14 @@
 package com.douglei.bpm.process.container;
 
+import com.douglei.bpm.bean.DefaultInstance;
+import com.douglei.bpm.process.container.impl.ApplicationProcessContainer;
 import com.douglei.bpm.process.node.Process;
 
 /**
  * 流程容器
  * @author DougLei
  */
+@DefaultInstance(clazz=ApplicationProcessContainer.class)
 public interface ProcessContainer {
 	
 	/**

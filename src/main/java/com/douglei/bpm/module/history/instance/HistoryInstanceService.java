@@ -7,7 +7,7 @@ import com.douglei.bpm.module.components.instance.InstanceHandlePolicy;
  * 历史实例服务
  * @author DougLei
  */
-@Bean(isTransaction=false)
+@Bean
 public class HistoryInstanceService {
 	
 	/**

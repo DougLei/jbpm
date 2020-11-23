@@ -13,7 +13,7 @@ import com.douglei.tools.utils.datatype.VerifyTypeMatchUtil;
  * 
  * @author DougLei
  */
-@Bean(clazz=Parser.class, supportMultiInstance=true)
+@Bean(clazz=Parser.class)
 public class FlowParser implements Parser<FlowTemporaryData, Flow> {
 
 	@Override

@@ -1,5 +1,6 @@
 package com.douglei.bpm.module.components.command.interceptor;
 
+import com.douglei.bpm.bean.MultiInstance;
 import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.components.command.Command;
 
@@ -7,6 +8,7 @@ import com.douglei.bpm.module.components.command.Command;
  * 
  * @author DougLei
  */
+@MultiInstance
 public abstract class Interceptor {
 	protected Interceptor next;
 	
@@ -18,7 +20,9 @@ public abstract class Interceptor {
 	 * 拦截器的顺序, 用以排序
 	 * @return
 	 */
-	public abstract int getOrder();
+	public int getOrder() {
+		return 100;
+	}
 	
 	/**
 	 * 拦截器执行方法

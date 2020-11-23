@@ -24,10 +24,10 @@ public class LogInterceptor extends Interceptor{
 	public <T> T execute(Command<T> command) {
 		if(logger.isDebugEnabled()) {
 			try {
-				logger.debug("开始执行命令: {}", command.getClass().getSimpleName());
+				logger.debug("开始执行命令: {}", command.getClass().getName());
 				return next.execute(command);
 			} finally {
-				logger.debug("结束执行命令: {}", command.getClass().getSimpleName());
+				logger.debug("结束执行命令: {}", command.getClass().getName());
 			}
 		}
 		return next.execute(command);

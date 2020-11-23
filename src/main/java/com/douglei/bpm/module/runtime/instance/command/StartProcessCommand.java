@@ -18,7 +18,7 @@ public class StartProcessCommand implements Command<ProcessRuntimeInstance> {
 
 	@Override
 	public ProcessRuntimeInstance execute(CommandContext commandContext) {
-		
+		System.out.println(commandContext);
 		
 //		int processDefinitionId;
 //		switch(parameter.getStartingMode()) {

@@ -7,8 +7,8 @@ package com.douglei.bpm.bean.entity;
 public class CustomBeanEntity extends BeanEntity{
 	private Object instance;
 	
-	public CustomBeanEntity(Class<?> beanClass, Object instance) {
-		super(beanClass, instance.getClass());
+	public CustomBeanEntity(Class<?> clazz, Object instance) {
+		super(clazz, instance.getClass());
 		this.instance = instance;
 	}
 

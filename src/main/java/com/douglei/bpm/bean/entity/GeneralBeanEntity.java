@@ -7,15 +7,15 @@ import com.douglei.tools.utils.reflect.ConstructorUtil;
  * @author DougLei
  */
 public class GeneralBeanEntity extends BeanEntity{
-	private Class<?> clazz;
+	private Class<?> instanceClazz;
 
-	public GeneralBeanEntity(Class<?> beanClass, Class<?> clazz) {
-		super(beanClass, clazz);
-		this.clazz = clazz;
+	public GeneralBeanEntity(Class<?> clazz, Class<?> instanceClazz) {
+		super(clazz, instanceClazz);
+		this.instanceClazz = instanceClazz;
 	}
 
 	@Override
 	public Object getInstance() {
-		return ConstructorUtil.newInstance(clazz);
+		return ConstructorUtil.newInstance(instanceClazz);
 	}
 }

@@ -7,16 +7,16 @@ import com.douglei.bpm.bean.annotation.MultiInstance;
  * @author DougLei
  */
 public abstract class BeanEntity {
-	protected Class<?> key;
+	protected Class<?> clazz;
 	protected boolean supportMultiInstances;
 	
-	public BeanEntity(Class<?> beanClass, Class<?> clazz) {
-		this.key = beanClass==Object.class?clazz:beanClass;
-		this.supportMultiInstances = this.key.getAnnotation(MultiInstance.class) != null;
+	public BeanEntity(Class<?> clazz, Class<?> instanceClazz) {
+		this.clazz = (clazz==Object.class || clazz==instanceClazz)?instanceClazz:clazz;
+		this.supportMultiInstances = this.clazz.getAnnotation(MultiInstance.class) != null;
 	}
 
-	public Class<?> getKey() {
-		return key;
+	public Class<?> getClazz() {
+		return clazz;
 	}
 	public boolean supportMultiInstances() {
 		return supportMultiInstances;

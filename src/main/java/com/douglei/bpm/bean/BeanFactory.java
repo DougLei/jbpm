@@ -2,6 +2,7 @@ package com.douglei.bpm.bean;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,14 +40,14 @@ public class BeanFactory {
 	@SuppressWarnings("unchecked")
 	private void putInstance2BeanContainer(BeanEntity beanEntity, Map<Class<?>, Object> beanContainer) {
 		if(beanEntity.supportMultiInstances()) {
-			List<Object> list = (List<Object>) beanContainer.get(beanEntity.getKey());
+			List<Object> list = (List<Object>) beanContainer.get(beanEntity.getClazz());
 			if(list == null) {
 				list = new ArrayList<Object>();
-				beanContainer.put(beanEntity.getKey(), list);
+				beanContainer.put(beanEntity.getClazz(), list);
 			}
 			list.add(beanEntity.getInstance());
 		}else {
-			beanContainer.put(beanEntity.getKey(), beanEntity.getInstance());
+			beanContainer.put(beanEntity.getClazz(), beanEntity.getInstance());
 		}
 	}
 	
@@ -55,8 +56,7 @@ public class BeanFactory {
 	 */
 	public void executeAutowired() {
 		try {
-			for(Object object : beanContainer.values())
-				setFields(object);
+			executeAutowired(beanContainer.values());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -64,30 +64,38 @@ public class BeanFactory {
 			defaultBeanContainer.clear();
 		}
 	}
-	// 设置当前对象的属性
-	private void setFields(Object object) throws IllegalArgumentException, IllegalAccessException, InstantiationException {
-		if(object instanceof CustomAutowired) {
-			((CustomAutowired)object).setFields(beanContainer);
-		}else {
-			Class<?> currentClass = object.getClass();
-			do{
-				for (Field field : currentClass.getDeclaredFields()) {
-					if(field.getAnnotation(Autowired.class) != null)
-						setField(object, field);
-				}
-				currentClass = currentClass.getSuperclass();
-			} while (currentClass != Object.class);
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void executeAutowired(Collection<Object> objects) throws Exception {
+		for(Object object : objects) {
+			if(object instanceof Collection)
+				executeAutowired((Collection)object); // 针对 supportMultiInstances=true 的集合实例
+			else
+				setFields(object);
 		}
 	}
+	// 设置当前对象的属性
+	private void setFields(Object object) throws Exception {
+		if(object instanceof CustomAutowired) 
+			((CustomAutowired)object).setFields(beanContainer);
+		
+		Class<?> currentClass = object.getClass();
+		do{
+			for (Field field : currentClass.getDeclaredFields()) {
+				if(field.getAnnotation(Autowired.class) != null)
+					setField(object, field);
+			}
+			currentClass = currentClass.getSuperclass();
+		} while (currentClass != Object.class);
+	}
 	// 设置属性
-	private void setField(Object object, Field field) throws IllegalArgumentException, IllegalAccessException, InstantiationException {
+	private void setField(Object object, Field field) throws Exception {
 		Object value = getFieldValue(object, field);
 		field.setAccessible(true);
 		field.set(object, value);
 		field.setAccessible(false);
 	}
 	// 从容器中获取指定Field类型的值
-	private Object getFieldValue(Object object, Field field) throws InstantiationException, IllegalAccessException {
+	private Object getFieldValue(Object object, Field field) throws Exception {
 		Object value = beanContainer.get(field.getType());
 		if(value != null)
 			return value;
@@ -109,10 +117,10 @@ public class BeanFactory {
 	
 	/**
 	 * 将自定义的实现Bean注册到BeanFactory的Bean容器中
-	 * @param key bean在容器中的key
+	 * @param clazz bean在容器中的key
 	 * @param instance bean的实例
 	 */
-	public void registerCustomBean(Class<?> key, Object instance) {
-		putInstance2BeanContainer(new CustomBeanEntity(key, instance), beanContainer);
+	public void registerCustomBean(Class<?> clazz, Object instance) {
+		putInstance2BeanContainer(new CustomBeanEntity(clazz, instance), beanContainer);
 	}
 }

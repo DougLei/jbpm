@@ -8,7 +8,7 @@ public class CommandExecuteException extends RuntimeException {
 
 	@SuppressWarnings("rawtypes")
 	public CommandExecuteException(Command command, Throwable cause) {
-		super("执行["+command.getClass().getName()+"]命令时出现异常", cause);
+		super("执行 ["+command.getClass().getName()+"] 命令时出现异常", cause);
 	}
 	public CommandExecuteException(String message, Throwable cause) {
 		super(message, cause);

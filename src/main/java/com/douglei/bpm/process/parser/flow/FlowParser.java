@@ -2,7 +2,7 @@ package com.douglei.bpm.process.parser.flow;
 
 import org.dom4j.Element;
 
-import com.douglei.bpm.bean.Bean;
+import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.node.flow.Flow;
 import com.douglei.bpm.process.node.flow.FlowMode;
 import com.douglei.bpm.process.parser.Parser;

@@ -1,6 +1,6 @@
 package com.douglei.bpm.module.runtime.instance;
 
-import com.douglei.bpm.bean.Bean;
+import com.douglei.bpm.bean.annotation.Bean;
 
 /**
  * 运行实例查询服务

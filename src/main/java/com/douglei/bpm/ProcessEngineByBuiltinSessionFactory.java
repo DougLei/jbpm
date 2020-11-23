@@ -15,6 +15,6 @@ class ProcessEngineByBuiltinSessionFactory extends ProcessEngine {
 
 	@Override
 	public void destroy() throws MappingHandlerException {
-		super.sessionFactory.destroy();
+		sessionFactory.destroy();
 	}
 }

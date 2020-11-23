@@ -1,0 +1,4 @@
+LogInterceptor:10
+CommandContextInterceptor:20
+TransactionInterceptor:	30
+CommandInvokerInterceptor:50

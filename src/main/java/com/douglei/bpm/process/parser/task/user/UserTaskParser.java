@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.parser.task.user;
 
-import com.douglei.bpm.bean.Bean;
+import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.node.task.user.UserTask;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;

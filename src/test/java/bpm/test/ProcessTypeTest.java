@@ -19,12 +19,12 @@ public class ProcessTypeTest {
 	@Test
 	public void save() {
 		ProcessType type = new ProcessType();
-		type.setCode("test_code");
-		type.setName("测试类型");
-		type.setTenantId("douglei");
-		ExecutionResult<ProcessType> result = engine.getRepositoryModule().getTypeService().save(type);
-		System.out.println(result);
-		System.out.println(type.getId());
+//		type.setCode("test_code");
+//		type.setName("测试类型");
+//		type.setTenantId("douglei");
+//		ExecutionResult<ProcessType> result = engine.getRepositoryModule().getTypeService().save(type);
+//		System.out.println(result);
+//		System.out.println(type.getId());
 	}
 	
 	@Test

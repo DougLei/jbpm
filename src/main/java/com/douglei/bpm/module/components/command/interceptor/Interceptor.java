@@ -1,7 +1,6 @@
 package com.douglei.bpm.module.components.command.interceptor;
 
-import com.douglei.bpm.bean.MultiInstance;
-import com.douglei.bpm.module.components.ExecutionResult;
+import com.douglei.bpm.bean.annotation.MultiInstance;
 import com.douglei.bpm.module.components.command.Command;
 
 /**
@@ -29,5 +28,5 @@ public abstract class Interceptor {
 	 * @param command
 	 * @return
 	 */
-	public abstract <T> ExecutionResult<T> execute(Command<T> command);
+	public abstract <T> T execute(Command<T> command);
 }

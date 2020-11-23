@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.parser;
 
-import com.douglei.bpm.bean.MultiInstance;
+import com.douglei.bpm.bean.annotation.MultiInstance;
 
 /**
  * 解析器

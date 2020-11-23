@@ -1,6 +1,6 @@
 package com.douglei.bpm.bean.entity;
 
-import com.douglei.bpm.bean.MultiInstance;
+import com.douglei.bpm.bean.annotation.MultiInstance;
 
 /**
  * 

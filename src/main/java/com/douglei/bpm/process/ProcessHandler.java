@@ -1,7 +1,7 @@
 package com.douglei.bpm.process;
 
-import com.douglei.bpm.bean.Autowired;
-import com.douglei.bpm.bean.Bean;
+import com.douglei.bpm.bean.annotation.Autowired;
+import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.bpm.process.container.ProcessContainer;
 import com.douglei.bpm.process.node.Process;

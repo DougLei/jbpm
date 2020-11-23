@@ -1,7 +1,7 @@
 package com.douglei.bpm.module.runtime.instance;
 
-import com.douglei.bpm.bean.Autowired;
-import com.douglei.bpm.bean.Bean;
+import com.douglei.bpm.bean.annotation.Autowired;
+import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.components.command.CommandExecutor;
 import com.douglei.bpm.module.components.instance.InstanceHandlePolicy;
@@ -25,7 +25,8 @@ public class RuntimeInstanceService {
 	 * @return 
 	 */
 	public ExecutionResult<ProcessRuntimeInstance> start(StartParameter parameter) {
-		return commandExecutor.execute(new StartProcessCommand(parameter));
+		ProcessRuntimeInstance instance =  commandExecutor.execute(new StartProcessCommand(parameter));
+		return new ExecutionResult<ProcessRuntimeInstance>(instance);
 	}
 	
 	/**

@@ -12,8 +12,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.bean.CustomAutowired;
+import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.node.Process;
 import com.douglei.bpm.process.node.flow.Flow;
 import com.douglei.bpm.process.node.task.Task;

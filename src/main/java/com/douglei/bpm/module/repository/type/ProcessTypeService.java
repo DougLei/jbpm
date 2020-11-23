@@ -1,6 +1,6 @@
 package com.douglei.bpm.module.repository.type;
 
-import com.douglei.bpm.bean.Bean;
+import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.repository.type.entity.ProcessType;
 

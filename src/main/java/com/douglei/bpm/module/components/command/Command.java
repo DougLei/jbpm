@@ -1,6 +1,7 @@
 package com.douglei.bpm.module.components.command;
 
-import com.douglei.bpm.module.components.ExecutionResult;
+import com.douglei.bpm.module.components.command.context.CommandContext;
+import com.douglei.bpm.module.components.command.context.transaction.TransactionConfig;
 
 /**
  * 
@@ -9,8 +10,17 @@ import com.douglei.bpm.module.components.ExecutionResult;
 public interface Command<T> {
 	
 	/**
-	 * 执行
+	 * 事物配置, 返回null标识不需要事物, 即不需要和数据库交互
 	 * @return
 	 */
-	ExecutionResult<T> execute();
+	default TransactionConfig getTransactionConfig() {
+		return TransactionConfig.DEFAULT_CONFIG;
+	}
+	
+	/**
+	 * 执行
+	 * @param commandContext
+	 * @return
+	 */
+	T execute(CommandContext commandContext);
 }

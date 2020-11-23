@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.container;
 
-import com.douglei.bpm.bean.DefaultInstance;
+import com.douglei.bpm.bean.annotation.DefaultInstance;
 import com.douglei.bpm.process.container.impl.ApplicationProcessContainer;
 import com.douglei.bpm.process.node.Process;
 

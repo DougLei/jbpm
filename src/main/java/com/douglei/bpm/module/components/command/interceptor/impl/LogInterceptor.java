@@ -3,8 +3,7 @@ package com.douglei.bpm.module.components.command.interceptor.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.douglei.bpm.bean.Bean;
-import com.douglei.bpm.module.components.ExecutionResult;
+import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.components.command.Command;
 import com.douglei.bpm.module.components.command.interceptor.Interceptor;
 
@@ -22,7 +21,7 @@ public class LogInterceptor extends Interceptor{
 	}
 	
 	@Override
-	public <T> ExecutionResult<T> execute(Command<T> command) {
+	public <T> T execute(Command<T> command) {
 		if(logger.isDebugEnabled()) {
 			try {
 				logger.debug("开始执行命令: {}", command.getClass().getSimpleName());

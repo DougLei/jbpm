@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.douglei.bpm.bean.annotation.Autowired;
+import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.bean.annotation.DefaultInstance;
 import com.douglei.bpm.bean.entity.BeanEntity;
 import com.douglei.bpm.bean.entity.CustomBeanEntity;
 import com.douglei.bpm.bean.entity.GeneralBeanEntity;
@@ -18,6 +21,7 @@ import com.douglei.tools.utils.reflect.ClassLoadUtil;
  */
 public class BeanFactory {
 	private Map<Class<?>, Object> beanContainer = new HashMap<Class<?>, Object>(128);
+	private Map<Class<?>, Object> defaultBeanContainer = new HashMap<Class<?>, Object>(32);
 	
 	public BeanFactory() {
 		Class<?> clazz = null;
@@ -27,13 +31,13 @@ public class BeanFactory {
 			bean = clazz.getAnnotation(Bean.class);
 			if(bean == null)
 				continue;
-			putInstance2BeanContainer(new GeneralBeanEntity(bean.clazz(), clazz));
+			putInstance2BeanContainer(new GeneralBeanEntity(bean.clazz(), clazz), beanContainer);
 		}
 	}
 	
-	// 将bean实例put到Bean容器中
+	// 将bean实例put到指定Bean容器中
 	@SuppressWarnings("unchecked")
-	private void putInstance2BeanContainer(BeanEntity beanEntity) {
+	private void putInstance2BeanContainer(BeanEntity beanEntity, Map<Class<?>, Object> beanContainer) {
 		if(beanEntity.supportMultiInstances()) {
 			List<Object> list = (List<Object>) beanContainer.get(beanEntity.getKey());
 			if(list == null) {
@@ -57,6 +61,7 @@ public class BeanFactory {
 			e.printStackTrace();
 		} finally {
 			beanContainer.clear();
+			defaultBeanContainer.clear();
 		}
 	}
 	// 设置当前对象的属性
@@ -76,19 +81,30 @@ public class BeanFactory {
 	}
 	// 设置属性
 	private void setField(Object object, Field field) throws IllegalArgumentException, IllegalAccessException, InstantiationException {
-		Object value = beanContainer.get(field.getType());
-		if(value == null) {
-			DefaultInstance defaultInstance = field.getType().getAnnotation(DefaultInstance.class);
-			if(defaultInstance == null)
-				throw new NullPointerException("在Bean容器中, 未能找到[" + object.getClass().getName() + "]类中的[" + field.getName() + "]属性值");
-			
-			value = defaultInstance.clazz().newInstance();
-			putInstance2BeanContainer(new CustomBeanEntity(field.getType(), value));
-		}
-		
+		Object value = getFieldValue(object, field);
 		field.setAccessible(true);
 		field.set(object, value);
 		field.setAccessible(false);
+	}
+	// 从容器中获取指定Field类型的值
+	private Object getFieldValue(Object object, Field field) throws InstantiationException, IllegalAccessException {
+		Object value = beanContainer.get(field.getType());
+		if(value != null)
+			return value;
+		
+		if(!defaultBeanContainer.isEmpty()) {
+			value = defaultBeanContainer.get(field.getType());
+			if(value != null)
+				return value;
+		}
+		
+		DefaultInstance defaultInstance = field.getType().getAnnotation(DefaultInstance.class);
+		if(defaultInstance == null) 
+			throw new NullPointerException("在Bean容器中, 未能找到[" + object.getClass().getName() + "]类中的[" + field.getName() + "]属性值");
+		
+		value = defaultInstance.clazz().newInstance();
+		putInstance2BeanContainer(new CustomBeanEntity(field.getType(), value), defaultBeanContainer);
+		return value;
 	}
 	
 	/**
@@ -97,6 +113,6 @@ public class BeanFactory {
 	 * @param instance bean的实例
 	 */
 	public void registerCustomBean(Class<?> key, Object instance) {
-		putInstance2BeanContainer(new CustomBeanEntity(key, instance));
+		putInstance2BeanContainer(new CustomBeanEntity(key, instance), beanContainer);
 	}
 }

@@ -4,9 +4,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import com.douglei.bpm.bean.Bean;
 import com.douglei.bpm.bean.CustomAutowired;
-import com.douglei.bpm.module.components.ExecutionResult;
+import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.components.command.interceptor.Interceptor;
 
 /**
@@ -43,7 +42,7 @@ public class CommandExecutor implements CustomAutowired{
 	 * @param command
 	 * @return
 	 */
-	public <T> ExecutionResult<T> execute(Command<T> command){
+	public <T> T execute(Command<T> command) {
 		return first.execute(command);
 	}
 }

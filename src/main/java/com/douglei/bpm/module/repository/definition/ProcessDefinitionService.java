@@ -1,7 +1,7 @@
 package com.douglei.bpm.module.repository.definition;
 
-import com.douglei.bpm.bean.Autowired;
-import com.douglei.bpm.bean.Bean;
+import com.douglei.bpm.bean.annotation.Autowired;
+import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.components.instance.InstanceHandlePolicy;
 import com.douglei.bpm.module.history.instance.HistoryInstanceQueryService;

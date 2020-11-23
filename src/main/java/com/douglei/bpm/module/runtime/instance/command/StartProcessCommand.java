@@ -1,7 +1,7 @@
 package com.douglei.bpm.module.runtime.instance.command;
 
-import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.components.command.Command;
+import com.douglei.bpm.module.components.command.context.CommandContext;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessRuntimeInstance;
 import com.douglei.bpm.module.runtime.instance.start.StartParameter;
 
@@ -17,7 +17,7 @@ public class StartProcessCommand implements Command<ProcessRuntimeInstance> {
 	}
 
 	@Override
-	public ExecutionResult<ProcessRuntimeInstance> execute() {
+	public ProcessRuntimeInstance execute(CommandContext commandContext) {
 		
 		
 //		int processDefinitionId;

@@ -1,6 +1,6 @@
 package com.douglei.bpm.module.history.instance;
 
-import com.douglei.bpm.bean.Bean;
+import com.douglei.bpm.bean.annotation.Bean;
 
 /**
  * 历史实例查询服务

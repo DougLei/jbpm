@@ -19,6 +19,6 @@ public class ProcessRuntimeTest {
 	@Test
 	public void start() throws ProcessParseException {
 		StartParameter starter = new StartParameter(1);
-		engine.getRuntimeModule().getRuntimeInstanceService().start(starter );
+		engine.getRuntimeModule().getInstanceService().start(starter );
 	}
 }

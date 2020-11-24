@@ -14,6 +14,7 @@ import com.douglei.bpm.module.components.command.context.CommandContext;
 public class DeleteProcessTypeCommand implements Command<ExecutionResult<Integer>> {
 	private int processTypeId; 
 	private boolean strict;
+	
 	public DeleteProcessTypeCommand(int processTypeId, boolean strict) {
 		this.processTypeId = processTypeId;
 		this.strict = strict;

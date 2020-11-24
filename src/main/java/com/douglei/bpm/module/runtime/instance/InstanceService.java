@@ -14,7 +14,7 @@ import com.douglei.bpm.module.runtime.instance.start.StartParameter;
  * @author DougLei
  */
 @Bean
-public class RuntimeInstanceService {
+public class InstanceService {
 	
 	@Autowired
 	private CommandExecutor commandExecutor;
@@ -25,18 +25,7 @@ public class RuntimeInstanceService {
 	 * @return 
 	 */
 	public ExecutionResult<ProcessRuntimeInstance> start(StartParameter parameter) {
-		ProcessRuntimeInstance instance =  commandExecutor.execute(new StartProcessCommand(parameter));
-		return new ExecutionResult<ProcessRuntimeInstance>(instance);
-	}
-	
-	/**
-	 * 处理指定id的流程定义, 相关的所有运行实例
-	 * @param processDefinitionId
-	 * @param policy 对实例的处理策略
-	 */
-	public void handle(int processDefinitionId, InstanceHandlePolicy policy) {
-		// TODO 处理指定id的流程定义, 相关的所有运行实例
-		
+		return commandExecutor.execute(new StartProcessCommand(parameter));
 	}
 	
 	/**
@@ -81,5 +70,25 @@ public class RuntimeInstanceService {
 		// TODO 
 		
 		return null;
+	}
+	
+	/**
+	 * 处理指定id的流程定义, 相关的所有运行实例
+	 * @param processDefinitionId
+	 * @param policy 对实例的处理策略
+	 */
+	public void handle(int processDefinitionId, InstanceHandlePolicy policy) {
+		// TODO 处理指定id的流程定义, 相关的所有运行实例
+		
+	}
+	
+	/**
+	 * 判断指定id的流程定义, 是否存在运行实例
+	 * @param processDefinitionId
+	 * @return
+	 */
+	public boolean exists(int processDefinitionId) {
+//		return Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_("select count(id) from bpm_ru_procinst where procdef_id=?", Arrays.asList(processDefinitionId))[0].toString()) > 0;
+		return false;
 	}
 }

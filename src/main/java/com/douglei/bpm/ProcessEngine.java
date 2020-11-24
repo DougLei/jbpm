@@ -4,6 +4,7 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
+import com.douglei.bpm.process.ProcessHandler;
 import com.douglei.orm.mapping.handler.MappingHandlerException;
 import com.douglei.orm.sessionfactory.SessionFactory;
 
@@ -13,6 +14,9 @@ import com.douglei.orm.sessionfactory.SessionFactory;
  */
 public abstract class ProcessEngine {
 	protected final SessionFactory sessionFactory; // 引擎id, 即SessionFactory的id, 所以也可以从SessionFactoryContainer.get().getId()来获取
+	
+	@Autowired
+	private ProcessHandler processHandler;
 	
 	@Autowired
 	private RepositoryModule repositoryModule;
@@ -32,6 +36,9 @@ public abstract class ProcessEngine {
 	}
 	public final SessionFactory getSessionFactory() {
 		return sessionFactory;
+	}
+	public final ProcessHandler getProcessHandler() {
+		return processHandler;
 	}
 	public final RepositoryModule getRepositoryModule() {
 		return repositoryModule;

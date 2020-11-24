@@ -10,7 +10,7 @@ import com.douglei.bpm.process.ProcessHandler;
  * @author DougLei
  */
 @Bean
-public class RuntimeTaskService {
+public class TaskService {
 	
 	@Autowired
 	private ProcessHandler processHandler;

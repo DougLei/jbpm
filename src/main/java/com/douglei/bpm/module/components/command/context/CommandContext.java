@@ -6,6 +6,10 @@ import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.module.components.command.Command;
 import com.douglei.bpm.module.components.command.context.transaction.SessionContext;
 import com.douglei.bpm.module.components.command.context.transaction.TransactionHandler;
+import com.douglei.bpm.module.history.HistoryModule;
+import com.douglei.bpm.module.repository.RepositoryModule;
+import com.douglei.bpm.module.runtime.RuntimeModule;
+import com.douglei.bpm.process.ProcessHandler;
 
 /**
  * 
@@ -14,14 +18,33 @@ import com.douglei.bpm.module.components.command.context.transaction.Transaction
 @SuppressWarnings("rawtypes")
 public class CommandContext {
 	private ProcessEngine processEngine;
+	private ProcessHandler processHandler;
+	private RepositoryModule repositoryModule;
+	private RuntimeModule runtimeModule;
+	private HistoryModule historyModule;
 	public CommandContext(ProcessEngine processEngine) {
 		this.processEngine = processEngine;
+		this.processHandler = processEngine.getProcessHandler();
+		this.repositoryModule = processEngine.getRepositoryModule();
+		this.runtimeModule = processEngine.getRuntimeModule();
+		this.historyModule = processEngine.getHistoryModule();
 	}
 	public ProcessEngine getProcessEngine() {
 		return processEngine;
 	}
-	
-	
+	public ProcessHandler getProcessHandler() {
+		return processHandler;
+	}
+	public RepositoryModule getRepositoryModule() {
+		return repositoryModule;
+	}
+	public RuntimeModule getRuntimeModule() {
+		return runtimeModule;
+	}
+	public HistoryModule getHistoryModule() {
+		return historyModule;
+	}
+
 	private Stack<Command> commandStack = new Stack<Command>();
 	public void pushCommand(Command command) {
 		commandStack.push(command);

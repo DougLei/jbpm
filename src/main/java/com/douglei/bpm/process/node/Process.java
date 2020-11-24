@@ -61,19 +61,4 @@ public class Process implements Serializable {
 	public String getPageID() {
 		return pageID;
 	}
-
-	/**
-	 * 启动流程
-	 * @param starter
-	 * @return
-	 */
-	public ExecutionResult<ProcessRuntimeInstance> start(StartParameter starter) {
-		// TODO Auto-generated method stub
-		
-		
-		startEvent.execute();
-		
-		
-		return null;
-	}
 }

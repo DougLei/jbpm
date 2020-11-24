@@ -24,7 +24,7 @@ public class ProcessTypeService {
 	 * @param type
 	 * @return
 	 */
-	public ExecutionResult<ProcessType> save(ProcessType type) {
+	public ExecutionResult<ProcessType> insert(ProcessType type) {
 		return commandExecutor.execute(new InsertProcessTypeCommand(type));
 	}
 	

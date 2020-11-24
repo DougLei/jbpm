@@ -22,7 +22,7 @@ public class ProcessTypeTest {
 		type.setCode("test_code333");
 		type.setName("测试类型");
 		type.setTenantId("douglei");
-		ExecutionResult<ProcessType> result = engine.getRepositoryModule().getTypeService().save(type);
+		ExecutionResult<ProcessType> result = engine.getRepositoryModule().getTypeService().insert(type);
 		System.out.println(result);
 		System.out.println(type.getId());
 	}

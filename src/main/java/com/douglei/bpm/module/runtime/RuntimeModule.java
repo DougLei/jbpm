@@ -2,8 +2,8 @@ package com.douglei.bpm.module.runtime;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.runtime.instance.RuntimeInstanceService;
-import com.douglei.bpm.module.runtime.task.RuntimeTaskService;
+import com.douglei.bpm.module.runtime.instance.InstanceService;
+import com.douglei.bpm.module.runtime.task.TaskService;
 
 /**
  * 
@@ -13,15 +13,15 @@ import com.douglei.bpm.module.runtime.task.RuntimeTaskService;
 public class RuntimeModule{
 	
 	@Autowired
-	private RuntimeInstanceService runtimeInstanceService;
+	private InstanceService instanceService;
 	
 	@Autowired
-	private RuntimeTaskService runtimeTaskService;
+	private TaskService taskService;
 
-	public RuntimeInstanceService getRuntimeInstanceService() {
-		return runtimeInstanceService;
+	public InstanceService getInstanceService() {
+		return instanceService;
 	}
-	public RuntimeTaskService getRuntimeTaskService() {
-		return runtimeTaskService;
+	public TaskService getTaskService() {
+		return taskService;
 	}
 }

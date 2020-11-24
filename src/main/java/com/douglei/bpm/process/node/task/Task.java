@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.process.node.ProcessNode;
 import com.douglei.bpm.process.node.flow.Flow;
 import com.douglei.bpm.process.parser.ProcessParseException;
@@ -49,11 +48,4 @@ public abstract class Task extends ProcessNode{
 			return 1;
 		}
 	};
-	
-	
-	public ExecutionResult execute() {
-		// TODO Auto-generated method stub
-		
-		return null;
-	}
 }

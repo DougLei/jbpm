@@ -11,6 +11,7 @@ import com.douglei.bpm.module.repository.type.entity.ProcessType;
  */
 public class InsertProcessTypeCommand implements Command<ExecutionResult<ProcessType>> {
 	private ProcessType type;
+	
 	public InsertProcessTypeCommand(ProcessType type) {
 		this.type = type;
 	}

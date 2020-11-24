@@ -5,6 +5,10 @@ package com.douglei.bpm.module.repository.definition.entity;
  * @author DougLei
  */
 public class ProcessDefinition {
+	public static final byte UNDEPLOY = 0; // 未部署: 0
+	public static final byte DEPLOY = 1; // 已部署:  1
+	public static final byte DELETE = 2; // 被删除: 2
+	
 	private int id;
 	private int typeId;
 	private String name;

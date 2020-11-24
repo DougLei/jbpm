@@ -12,7 +12,7 @@ public class Context {
 	private static final ThreadLocal<CommandContext> COMMAND_CONTEXT = new ThreadLocal<CommandContext>();
 	
 	@SuppressWarnings("rawtypes")
-	public static void initialize(Command command, ProcessEngine processEngine) {
+	public static void pushCommand(Command command, ProcessEngine processEngine) {
 		CommandContext context = COMMAND_CONTEXT.get();
 		if(context == null) {
 			context = new CommandContext(processEngine);

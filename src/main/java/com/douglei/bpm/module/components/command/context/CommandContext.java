@@ -14,16 +14,15 @@ import com.douglei.bpm.module.components.command.context.transaction.Transaction
 @SuppressWarnings("rawtypes")
 public class CommandContext {
 	private ProcessEngine processEngine;
-	private Stack<Command> commandStack;
-	
 	public CommandContext(ProcessEngine processEngine) {
 		this.processEngine = processEngine;
-		this.commandStack = new Stack<Command>();
 	}
-	
 	public ProcessEngine getProcessEngine() {
 		return processEngine;
 	}
+	
+	
+	private Stack<Command> commandStack = new Stack<Command>();
 	public void pushCommand(Command command) {
 		commandStack.push(command);
 	}
@@ -33,9 +32,7 @@ public class CommandContext {
 	}
 	
 	
-	
 	private TransactionHandler transactionHandler;
-	
 	TransactionHandler enableTransactionHandler() {
 		if(transactionHandler == null)
 			transactionHandler = new TransactionHandler(processEngine.getSessionFactory());

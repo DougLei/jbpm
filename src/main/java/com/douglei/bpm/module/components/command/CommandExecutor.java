@@ -14,7 +14,6 @@ import com.douglei.bpm.module.components.command.interceptor.Interceptor;
  */
 @Bean
 public class CommandExecutor implements CustomAutowired{
-
 	private Interceptor first;
 	
 	@Override

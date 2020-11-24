@@ -1,7 +1,12 @@
 package com.douglei.bpm.module.repository.type;
 
+import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.components.ExecutionResult;
+import com.douglei.bpm.module.components.command.CommandExecutor;
+import com.douglei.bpm.module.repository.type.command.DeleteProcessTypeCommand;
+import com.douglei.bpm.module.repository.type.command.InsertProcessTypeCommand;
+import com.douglei.bpm.module.repository.type.command.UpdateProcessTypeCommand;
 import com.douglei.bpm.module.repository.type.entity.ProcessType;
 
 /**
@@ -11,18 +16,16 @@ import com.douglei.bpm.module.repository.type.entity.ProcessType;
 @Bean
 public class ProcessTypeService {
 	
+	@Autowired
+	private CommandExecutor commandExecutor;
+	
 	/**
 	 * 保存类型
 	 * @param type
 	 * @return
 	 */
 	public ExecutionResult<ProcessType> save(ProcessType type) {
-//		if(SessionContext.getSQLSession().uniqueQuery_("ProcessType", "query4ValidateCodeExists", type) != null)
-//			return new ExecutionResult<ProcessType>("已存在编码为[%s]的流程类型", "bpm.process.type.code.exists", type.getCode());
-//		
-//		SessionContext.getTableSession().save(type);
-//		return new ExecutionResult<ProcessType>(type);
-		return null;
+		return commandExecutor.execute(new InsertProcessTypeCommand(type));
 	}
 	
 	/**
@@ -31,13 +34,7 @@ public class ProcessTypeService {
 	 * @return
 	 */
 	public ExecutionResult<ProcessType> update(ProcessType type) {
-//		Object[] obj = SessionContext.getSQLSession().uniqueQuery_("ProcessType", "query4ValidateCodeExists", type);
-//		if(obj != null && type.getId() != Integer.parseInt(obj[0].toString())) 
-//			return new ExecutionResult<ProcessType>("已存在编码为[%s]的流程类型", "bpm.process.type.code.exists", type.getCode());
-//		
-//		SessionContext.getTableSession().update(type);
-//		return new ExecutionResult<ProcessType>(type);
-		return null;
+		return commandExecutor.execute(new UpdateProcessTypeCommand(type));
 	}
 	
 	/**
@@ -47,16 +44,6 @@ public class ProcessTypeService {
 	 * @return
 	 */
 	public ExecutionResult<Integer> delete(int processTypeId, boolean strict) {
-//		List<Object> paramList = Arrays.asList(processTypeId);
-//		
-//		int count = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_("select count(id) from bpm_re_procdef where type_id = ?", paramList)[0].toString());
-//		if(count > 0 && !strict)
-//			return new ExecutionResult<Integer>("该流程类型关联了[%d]条流程, 无法删除", "bpm.process.type.delete.fail", count);
-//
-//		SessionContext.getSqlSession().executeUpdate("delete bpm_re_proctype where id=?", paramList);
-//		if(count > 0) 
-//			SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set type_id=0 where type_id=?", paramList);
-//		return new ExecutionResult<Integer>(processTypeId, strict);
-		return null;
+		return commandExecutor.execute(new DeleteProcessTypeCommand(processTypeId, strict));
 	}
 }

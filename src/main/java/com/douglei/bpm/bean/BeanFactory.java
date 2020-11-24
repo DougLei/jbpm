@@ -67,8 +67,8 @@ public class BeanFactory {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void executeAutowired(Collection<Object> objects) throws Exception {
 		for(Object object : objects) {
-			if(object instanceof Collection)
-				executeAutowired((Collection)object); // 针对 supportMultiInstances=true 的集合实例
+			if(object instanceof List)
+				executeAutowired((List)object); // 针对 supportMultiInstances=true 的集合实例
 			else
 				setFields(object);
 		}

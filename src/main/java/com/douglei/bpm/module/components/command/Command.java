@@ -14,7 +14,7 @@ public interface Command<T> {
 	 * @return
 	 */
 	default TransactionConfig getTransactionConfig() {
-		return TransactionConfig.DEFAULT_CONFIG;
+		return TransactionConfig.DEFAULT_INSTANCE;
 	}
 	
 	/**

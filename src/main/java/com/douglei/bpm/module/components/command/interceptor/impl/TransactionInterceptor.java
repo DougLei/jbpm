@@ -4,7 +4,7 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.components.command.Command;
 import com.douglei.bpm.module.components.command.context.Context;
 import com.douglei.bpm.module.components.command.context.transaction.TransactionConfig;
-import com.douglei.bpm.module.components.command.context.transaction.TransactionContext;
+import com.douglei.bpm.module.components.command.context.transaction.TransactionHandler;
 import com.douglei.bpm.module.components.command.interceptor.Interceptor;
 
 /**
@@ -25,17 +25,17 @@ public class TransactionInterceptor extends Interceptor {
 		if(config == null)
 			return next.execute(command);
 		
-		TransactionContext transactionContext = Context.getTransactionContext();
+		TransactionHandler handler = Context.enableTransactionHandler();
 		try {
-			transactionContext.openSession(config);
+			handler.openSession(config);
 			T t = next.execute(command);
-			transactionContext.commit();
+			handler.commit();
 			return t;
 		} catch (Throwable t) {
-			transactionContext.rollback(command, t);
+			handler.rollback(command, t);
 			return null;
 		} finally {
-			transactionContext.close();
+			handler.close();
 		}
 	}
 }

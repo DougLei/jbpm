@@ -25,7 +25,7 @@ public class CommandContextInterceptor extends Interceptor{
 	@Override
 	public <T> T execute(Command<T> command) {
 		try {
-			Context.initialize(processEngine);
+			Context.initialize(command, processEngine);
 			return next.execute(command);
 		} finally {
 			Context.clear();

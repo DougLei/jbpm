@@ -7,7 +7,7 @@ import com.douglei.orm.configuration.environment.datasource.TransactionIsolation
  * @author DougLei
  */
 public interface TransactionConfig {
-	TransactionConfig DEFAULT_CONFIG = new TransactionConfig(){};
+	TransactionConfig DEFAULT_INSTANCE = new TransactionConfig(){};
 	
 	/**
 	 * 传播行为

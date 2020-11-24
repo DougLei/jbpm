@@ -1,7 +1,8 @@
 package com.douglei.bpm.module.components.command.context;
 
 import com.douglei.bpm.ProcessEngine;
-import com.douglei.bpm.module.components.command.context.transaction.TransactionContext;
+import com.douglei.bpm.module.components.command.Command;
+import com.douglei.bpm.module.components.command.context.transaction.TransactionHandler;
 
 /**
  * 
@@ -10,11 +11,18 @@ import com.douglei.bpm.module.components.command.context.transaction.Transaction
 public class Context {
 	private static final ThreadLocal<CommandContext> COMMAND_CONTEXT = new ThreadLocal<CommandContext>();
 	
-	public static void initialize(ProcessEngine processEngine) {
-		COMMAND_CONTEXT.set(new CommandContext(processEngine));
+	@SuppressWarnings("rawtypes")
+	public static void initialize(Command command, ProcessEngine processEngine) {
+		CommandContext context = COMMAND_CONTEXT.get();
+		if(context == null) {
+			context = new CommandContext(processEngine);
+			COMMAND_CONTEXT.set(context);
+		}
+		context.pushCommand(command);
 	}
 	public static void clear() {
-		COMMAND_CONTEXT.remove();
+		if(COMMAND_CONTEXT.get().popCommand())
+			COMMAND_CONTEXT.remove();
 	}
 	
 	/**
@@ -26,10 +34,10 @@ public class Context {
 	}
 	
 	/**
-	 * 获取事物上下文
+	 * 启用事物处理器
 	 * @return
 	 */
-	public static TransactionContext getTransactionContext() {
-		return COMMAND_CONTEXT.get().getTransactionContext();
+	public static TransactionHandler enableTransactionHandler() {
+		return COMMAND_CONTEXT.get().enableTransactionHandler();
 	}
 }

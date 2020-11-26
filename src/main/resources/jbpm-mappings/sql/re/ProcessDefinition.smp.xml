@@ -9,8 +9,8 @@
 			<if test="tenantId != null and tenantId != ''">
 				and tenant_id = #{tenantId}
 			</if>
-			
-				order by subversion desc
+
+			order by subversion desc
 		</content>
 		
 	</sql>

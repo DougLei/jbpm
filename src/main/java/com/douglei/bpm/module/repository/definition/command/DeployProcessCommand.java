@@ -31,7 +31,7 @@ public class DeployProcessCommand extends AbstractProcessDefinitionCommand<Execu
 		if(runtimeInstancePolicy != null && commandContext.getRuntimeModule().getInstanceService().exists(processDefinitionId))
 			commandContext.getRuntimeModule().getInstanceService().handle(processDefinitionId, runtimeInstancePolicy);
 		
-		updateState(commandContext.getSessionContext(), processDefinitionId, ProcessDefinition.DEPLOY);
+		updateState(commandContext, processDefinitionId, ProcessDefinition.DEPLOY);
 		commandContext.getProcessHandler().addProcess(processDefinition);
 		return new ExecutionResult<Integer>(processDefinitionId, runtimeInstancePolicy);
 	}

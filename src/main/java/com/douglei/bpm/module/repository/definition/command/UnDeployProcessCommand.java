@@ -36,7 +36,7 @@ public class UnDeployProcessCommand extends AbstractProcessDefinitionCommand<Exe
 		if(historyInstancePolicy != null && commandContext.getHistoryModule().getInstanceService().exists(processDefinitionId)) 
 			commandContext.getHistoryModule().getInstanceService().handle(processDefinitionId, historyInstancePolicy);
 		
-		updateState(commandContext.getSessionContext(), processDefinitionId, ProcessDefinition.UNDEPLOY);
+		updateState(commandContext, processDefinitionId, ProcessDefinition.UNDEPLOY);
 		commandContext.getProcessHandler().deleteProcess(processDefinitionId);
 		return new ExecutionResult<Integer>(processDefinitionId, runtimeInstancePolicy, historyInstancePolicy);
 	}

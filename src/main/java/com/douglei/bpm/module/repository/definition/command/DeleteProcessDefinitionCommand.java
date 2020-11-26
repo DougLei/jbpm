@@ -33,7 +33,7 @@ public class DeleteProcessDefinitionCommand extends AbstractProcessDefinitionCom
 		if(commandContext.getRuntimeModule().getInstanceService().exists(processDefinitionId) || commandContext.getHistoryModule().getInstanceService().exists(processDefinitionId)) {
 			if(!strict)
 				return new ExecutionResult<Integer>("操作失败, 当前流程已存在实例", "bpm.process.defined.instance.exists");
-			updateState(commandContext.getSessionContext(), processDefinitionId, ProcessDefinition.DELETE);
+			updateState(commandContext, processDefinitionId, ProcessDefinition.DELETE);
 		} else {
 			commandContext.getSessionContext().getSqlSession().executeUpdate("delete bpm_re_procdef where id=?", paramList);
 		}

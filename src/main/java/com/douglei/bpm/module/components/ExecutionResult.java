@@ -35,6 +35,20 @@ public class ExecutionResult<T> extends Result{
 		return extendObjects;
 	}
 	
+	/**
+	 * 当执行结果为false时, 可通过该方法进行执行结果的泛型转换
+	 * @param targetClass
+	 * @return
+	 */
+	public <P> ExecutionResult<P> convertGenericsOnFail(Class<P> targetClass) {
+		if(success)
+			throw new IllegalArgumentException("当前执行结果为true时, 禁止调用 convertGenericsOnFail(Class) 方法");
+		
+		if(getParams().length == 0)
+			return new ExecutionResult<P>(getOriginMessage(), getCode());
+		return new ExecutionResult<P>(getOriginMessage(), getCode(), getParams());
+	}
+	
 	@Override
 	public String toString() {
 		if(success)

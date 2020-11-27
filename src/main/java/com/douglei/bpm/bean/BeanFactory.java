@@ -34,6 +34,7 @@ public class BeanFactory {
 			if(bean != null)
 				putInstance2BeanContainer(new GeneralBeanEntity(bean, instanceClazz), beanContainer);
 		}
+		beanContainer.put(BeanFactory.class, this);
 	}
 	
 	// 将bean实例put到指定Bean容器中
@@ -59,10 +60,7 @@ public class BeanFactory {
 			executeAutowired(beanContainer.values());
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			beanContainer.clear();
-			defaultBeanContainer.clear();
-		}
+		} 
 	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void executeAutowired(Collection<Object> objects) throws Exception {
@@ -78,7 +76,7 @@ public class BeanFactory {
 		if(object instanceof CustomAutowired) 
 			((CustomAutowired)object).setFields(beanContainer);
 		
-		Class<?> currentClass = object.getClass();
+		Class<?> currentClass = (object instanceof ProxyBean)?((ProxyBean)object).getOriginObject().getClass():object.getClass();
 		do{
 			for (Field field : currentClass.getDeclaredFields()) {
 				if(field.getAnnotation(Autowired.class) != null)
@@ -129,11 +127,23 @@ public class BeanFactory {
 	}
 	
 	/**
-	 * 将自定义的实现Bean注册到BeanFactory的Bean容器中
+	 * 将自定义的Bean注册到BeanFactory的Bean容器中
 	 * @param clazz bean在容器中的key
 	 * @param instance bean的实例
 	 */
 	public void registerCustomBean(Class<?> clazz, Object instance) {
 		putInstance2BeanContainer(new CustomBeanEntity(clazz, instance), beanContainer);
+	}
+	
+	/**
+	 * 对自定义的实例执行自动装配
+	 * @param customInstance
+	 */
+	public void executeAutowired(Object customInstance) {
+		try {
+			setFields(customInstance);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

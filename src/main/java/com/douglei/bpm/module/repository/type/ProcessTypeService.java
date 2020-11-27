@@ -62,6 +62,6 @@ public class ProcessTypeService {
 		SessionContext.getSqlSession().executeUpdate("delete bpm_re_proctype where id=?", paramList);
 		if(count > 0) 
 			SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set type_id=0 where type_id=?", paramList);
-		return new ExecutionResult<Integer>(processTypeId, strict);
+		return new ExecutionResult<Integer>(processTypeId);
 	}
 }

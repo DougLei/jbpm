@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
+import com.douglei.bpm.module.components.ExecutionResult;
+import com.douglei.bpm.module.runtime.instance.entity.ProcessInstance;
 import com.douglei.bpm.module.runtime.instance.start.StartParameter;
 import com.douglei.bpm.process.parser.ProcessParseException;
 
@@ -18,7 +20,8 @@ public class ProcessRuntimeTest {
 	
 	@Test
 	public void start() throws ProcessParseException {
-		StartParameter starter = new StartParameter(1);
-		engine.getRuntimeModule().getInstanceService().start(starter );
+		StartParameter parameter = new StartParameter("vocation", "v1");
+		ExecutionResult<ProcessInstance> result = engine.getRuntimeModule().getInstanceService().start(parameter);
+		System.out.println(result);
 	}
 }

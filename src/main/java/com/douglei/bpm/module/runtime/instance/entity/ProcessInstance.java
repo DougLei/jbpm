@@ -6,7 +6,7 @@ import java.util.Date;
  * 
  * @author DougLei
  */
-public class ProcessRuntimeInstance {
+public class ProcessInstance {
 	protected int id;
 	protected int procdefId;
 	protected String title;

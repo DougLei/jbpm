@@ -1,26 +1,33 @@
 package com.douglei.bpm.module.runtime.instance;
 
+import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.components.ExecutionResult;
+import com.douglei.bpm.module.components.command.CommandExecutor;
 import com.douglei.bpm.module.components.instance.InstanceHandlePolicy;
 import com.douglei.bpm.module.runtime.instance.command.StartProcessCommand;
-import com.douglei.bpm.module.runtime.instance.entity.ProcessRuntimeInstance;
+import com.douglei.bpm.module.runtime.instance.entity.ProcessInstance;
 import com.douglei.bpm.module.runtime.instance.start.StartParameter;
+import com.douglei.orm.context.transaction.component.Transaction;
 
 /**
  * 运行实例服务
  * @author DougLei
  */
-@Bean
+@Bean(isTransaction=true)
 public class InstanceService {
+	
+	@Autowired
+	private CommandExecutor commandExecutor;
 	
 	/**
 	 * 启动流程
 	 * @param parameter
 	 * @return 
 	 */
-	public ExecutionResult<ProcessRuntimeInstance> start(StartParameter parameter) {
-		return null;
+	@Transaction
+	public ExecutionResult<ProcessInstance> start(StartParameter parameter) {
+		return commandExecutor.execute(new StartProcessCommand(parameter));
 	}
 	
 	/**

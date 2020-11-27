@@ -49,7 +49,7 @@ public class ProcessDefinitionService {
 	@Transaction
 	public ExecutionResult<ProcessDefinition> insert(ProcessDefinitionBuilder builder, boolean strict) {
 		ProcessDefinition processDefinition = builder.build();
-		ProcessDefinition exProcessDefinition = SessionContext.getSQLSession().queryFirst(ProcessDefinition.class, "ProcessDefinition", "queryProcessDefinition4Save", processDefinition);
+		ProcessDefinition exProcessDefinition = SessionContext.getSQLSession().queryFirst(ProcessDefinition.class, "ProcessDefinition", "query4Save", processDefinition);
 		if(exProcessDefinition == null) {
 			// 新的流程定义, 进行save
 			SessionContext.getTableSession().save(processDefinition); 
@@ -81,7 +81,7 @@ public class ProcessDefinitionService {
 		
 		if(processDefinition.getState() == ProcessDefinition.DEPLOY) 
 			processContainer.addProcess(processDefinition);
-		return new ExecutionResult<ProcessDefinition>(processDefinition, strict);
+		return new ExecutionResult<ProcessDefinition>(processDefinition);
 	}
 	
 	/**
@@ -103,7 +103,7 @@ public class ProcessDefinitionService {
 		
 		updateState(processDefinitionId, ProcessDefinition.DEPLOY);
 		processContainer.addProcess(processDefinition);
-		return new ExecutionResult<Integer>(processDefinitionId, runtimeInstancePolicy);
+		return new ExecutionResult<Integer>(processDefinitionId);
 	}
 	
 	/**
@@ -129,7 +129,7 @@ public class ProcessDefinitionService {
 		
 		updateState(processDefinitionId, ProcessDefinition.UNDEPLOY);
 		processContainer.deleteProcess(processDefinitionId);
-		return new ExecutionResult<Integer>(processDefinitionId, runtimeInstancePolicy, historyInstancePolicy);
+		return new ExecutionResult<Integer>(processDefinitionId);
 	}
 	
 	/**
@@ -155,6 +155,6 @@ public class ProcessDefinitionService {
 		} else {
 			SessionContext.getSqlSession().executeUpdate("delete bpm_re_procdef where id=?", paramList);
 		}
-		return new ExecutionResult<Integer>(processDefinitionId, strict);
+		return new ExecutionResult<Integer>(processDefinitionId);
 	}
 }

@@ -1,7 +1,5 @@
 package com.douglei.bpm.module.components;
 
-import java.util.Arrays;
-
 import com.douglei.i18n.I18nContext;
 import com.douglei.i18n.Result;
 
@@ -11,15 +9,13 @@ import com.douglei.i18n.Result;
  */
 public class ExecutionResult<T> extends Result{
 	private boolean success; // 结果是否成功
-	private T object; // 可通过该属性传递某个(主要)实例
-	private Object[] extendObjects; // 对object的扩展, 可通过该属性传递多个实例
+	private T object; // 当结果成功时, 可通过该属性传递某个实例
 	
 	public ExecutionResult(String originMessage, String code, Object... params) {
 		super(originMessage, code, params);
 	}
-	public ExecutionResult(T object, Object... extendObjects) {
+	public ExecutionResult(T object) {
 		this.object = object;
-		this.extendObjects = extendObjects;
 		this.success = true;
 	}
 	
@@ -31,9 +27,6 @@ public class ExecutionResult<T> extends Result{
 	}
 	public T getObject() {
 		return object;
-	}
-	public Object[] getExtendObjects() {
-		return extendObjects;
 	}
 	
 	/**
@@ -63,7 +56,7 @@ public class ExecutionResult<T> extends Result{
 	@Override
 	public String toString() {
 		if(success)
-			return getClass().getSimpleName() + " [success=true, object=" + object + ", extendObjects=" + Arrays.toString(extendObjects) +"]";
+			return getClass().getSimpleName() + " [success=true, object=" + object +"]";
 		return getClass().getSimpleName() + " [success=false, failMessage="+getFailMessage()+"]";
 	}
 }

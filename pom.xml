@@ -10,7 +10,7 @@
 	<dependencies>
 		<dependency>
 		    <groupId>com.douglei</groupId>
-			<artifactId>jdb-orm</artifactId>
+			<artifactId>jdb-orm-context</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

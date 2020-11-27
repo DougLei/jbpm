@@ -1,6 +1,7 @@
 package com.douglei.bpm.process.parser;
 
 import com.douglei.bpm.bean.annotation.MultiInstance;
+import com.douglei.bpm.process.NodeType;
 
 /**
  * 解析器
@@ -10,10 +11,10 @@ import com.douglei.bpm.bean.annotation.MultiInstance;
 public interface Parser<P, R> {
 	
 	/**
-	 * 获取要解析的元素名称
+	 * 
 	 * @return
 	 */
-	String elementName();
+	NodeType getNodeType();
 	
 	/**
 	 * 解析

@@ -3,35 +3,33 @@ package com.douglei.bpm.module.runtime.instance.command;
 import java.util.Arrays;
 
 import com.douglei.bpm.module.components.ExecutionResult;
-import com.douglei.bpm.module.components.command.Command;
-import com.douglei.bpm.module.components.command.context.CommandContext;
-import com.douglei.bpm.module.components.command.context.transaction.SessionContext;
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessRuntimeInstance;
 import com.douglei.bpm.module.runtime.instance.start.StartParameter;
-import com.douglei.bpm.process.node.Process;
-import com.douglei.bpm.process.node.task.event.StartEvent;
+import com.douglei.orm.context.SessionContext;
 
 /**
  * 启动流程命令
  * @author DougLei
  */
-public class StartProcessCommand implements Command<ExecutionResult<ProcessRuntimeInstance>> {
+public class StartProcessCommand {
 	private StartParameter parameter;
 	
 	public StartProcessCommand(StartParameter parameter) {
 		this.parameter = parameter;
 	}
 
-	@Override
-	public ExecutionResult<ProcessRuntimeInstance> execute(CommandContext commandContext) {
-		ExecutionResult<Integer> processDefinitionId = getProcessDefinitionIdAfterValidate(commandContext.getSessionContext());
-		if(processDefinitionId.isFail())
-			return processDefinitionId.convertGenericsOnFail(ProcessRuntimeInstance.class);
+	public ExecutionResult<ProcessRuntimeInstance> execute() {
+//		ExecutionResult<Integer> processDefinitionId = getProcessDefinitionIdAfterValidate(commandContext.getSessionContext());
+//		if(processDefinitionId.isFail())
+//			return processDefinitionId.convertGenericsOnFail(ProcessRuntimeInstance.class);
 		
-		Process process = commandContext.getProcessHandler().getProcess(processDefinitionId.getObject());
+//		ProcessMetadata process = commandContext.getProcessContainer().getProcess(processDefinitionId.getObject());
+//		StartEventMetadata startEvent = process.getStartEvent();
 		
-		StartEvent startEvent = process.getStartEvent();
+		
+		
+		
 		
 		// TODO 
 		

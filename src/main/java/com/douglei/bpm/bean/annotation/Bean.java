@@ -25,4 +25,10 @@ public @interface Bean {
 	 * @return
 	 */
 	Class<?> clazz() default Object.class;
+	
+	/**
+	 * 是否是事物Bean
+	 * @return
+	 */
+	boolean isTransaction() default false;
 }

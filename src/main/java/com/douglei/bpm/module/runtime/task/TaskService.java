@@ -3,7 +3,7 @@ package com.douglei.bpm.module.runtime.task;
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.components.ExecutionResult;
-import com.douglei.bpm.process.ProcessHandler;
+import com.douglei.bpm.process.container.ProcessContainerProxy;
 
 /**
  * 运行任务服务
@@ -13,7 +13,7 @@ import com.douglei.bpm.process.ProcessHandler;
 public class TaskService {
 	
 	@Autowired
-	private ProcessHandler processHandler;
+	private ProcessContainerProxy processHandler;
 	
 	/**
 	 * 完成指定id的任务

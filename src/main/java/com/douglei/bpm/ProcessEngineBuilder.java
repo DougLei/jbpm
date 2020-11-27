@@ -12,6 +12,8 @@ import com.douglei.bpm.bean.BeanFactory;
 import com.douglei.bpm.process.container.ProcessContainer;
 import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
+import com.douglei.orm.context.RegistrationResult;
+import com.douglei.orm.context.SessionFactoryContainer;
 import com.douglei.orm.mapping.handler.entity.MappingEntity;
 import com.douglei.orm.mapping.handler.entity.impl.AddOrCoverMappingEntity;
 import com.douglei.orm.mapping.type.MappingTypeContainer;
@@ -31,29 +33,6 @@ public class ProcessEngineBuilder {
 	private BeanFactory beanFactory = new BeanFactory();
 	
 	/**
-	 * - 关于以下四种构建函数的介绍
-	 * 
-	 * -------------------------------------------------------------------------------------------------
-	 * jbpm流程引擎单独作为服务, 有以下两种方式构建:
-	 * 
-	 * 1. 使用默认的jdb-orm配置文件(即jbpm.conf.xml), 构建引擎, 方法为: {@link ProcessEngineBuilder.build()}
-	 * 2. 使用指定name的jdb-orm配置文件, 构建引擎, 方法为: {@link ProcessEngineBuilder.build(String)}
-	 *    - 在流程引擎被销毁时, 会同时销毁SessionFactory实例, 因为该SessionFactory是完全属于流程引擎的
-	 * 
-	 * -------------------------------------------------------------------------------------------------
-	 * jbpm流程引擎属于扩展功能, 需要集成到其他系统中使用, 有以下两种方式构建: 
-	 * 
-	 * 1. 使用了其他 orm框架的系统, 使用 {@link ProcessEngineBuilder.build(String, DataSource)} 方法构建引擎, 传入引擎的唯一标识, 以及自己的数据源实例
-	 *    - 在流程引擎被销毁时, 会同时销毁SessionFactory实例, 因为该SessionFactory是完全属于流程引擎的
-	 *    
-	 * 2. 使用了jdb-orm框架的系统, 使用 {@link ProcessEngineBuilder.build(SessionFactory)} 方法构建引擎, 传入自己的SessionFactory实例(externalSessionFactory)
-	 *    - 在流程引擎被销毁时, 不会销毁SessionFactory实例, 只会将流程引擎相关的mapping从externalSessionFactory中移除 
-	 *    
-	 * -------------------------------------------------------------------------------------------------
-	 * 特别说明, 流程引擎在销毁时, 不会对流程相关的表结构和其中的数据产生影响
-	 */
-	
-	/**
 	 * 使用默认的jbpm.conf.xml配置文件, 构建引擎
 	 */
 	public ProcessEngineBuilder() {
@@ -67,7 +46,9 @@ public class ProcessEngineBuilder {
 		try {
 			Configuration configuration = new Configuration(configurationFilePath);
 			SessionFactory sessionFactory = configuration.buildSessionFactory();
-			this.engine = new ProcessEngineByBuiltinSessionFactory(sessionFactory);
+			
+			SessionFactoryContainer.getSingleton().register(sessionFactory);
+			this.engine = new ProcessEngineByBuiltinSessionFactory(sessionFactory.getId());
 		} catch (Exception e) {
 			logger.error("构建流程引擎时出现异常: {}", ExceptionUtil.getExceptionDetailMessage(e));
 			throw new ProcessEngineBuildException("构建流程引擎时出现异常", e);
@@ -91,9 +72,10 @@ public class ProcessEngineBuilder {
 			Configuration configuration = new Configuration(DEFAULT_CONFIGURATION_FILE_PATH);
 			configuration.setId(engineId);
 			configuration.setExternalDataSource(new ExternalDataSource(dataSource));
-			
 			SessionFactory sessionFactory = configuration.buildSessionFactory();
-			this.engine = new ProcessEngineByBuiltinSessionFactory(sessionFactory);
+			
+			SessionFactoryContainer.getSingleton().register(sessionFactory);
+			this.engine = new ProcessEngineByBuiltinSessionFactory(sessionFactory.getId());
 		} catch (Exception e) {
 			logger.error("构建流程引擎时出现异常: {}", ExceptionUtil.getExceptionDetailMessage(e));
 			throw new ProcessEngineBuildException("构建流程引擎时出现异常", e);
@@ -111,7 +93,8 @@ public class ProcessEngineBuilder {
 			mappingFiles.forEach(mappingFile -> mappingEntities.add(new AddOrCoverMappingEntity(mappingFile)));
 			externalSessionFactory.getMappingHandler().execute(mappingEntities);
 			
-			this.engine = new ProcessEngineByExternalSessionFactory(externalSessionFactory, mappingFiles);
+			RegistrationResult registrationResult = SessionFactoryContainer.getSingleton().register(externalSessionFactory);
+			this.engine = new ProcessEngineByExternalSessionFactory(externalSessionFactory.getId(), registrationResult, mappingFiles);
 		} catch (Exception e) {
 			logger.error("构建流程引擎时出现异常: {}", ExceptionUtil.getExceptionDetailMessage(e));
 			throw new ProcessEngineBuildException("构建流程引擎时出现异常", e);

@@ -2,7 +2,7 @@ package com.douglei.bpm.process.container;
 
 import com.douglei.bpm.bean.annotation.DefaultInstance;
 import com.douglei.bpm.process.container.impl.ApplicationProcessContainer;
-import com.douglei.bpm.process.node.Process;
+import com.douglei.bpm.process.metadata.ProcessMetadata;
 
 /**
  * 流程容器
@@ -20,7 +20,7 @@ public interface ProcessContainer {
 	 * 添加流程, 如果存在相同id的流程, 将其cover; 如果不存在相同id的流程, 将其add
 	 * @param process
 	 */
-	void addProcess(Process process);
+	void addProcess(ProcessMetadata process);
 	
 	/**
 	 * 删除流程
@@ -33,12 +33,5 @@ public interface ProcessContainer {
 	 * @param id
 	 * @return 如果没有查询到, 返回null
 	 */
-	Process getProcess(int id);
-	
-	/**
-	 * 指定id的流程是否存在
-	 * @param id
-	 * @return
-	 */
-	boolean exists(int id);
+	ProcessMetadata getProcess(int id);
 }

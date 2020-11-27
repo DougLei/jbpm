@@ -14,11 +14,11 @@ import org.dom4j.io.SAXReader;
 
 import com.douglei.bpm.bean.CustomAutowired;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.process.node.Process;
-import com.douglei.bpm.process.node.flow.Flow;
-import com.douglei.bpm.process.node.task.Task;
-import com.douglei.bpm.process.node.task.event.EndEvent;
-import com.douglei.bpm.process.node.task.event.StartEvent;
+import com.douglei.bpm.process.metadata.ProcessMetadata;
+import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
+import com.douglei.bpm.process.metadata.node.task.TaskMetadata;
+import com.douglei.bpm.process.metadata.node.task.event.EndEventMetadata;
+import com.douglei.bpm.process.metadata.node.task.event.StartEventMetadata;
 import com.douglei.bpm.process.parser.flow.FlowParser;
 import com.douglei.bpm.process.parser.flow.FlowTemporaryData;
 import com.douglei.bpm.process.parser.task.TaskTemporaryData;
@@ -44,7 +44,7 @@ public class ProcessParser implements CustomAutowired{
 			}else if(parser.getClass() == FlowParser.class) {
 				flowParser = (FlowParser) parser;
 			}
-			parserMap.put(parser.elementName(), parser);
+			parserMap.put(parser.getNodeType().getElementName(), parser);
 		});
 	}
 	
@@ -55,11 +55,11 @@ public class ProcessParser implements CustomAutowired{
 	 * @return
 	 * @throws ProcessParseException
 	 */
-	public Process parse(int processDefinitionId, String content) throws ProcessParseException {
+	public ProcessMetadata parse(int processDefinitionId, String content) throws ProcessParseException {
 		try {
 			Document document = new SAXReader().read(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
 			Element processElement = document.getRootElement().element("process");
-			Process process = new Process(processDefinitionId, 
+			ProcessMetadata process = new ProcessMetadata(processDefinitionId, 
 					processElement.attributeValue("code"), processElement.attributeValue("version"), processElement.attributeValue("name"), 
 					processElement.attributeValue("title"), processElement.attributeValue("pageID"));
 			buildProcessStruct(process, processElement.elements());
@@ -74,8 +74,8 @@ public class ProcessParser implements CustomAutowired{
 	 * @param process
 	 * @param elements
 	 */
-	private void buildProcessStruct(Process process, List<Element> elements) {
-		StartEvent startEvent = null;
+	private void buildProcessStruct(ProcessMetadata process, List<Element> elements) {
+		StartEventMetadata startEventMetadata = null;
 		List<FlowTemporaryData> flowTemporaryDatas = new ArrayList<FlowTemporaryData>(elements.size());
 		Map<String, Object> taskMap = new HashMap<String, Object>();
 		
@@ -88,25 +88,27 @@ public class ProcessParser implements CustomAutowired{
 			id = element.attributeValue("id");
 			if(StringUtil.isEmpty(id))
 				throw new ProcessParseException("流程中连线/任务的id值不能为空");
-			if(idExists4flowTemporaryDatas(id, flowTemporaryDatas) || (!taskMap.isEmpty() && taskMap.containsKey(id)) || (startEvent != null && startEvent.getId().equals(id)))
+			if(id.length() > 50)
+				throw new ProcessParseException("流程中连线/任务的id值长度不能超过50");
+			if(idExists4flowTemporaryDatas(id, flowTemporaryDatas) || (!taskMap.isEmpty() && taskMap.containsKey(id)) || (startEventMetadata != null && startEventMetadata.getId().equals(id)))
 				throw new ProcessParseException("流程中连线/任务的id值出现重复: " + id);
 			
-			if(startEventParser.elementName().equals(elementName)) {
-				if(startEvent != null)
+			if(startEventParser.getNodeType().getElementName().equals(elementName)) {
+				if(startEventMetadata != null)
 					throw new ProcessParseException("流程中只能配置一个起始事件");
-				startEvent = startEventParser.parse(new TaskTemporaryData(id, element));
-			}else if(flowParser.elementName().equals(elementName)) {
+				startEventMetadata = startEventParser.parse(new TaskTemporaryData(id, element));
+			}else if(flowParser.getNodeType().getElementName().equals(elementName)) {
 				flowTemporaryDatas.add(new FlowTemporaryData(id, element));
 			}else {
 				taskMap.put(id, element);
 			}
 		}
 		
-		if(startEvent == null)
+		if(startEventMetadata == null)
 			throw new ProcessParseException("流程中必须配置起始事件");
-		process.setStartEvent(startEvent);
+		process.setStartEvent(startEventMetadata);
 		
-		linkTaskAndFlow(startEvent, flowTemporaryDatas, taskMap, process);
+		linkTaskAndFlow(startEventMetadata, flowTemporaryDatas, taskMap, process);
 		
 		if(!flowTemporaryDatas.isEmpty())
 			flowTemporaryDatas.clear();
@@ -136,7 +138,7 @@ public class ProcessParser implements CustomAutowired{
 	 * @param taskMap
 	 * @param process
 	 */
-	private void linkTaskAndFlow(Task sourceTask, List<FlowTemporaryData> flowTemporaryDatas, Map<String, Object> taskMap, Process process) {
+	private void linkTaskAndFlow(TaskMetadata sourceTask, List<FlowTemporaryData> flowTemporaryDatas, Map<String, Object> taskMap, ProcessMetadata process) {
 		boolean taskExistsFlow = false;
 		if(!flowTemporaryDatas.isEmpty()) {
 			for (int i = 0; i < flowTemporaryDatas.size(); i++) {
@@ -148,22 +150,22 @@ public class ProcessParser implements CustomAutowired{
 					if(taskObj == null)
 						throw new ProcessParseException("流程中不存在id=["+flowTemporaryData.getTarget()+"]的任务");
 					
-					Flow flow = flowParser.parse(flowTemporaryData);
+					FlowMetadata flow = flowParser.parse(flowTemporaryData);
 					sourceTask.addFlow(flow);
 					
-					Task targetTask = null;
+					TaskMetadata targetTask = null;
 					if(taskObj instanceof Element) {
 						Element element = (Element) taskObj;
-						targetTask = (Task) parserMap.get(element.getName()).parse(new TaskTemporaryData(flowTemporaryData.getTarget(), element));
+						targetTask = (TaskMetadata) parserMap.get(element.getName()).parse(new TaskTemporaryData(flowTemporaryData.getTarget(), element));
 						taskMap.put(targetTask.getId(), targetTask);
 					}else {
-						targetTask = (Task) taskObj;
+						targetTask = (TaskMetadata) taskObj;
 					}
 					
 					flow.setTargetTask(targetTask);
 					if(targetTask != taskObj) { // 证明targetTask是第一次解析
 						process.addTask(targetTask);
-						if(!(targetTask instanceof EndEvent)) {
+						if(!(targetTask instanceof EndEventMetadata)) {
 							linkTaskAndFlow(targetTask, flowTemporaryDatas, taskMap, process);
 							i = -1;
 						}

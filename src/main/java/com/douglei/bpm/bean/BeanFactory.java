@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.douglei.aop.ProxyBean;
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.bean.annotation.DefaultInstance;
@@ -22,32 +23,31 @@ import com.douglei.tools.utils.reflect.ClassLoadUtil;
  */
 public class BeanFactory {
 	private Map<Class<?>, Object> beanContainer = new HashMap<Class<?>, Object>(128);
-	private Map<Class<?>, Object> defaultBeanContainer = new HashMap<Class<?>, Object>(32);
+	private Map<Class<?>, Object> defaultBeanContainer = new HashMap<Class<?>, Object>(16);
 	
 	public BeanFactory() {
-		Class<?> clazz = null;
+		Class<?> instanceClazz = null;
 		Bean bean = null;
 		for (String classpath : new ClassScanner().scan("com.douglei.bpm")) { // 扫描指定路径下的所有class
-			clazz = ClassLoadUtil.loadClass(classpath);
-			bean = clazz.getAnnotation(Bean.class);
-			if(bean == null)
-				continue;
-			putInstance2BeanContainer(new GeneralBeanEntity(bean.clazz(), clazz), beanContainer);
+			instanceClazz = ClassLoadUtil.loadClass(classpath);
+			bean = instanceClazz.getAnnotation(Bean.class);
+			if(bean != null)
+				putInstance2BeanContainer(new GeneralBeanEntity(bean, instanceClazz), beanContainer);
 		}
 	}
 	
 	// 将bean实例put到指定Bean容器中
 	@SuppressWarnings("unchecked")
-	private void putInstance2BeanContainer(BeanEntity beanEntity, Map<Class<?>, Object> beanContainer) {
+	private void putInstance2BeanContainer(BeanEntity beanEntity, Map<Class<?>, Object> container) {
 		if(beanEntity.supportMultiInstances()) {
-			List<Object> list = (List<Object>) beanContainer.get(beanEntity.getClazz());
+			List<Object> list = (List<Object>) container.get(beanEntity.getClazz());
 			if(list == null) {
 				list = new ArrayList<Object>();
-				beanContainer.put(beanEntity.getClazz(), list);
+				container.put(beanEntity.getClazz(), list);
 			}
 			list.add(beanEntity.getInstance());
 		}else {
-			beanContainer.put(beanEntity.getClazz(), beanEntity.getInstance());
+			container.put(beanEntity.getClazz(), beanEntity.getInstance());
 		}
 	}
 	
@@ -90,8 +90,21 @@ public class BeanFactory {
 	// 设置属性
 	private void setField(Object object, Field field) throws Exception {
 		Object value = getFieldValue(object, field);
+		
 		field.setAccessible(true);
-		field.set(object, value);
+		if(value instanceof ProxyBean) {
+			if(object instanceof ProxyBean) {
+				field.set(((ProxyBean)object).getOriginObject(), ((ProxyBean)value).getProxy());
+			}else {
+				field.set(object, ((ProxyBean)value).getProxy());
+			}
+		}else {
+			if(object instanceof ProxyBean) {
+				field.set(((ProxyBean)object).getOriginObject(), value);
+			}else {
+				field.set(object, value);
+			}
+		}
 		field.setAccessible(false);
 	}
 	// 从容器中获取指定Field类型的值

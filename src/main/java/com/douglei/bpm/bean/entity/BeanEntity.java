@@ -7,8 +7,9 @@ import com.douglei.bpm.bean.annotation.MultiInstance;
  * @author DougLei
  */
 public abstract class BeanEntity {
-	protected Class<?> clazz;
-	protected boolean supportMultiInstances;
+	private Class<?> clazz;
+	private boolean supportMultiInstances;
+	protected Object instance;
 	
 	public BeanEntity(Class<?> clazz, Class<?> instanceClazz) {
 		this.clazz = (clazz==Object.class || clazz==instanceClazz)?instanceClazz:clazz;
@@ -21,10 +22,7 @@ public abstract class BeanEntity {
 	public boolean supportMultiInstances() {
 		return supportMultiInstances;
 	}
-	
-	/**
-	 * 获取实例
-	 * @return
-	 */
-	public abstract Object getInstance();
+	public Object getInstance() {
+		return instance;
+	}
 }

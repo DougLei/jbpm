@@ -2,6 +2,7 @@ package com.douglei.bpm.module.components;
 
 import java.util.Arrays;
 
+import com.douglei.i18n.I18nContext;
 import com.douglei.i18n.Result;
 
 /**
@@ -36,13 +37,23 @@ public class ExecutionResult<T> extends Result{
 	}
 	
 	/**
+	 * 获取执行结果为false时的具体(国际化)消息
+	 * @return
+	 */
+	public String getFailMessage() {
+		if(success)
+			return null;
+		return I18nContext.getMessage(this).getMessage();
+	}
+	
+	/**
 	 * 当执行结果为false时, 可通过该方法进行执行结果的泛型转换
 	 * @param targetClass
 	 * @return
 	 */
 	public <P> ExecutionResult<P> convertGenericsOnFail(Class<P> targetClass) {
 		if(success)
-			throw new IllegalArgumentException("当前执行结果为true时, 禁止调用 convertGenericsOnFail(Class) 方法");
+			throw new IllegalArgumentException("当前执行结果为true时, 无法调用 convertGenericsOnFail(Class) 方法");
 		
 		if(getParams().length == 0)
 			return new ExecutionResult<P>(getOriginMessage(), getCode());
@@ -53,6 +64,6 @@ public class ExecutionResult<T> extends Result{
 	public String toString() {
 		if(success)
 			return getClass().getSimpleName() + " [success=true, object=" + object + ", extendObjects=" + Arrays.toString(extendObjects) +"]";
-		return getClass().getSimpleName() + " [success=false, originMessage=" + getOriginMessage() + ", code=" + getCode() + ", params=" + Arrays.toString(getParams()) +"]";
+		return getClass().getSimpleName() + " [success=false, failMessage="+getFailMessage()+"]";
 	}
 }

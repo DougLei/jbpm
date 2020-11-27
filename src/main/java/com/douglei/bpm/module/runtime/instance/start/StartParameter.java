@@ -25,6 +25,10 @@ public class StartParameter {
 		this.processDefinitionId = processDefinitionId;
 		this.startingMode = StartingMode.BY_PROCESS_DEFINITION_ID;
 	}
+	
+	public StartParameter(String code) {
+		this(code, null, null);
+	}
 	public StartParameter(String code, String version) {
 		this(code, version, null);
 	}

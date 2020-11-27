@@ -1,7 +1,8 @@
 package com.douglei.bpm.process.parser.task.gateway;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.process.node.task.gateway.ExclusiveGateway;
+import com.douglei.bpm.process.NodeType;
+import com.douglei.bpm.process.metadata.node.task.gateway.ExclusiveGatewayMetadata;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.bpm.process.parser.task.TaskTemporaryData;
@@ -11,15 +12,15 @@ import com.douglei.bpm.process.parser.task.TaskTemporaryData;
  * @author DougLei
  */
 @Bean(clazz=Parser.class)
-public class ExclusiveGatewayParser implements Parser<TaskTemporaryData, ExclusiveGateway> {
+public class ExclusiveGatewayParser implements Parser<TaskTemporaryData, ExclusiveGatewayMetadata> {
 
 	@Override
-	public String elementName() {
-		return "exclusiveGateway";
+	public ExclusiveGatewayMetadata parse(TaskTemporaryData temporaryData) throws ProcessParseException {
+		return new ExclusiveGatewayMetadata(temporaryData.getId(), temporaryData.getElement().attributeValue("name"), getNodeType());
 	}
 
 	@Override
-	public ExclusiveGateway parse(TaskTemporaryData temporaryData) throws ProcessParseException {
-		return new ExclusiveGateway(temporaryData.getId(), temporaryData.getElement().attributeValue("name"));
+	public NodeType getNodeType() {
+		return NodeType.EXCLUSIVE_GATEWAY;
 	}
 }

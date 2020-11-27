@@ -1,17 +1,17 @@
 package com.douglei.bpm.process.container.impl;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.douglei.bpm.process.container.ProcessContainer;
-import com.douglei.bpm.process.node.Process;
+import com.douglei.bpm.process.metadata.ProcessMetadata;
 
 /**
  * 
  * @author DougLei
  */
 public class ApplicationProcessContainer implements ProcessContainer {
-	private final Map<Integer, Process> container = new HashMap<Integer, Process>(64);
+	private final Map<Integer, ProcessMetadata> container = new ConcurrentHashMap<Integer, ProcessMetadata>(64);
 
 	@Override
 	public void clear() {
@@ -20,7 +20,7 @@ public class ApplicationProcessContainer implements ProcessContainer {
 	}
 	
 	@Override
-	public void addProcess(Process process) {
+	public void addProcess(ProcessMetadata process) {
 		container.put(process.getId(), process);
 	}
 
@@ -30,12 +30,7 @@ public class ApplicationProcessContainer implements ProcessContainer {
 	}
 
 	@Override
-	public Process getProcess(int id) {
+	public ProcessMetadata getProcess(int id) {
 		return container.get(id);
-	}
-
-	@Override
-	public boolean exists(int id) {
-		return container.containsKey(id);
 	}
 }

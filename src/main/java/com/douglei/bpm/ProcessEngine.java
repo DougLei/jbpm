@@ -4,19 +4,18 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
-import com.douglei.bpm.process.ProcessHandler;
+import com.douglei.bpm.process.container.ProcessContainerProxy;
 import com.douglei.orm.mapping.handler.MappingHandlerException;
-import com.douglei.orm.sessionfactory.SessionFactory;
 
 /**
  * 流程引擎
  * @author DougLei
  */
 public abstract class ProcessEngine {
-	protected final SessionFactory sessionFactory; // 引擎id, 即SessionFactory的id, 所以也可以从SessionFactoryContainer.get().getId()来获取
+	protected final String id; // 引擎id, 即SessionFactory的id, 所以也可以从SessionFactoryContainer.get().getId()来获取
 	
 	@Autowired
-	private ProcessHandler processHandler;
+	private ProcessContainerProxy processContainer;
 	
 	@Autowired
 	private RepositoryModule repositoryModule;
@@ -27,18 +26,15 @@ public abstract class ProcessEngine {
 	@Autowired
 	private HistoryModule historyModule;
 	
-	protected ProcessEngine(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
+	protected ProcessEngine(String id) {
+		this.id = id;
 	}
 	
 	public final String getId() {
-		return sessionFactory.getId();
+		return id;
 	}
-	public final SessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
-	public final ProcessHandler getProcessHandler() {
-		return processHandler;
+	public final ProcessContainerProxy getProcessContainer() {
+		return processContainer;
 	}
 	public final RepositoryModule getRepositoryModule() {
 		return repositoryModule;

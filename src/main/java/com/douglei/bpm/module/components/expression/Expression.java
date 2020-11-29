@@ -43,23 +43,20 @@ public class Expression implements Serializable {
 	public String getSource() {
 		return source;
 	}
-	public boolean exists() {
-		return expressions != null;
-	}
 	
 	private int pointer;
-	public boolean hasNext() {
-		return pointer+1 < expressions.size();
-	}
-	public boolean next() {
-		pointer++;
-		return pointer < expressions.size();
+	public boolean exists() {
+		return expressions != null;
 	}
 	public String getExpression() {
 		return expressions.get(pointer);
 	}
 	public Object getValue(Object obj) {
-		return OgnlHandler.getSingleton().getObjectValue(expressions.get(pointer), obj);
+		return OgnlHandler.getSingleton().getObjectValue(getExpression(), obj);
+	}
+	public boolean next() {
+		pointer++;
+		return pointer < expressions.size();
 	}
 	public void reset() {
 		pointer=0;

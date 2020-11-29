@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping-configuration>
+	<!-- 流程运行任务表 -->
+	<table name="BPM_RU_TASK" class="com.douglei.bpm.module.runtime.task.entity.ProcessRuntimeTask" createMode="create" strict="true">
+		<columns>
+			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
+			<column name="PROCDEF_ID" property="procdefId" dataType="number" length="10" nullable="false"/>
+			<column name="PROCINST_ID" property="procinstId" dataType="number" length="10" nullable="false"/>
+			<column name="TASK_ID" property="taskId" dataType="string" length="50" nullable="false"/>
+			<column name="TASK_NAME" property="taskName" dataType="nstring" length="100" nullable="false"/>
+			<column name="TASK_TYPE" property="taskType" dataType="string" length="20" nullable="false"/>
+			<column name="START_TIME" property="startTime" dataType="datetime" nullable="false" />
+			<column name="EXPIRY_TIME" property="expiryTime" dataType="datetime" />
+			<column name="BUSINESS_ID" property="businessId" dataType="string" length="100"/>
+			<column name="PAGE_ID" property="pageId" dataType="string" length="500"/>
+		</columns>
+		<primaryKeyHandler type="sequence"></primaryKeyHandler>
+	</table>
+</mapping-configuration>

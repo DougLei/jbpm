@@ -15,7 +15,7 @@ public class ProcessRuntimeInstance {
 	protected int state;
 	protected String startUserId;
 	protected Date startTime;
-	private String tenantId;
+	protected String tenantId;
 	
 	public int getId() {
 		return id;

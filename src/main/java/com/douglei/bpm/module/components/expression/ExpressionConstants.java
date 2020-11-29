@@ -24,10 +24,10 @@ public class ExpressionConstants {
 	/**
 	 * 表达式前缀正则表达式实例
 	 */
-	public static final Pattern PREFIX_REGEX_PATTERN = Pattern.compile(PREFIX_4_REGEX);
+	static final Pattern PREFIX_REGEX_PATTERN = Pattern.compile(PREFIX_4_REGEX);
 	
 	/**
 	 * 表达式后缀正则表达式实例
 	 */
-	public static final Pattern SUFFIX_REGEX_PATTERN = Pattern.compile(SUFFIX);
+	static final Pattern SUFFIX_REGEX_PATTERN = Pattern.compile(SUFFIX);
 }

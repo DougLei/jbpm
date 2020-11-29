@@ -28,6 +28,6 @@ public class InstanceService {
 	 */
 	public boolean exists(int processDefinitionId) {
 		// TODO 判断指定的流程定义id, 是否存在历史实例
-		return true;
+		return false;
 	}
 }

@@ -19,7 +19,7 @@ public class UserTaskMetadata extends TaskMetadata {
 	private List<Option> options;
 	
 	
-	protected UserTaskMetadata(String id, String name, NodeType type) {
+	public UserTaskMetadata(String id, String name, NodeType type) {
 		super(id, name, type);
 	}
 }

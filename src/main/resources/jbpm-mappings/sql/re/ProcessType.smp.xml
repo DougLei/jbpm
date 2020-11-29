@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping-configuration>
 	<sql namespace="ProcessType">
-		
 		<!-- 查询验证流程类型的code是否存在 -->
 		<content name="query4ValidateCodeExists" type="select">
 			select id from bpm_re_proctype where code = #{code}
@@ -10,6 +9,5 @@
 				and tenant_id = #{tenantId}
 			</if>
 		</content>
-		
 	</sql>
 </mapping-configuration>

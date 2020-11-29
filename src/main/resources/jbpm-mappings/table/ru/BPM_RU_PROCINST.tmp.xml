@@ -7,6 +7,7 @@
 			<column name="PROCDEF_ID" property="procdefId" dataType="number" length="10" nullable="false"/>
 			<column name="TITLE" property="title" dataType="nstring" length="200" nullable="false"/>
 			<column name="BUSINESS_ID" property="businessId" dataType="string" length="100"/>
+			<column name="PAGE_ID" property="pageId" dataType="string" length="500"/>
 			<column name="STATE" property="state" dataType="number" length="1" defaultValue="0" nullable="false"/>
 			<column name="START_USER_ID" property="startUserId" dataType="nstring" length="150" />
 			<column name="START_TIME" property="startTime" dataType="datetime" nullable="false" />

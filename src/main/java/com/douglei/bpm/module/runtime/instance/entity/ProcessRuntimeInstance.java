@@ -6,11 +6,12 @@ import java.util.Date;
  * 
  * @author DougLei
  */
-public class ProcessInstance {
+public class ProcessRuntimeInstance {
 	protected int id;
 	protected int procdefId;
 	protected String title;
 	protected String businessId;
+	protected String pageId;
 	protected int state;
 	protected String startUserId;
 	protected Date startTime;
@@ -39,6 +40,12 @@ public class ProcessInstance {
 	}
 	public void setBusinessId(String businessId) {
 		this.businessId = businessId;
+	}
+	public String getPageId() {
+		return pageId;
+	}
+	public void setPageId(String pageId) {
+		this.pageId = pageId;
 	}
 	public int getState() {
 		return state;

@@ -3,8 +3,6 @@ package com.douglei.bpm.module.runtime.instance.start;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.douglei.bpm.module.components.variable.Variable;
-
 /**
  * 流程的启动参数
  * @author DougLei
@@ -18,8 +16,8 @@ public class StartParameter {
 	private String tenantId; // 租户
 	
 	private String businessId; // (主)业务标识
-	private String startUser; // 启动人
-	private Map<String, Variable> variables; // 流程变量map集合
+	private String startUserId; // 启动人
+	private Map<String, Object> variables; // 流程变量map集合
 	
 	public StartParameter(int processDefinitionId) {
 		this.processDefinitionId = processDefinitionId;
@@ -40,22 +38,21 @@ public class StartParameter {
 		this.businessId = businessId;
 		return this;
 	}
-	public StartParameter setStartUser(String startUser) {
-		this.startUser = startUser;
+	public StartParameter setStartUserId(String startUserId) {
+		this.startUserId = startUserId;
 		return this;
 	}
 	
 	public StartParameter addVariable(String name, Object value) {
 		if(this.variables == null)
-			this.variables = new HashMap<String, Variable>();
-		this.variables.put(name, new Variable(name, value));
+			this.variables = new HashMap<String, Object>();
+		this.variables.put(name, value);
 		return this;
 	}
 	public StartParameter addVariables(Map<String, Object> variables) {
 		if(this.variables == null)
-			this.variables = new HashMap<String, Variable>();
-		
-		variables.entrySet().forEach(entry -> this.variables.put(entry.getKey(), new Variable(entry.getKey(), entry.getValue())));
+			this.variables = new HashMap<String, Object>();
+		this.variables.putAll(variables);
 		return this;
 	}
 	
@@ -77,10 +74,10 @@ public class StartParameter {
 	public String getBusinessId() {
 		return businessId;
 	}
-	public String getStartUser() {
-		return startUser;
+	public String getStartUserId() {
+		return startUserId;
 	}
-	public Map<String, Variable> getVariables() {
+	public Map<String, Object> getVariables() {
 		return variables;
 	}
 }

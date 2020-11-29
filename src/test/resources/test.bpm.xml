@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpm-configuration>
+	<!-- 
+		流程配置结构, 核心主要包括以下两种节点类型:
+		1. 连线
+		2. 任务, 包含两种类型:
+			2.1. 手动任务, 需要用户手动处理, 来推动流程流转, 主要是用户任务
+			2.2. 自动任务, 可以自行推动流程流转, 例如开始/结束事件, 网关任务, 子流程任务, SQL脚本任务, 定时任务, 邮件任务等
+	-->
+	<!-- 
+		title: 可以配置从流程变量中取值, 取值的写法为: #{流程变量名}, 如果流程变量的值为对象, 可通过.xxx进行递归属性值选择; 例如: #{user.name}的请假申请
+	 -->
+	<process code="vocation" version="version" name="请假" title="#{name}的请假申请" pageID="全局页面标识">
+		<!-- 开始事件, 一个流程中只能有一个开始 -->
+		<startEvent id="startEvent" name=""></startEvent>
+		<!-- 结束事件, 一个流程中可以有多个结束 -->
+		<endEvent id="endEvent1" name=""></endEvent>
+		
+		<!-- 用户任务 -->
+		<userTask id="userTask1" name="任务名称" pageID="属于任务的页面标识, 优先级高于全局页面标识" timeLimit="办理时限的表达式, 设置当前用户任务需要在多长时间内办理, 不配置则没有时限约束, 这里的表达式还要体现出工作日/自然日">
+		</userTask>
+		
+		<!-- 连线, 可配置条件 -->
+		<flow id="flow1" name="" order="0, 排序值, 默认为0" source="startEvent" target="userTask1"  />
+		<flow id="flow2" name="" order="0, 排序值, 默认为0" source="userTask1" target="endEvent1"  />
+	</process>
+	
+	<!-- 配置流程图的结构, 主要就是记录画布的长宽，以及各个节点的坐标，长宽等 -->
+	<process-img>
+	</process-img>
+</bpm-configuration>

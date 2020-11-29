@@ -16,8 +16,8 @@ public class UserTaskParser implements Parser<TaskTemporaryData, UserTaskMetadat
 
 	@Override
 	public UserTaskMetadata parse(TaskTemporaryData temporaryData) throws ProcessParseException {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO 
+		return new UserTaskMetadata(temporaryData.getId(), "", getNodeType());
 	}
 
 	@Override

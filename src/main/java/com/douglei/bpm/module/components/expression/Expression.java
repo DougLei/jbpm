@@ -24,11 +24,11 @@ public class Expression implements Serializable {
 				if(suffixMatcher.find()) {
 					addExpression(source.substring(prefixMatcher.start()+2, suffixMatcher.start()));
 				}else {
-					throw new IllegalArgumentException("表达式配置异常, ["+ExpressionConstants.SUFFIX+"]标识符不匹配(少一个), 请检查");
+					throw new IllegalArgumentException("["+source+"]中的表达式配置异常, ["+ExpressionConstants.SUFFIX+"]标识符不匹配(少一个), 请检查");
 				}
 			}
 			if(suffixMatcher.find())
-				throw new IllegalArgumentException("表达式配置异常, ["+ExpressionConstants.PREFIX+"]标识符不匹配(至少少一个), 请检查");
+				throw new IllegalArgumentException("["+source+"]中的表达式配置异常, ["+ExpressionConstants.PREFIX+"]标识符不匹配(至少少一个), 请检查");
 		}
 	}
 	private void addExpression(String expression) {

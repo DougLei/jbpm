@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.instance.command.start.parameter;
+package com.douglei.bpm.module.runtime.instance.command.start.process;
 
 /**
  * 启动方式

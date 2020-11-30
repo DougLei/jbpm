@@ -5,8 +5,8 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.components.command.CommandExecutor;
 import com.douglei.bpm.module.components.instance.InstanceHandlePolicy;
-import com.douglei.bpm.module.runtime.instance.command.StartProcessCommand;
-import com.douglei.bpm.module.runtime.instance.command.start.parameter.StartParameter;
+import com.douglei.bpm.module.runtime.instance.command.start.process.StartParameter;
+import com.douglei.bpm.module.runtime.instance.command.start.process.StartProcessCommand;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessInstance;
 import com.douglei.orm.context.transaction.component.Transaction;
 

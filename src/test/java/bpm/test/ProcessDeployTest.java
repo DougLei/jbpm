@@ -6,9 +6,9 @@ import org.junit.Test;
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.components.ExecutionResult;
-import com.douglei.bpm.module.repository.definition.builder.ClasspathFile;
-import com.douglei.bpm.module.repository.definition.builder.ProcessDefinitionBuilder;
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
+import com.douglei.bpm.module.repository.definition.entity.builder.ClasspathFile;
+import com.douglei.bpm.module.repository.definition.entity.builder.ProcessDefinitionBuilder;
 import com.douglei.bpm.process.parser.ProcessParseException;
 
 public class ProcessDeployTest {

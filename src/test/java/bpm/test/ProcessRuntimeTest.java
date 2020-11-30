@@ -6,7 +6,7 @@ import org.junit.Test;
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.components.ExecutionResult;
-import com.douglei.bpm.module.runtime.instance.command.start.parameter.StartParameter;
+import com.douglei.bpm.module.runtime.instance.command.start.process.StartParameter;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessInstance;
 import com.douglei.bpm.process.parser.ProcessParseException;
 

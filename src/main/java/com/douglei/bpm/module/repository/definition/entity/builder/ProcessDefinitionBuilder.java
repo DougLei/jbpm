@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.repository.definition.builder;
+package com.douglei.bpm.module.repository.definition.entity.builder;
 
 import java.io.File;
 import java.io.FileInputStream;

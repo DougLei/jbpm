@@ -14,12 +14,15 @@ public class UserTaskMetadata extends TaskMetadata {
 	private String pageID;
 	private String timeLimitExpr;
 	
-	
 	private Candidate candidate;
 	private List<Option> options;
 	
-	
-	public UserTaskMetadata(String id, String name, NodeType type) {
-		super(id, name, type);
+	public UserTaskMetadata(String id, String name) {
+		super(id, name);
+	}
+
+	@Override
+	public NodeType getType() {
+		return NodeType.USER_TASK;
 	}
 }

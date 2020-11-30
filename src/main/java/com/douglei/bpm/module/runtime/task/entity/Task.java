@@ -6,11 +6,11 @@ import java.util.Date;
  * 
  * @author DougLei
  */
-public class ProcessRuntimeTask {
+public class Task {
 	protected int id;
 	protected int procdefId;
 	protected int procinstId;
-	protected String taskId;
+	protected String taskKey;
 	protected String taskName;
 	protected String taskType;
 	protected Date startTime;
@@ -36,11 +36,11 @@ public class ProcessRuntimeTask {
 	public void setProcinstId(int procinstId) {
 		this.procinstId = procinstId;
 	}
-	public String getTaskId() {
-		return taskId;
+	public String getTaskKey() {
+		return taskKey;
 	}
-	public void setTaskId(String taskId) {
-		this.taskId = taskId;
+	public void setTaskKey(String taskKey) {
+		this.taskKey = taskKey;
 	}
 	public String getTaskName() {
 		return taskName;

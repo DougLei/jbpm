@@ -9,7 +9,12 @@ import com.douglei.bpm.process.metadata.node.task.TaskMetadata;
  */
 public class ParallelGatewayMetadata extends TaskMetadata {
 
-	public ParallelGatewayMetadata(String id, String name, NodeType type) {
-		super(id, name, type);
+	public ParallelGatewayMetadata(String id, String name) {
+		super(id, name);
+	}
+	
+	@Override
+	public NodeType getType() {
+		return NodeType.PARALLEL_GATEWAY;
 	}
 }

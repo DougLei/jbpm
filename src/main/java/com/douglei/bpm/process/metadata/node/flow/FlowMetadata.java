@@ -15,12 +15,13 @@ public class FlowMetadata extends ProcessNodeMetadata{
 	private TaskMetadata targetTask;
 	
 	public FlowMetadata(String id, String name, NodeType type, int order, FlowMode mode, String conditionExpr) {
-		super(id, name, type);
+		super(id, name);
 		this.order = order;
 		this.mode = mode;
 		this.conditionExpr = conditionExpr;
 	}
 	
+	// 设置目标任务
 	public void setTargetTask(TaskMetadata targetTask) {
 		this.targetTask = targetTask;
 	}
@@ -36,5 +37,10 @@ public class FlowMetadata extends ProcessNodeMetadata{
 	}
 	public TaskMetadata getTargetTask() {
 		return targetTask;
+	}
+
+	@Override
+	public NodeType getType() {
+		return NodeType.FLOW;
 	}
 }

@@ -9,7 +9,12 @@ import com.douglei.bpm.process.metadata.node.task.TaskMetadata;
  */
 public class EndEventMetadata extends TaskMetadata {
 
-	public EndEventMetadata(String id, String name, NodeType type) {
-		super(id, name, type);
+	public EndEventMetadata(String id, String name) {
+		super(id, name);
+	}
+	
+	@Override
+	public NodeType getType() {
+		return NodeType.END_EVENT;
 	}
 }

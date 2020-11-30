@@ -2,9 +2,10 @@ package com.douglei.bpm.process.metadata.node.task;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
-import com.douglei.bpm.process.NodeType;
+import com.douglei.bpm.module.runtime.task.entity.Task;
 import com.douglei.bpm.process.metadata.ProcessNodeMetadata;
 import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
 import com.douglei.bpm.process.parser.ProcessParseException;
@@ -16,8 +17,8 @@ import com.douglei.bpm.process.parser.ProcessParseException;
 public abstract class TaskMetadata extends ProcessNodeMetadata{
 	protected List<FlowMetadata> flows = new ArrayList<FlowMetadata>(4);
 	
-	protected TaskMetadata(String id, String name, NodeType type) {
-		super(id, name, type);
+	protected TaskMetadata(String id, String name) {
+		super(id, name);
 	}
 	
 	/**
@@ -49,4 +50,29 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 			return 1;
 		}
 	};
+	
+	/**
+	 * 是否是自动任务节点
+	 * @return
+	 */
+	public boolean isAuto() {
+		return false;
+	}
+	
+	/**
+	 * 创建流程运行任务实例
+	 * @param processDefinitionId
+	 * @param processRuntimeInstanceId
+	 * @return
+	 */
+	public Task createProcessRuntimeTask(int processDefinitionId, int processRuntimeInstanceId) {
+		Task task = new Task();
+		task.setProcdefId(processDefinitionId);
+		task.setProcinstId(processRuntimeInstanceId);
+		task.setTaskKey(id);
+		task.setTaskName(name);
+		task.setTaskType(getType().getName());
+		task.setStartTime(new Date());
+		return task;
+	}
 }

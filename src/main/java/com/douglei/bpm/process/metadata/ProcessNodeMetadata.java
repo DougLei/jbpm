@@ -12,12 +12,10 @@ import com.douglei.tools.utils.StringUtil;
 public abstract class ProcessNodeMetadata implements Serializable {
 	protected String id;
 	protected String name;
-	protected NodeType type;
 	
-	protected ProcessNodeMetadata(String id, String name, NodeType type) {
+	protected ProcessNodeMetadata(String id, String name) {
 		this.id = id;
 		this.name = StringUtil.isEmpty(name)?id:name;
-		this.type = type;
 	}
 	
 	public final String getId() {
@@ -26,7 +24,10 @@ public abstract class ProcessNodeMetadata implements Serializable {
 	public final String getName() {
 		return name;
 	}
-	public final NodeType getType() {
-		return type;
-	}
+	
+	/**
+	 * 获取节点类型
+	 * @return
+	 */
+	public abstract NodeType getType();
 }

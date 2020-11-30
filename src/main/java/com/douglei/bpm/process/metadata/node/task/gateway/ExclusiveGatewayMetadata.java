@@ -9,7 +9,12 @@ import com.douglei.bpm.process.metadata.node.task.TaskMetadata;
  */
 public class ExclusiveGatewayMetadata extends TaskMetadata {
 
-	public ExclusiveGatewayMetadata(String id, String name, NodeType type) {
-		super(id, name, type);
+	public ExclusiveGatewayMetadata(String id, String name) {
+		super(id, name);
+	}
+	
+	@Override
+	public NodeType getType() {
+		return NodeType.EXCLUSIVE_GATEWAY;
 	}
 }

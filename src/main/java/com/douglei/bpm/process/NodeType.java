@@ -16,15 +16,12 @@ public enum NodeType {
 	
 	USER_TASK("userTask");
 	
-	private String elementName; // xml中的元素名
-	private NodeType(String elementName) {
-		this.elementName = elementName;
+	private String name; // 类型名, 也是xml中的元素名
+	private NodeType(String name) {
+		this.name = name;
 	}
 	
-	public String getElementName() {
-		return elementName;
-	}
-	public String getTypeName() { // 获取类型名
-		return name();
+	public String getName() {
+		return name;
 	}
 }

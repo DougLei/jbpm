@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.instance.start;
+package com.douglei.bpm.module.runtime.instance.command.start.parameter;
 
 import java.util.HashMap;
 import java.util.Map;

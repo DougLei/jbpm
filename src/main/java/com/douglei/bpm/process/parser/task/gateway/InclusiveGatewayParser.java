@@ -16,7 +16,7 @@ public class InclusiveGatewayParser implements Parser<TaskTemporaryData, Inclusi
 
 	@Override
 	public InclusiveGatewayMetadata parse(TaskTemporaryData temporaryData) throws ProcessParseException {
-		return new InclusiveGatewayMetadata(temporaryData.getId(), temporaryData.getElement().attributeValue("name"), getNodeType());
+		return new InclusiveGatewayMetadata(temporaryData.getId(), temporaryData.getElement().attributeValue("name"));
 	}
 
 	@Override

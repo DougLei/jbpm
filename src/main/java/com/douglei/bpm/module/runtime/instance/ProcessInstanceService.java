@@ -6,8 +6,8 @@ import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.components.command.CommandExecutor;
 import com.douglei.bpm.module.components.instance.InstanceHandlePolicy;
 import com.douglei.bpm.module.runtime.instance.command.StartProcessCommand;
-import com.douglei.bpm.module.runtime.instance.entity.ProcessRuntimeInstance;
-import com.douglei.bpm.module.runtime.instance.start.StartParameter;
+import com.douglei.bpm.module.runtime.instance.command.start.parameter.StartParameter;
+import com.douglei.bpm.module.runtime.instance.entity.ProcessInstance;
 import com.douglei.orm.context.transaction.component.Transaction;
 
 /**
@@ -15,7 +15,7 @@ import com.douglei.orm.context.transaction.component.Transaction;
  * @author DougLei
  */
 @Bean(isTransaction=true)
-public class InstanceService {
+public class ProcessInstanceService {
 	
 	@Autowired
 	private CommandExecutor commandExecutor;
@@ -26,7 +26,7 @@ public class InstanceService {
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult<ProcessRuntimeInstance> start(StartParameter parameter) {
+	public ExecutionResult<ProcessInstance> start(StartParameter parameter) {
 		return commandExecutor.execute(new StartProcessCommand(parameter));
 	}
 	

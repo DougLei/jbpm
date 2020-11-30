@@ -16,7 +16,7 @@ public class EndEventParser implements Parser<TaskTemporaryData, EndEventMetadat
 
 	@Override
 	public EndEventMetadata parse(TaskTemporaryData temporaryData) throws ProcessParseException {
-		return new EndEventMetadata(temporaryData.getId(), temporaryData.getElement().attributeValue("name"), getNodeType());
+		return new EndEventMetadata(temporaryData.getId(), temporaryData.getElement().attributeValue("name"));
 	}
 
 	@Override

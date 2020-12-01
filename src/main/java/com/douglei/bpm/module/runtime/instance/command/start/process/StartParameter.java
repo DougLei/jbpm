@@ -8,7 +8,7 @@ import java.util.Map;
  * @author DougLei
  */
 public class StartParameter {
-	private StartingMode startingMode;
+	private StartingMode mode;
 	private int processDefinitionId; // 流程定义的id
 	
 	private String code; // 流程code
@@ -21,7 +21,7 @@ public class StartParameter {
 	
 	public StartParameter(int processDefinitionId) {
 		this.processDefinitionId = processDefinitionId;
-		this.startingMode = StartingMode.BY_PROCESS_DEFINITION_ID;
+		this.mode = StartingMode.BY_PROCESS_DEFINITION_ID;
 	}
 	
 	public StartParameter(String code, String version) {
@@ -31,7 +31,7 @@ public class StartParameter {
 		this.code = code;
 		this.version = version;
 		this.tenantId = tenantId;
-		this.startingMode = StartingMode.BY_PROCESS_DEFINITION_CODE_VERSION;
+		this.mode = StartingMode.BY_PROCESS_DEFINITION_CODE_VERSION;
 	}
 	
 	public StartParameter setBusinessId(String businessId) {
@@ -56,8 +56,8 @@ public class StartParameter {
 		return this;
 	}
 	
-	public StartingMode getStartingMode() {
-		return startingMode;
+	public StartingMode getMode() {
+		return mode;
 	}
 	public int getProcessDefinitionId() {
 		return processDefinitionId;

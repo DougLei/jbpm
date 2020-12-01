@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.module.components.ProcessObjectException;
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.parser.ProcessParser;
@@ -44,24 +45,24 @@ public class ProcessContainerProxy {
 	
 	/**
 	 * 删除流程
-	 * @param id
+	 * @param processDefinitionId
 	 */
-	public void deleteProcess(int id) {
-		container.deleteProcess(id);
+	public void deleteProcess(int processDefinitionId) {
+		container.deleteProcess(processDefinitionId);
 	}
 
 	/**
 	 * 获取流程
-	 * @param id
+	 * @param processDefinitionId
 	 * @return
 	 */
 	@Transaction
-	public ProcessMetadata getProcess(int id) {
-		ProcessMetadata process =  container.getProcess(id);
+	public ProcessMetadata getProcess(int processDefinitionId) {
+		ProcessMetadata process =  container.getProcess(processDefinitionId);
 		if(process == null) {
-			ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, content_ from bpm_re_procdef where id=?", Arrays.asList(id));
+			ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, content_ from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 			if(processDefinition == null)
-				throw new NullPointerException("容器获取流程失败, 不存在id为["+id+"]的流程");
+				throw new ProcessObjectException("容器获取流程失败, 不存在id为["+processDefinitionId+"]的流程");
 			process = addProcess(processDefinition);
 		}
 		return process;

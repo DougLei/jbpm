@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
@@ -29,8 +28,8 @@ import com.douglei.tools.utils.StringUtil;
  * process解析器
  * @author DougLei
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
 @Bean
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ProcessParser implements CustomAutowired{
 	private Map<String, Parser> parserMap = new HashMap<String, Parser>();
 	private StartEventParser startEventParser;
@@ -53,9 +52,8 @@ public class ProcessParser implements CustomAutowired{
 	 * @param processDefinitionId
 	 * @param content
 	 * @return
-	 * @throws ProcessParseException
 	 */
-	public ProcessMetadata parse(int processDefinitionId, String content) throws ProcessParseException {
+	public ProcessMetadata parse(int processDefinitionId, String content) {
 		try {
 			Document document = new SAXReader().read(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
 			Element processElement = document.getRootElement().element("process");
@@ -64,7 +62,7 @@ public class ProcessParser implements CustomAutowired{
 					processElement.attributeValue("title"), processElement.attributeValue("pageID"));
 			buildProcessStruct(process, processElement.elements());
 			return process;
-		} catch (DocumentException e) {
+		} catch (Exception e) {
 			throw new ProcessParseException("读取流程配置内容时出现异常", e);
 		}
 	}

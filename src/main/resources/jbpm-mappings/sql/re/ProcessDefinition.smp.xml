@@ -16,10 +16,10 @@
 			select id, name, state from bpm_re_procdef 
 			
 			<switch>
-				<if test="startingMode.name() == 'BY_PROCESS_DEFINITION_ID'">
+				<if test="mode.name() == 'BY_PROCESS_DEFINITION_ID'">
 					where id = #{processDefinitionId, dataType=number} 
 				</if>
-				<if test="startingMode.name() == 'BY_PROCESS_DEFINITION_CODE_VERSION'">
+				<if test="mode.name() == 'BY_PROCESS_DEFINITION_CODE_VERSION'">
 					where code = #{code} and version = #{version} 
 					<if test="tenantId != null and tenantId != ''">
 						and tenant_id = #{tenantId} 

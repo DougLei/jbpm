@@ -7,7 +7,7 @@
 		<endEvent id="endEvent1" name=""></endEvent>
 		
 		<!-- 用户任务 -->
-		<userTask id="userTask1" name="任务名称" pageID="属于任务的页面标识, 优先级高于全局页面标识" timeLimit="办理时限的表达式, 设置当前用户任务需要在多长时间内办理, 不配置则没有时限约束, 这里的表达式还要体现出工作日/自然日">
+		<userTask id="userTask1" name="任务名称" pageID="属于任务的页面标识, 优先级高于全局页面标识xx" timeLimit="办理时限的表达式, 设置当前用户任务需要在多长时间内办理, 不配置则没有时限约束, 这里的表达式还要体现出工作日/自然日">
 		</userTask>
 		
 		<!-- 连线, 可配置条件 -->

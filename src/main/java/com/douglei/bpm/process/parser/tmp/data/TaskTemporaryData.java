@@ -6,7 +6,7 @@ import org.dom4j.Element;
  * 
  * @author DougLei
  */
-public class TaskTemporaryData {
+public class TaskTemporaryData implements TemporaryData{
 	private String id;
 	private Element element;
 	

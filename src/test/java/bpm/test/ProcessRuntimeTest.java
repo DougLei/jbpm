@@ -20,8 +20,8 @@ public class ProcessRuntimeTest {
 	@Test
 	public void start() throws ProcessParseException {
 		StartParameter parameter = new StartParameter(1);
-		parameter.addVariable("name", "douglei");
-		parameter.setStartUserId("douglei");
+		parameter.addVariable("name", "金石磊");
+		parameter.setStartUserId("金石磊");
 		
 		ProcessInstance processInstance = engine.getRuntimeModule().getInstanceService().start(parameter);
 		System.out.println("成功启动的流程实例id为["+processInstance.getId()+"]");

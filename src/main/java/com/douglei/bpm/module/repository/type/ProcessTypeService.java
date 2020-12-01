@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.ProcessObjectException;
+import com.douglei.bpm.module.components.ProcessObjectException;
 import com.douglei.bpm.module.repository.type.entity.ProcessType;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;

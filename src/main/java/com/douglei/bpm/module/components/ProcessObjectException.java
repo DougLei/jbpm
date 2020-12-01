@@ -1,4 +1,4 @@
-package com.douglei.bpm.module;
+package com.douglei.bpm.module.components;
 
 import com.douglei.bpm.ProcessEngineException;
 

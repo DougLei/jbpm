@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.ProcessObjectException;
+import com.douglei.bpm.module.components.ProcessObjectException;
 import com.douglei.bpm.module.components.instance.InstanceHandlePolicy;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
@@ -79,7 +79,7 @@ public class ProcessDefinitionService {
 			}
 		}
 		
-		if(processDefinition.getState() == ProcessDefinition.DEPLOY) 
+		if(processDefinition.getState() == ProcessDefinition.DEPLOY && processDefinition.getContent() != null) 
 			processContainer.addProcess(processDefinition);
 		return processDefinition;
 	}

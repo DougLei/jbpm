@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.instance.entity;
+package com.douglei.bpm.module.runtime.task.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -7,7 +7,7 @@ import java.util.Date;
  * 
  * @author DougLei
  */
-public class ProcessVariable {
+public class Variable {
 	protected int id;
 	protected int procdefId;
 	protected int procinstId;

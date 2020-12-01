@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.metadata.node.task.event;
+package com.douglei.bpm.process.metadata.node.task.events;
 
 import com.douglei.bpm.process.NodeType;
 import com.douglei.bpm.process.metadata.node.task.TaskMetadata;

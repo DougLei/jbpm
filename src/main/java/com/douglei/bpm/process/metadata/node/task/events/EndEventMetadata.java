@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.metadata.node.task.gateway;
+package com.douglei.bpm.process.metadata.node.task.events;
 
 import com.douglei.bpm.process.NodeType;
 import com.douglei.bpm.process.metadata.node.task.TaskMetadata;
@@ -7,14 +7,14 @@ import com.douglei.bpm.process.metadata.node.task.TaskMetadata;
  * 
  * @author DougLei
  */
-public class InclusiveGatewayMetadata extends TaskMetadata {
+public class EndEventMetadata extends TaskMetadata {
 
-	public InclusiveGatewayMetadata(String id, String name) {
+	public EndEventMetadata(String id, String name) {
 		super(id, name);
 	}
 	
 	@Override
 	public NodeType getType() {
-		return NodeType.INCLUSIVE_GATEWAY;
+		return NodeType.END_EVENT;
 	}
 }

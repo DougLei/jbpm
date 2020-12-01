@@ -17,12 +17,12 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
 import com.douglei.bpm.process.metadata.node.task.TaskMetadata;
-import com.douglei.bpm.process.metadata.node.task.event.EndEventMetadata;
-import com.douglei.bpm.process.metadata.node.task.event.StartEventMetadata;
+import com.douglei.bpm.process.metadata.node.task.events.EndEventMetadata;
+import com.douglei.bpm.process.metadata.node.task.events.StartEventMetadata;
 import com.douglei.bpm.process.parser.flow.FlowParser;
 import com.douglei.bpm.process.parser.flow.FlowTemporaryData;
 import com.douglei.bpm.process.parser.task.TaskTemporaryData;
-import com.douglei.bpm.process.parser.task.event.StartEventParser;
+import com.douglei.bpm.process.parser.task.events.StartEventParser;
 import com.douglei.tools.utils.StringUtil;
 
 /**

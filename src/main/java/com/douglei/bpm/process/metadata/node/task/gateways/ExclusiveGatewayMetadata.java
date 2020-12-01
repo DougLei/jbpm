@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.metadata.node.task.gateway;
+package com.douglei.bpm.process.metadata.node.task.gateways;
 
 import com.douglei.bpm.process.NodeType;
 import com.douglei.bpm.process.metadata.node.task.TaskMetadata;
@@ -7,14 +7,14 @@ import com.douglei.bpm.process.metadata.node.task.TaskMetadata;
  * 
  * @author DougLei
  */
-public class ParallelGatewayMetadata extends TaskMetadata {
+public class ExclusiveGatewayMetadata extends TaskMetadata {
 
-	public ParallelGatewayMetadata(String id, String name) {
+	public ExclusiveGatewayMetadata(String id, String name) {
 		super(id, name);
 	}
 	
 	@Override
 	public NodeType getType() {
-		return NodeType.PARALLEL_GATEWAY;
+		return NodeType.EXCLUSIVE_GATEWAY;
 	}
 }

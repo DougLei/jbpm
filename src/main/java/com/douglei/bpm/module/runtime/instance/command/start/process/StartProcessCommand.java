@@ -9,12 +9,12 @@ import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.components.command.Command;
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessInstance;
-import com.douglei.bpm.module.runtime.instance.entity.ProcessVariable;
 import com.douglei.bpm.module.runtime.task.entity.Assignee;
 import com.douglei.bpm.module.runtime.task.entity.Task;
+import com.douglei.bpm.module.runtime.task.entity.Variable;
 import com.douglei.bpm.process.container.ProcessContainerProxy;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
-import com.douglei.bpm.process.metadata.node.task.event.StartEventMetadata;
+import com.douglei.bpm.process.metadata.node.task.events.StartEventMetadata;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -66,9 +66,9 @@ public class StartProcessCommand implements Command<ExecutionResult<ProcessInsta
 		assignee.setUserId(parameter.getStartUserId());
 		SessionContext.getTableSession().save(assignee);
 		
-		List<ProcessVariable> variables = new ArrayList<ProcessVariable>();
+		List<Variable> variables = new ArrayList<Variable>();
 		parameter.getVariables().forEach((key, value) ->{
-			ProcessVariable variable = new ProcessVariable();
+			Variable variable = new Variable();
 			variable.setProcdefId(process.getId());
 			variable.setProcinstId(processRuntimeInstance.getId());
 			variable.setTaskId(processRuntimeTask.getId());

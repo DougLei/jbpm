@@ -1,11 +1,12 @@
 package com.douglei.bpm.process.parser;
 
+import com.douglei.bpm.ProcessEngineException;
+
 /**
  * 
  * @author DougLei
  */
-public class ProcessParseException extends RuntimeException{
-	private static final long serialVersionUID = -1006301697731190021L;
+public class ProcessParseException extends ProcessEngineException{
 	
 	public ProcessParseException(String message) {
 		super(message);

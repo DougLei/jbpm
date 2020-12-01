@@ -1,9 +1,8 @@
-package com.douglei.bpm.process.parser.flow;
+package com.douglei.bpm.process.parser.tmp.data;
 
 import org.dom4j.Element;
 
 import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.bpm.process.parser.task.TaskTemporaryData;
 import com.douglei.tools.utils.StringUtil;
 
 /**

@@ -65,8 +65,8 @@
 			<option type="withdraw" name="撤回" order="0, 排序值, 默认为0" times="0"></option><!-- 当用户提交后, 如果发现提交的有问题, 还可以自主选择撤回, 重新编辑后重新提交; times设置可以撤回的次数, 默认值为0, 配置的值在小于1时, 表示不限制次数 -->
 			<!-- 流程挂起, 终止, 激活, 跳转, 重置等功能, 均放到流程实例管理界面, 由流程管理员操作 -->
 						
-			<!-- 前置(pre)/后置(post)监听器, 按照配置的顺序依次执行; type和value必须配置, 没有默认值; 如果不配置, 解析时会出现异常 -->
-			<listener type="pre/post" value="" />
+			<!-- 启动时前置(pre4startup)/启动时后置(post4startup)/完成时前置(pre4complete)/完成时后置(post4complete), 按照配置的顺序依次执行; type和value必须配置, 没有默认值; 如果不配置, 解析时会出现异常 -->
+			<listener type="pre4startup/post4startup/pre4complete/post4complete" value="" />
 		</userTask>
 		
 		<!-- 子流程任务, 暂不实现 -->

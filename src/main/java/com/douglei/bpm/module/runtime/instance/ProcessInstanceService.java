@@ -2,7 +2,6 @@ package com.douglei.bpm.module.runtime.instance;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.module.components.command.CommandExecutor;
 import com.douglei.bpm.module.components.instance.InstanceHandlePolicy;
 import com.douglei.bpm.module.runtime.instance.command.start.process.StartParameter;
@@ -26,52 +25,52 @@ public class ProcessInstanceService {
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult<ProcessInstance> start(StartParameter parameter) {
+	public ProcessInstance start(StartParameter parameter) {
 		return commandExecutor.execute(new StartProcessCommand(parameter));
 	}
 	
 	/**
 	 * 激活指定id的流程实例
 	 * @param instanceId
-	 * @return 返回null表示操作成功
+	 * @return
 	 */
-	public ExecutionResult<Integer> activate(int instanceId) {
+	public int activate(int instanceId) {
 		// TODO 
 		
-		return null;
+		return 1;
 	}
 	
 	/**
 	 * 挂起指定id的流程实例
 	 * @param instanceId
-	 * @return 返回null表示操作成功
+	 * @return
 	 */
-	public ExecutionResult<Integer> suspend(int instanceId) {
+	public int suspend(int instanceId) {
 		// TODO 
 		
-		return null;
+		return 1;
 	}
 	
 	/**
 	 * 终止指定id的流程实例
 	 * @param instanceId
-	 * @return 返回null表示操作成功
+	 * @return
 	 */
-	public ExecutionResult<Integer> terminate(int instanceId) {
+	public int terminate(int instanceId) {
 		// TODO 
 		
-		return null;
+		return 1;
 	}
 	
 	/**
 	 * 删除指定id的流程实例
 	 * @param instanceId
-	 * @return 返回null表示操作成功
+	 * @return
 	 */
-	public ExecutionResult<Integer> delete(int instanceId) {
+	public int delete(int instanceId) {
 		// TODO 
 		
-		return null;
+		return 1;
 	}
 	
 	/**

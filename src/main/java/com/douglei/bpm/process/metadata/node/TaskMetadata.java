@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.metadata.node.task;
+package com.douglei.bpm.process.metadata.node;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.douglei.bpm.module.runtime.task.entity.Task;
 import com.douglei.bpm.process.metadata.ProcessNodeMetadata;
-import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
 import com.douglei.bpm.process.parser.ProcessParseException;
 
 /**

@@ -2,7 +2,6 @@ package com.douglei.bpm.module.runtime.task;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.components.ExecutionResult;
 import com.douglei.bpm.process.container.ProcessContainerProxy;
 
 /**
@@ -18,11 +17,11 @@ public class TaskService {
 	/**
 	 * 完成指定id的任务
 	 * @param taskId
-	 * @return  返回null表示操作成功
+	 * @return 
 	 */
-	public ExecutionResult complete(int taskId) {
+	public int complete(int taskId) {
 		// TODO 
 		
-		return null;
+		return taskId;
 	}
 }

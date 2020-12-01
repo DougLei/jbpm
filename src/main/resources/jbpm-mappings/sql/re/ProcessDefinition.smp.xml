@@ -13,7 +13,7 @@
 		
 		<!-- 启动流程时查询流程定义 -->
 		<content name="query4Start" type="select">
-			select id, state from bpm_re_procdef 
+			select id, name, state from bpm_re_procdef 
 			
 			<switch>
 				<if test="startingMode.name() == 'BY_PROCESS_DEFINITION_ID'">
@@ -26,9 +26,6 @@
 					</if>
 					order by subversion desc
 				</if>
-				<else>
-					where 1=2
-				</else>
 			</switch>
 		</content>
 		

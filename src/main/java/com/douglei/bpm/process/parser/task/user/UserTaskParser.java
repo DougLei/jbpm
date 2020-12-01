@@ -5,7 +5,7 @@ import com.douglei.bpm.process.NodeType;
 import com.douglei.bpm.process.metadata.node.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.bpm.process.parser.task.TaskTemporaryData;
+import com.douglei.bpm.process.parser.tmp.data.TaskTemporaryData;
 
 /**
  * 

@@ -1,7 +1,7 @@
-package com.douglei.bpm.process.metadata.node.task.gateways;
+package com.douglei.bpm.process.metadata.node.gateway;
 
 import com.douglei.bpm.process.NodeType;
-import com.douglei.bpm.process.metadata.node.task.TaskMetadata;
+import com.douglei.bpm.process.metadata.node.TaskMetadata;
 
 /**
  * 

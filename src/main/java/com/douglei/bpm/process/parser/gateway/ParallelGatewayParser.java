@@ -1,11 +1,11 @@
-package com.douglei.bpm.process.parser.task.gateways;
+package com.douglei.bpm.process.parser.gateway;
 
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.NodeType;
-import com.douglei.bpm.process.metadata.node.task.gateways.ParallelGatewayMetadata;
+import com.douglei.bpm.process.metadata.node.gateway.ParallelGatewayMetadata;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.bpm.process.parser.task.TaskTemporaryData;
+import com.douglei.bpm.process.parser.tmp.data.TaskTemporaryData;
 
 /**
  * 

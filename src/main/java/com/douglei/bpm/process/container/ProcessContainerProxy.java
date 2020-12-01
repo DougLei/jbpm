@@ -61,7 +61,7 @@ public class ProcessContainerProxy {
 		if(process == null) {
 			ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, content_ from bpm_re_procdef where id=?", Arrays.asList(id));
 			if(processDefinition == null)
-				throw new NullPointerException("不存在id为["+id+"]的流程");
+				throw new NullPointerException("容器获取流程失败, 不存在id为["+id+"]的流程");
 			process = addProcess(processDefinition);
 		}
 		return process;

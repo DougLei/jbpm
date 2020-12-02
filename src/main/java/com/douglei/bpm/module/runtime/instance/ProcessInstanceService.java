@@ -34,12 +34,16 @@ public class ProcessInstanceService {
 	@Transaction
 	public ExecutionResult<ProcessInstance> start(StartParameter parameter) {
 		ProcessDefinition processDefinition = SessionContext.getSQLSession().queryFirst(ProcessDefinition.class, "ProcessDefinition", "query4Start", parameter);
-		switch (parameter.getMode()) {
-			case BY_PROCESS_DEFINITION_ID:
+		switch (parameter.getStartMode()) {
+			case StartParameter.BY_PROCESS_DEFINITION_ID:
 				if(processDefinition == null || processDefinition.getState() == ProcessDefinition.DELETE) 
 					return new ExecutionResult<ProcessInstance>("启动失败, 不存在id为["+parameter.getProcessDefinitionId()+"]的流程");
 				break;
-			case BY_PROCESS_DEFINITION_CODE_VERSION:
+			case StartParameter.BY_PROCESS_DEFINITION_CODE:
+				if(processDefinition == null || processDefinition.getState() == ProcessDefinition.DELETE) 
+					return new ExecutionResult<ProcessInstance>("启动失败, 不存在code为["+parameter.getCode()+"]的流程");
+				break;
+			case StartParameter.BY_PROCESS_DEFINITION_CODE_VERSION:
 				if(processDefinition == null || processDefinition.getState() == ProcessDefinition.DELETE) 
 					return new ExecutionResult<ProcessInstance>("启动失败, 不存在code为["+parameter.getCode()+"], version为["+parameter.getVersion()+"]的流程");
 				break;
@@ -48,7 +52,7 @@ public class ProcessInstanceService {
 			return new ExecutionResult<ProcessInstance>("启动失败, ["+processDefinition.getName()+"]流程还未部署");
 		
 		ProcessMetadata processMetadata = processContainer.getProcess(processDefinition.getId());
-		return executors.execute(processMetadata.getStartEvent(), new StartEventExecutionParameter(parameter));
+		return executors.execute(processMetadata.getStartEvent(), new StartEventExecutionParameter(processMetadata, parameter));
 	}
 	
 	/**

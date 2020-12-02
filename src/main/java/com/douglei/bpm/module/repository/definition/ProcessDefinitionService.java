@@ -47,7 +47,7 @@ public class ProcessDefinitionService {
 	 */
 	@Transaction
 	public ExecutionResult<ProcessDefinition> insert(ProcessDefinitionBuilder builder, boolean strict) {
-		ProcessDefinition processDefinition = builder.build();
+		ProcessDefinition processDefinition = builder.getProcessDefinition();
 		ProcessDefinition exProcessDefinition = SessionContext.getSQLSession().queryFirst(ProcessDefinition.class, "ProcessDefinition", "query4Save", processDefinition);
 		if(exProcessDefinition == null) {
 			// 新的流程定义, 进行save

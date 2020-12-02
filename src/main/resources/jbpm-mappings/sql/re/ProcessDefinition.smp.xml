@@ -16,10 +16,23 @@
 			select id, name, state from bpm_re_procdef 
 			
 			<switch>
-				<if test="mode.name() == 'BY_PROCESS_DEFINITION_ID'">
+				<if test="startMode == 1">
 					where id = #{processDefinitionId, dataType=number} 
 				</if>
-				<if test="mode.name() == 'BY_PROCESS_DEFINITION_CODE_VERSION'">
+				<if test="startMode == 2">
+					where code = #{code} and version in (
+						select version from bpm_re_procdef  where id in (select max(id) from bpm_re_procdef where code = #{code} and subversion=0
+						<if test="tenantId != null and tenantId != ''">
+							and tenant_id = #{tenantId} 
+						</if>
+						)
+					)
+					<if test="tenantId != null and tenantId != ''">
+						and tenant_id = #{tenantId} 
+					</if>
+					order by subversion desc 
+				</if>
+				<if test="startMode == 3">
 					where code = #{code} and version = #{version} 
 					<if test="tenantId != null and tenantId != ''">
 						and tenant_id = #{tenantId} 

@@ -11,11 +11,11 @@ public class ExpressionConstants {
 	/**
 	 * 表达式前缀
 	 */
-	public static final String PREFIX = "${";
+	public static final String PREFIX = "#{";
 	/**
-	 * 表达式前缀 for 正则表达式, 针对${两个符号进行了转义
+	 * 表达式前缀 for 正则表达式, 针对{符号进行了转义
 	 */
-	public static final String PREFIX_4_REGEX = "\\$\\{";
+	public static final String PREFIX_4_REGEX = "#\\{";
 	/**
 	 * 表达式后缀
 	 */

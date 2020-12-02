@@ -150,10 +150,10 @@ public class ProcessDefinitionBuilder {
 	}
 	
 	/**
-	 * 构建流程定义实例
+	 * 获取流程定义实例
 	 * @return
 	 */
-	ProcessDefinition build() {
+	ProcessDefinition getProcessDefinition() {
 		return processDefinition;
 	}
 	

@@ -35,7 +35,6 @@ public class BeanFactory {
 			if(bean != null)
 				putInstance2BeanContainer(new GeneralBeanEntity(bean, instanceClazz), beanContainer);
 		}
-		beanContainer.put(BeanFactory.class, this);
 	}
 	
 	// 将bean实例put到指定Bean容器中

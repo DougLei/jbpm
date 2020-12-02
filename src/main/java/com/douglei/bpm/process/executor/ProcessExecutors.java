@@ -7,6 +7,7 @@ import java.util.Map;
 import com.douglei.bpm.bean.CustomAutowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.component.ExecutionResult;
+import com.douglei.bpm.process.NodeType;
 import com.douglei.bpm.process.metadata.node.ProcessNodeMetadata;
 
 /**
@@ -16,12 +17,12 @@ import com.douglei.bpm.process.metadata.node.ProcessNodeMetadata;
 @Bean
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class ProcessExecutors implements CustomAutowired{
-	private Map<Class, ProcessExecutor> executors = new HashMap<Class, ProcessExecutor>();
+	private Map<NodeType, Executor> executors = new HashMap<NodeType, Executor>();
 	
 	@Override
 	public void setFields(Map<Class<?>, Object> beanContainer) {
-		((List<ProcessExecutor>)beanContainer.get(ProcessExecutor.class)).forEach(executor -> {
-			executors.put(executor.getMetadataClass(), executor);
+		((List<Executor>)beanContainer.get(Executor.class)).forEach(executor -> {
+			executors.put(executor.getType(), executor);
 		});
 	}
 	
@@ -32,7 +33,7 @@ public class ProcessExecutors implements CustomAutowired{
 	 * @return
 	 */
 	public ExecutionResult execute(ProcessNodeMetadata metadata, ProcessExecutionParameter parameter) {
-		ProcessExecutor executor = executors.get(metadata.getClass());
+		Executor executor = executors.get(metadata.getType());
 		if(executor == null)
 			throw new ProcessExecuteException("不支持["+metadata.getClass().getName()+"]类型的执行器");
 		return executor.execute(metadata, parameter);

@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.douglei.bpm.module.components.expression.Expression;
-import com.douglei.bpm.module.components.expression.ExpressionConstants;
-import com.douglei.bpm.process.metadata.node.TaskMetadata;
+import com.douglei.bpm.component.expression.Expression;
+import com.douglei.bpm.component.expression.ExpressionConstants;
+import com.douglei.bpm.process.metadata.node.TaskNodeMetadata;
 import com.douglei.bpm.process.metadata.node.event.StartEventMetadata;
 import com.douglei.tools.utils.StringUtil;
 
@@ -21,7 +21,7 @@ public class ProcessMetadata implements Serializable {
 	private String pageID;
 	
 	private StartEventMetadata startEvent;
-	private Map<String, TaskMetadata> taskMap = new HashMap<String, TaskMetadata>();
+	private Map<String, TaskNodeMetadata> taskMap = new HashMap<String, TaskNodeMetadata>();
 	
 	public ProcessMetadata(int processDefinitionId, String code, String version, String name, String title, String pageID) {
 		this.id = processDefinitionId;
@@ -32,7 +32,7 @@ public class ProcessMetadata implements Serializable {
 	public void setStartEvent(StartEventMetadata startEvent) {
 		this.startEvent = startEvent;
 	}
-	public void addTask(TaskMetadata task) {
+	public void addTask(TaskNodeMetadata task) {
 		this.taskMap.put(task.getId(), task);
 	}
 	
@@ -62,8 +62,8 @@ public class ProcessMetadata implements Serializable {
 	public StartEventMetadata getStartEvent() {
 		return startEvent;
 	}
-	public TaskMetadata getTask(String taskId) {
-		TaskMetadata task = taskMap.get(taskId);
+	public TaskNodeMetadata getTask(String taskId) {
+		TaskNodeMetadata task = taskMap.get(taskId);
 		if(task == null)
 			throw new NullPointerException("不存在id为["+taskId+"]的任务");
 		return task;

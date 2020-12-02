@@ -2,6 +2,8 @@ package com.douglei.bpm.module.runtime.task.entity;
 
 import java.util.Date;
 
+import com.douglei.bpm.process.metadata.node.TaskNodeMetadata;
+
 /**
  * 
  * @author DougLei
@@ -17,6 +19,15 @@ public class Task {
 	protected Date expiryTime;
 	protected String businessId;
 	protected String pageId;
+	
+	public Task() {}
+	public Task(int procdefId, int procinstId, TaskNodeMetadata taskMetadata) {
+		this.procdefId = procdefId;
+		this.procinstId = procinstId;
+		this.taskKey = taskMetadata.getId();
+		this.taskName = taskMetadata.getName();
+		this.taskType = taskMetadata.getType().getName();
+	}
 	
 	public int getId() {
 		return id;

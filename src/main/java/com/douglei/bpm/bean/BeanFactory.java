@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.douglei.aop.ProxyBean;
+import com.douglei.bpm.ProcessEngineException;
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.bean.annotation.DefaultInstance;
@@ -55,18 +56,24 @@ public class BeanFactory {
 	/**
 	 * 执行自动装配
 	 */
-	public void executeAutowired() {
+	public void autowireBeans() {
+		if(beanContainer.isEmpty())
+			throw new ProcessEngineException("禁止重复调用["+BeanFactory.class.getName()+".autowireBeans()]方法");
+		
 		try {
-			executeAutowired(beanContainer.values());
+			autowireBeans(beanContainer.values());
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		} finally {
+			beanContainer.clear();
+			defaultBeanContainer.clear();
+		}
 	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void executeAutowired(Collection<Object> objects) throws Exception {
+	private void autowireBeans(Collection<Object> objects) throws Exception {
 		for(Object object : objects) {
 			if(object instanceof List)
-				executeAutowired((List)object); // 针对 supportMultiInstances=true 的集合实例
+				autowireBeans((List)object); // 针对 supportMultiInstances=true 的集合实例
 			else
 				setFields(object);
 		}
@@ -79,7 +86,7 @@ public class BeanFactory {
 		Class<?> currentClass = (object instanceof ProxyBean)?((ProxyBean)object).getOriginObject().getClass():object.getClass();
 		do{
 			for (Field field : currentClass.getDeclaredFields()) {
-				if(field.getAnnotation(Autowired.class) != null)
+				if(field.isAnnotationPresent(Autowired.class))
 					setField(object, field);
 			}
 			currentClass = currentClass.getSuperclass();
@@ -133,17 +140,5 @@ public class BeanFactory {
 	 */
 	public void registerCustomBean(Class<?> clazz, Object instance) {
 		putInstance2BeanContainer(new CustomBeanEntity(clazz, instance), beanContainer);
-	}
-	
-	/**
-	 * 对自定义的实例执行自动装配
-	 * @param customInstance
-	 */
-	public void executeAutowired(Object customInstance) {
-		try {
-			setFields(customInstance);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

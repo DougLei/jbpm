@@ -8,7 +8,7 @@
 			2.2. 自动任务, 可以自行推动流程流转, 例如开始/结束事件, 网关任务, 子流程任务, SQL脚本任务, 定时任务, 邮件任务等
 	-->
 	<!-- 
-		title: 可以配置表达式, 从流程变量中取值, 取值的表达式写法为: #{流程变量名}, 如果流程变量的值为对象, 可通过 #{xxx.xxx} 的形式进行属性值选择; 例如: #{user.name}的请假申请
+		title: 可以配置表达式, 从流程变量中取值, 取值的表达式写法为: ${流程变量名}, 如果流程变量的值为对象, 可通过 ${xxx.xxx} 的形式进行属性值选择; 例如: ${user.name}的请假申请
 	 -->
 	<process code="编码, 唯一" version="用户自定义的版本" name="流程名称, 可以不配置, 如果不配置则使用code:version" title="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name" pageID="全局页面标识">
 		<!-- 开始事件, 一个流程中只能有一个开始 -->
@@ -87,9 +87,8 @@
 		<!-- 包容网关 -->
 		<inclusiveGateway id="inclusiveGateway1" name=""></inclusiveGateway>
 		
-		<!-- 连线, 可配置条件 -->
-		<flow id="flow1" name="" order="0, 排序值, 默认为0" 
-			mode="exclusive/parallel/inclusive, 可不配置, 默认值为exclusive; 流转模式, 针对一个source中直接引出多条flow的情况; 且同一个source引出的多条flow的mode值, 必须一样, 否则在解析时会抛出异常" 
+		<!-- 连线, 可配置条件; 如果一个任务引出多条flow, 则是排他模式 -->
+		<flow id="flow1" name="" order="0, 排序值, 默认为0"
 			source="startEvent1" target="userTask1" 
 			conditionExpr="配置比较表达式, 根据表达式决定是否可以走该flow; 可不配置, 默认比较结果为true" />
 	</process>

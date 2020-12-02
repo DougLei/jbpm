@@ -2,22 +2,29 @@ package com.douglei.bpm.module.runtime.instance;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.components.command.CommandExecutor;
-import com.douglei.bpm.module.components.instance.InstanceHandlePolicy;
-import com.douglei.bpm.module.runtime.instance.command.start.process.StartParameter;
-import com.douglei.bpm.module.runtime.instance.command.start.process.StartProcessCommand;
+import com.douglei.bpm.component.ExecutionResult;
+import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessInstance;
+import com.douglei.bpm.process.container.ProcessContainerProxy;
+import com.douglei.bpm.process.executor.ProcessExecutors;
+import com.douglei.bpm.process.executor.event.start.StartEventExecutionParameter;
+import com.douglei.bpm.process.metadata.ProcessMetadata;
+import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
 
 /**
  * 运行实例服务
  * @author DougLei
  */
+@SuppressWarnings("unchecked")
 @Bean(isTransaction=true)
 public class ProcessInstanceService {
 	
 	@Autowired
-	private CommandExecutor commandExecutor;
+	private ProcessContainerProxy processContainer;
+	
+	@Autowired
+	private ProcessExecutors executors;
 	
 	/**
 	 * 启动流程
@@ -25,8 +32,23 @@ public class ProcessInstanceService {
 	 * @return 
 	 */
 	@Transaction
-	public ProcessInstance start(StartParameter parameter) {
-		return commandExecutor.execute(new StartProcessCommand(parameter));
+	public ExecutionResult<ProcessInstance> start(StartParameter parameter) {
+		ProcessDefinition processDefinition = SessionContext.getSQLSession().queryFirst(ProcessDefinition.class, "ProcessDefinition", "query4Start", parameter);
+		switch (parameter.getMode()) {
+			case BY_PROCESS_DEFINITION_ID:
+				if(processDefinition == null || processDefinition.getState() == ProcessDefinition.DELETE) 
+					return new ExecutionResult<ProcessInstance>("启动失败, 不存在id为["+parameter.getProcessDefinitionId()+"]的流程");
+				break;
+			case BY_PROCESS_DEFINITION_CODE_VERSION:
+				if(processDefinition == null || processDefinition.getState() == ProcessDefinition.DELETE) 
+					return new ExecutionResult<ProcessInstance>("启动失败, 不存在code为["+parameter.getCode()+"], version为["+parameter.getVersion()+"]的流程");
+				break;
+		}
+		if(processDefinition.getState() == ProcessDefinition.UNDEPLOY)
+			return new ExecutionResult<ProcessInstance>("启动失败, ["+processDefinition.getName()+"]流程还未部署");
+		
+		ProcessMetadata processMetadata = processContainer.getProcess(processDefinition.getId());
+		return executors.execute(processMetadata.getStartEvent(), new StartEventExecutionParameter(parameter));
 	}
 	
 	/**
@@ -78,7 +100,7 @@ public class ProcessInstanceService {
 	 * @param processDefinitionId
 	 * @param policy 对实例的处理策略
 	 */
-	public void handle(int processDefinitionId, InstanceHandlePolicy policy) {
+	public void handle(int processDefinitionId, ProcessInstanceHandlePolicy policy) {
 		// TODO 处理指定id的流程定义, 相关的所有运行实例
 		
 	}

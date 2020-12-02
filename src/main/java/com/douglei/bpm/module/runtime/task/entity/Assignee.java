@@ -9,11 +9,16 @@ import java.util.Date;
 public class Assignee {
 	protected int id;
 	protected int taskId;
-	protected int mode;
 	protected String userId;
 	protected int isHandling;
 	protected Date startTime;
 	
+	public Assignee() {}
+	public Assignee(int taskId, String userId) {
+		this.taskId = taskId;
+		this.userId = userId;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -25,12 +30,6 @@ public class Assignee {
 	}
 	public void setTaskId(int taskId) {
 		this.taskId = taskId;
-	}
-	public int getMode() {
-		return mode;
-	}
-	public void setMode(int mode) {
-		this.mode = mode;
 	}
 	public String getUserId() {
 		return userId;

@@ -2,8 +2,8 @@ package com.douglei.bpm.module.history;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.history.instance.InstanceService;
-import com.douglei.bpm.module.history.task.TaskService;
+import com.douglei.bpm.module.history.instance.HistoryInstanceService;
+import com.douglei.bpm.module.history.task.HistoryTaskService;
 
 /**
  * 
@@ -13,15 +13,15 @@ import com.douglei.bpm.module.history.task.TaskService;
 public class HistoryModule {
 	
 	@Autowired
-	private InstanceService instanceService;
+	private HistoryInstanceService instanceService;
 	
 	@Autowired
-	private TaskService taskService;
+	private HistoryTaskService taskService;
 
-	public InstanceService getInstanceService() {
+	public HistoryInstanceService getHistoryInstanceService() {
 		return instanceService;
 	}
-	public TaskService getTaskService() {
+	public HistoryTaskService getHistoryTaskService() {
 		return taskService;
 	}
 }

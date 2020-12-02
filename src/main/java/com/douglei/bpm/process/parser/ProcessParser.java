@@ -14,10 +14,10 @@ import org.dom4j.io.SAXReader;
 import com.douglei.bpm.bean.CustomAutowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
-import com.douglei.bpm.process.metadata.node.FlowMetadata;
-import com.douglei.bpm.process.metadata.node.TaskMetadata;
+import com.douglei.bpm.process.metadata.node.TaskNodeMetadata;
 import com.douglei.bpm.process.metadata.node.event.EndEventMetadata;
 import com.douglei.bpm.process.metadata.node.event.StartEventMetadata;
+import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
 import com.douglei.bpm.process.parser.event.StartEventParser;
 import com.douglei.bpm.process.parser.flow.FlowParser;
 import com.douglei.bpm.process.parser.tmp.data.FlowTemporaryData;
@@ -136,7 +136,7 @@ public class ProcessParser implements CustomAutowired{
 	 * @param taskMap
 	 * @param process
 	 */
-	private void linkTaskAndFlow(TaskMetadata sourceTask, List<FlowTemporaryData> flowTemporaryDatas, Map<String, Object> taskMap, ProcessMetadata process) {
+	private void linkTaskAndFlow(TaskNodeMetadata sourceTask, List<FlowTemporaryData> flowTemporaryDatas, Map<String, Object> taskMap, ProcessMetadata process) {
 		boolean taskExistsFlow = false;
 		if(!flowTemporaryDatas.isEmpty()) {
 			for (int i = 0; i < flowTemporaryDatas.size(); i++) {
@@ -151,13 +151,13 @@ public class ProcessParser implements CustomAutowired{
 					FlowMetadata flow = flowParser.parse(flowTemporaryData);
 					sourceTask.addFlow(flow);
 					
-					TaskMetadata targetTask = null;
+					TaskNodeMetadata targetTask = null;
 					if(taskObj instanceof Element) {
 						Element element = (Element) taskObj;
-						targetTask = (TaskMetadata) parserMap.get(element.getName()).parse(new TaskTemporaryData(flowTemporaryData.getTarget(), element));
+						targetTask = (TaskNodeMetadata) parserMap.get(element.getName()).parse(new TaskTemporaryData(flowTemporaryData.getTarget(), element));
 						taskMap.put(targetTask.getId(), targetTask);
 					}else {
-						targetTask = (TaskMetadata) taskObj;
+						targetTask = (TaskNodeMetadata) taskObj;
 					}
 					
 					flow.setTargetTask(targetTask);

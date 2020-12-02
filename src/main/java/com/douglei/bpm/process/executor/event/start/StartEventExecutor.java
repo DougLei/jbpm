@@ -1,15 +1,13 @@
 package com.douglei.bpm.process.executor.event.start;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.runtime.task.entity.Assignee;
-import com.douglei.bpm.module.runtime.task.entity.Task;
+import com.douglei.bpm.component.ExecutionResult;
+import com.douglei.bpm.module.history.task.entity.HistoryTask;
+import com.douglei.bpm.module.runtime.instance.entity.ProcessInstance;
 import com.douglei.bpm.module.runtime.task.entity.Variable;
-import com.douglei.bpm.process.executor.Executor;
-import com.douglei.bpm.process.executor.Executors;
+import com.douglei.bpm.process.executor.ProcessExecutor;
 import com.douglei.bpm.process.metadata.node.event.StartEventMetadata;
 import com.douglei.orm.context.SessionContext;
 
@@ -17,11 +15,8 @@ import com.douglei.orm.context.SessionContext;
  * 
  * @author DougLei
  */
-@Bean(clazz=Executor.class)
-public class StartEventExecutor extends Executor<StartEventMetadata, StartEventExecutionParameter> {
-	
-	@Autowired
-	private Executors executors;
+@Bean(clazz=ProcessExecutor.class)
+public class StartEventExecutor extends ProcessExecutor<StartEventMetadata, StartEventExecutionParameter> {
 	
 	@Override
 	public Class<StartEventMetadata> getMetadataClass() {
@@ -29,39 +24,41 @@ public class StartEventExecutor extends Executor<StartEventMetadata, StartEventE
 	}
 
 	@Override
-	public void execute(StartEventMetadata startEvent, StartEventExecutionParameter parameter) {
-		
+	public ExecutionResult<ProcessInstance> execute(StartEventMetadata startEvent, StartEventExecutionParameter parameter) {
 //		if(起始事件判断当前的启动条件不满足)
 //			return new ExecutionResult<ProcessRuntimeInstance>("不能启动", "");
 	
-	
-	
-		// 创建流程运行任务
-		Task processRuntimeTask = startEvent.createProcessRuntimeTask(parameter.getProcessDefinitionId(), parameter.getProcessInstanceId());
-		SessionContext.getTableSession().save(processRuntimeTask);
+		// 创建流程任务(因为是开始事件, 所以直接创建历史任务结束即可)
+		HistoryTask historyTask = new HistoryTask(parameter.getProcessDefinitionId(), parameter.getProcessInstanceId(), startEvent);
+		historyTask.setEndTime(historyTask.getStartTime());
+		SessionContext.getTableSession().save(historyTask);
 		
-		Assignee assignee = new Assignee();
-		assignee.setTaskId(processRuntimeTask.getId());
-		assignee.setMode(1);
-		assignee.setUserId(parameter.getStartParameter().getStartUserId());
-		SessionContext.getTableSession().save(assignee);
+		// 保存流程变量
+		List<Variable> variables = parameter.getVariables();
+		if(variables != null)
+			SessionContext.getTableSession().save(variables);
 		
-		List<Variable> variables = new ArrayList<Variable>();
-		parameter.getStartParameter().getVariables().forEach((key, value) ->{
-			Variable variable = new Variable();
-			variable.setProcdefId(parameter.getProcessDefinitionId());
-			variable.setProcinstId(parameter.getProcessInstanceId());
-			variable.setTaskId(processRuntimeTask.getId());
-			variable.setScope(1);
-			variable.setName(key);
-			variable.setDataType("string");
-			variable.setStringVal(value.toString());
-			
-			variables.add(variable);
-		});
-		SessionContext.getTableSession().save(variables);
+		executeFlow(startEvent, parameter.getVariableMap());
 		
 		
-		
+		return null;
 	}
+	
+	
+	
+	
+	// 创建流程实例
+//	private ProcessInstance createProcessInstance(ProcessMetadata process) {
+//		ProcessInstance instance = new ProcessInstance();
+//		instance.setProcdefId(process.getId());
+//		instance.setTitle(process.getTitle(parameter.getVariables()));
+//		instance.setBusinessId(parameter.getBusinessId());
+//		instance.setPageId(process.getPageID());
+//		instance.setStartUserId(parameter.getStartUserId());
+//		instance.setStartTime(new Date());
+//		instance.setTenantId(parameter.getTenantId());
+//		
+//		SessionContext.getTableSession().save(instance);
+//		return instance;
+//	}
 }

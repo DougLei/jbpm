@@ -4,8 +4,7 @@ import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.NodeType;
-import com.douglei.bpm.process.metadata.node.FlowMetadata;
-import com.douglei.bpm.process.metadata.node.flow.FlowMode;
+import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.bpm.process.parser.tmp.data.FlowTemporaryData;
@@ -27,7 +26,7 @@ public class FlowParser implements Parser<FlowTemporaryData, FlowMetadata> {
 		if(VerifyTypeMatchUtil.isInteger(orderValue))
 			order = Integer.parseInt(orderValue);
 		
-		return new FlowMetadata(temporaryData.getId(), element.attributeValue("name"), getNodeType(), order, FlowMode.toValue(element.attributeValue("mode")), element.attributeValue("conditionExpr"));
+		return new FlowMetadata(temporaryData.getId(), element.attributeValue("name"), getNodeType(), order, element.attributeValue("conditionExpr"));
 	}
 
 	@Override

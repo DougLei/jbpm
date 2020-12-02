@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.douglei.aop.ProxyBeanContext;
+import com.douglei.aop.ProxyBeanContainer;
 import com.douglei.aop.ProxyMethod;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.orm.context.TransactionProxyInterceptor;
@@ -21,18 +21,22 @@ public class GeneralBeanEntity extends BeanEntity{
 		super(bean.clazz(), instanceClazz);
 		
 		if(bean.isTransaction()) {
+			Class<?> copy = instanceClazz;
 			List<ProxyMethod> methods = null;
-			for (Method method : instanceClazz.getDeclaredMethods()) {
-				if(method.getAnnotation(Transaction.class) != null) {
-					if(methods == null)
-						methods = new ArrayList<ProxyMethod>();
-					methods.add(new ProxyMethod(method));
-				} 
-			}
+			do {
+				for (Method method : copy.getDeclaredMethods()) {
+					if(method.isAnnotationPresent(Transaction.class)) {
+						if(methods == null)
+							methods = new ArrayList<ProxyMethod>();
+						methods.add(new ProxyMethod(method));
+					} 
+				}
+				copy = copy.getSuperclass();
+			}while(copy != Object.class);
 			
 			if(methods == null)
 				throw new NullPointerException("["+instanceClazz.getName()+"]类被注解为事物Bean, 但是类中却没有任何方法有["+Transaction.class.getName()+"]注解");
-			super.instance = ProxyBeanContext.createProxy(instanceClazz, new TransactionProxyInterceptor(instanceClazz, methods));
+			super.instance = ProxyBeanContainer.createProxy(instanceClazz, new TransactionProxyInterceptor(instanceClazz, methods));
 		}else {
 			super.instance = ConstructorUtil.newInstance(instanceClazz);
 		}

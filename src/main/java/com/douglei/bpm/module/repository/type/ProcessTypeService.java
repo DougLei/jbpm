@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.components.ProcessObjectException;
+import com.douglei.bpm.component.ExecutionResult;
 import com.douglei.bpm.module.repository.type.entity.ProcessType;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
@@ -22,12 +22,12 @@ public class ProcessTypeService {
 	 * @return
 	 */
 	@Transaction
-	public ProcessType insert(ProcessType type) {
+	public ExecutionResult<ProcessType> insert(ProcessType type) {
 		if(SessionContext.getSQLSession().uniqueQuery_("ProcessType", "query4ValidateCodeExists", type) != null)
-			throw new ProcessObjectException("已存在编码为["+type.getCode()+"]的流程类型");
+			return new ExecutionResult<ProcessType>("已存在编码为["+type.getCode()+"]的流程类型");
 		
 		SessionContext.getTableSession().save(type);
-		return type;
+		return new ExecutionResult<ProcessType>(type);
 	}
 	
 	/**
@@ -36,13 +36,13 @@ public class ProcessTypeService {
 	 * @return
 	 */
 	@Transaction
-	public ProcessType update(ProcessType type) {
+	public ExecutionResult<ProcessType> update(ProcessType type) {
 		Object[] obj = SessionContext.getSQLSession().uniqueQuery_("ProcessType", "query4ValidateCodeExists", type);
 		if(obj != null && type.getId() != Integer.parseInt(obj[0].toString())) 
-			throw new ProcessObjectException("已存在编码为["+type.getCode()+"]的流程类型");
+			return new ExecutionResult<ProcessType>("已存在编码为["+type.getCode()+"]的流程类型");
 		
 		SessionContext.getTableSession().update(type);
-		return type;
+		return new ExecutionResult<ProcessType>(type);
 	}
 	
 	/**
@@ -52,16 +52,16 @@ public class ProcessTypeService {
 	 * @return
 	 */
 	@Transaction
-	public int delete(int processTypeId, boolean strict) {
+	public ExecutionResult<Integer> delete(int processTypeId, boolean strict) {
 		List<Object> paramList = Arrays.asList(processTypeId);
 		
 		int count = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_("select count(id) from bpm_re_procdef where type_id = ?", paramList)[0].toString());
 		if(count > 0 && !strict)
-			throw new ProcessObjectException("该流程类型关联了["+count+"]条流程, 无法删除");
+			return new ExecutionResult<Integer>("该流程类型关联了["+count+"]条流程, 无法删除");
 
 		SessionContext.getSqlSession().executeUpdate("delete bpm_re_proctype where id=?", paramList);
 		if(count > 0) 
 			SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set type_id=0 where type_id=?", paramList);
-		return processTypeId;
+		return new ExecutionResult<Integer>(processTypeId);
 	}
 }

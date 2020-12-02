@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.components.ProcessObjectException;
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.parser.ProcessParser;
@@ -62,7 +61,7 @@ public class ProcessContainerProxy {
 		if(process == null) {
 			ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, content_ from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 			if(processDefinition == null)
-				throw new ProcessObjectException("容器获取流程失败, 不存在id为["+processDefinitionId+"]的流程");
+				throw new NullPointerException("从容器获取流程失败, 不存在id为["+processDefinitionId+"]的流程");
 			process = addProcess(processDefinition);
 		}
 		return process;

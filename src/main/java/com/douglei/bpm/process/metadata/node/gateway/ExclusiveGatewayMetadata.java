@@ -1,13 +1,13 @@
 package com.douglei.bpm.process.metadata.node.gateway;
 
 import com.douglei.bpm.process.NodeType;
-import com.douglei.bpm.process.metadata.node.TaskMetadata;
+import com.douglei.bpm.process.metadata.node.TaskNodeMetadata;
 
 /**
  * 
  * @author DougLei
  */
-public class ExclusiveGatewayMetadata extends TaskMetadata {
+public class ExclusiveGatewayMetadata extends TaskNodeMetadata {
 
 	public ExclusiveGatewayMetadata(String id, String name) {
 		super(id, name);

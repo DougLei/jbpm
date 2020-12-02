@@ -19,6 +19,16 @@ public class Variable {
 	protected BigDecimal numberVal;
 	protected Date dateVal;
 	
+	public Variable() {}
+	public Variable(int procdefId, int procinstId, int scope, String name, String dataType, String stringVal) {
+		this.procdefId = procdefId;
+		this.procinstId = procinstId;
+		this.scope = scope;
+		this.name = name;
+		this.dataType = dataType;
+		this.stringVal = stringVal;
+	}
+
 	public int getId() {
 		return id;
 	}

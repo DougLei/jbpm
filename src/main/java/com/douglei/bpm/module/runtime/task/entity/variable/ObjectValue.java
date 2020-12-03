@@ -7,15 +7,15 @@ import java.io.Serializable;
  * @author DougLei
  */
 class ObjectValue implements Serializable{
-	private String clazz;
+	private Class<?> clazz;
 	private Object value;
 
 	public ObjectValue(Object value) {
-		this.clazz = value.getClass().getName();
+		this.clazz = value.getClass();
 		this.value = value;
 	}
 
-	public String getClazz() {
+	public Class<?> getClazz() {
 		return clazz;
 	}
 	public Object getValue() {

@@ -21,7 +21,7 @@
 				</if>
 				<if test="startMode == 2">
 					where code = #{code} and version in (
-						select version from bpm_re_procdef  where id in (select max(id) from bpm_re_procdef where code = #{code} and subversion=0
+						select version from bpm_re_procdef  where id in (select max(id) from bpm_re_procdef where code = #{code} and subversion=0 and state != 2
 						<if test="tenantId != null and tenantId != ''">
 							and tenant_id = #{tenantId} 
 						</if>

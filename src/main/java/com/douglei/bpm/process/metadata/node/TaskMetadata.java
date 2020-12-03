@@ -10,10 +10,10 @@ import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
  * 
  * @author DougLei
  */
-public abstract class TaskNodeMetadata extends ProcessNodeMetadata{
+public abstract class TaskMetadata extends ProcessNodeMetadata{
 	protected List<FlowMetadata> flows = new ArrayList<FlowMetadata>(4);
 	
-	protected TaskNodeMetadata(String id, String name) {
+	protected TaskMetadata(String id, String name) {
 		super(id, name);
 	}
 	

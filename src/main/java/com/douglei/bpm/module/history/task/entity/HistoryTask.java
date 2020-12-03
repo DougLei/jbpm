@@ -3,7 +3,7 @@ package com.douglei.bpm.module.history.task.entity;
 import java.util.Date;
 
 import com.douglei.bpm.module.runtime.task.entity.Task;
-import com.douglei.bpm.process.metadata.node.TaskNodeMetadata;
+import com.douglei.bpm.process.metadata.node.TaskMetadata;
 
 /**
  * 
@@ -13,7 +13,7 @@ public class HistoryTask extends Task{
 	private Date endTime;
 
 	public HistoryTask() {}
-	public HistoryTask(int procdefId, int procinstId, TaskNodeMetadata taskMetadata) {
+	public HistoryTask(int procdefId, int procinstId, TaskMetadata taskMetadata) {
 		super(procdefId, procinstId, taskMetadata);
 	}
 	

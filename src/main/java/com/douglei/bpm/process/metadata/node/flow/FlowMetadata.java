@@ -1,7 +1,7 @@
 package com.douglei.bpm.process.metadata.node.flow;
 
 import com.douglei.bpm.process.NodeType;
-import com.douglei.bpm.process.metadata.node.TaskNodeMetadata;
+import com.douglei.bpm.process.metadata.node.TaskMetadata;
 import com.douglei.bpm.process.metadata.node.ProcessNodeMetadata;
 
 /**
@@ -11,7 +11,7 @@ import com.douglei.bpm.process.metadata.node.ProcessNodeMetadata;
 public class FlowMetadata extends ProcessNodeMetadata{
 	private int order;
 	private String conditionExpr;
-	private TaskNodeMetadata targetTask;
+	private TaskMetadata targetTask;
 	
 	public FlowMetadata(String id, String name, NodeType type, int order, String conditionExpr) {
 		super(id, name);
@@ -20,7 +20,7 @@ public class FlowMetadata extends ProcessNodeMetadata{
 	}
 	
 	// 设置目标任务
-	public void setTargetTask(TaskNodeMetadata targetTask) {
+	public void setTargetTask(TaskMetadata targetTask) {
 		this.targetTask = targetTask;
 	}
 
@@ -30,7 +30,7 @@ public class FlowMetadata extends ProcessNodeMetadata{
 	public String getConditionExpr() {
 		return conditionExpr;
 	}
-	public TaskNodeMetadata getTargetTask() {
+	public TaskMetadata getTargetTask() {
 		return targetTask;
 	}
 

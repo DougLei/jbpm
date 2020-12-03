@@ -1,4 +1,4 @@
-package com.douglei.bpm.component.expression;
+package com.douglei.bpm.expression;
 
 import java.io.Serializable;
 import java.util.ArrayList;

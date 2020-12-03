@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping-configuration>
-	<!-- 流程运行变量表 -->
-	<table name="BPM_RU_VARIABLE" class="com.douglei.bpm.module.runtime.task.entity.variable.Variable" createMode="create" strict="true">
+	<!-- 流程历史变量表 -->
+	<table name="BPM_HI_VARIABLE" class="com.douglei.bpm.module.history.task.entity.HistoryVariable" createMode="create" strict="true">
 		<columns>
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
 			<column name="PROCDEF_ID" property="procdefId" dataType="number" length="10" nullable="false" />

@@ -1,7 +1,11 @@
-package com.douglei.bpm.module.runtime.task.entity;
+package com.douglei.bpm.module.runtime.task.entity.variable;
 
 import java.math.BigDecimal;
 import java.util.Date;
+
+import com.douglei.bpm.module.runtime.instance.ProcessVariable;
+import com.douglei.tools.utils.datatype.dateformat.DateFormatUtil;
+import com.douglei.tools.utils.serialize.JdkSerializeProcessor;
 
 /**
  * 
@@ -11,24 +15,41 @@ public class Variable {
 	protected int id;
 	protected int procdefId;
 	protected int procinstId;
-	protected int taskId;
-	protected int scope;
+	protected Integer taskId;
+	protected String scope;
 	protected String name;
 	protected String dataType;
 	protected String stringVal;
 	protected BigDecimal numberVal;
 	protected Date dateVal;
+	protected byte[] objectVal;
 	
 	public Variable() {}
-	public Variable(int procdefId, int procinstId, int scope, String name, String dataType, String stringVal) {
+	public Variable(int procdefId, int procinstId, Integer taskId, ProcessVariable processVariable) {
 		this.procdefId = procdefId;
 		this.procinstId = procinstId;
-		this.scope = scope;
-		this.name = name;
-		this.dataType = dataType;
-		this.stringVal = stringVal;
+		this.taskId = taskId;
+		this.scope = processVariable.getScope().getValue();
+		this.name = processVariable.getName();
+		this.dataType = processVariable.getDataType().getValue();
+		if(processVariable.getValue() != null) {
+			switch (processVariable.getDataType()) {
+				case STRING:
+					this.stringVal = processVariable.getValue().toString();
+					break;
+				case NUMBER:
+					this.numberVal = new BigDecimal(processVariable.getValue().toString());
+					break;
+				case DATETIME:
+					this.dateVal = DateFormatUtil.parseDate(processVariable.getValue());
+					break;
+				case OBJECT:
+					this.objectVal = JdkSerializeProcessor.serialize2ByteArray(new ObjectValue(processVariable.getValue()));
+					break;
+			}
+		}
 	}
-
+	
 	public int getId() {
 		return id;
 	}
@@ -47,16 +68,16 @@ public class Variable {
 	public void setProcinstId(int procinstId) {
 		this.procinstId = procinstId;
 	}
-	public int getTaskId() {
+	public Integer getTaskId() {
 		return taskId;
 	}
-	public void setTaskId(int taskId) {
+	public void setTaskId(Integer taskId) {
 		this.taskId = taskId;
 	}
-	public int getScope() {
+	public String getScope() {
 		return scope;
 	}
-	public void setScope(int scope) {
+	public void setScope(String scope) {
 		this.scope = scope;
 	}
 	public String getName() {
@@ -88,5 +109,11 @@ public class Variable {
 	}
 	public void setDateVal(Date dateVal) {
 		this.dateVal = dateVal;
+	}
+	public byte[] getObjectVal() {
+		return objectVal;
+	}
+	public void setObjectVal(byte[] objectVal) {
+		this.objectVal = objectVal;
 	}
 }

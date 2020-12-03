@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.component.ExecutionResult;
+import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.bpm.module.runtime.RuntimeModule;

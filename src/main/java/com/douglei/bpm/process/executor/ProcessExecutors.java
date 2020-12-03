@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.douglei.bpm.bean.CustomAutowired;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.component.ExecutionResult;
+import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.process.NodeType;
 import com.douglei.bpm.process.metadata.node.ProcessNodeMetadata;
 

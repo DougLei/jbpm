@@ -36,6 +36,7 @@ public class ProcessRuntimeTest {
 }
 
 class User implements Serializable{
+	private static final long serialVersionUID = -1624039524127599909L;
 	private String name;
 	public User(String name) {
 		this.name = name;

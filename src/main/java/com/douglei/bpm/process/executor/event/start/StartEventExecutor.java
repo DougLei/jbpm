@@ -37,7 +37,6 @@ public class StartEventExecutor extends Executor<StartEventMetadata, StartEventE
 //		if(起始事件判断当前的启动条件不满足)
 //			return new ExecutionResult<ProcessRuntimeInstance>("不能启动", "");
 		
-		
 		// 创建流程实例
 		ProcessInstance processInstance = createProcessInstance(parameter.getProcessMetadata(), parameter.getStartParameter());
 		

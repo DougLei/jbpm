@@ -14,10 +14,10 @@ import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
  * @author DougLei
  */
 @MultiInstance
-public abstract class Executor<M extends ProcessNodeMetadata, EM extends ProcessExecutionParameter> {
+public abstract class Executor<M extends ProcessNodeMetadata, EM extends ExecutionParameter> {
 	
 	@Autowired
-	protected ProcessExecutors executors;
+	protected Executors executors;
 	
 	/**
 	 * 执行flow

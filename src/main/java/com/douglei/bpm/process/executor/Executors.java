@@ -16,7 +16,7 @@ import com.douglei.bpm.process.metadata.node.ProcessNodeMetadata;
  */
 @Bean
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class ProcessExecutors implements CustomAutowired{
+public class Executors implements CustomAutowired{
 	private Map<NodeType, Executor> executors = new HashMap<NodeType, Executor>();
 	
 	@Override
@@ -32,10 +32,10 @@ public class ProcessExecutors implements CustomAutowired{
 	 * @param parameter
 	 * @return
 	 */
-	public ExecutionResult execute(ProcessNodeMetadata metadata, ProcessExecutionParameter parameter) {
+	public ExecutionResult execute(ProcessNodeMetadata metadata, ExecutionParameter parameter) {
 		Executor executor = executors.get(metadata.getType());
 		if(executor == null)
-			throw new ProcessExecuteException("不支持["+metadata.getClass().getName()+"]类型的执行器");
+			throw new ExecuteException("不支持["+metadata.getClass().getName()+"]类型的执行器");
 		return executor.execute(metadata, parameter);
 	}
 }

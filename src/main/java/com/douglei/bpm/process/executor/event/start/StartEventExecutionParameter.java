@@ -9,15 +9,16 @@ import com.douglei.bpm.module.runtime.instance.ProcessVariable;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.module.runtime.task.entity.Assignee;
 import com.douglei.bpm.module.runtime.task.entity.variable.Variable;
-import com.douglei.bpm.process.executor.ProcessExecutionParameter;
+import com.douglei.bpm.process.executor.ExecutionParameter;
 import com.douglei.bpm.process.executor.flow.FlowExecutionParameter;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
+import com.douglei.tools.utils.StringUtil;
 
 /**
  * 
  * @author DougLei
  */
-public class StartEventExecutionParameter implements ProcessExecutionParameter {
+public class StartEventExecutionParameter implements ExecutionParameter {
 	private ProcessMetadata processMetadata;
 	private StartParameter startParameter;
 	
@@ -70,8 +71,11 @@ public class StartEventExecutionParameter implements ProcessExecutionParameter {
 	
 	// 构建Flow的执行参数
 	public FlowExecutionParameter buildFlowExecutionParameter() {
-		List<Assignee> assignees = new ArrayList<Assignee>(1);
-		assignees.add(new Assignee(startParameter.getStartUserId()));
+		List<Assignee> assignees = null;
+		if(StringUtil.notEmpty(startParameter.getStartUserId())) {
+			assignees = new ArrayList<Assignee>(1);
+			assignees.add(new Assignee(startParameter.getStartUserId()));
+		}
 		return new FlowExecutionParameter(startParameter.getProcessVariables().getVariableMap(), assignees);
 	}
 }

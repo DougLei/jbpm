@@ -6,7 +6,7 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessInstance;
 import com.douglei.bpm.process.container.ProcessContainerProxy;
-import com.douglei.bpm.process.executor.ProcessExecutors;
+import com.douglei.bpm.process.executor.Executors;
 import com.douglei.bpm.process.executor.event.start.StartEventExecutionParameter;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.orm.context.SessionContext;
@@ -24,7 +24,7 @@ public class ProcessInstanceService {
 	private ProcessContainerProxy processContainer;
 	
 	@Autowired
-	private ProcessExecutors executors;
+	private Executors executors;
 	
 	/**
 	 * 启动流程

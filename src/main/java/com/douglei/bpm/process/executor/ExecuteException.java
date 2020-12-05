@@ -6,12 +6,12 @@ import com.douglei.bpm.ProcessEngineException;
  * 
  * @author DougLei
  */
-public class ProcessExecuteException extends ProcessEngineException{
+public class ExecuteException extends ProcessEngineException{
 	
-	public ProcessExecuteException(String message) {
+	public ExecuteException(String message) {
 		super(message);
 	}
-	public ProcessExecuteException(String message, Throwable cause) {
+	public ExecuteException(String message, Throwable cause) {
 		super(message, cause);
 	}
 }

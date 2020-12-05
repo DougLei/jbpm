@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import com.douglei.bpm.module.runtime.task.entity.Assignee;
-import com.douglei.bpm.process.executor.GeneralTaskExecutionParameter;
-import com.douglei.bpm.process.executor.ProcessExecutionParameter;
+import com.douglei.bpm.process.executor.GeneralExecutionParameter;
+import com.douglei.bpm.process.executor.ExecutionParameter;
 
 /**
  * 
  * @author DougLei
  */
-public class FlowExecutionParameter implements ProcessExecutionParameter {
+public class FlowExecutionParameter implements ExecutionParameter {
 	private Map<String, Object> variableMap;
 	private List<Assignee> assignees;
 
@@ -28,7 +28,7 @@ public class FlowExecutionParameter implements ProcessExecutionParameter {
 	}
 
 	// 构建通用的任务执行参数
-	public GeneralTaskExecutionParameter buildGeneralTaskExecutionParameter() {
+	public GeneralExecutionParameter buildGeneralTaskExecutionParameter() {
 		// TODO Auto-generated method stub
 		
 		

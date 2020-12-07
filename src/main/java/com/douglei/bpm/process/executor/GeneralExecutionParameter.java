@@ -9,11 +9,17 @@ import com.douglei.bpm.module.runtime.task.entity.Assignee;
  * @author DougLei
  */
 public class GeneralExecutionParameter implements ExecutionParameter {
+	protected Integer procdefId;
+	protected Integer procinstId;
 	protected List<Assignee> assignees;
 
-	public GeneralExecutionParameter(List<Assignee> assignees) {
-		this.assignees = assignees;
+	public Integer getProcdefId() {
+		return procdefId;
 	}
-	
-	
+	public Integer getProcinstId() {
+		return procinstId;
+	}
+	public List<Assignee> getAssignees() {
+		return assignees;
+	}
 }

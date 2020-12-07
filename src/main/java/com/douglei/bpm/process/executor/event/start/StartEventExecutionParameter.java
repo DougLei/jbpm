@@ -18,7 +18,7 @@ import com.douglei.tools.utils.StringUtil;
  * 
  * @author DougLei
  */
-public class StartEventExecutionParameter implements ExecutionParameter {
+public class StartEventExecutionParameter implements ExecutionParameter{
 	private ProcessMetadata processMetadata;
 	private StartParameter startParameter;
 	
@@ -70,12 +70,12 @@ public class StartEventExecutionParameter implements ExecutionParameter {
 	}
 	
 	// 构建通用执行参数
-	public FlowExecutionParameter buildFlowExecutionParameter() {
+	public FlowExecutionParameter buildFlowExecutionParameter(int procinstId) {
 		List<Assignee> assignees = null;
 		if(StringUtil.notEmpty(startParameter.getStartUserId())) {
 			assignees = new ArrayList<Assignee>(1);
 			assignees.add(new Assignee(startParameter.getStartUserId()));
 		}
-		return new FlowExecutionParameter(startParameter.getProcessVariables().getVariableMap(), assignees);
+		return new FlowExecutionParameter(processMetadata.getId(), procinstId, assignees, startParameter.getProcessVariables().getVariableMap());
 	}
 }

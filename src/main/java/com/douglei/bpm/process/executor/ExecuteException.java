@@ -11,7 +11,4 @@ public class ExecuteException extends ProcessEngineException{
 	public ExecuteException(String message) {
 		super(message);
 	}
-	public ExecuteException(String message, Throwable cause) {
-		super(message, cause);
-	}
 }

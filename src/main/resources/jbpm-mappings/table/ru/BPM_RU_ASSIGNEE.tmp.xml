@@ -5,7 +5,6 @@
 		<columns>
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
 			<column name="TASK_ID" property="taskId" dataType="number" length="10" nullable="false"/>
-			<column name="MODE" property="mode" dataType="number" length="2" />
 			<column name="USER_ID" property="userId" dataType="nstring" length="150" nullable="false" />
 			<column name="IS_HANDLING" property="isHandling" dataType="number" length="1" defaultValue="0"/>
 			<column name="START_TIME" property="startTime" dataType="datetime"/>

@@ -32,7 +32,7 @@ public class FlowExecutor {
 		if(!matching(flow.getConditionExpr(), parameter.getVariableMap()))
 			return fail;
 		
-		executors.executeTask(flow.getTargetTask(), null);
+		executors.executeTask(flow.getTargetTask(), parameter);
 		return success;
 	}
 	

@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.metadata.node.event;
 
-import com.douglei.bpm.process.NodeType;
+import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.node.TaskMetadata;
 
 /**
@@ -16,7 +16,7 @@ public class StartEventMetadata extends TaskMetadata {
 	}
 	
 	@Override
-	public NodeType getType() {
-		return NodeType.START_EVENT;
+	public Type getType() {
+		return Type.START_EVENT;
 	}
 }

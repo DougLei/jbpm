@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.executor.event.start;
+package com.douglei.bpm.process.scheduler.event.start;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,20 +9,20 @@ import com.douglei.bpm.module.runtime.instance.ProcessVariable;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.module.runtime.task.entity.Assignee;
 import com.douglei.bpm.module.runtime.task.entity.variable.Variable;
-import com.douglei.bpm.process.executor.ExecutionParameter;
-import com.douglei.bpm.process.executor.flow.FlowExecutionParameter;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
+import com.douglei.bpm.process.scheduler.DispatchParameter;
+import com.douglei.bpm.process.scheduler.flow.FlowDispatchParameter;
 import com.douglei.tools.utils.StringUtil;
 
 /**
  * 
  * @author DougLei
  */
-public class StartEventExecutionParameter implements ExecutionParameter{
+public class StartEventDispatchParameter implements DispatchParameter{
 	private ProcessMetadata processMetadata;
 	private StartParameter startParameter;
 	
-	public StartEventExecutionParameter(ProcessMetadata processMetadata, StartParameter startParameter) {
+	public StartEventDispatchParameter(ProcessMetadata processMetadata, StartParameter startParameter) {
 		this.processMetadata = processMetadata;
 		this.startParameter = startParameter;
 	}
@@ -69,13 +69,13 @@ public class StartEventExecutionParameter implements ExecutionParameter{
 		return list;
 	}
 	
-	// 构建通用执行参数
-	public FlowExecutionParameter buildFlowExecutionParameter(int procinstId) {
+	// 构建Flow的调度参数
+	public FlowDispatchParameter buildFlowDispatchParameter(int procinstId) {
 		List<Assignee> assignees = null;
 		if(StringUtil.notEmpty(startParameter.getStartUserId())) {
 			assignees = new ArrayList<Assignee>(1);
 			assignees.add(new Assignee(startParameter.getStartUserId()));
 		}
-		return new FlowExecutionParameter(processMetadata.getId(), procinstId, assignees, startParameter.getProcessVariables().getVariableMap());
+		return new FlowDispatchParameter(processMetadata.getId(), procinstId, assignees, startParameter.getProcessVariables().getVariableMap());
 	}
 }

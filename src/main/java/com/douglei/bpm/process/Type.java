@@ -4,7 +4,7 @@ package com.douglei.bpm.process;
  * 
  * @author DougLei
  */
-public enum NodeType {
+public enum Type {
 	FLOW("flow"),
 	
 	START_EVENT("startEvent"),
@@ -17,7 +17,7 @@ public enum NodeType {
 	USER_TASK("userTask");
 	
 	private String name; // 类型名, 也是xml中的元素名
-	private NodeType(String name) {
+	private Type(String name) {
 		this.name = name;
 	}
 	

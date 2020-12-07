@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.executor;
+package com.douglei.bpm.process.scheduler;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import com.douglei.bpm.module.runtime.task.entity.Assignee;
  * 
  * @author DougLei
  */
-public class GeneralExecutionParameter implements ExecutionParameter {
+public class GeneralDispatchParameter implements DispatchParameter {
 	protected Integer procdefId;
 	protected Integer procinstId;
 	protected List<Assignee> assignees;

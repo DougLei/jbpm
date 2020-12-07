@@ -2,7 +2,7 @@ package com.douglei.bpm.process.metadata.node;
 
 import java.io.Serializable;
 
-import com.douglei.bpm.process.NodeType;
+import com.douglei.bpm.process.Type;
 import com.douglei.tools.utils.StringUtil;
 
 /**
@@ -29,5 +29,5 @@ public abstract class ProcessNodeMetadata implements Serializable {
 	 * 获取节点类型
 	 * @return
 	 */
-	public abstract NodeType getType();
+	public abstract Type getType();
 }

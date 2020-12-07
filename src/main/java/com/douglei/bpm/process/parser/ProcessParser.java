@@ -46,7 +46,7 @@ public class ProcessParser implements CustomAutowired{
 			}else if(parser.getClass() == FlowParser.class) {
 				flowParser = (FlowParser) parser;
 			}
-			parserMap.put(parser.getNodeType().getName(), parser);
+			parserMap.put(parser.getType().getName(), parser);
 		});
 	}
 	
@@ -95,11 +95,11 @@ public class ProcessParser implements CustomAutowired{
 			if(idExists4flowTemporaryDatas(id, flowTemporaryDatas) || (!taskMap.isEmpty() && taskMap.containsKey(id)) || (startEventMetadata != null && startEventMetadata.getId().equals(id)))
 				throw new ProcessParseException("流程中连线/任务的id值出现重复: " + id);
 			
-			if(startEventParser.getNodeType().getName().equals(elementName)) {
+			if(startEventParser.getType().getName().equals(elementName)) {
 				if(startEventMetadata != null)
 					throw new ProcessParseException("流程中只能配置一个起始事件");
 				startEventMetadata = startEventParser.parse(new TaskTemporaryData(id, element));
-			}else if(flowParser.getNodeType().getName().equals(elementName)) {
+			}else if(flowParser.getType().getName().equals(elementName)) {
 				flowTemporaryDatas.add(new FlowTemporaryData(id, element));
 			}else {
 				taskMap.put(id, element);

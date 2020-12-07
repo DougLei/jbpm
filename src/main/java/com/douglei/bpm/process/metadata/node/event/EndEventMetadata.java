@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.metadata.node.event;
 
-import com.douglei.bpm.process.NodeType;
+import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.node.TaskMetadata;
 
 /**
@@ -14,7 +14,7 @@ public class EndEventMetadata extends TaskMetadata {
 	}
 	
 	@Override
-	public NodeType getType() {
-		return NodeType.END_EVENT;
+	public Type getType() {
+		return Type.END_EVENT;
 	}
 }

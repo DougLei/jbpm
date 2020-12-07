@@ -1,7 +1,7 @@
 package com.douglei.bpm.process.parser.task.user;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.process.NodeType;
+import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.node.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
@@ -21,7 +21,7 @@ public class UserTaskParser implements Parser<TaskTemporaryData, UserTaskMetadat
 	}
 
 	@Override
-	public NodeType getNodeType() {
-		return NodeType.USER_TASK;
+	public Type getType() {
+		return Type.USER_TASK;
 	}
 }

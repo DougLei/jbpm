@@ -1,7 +1,7 @@
 package com.douglei.bpm.process.parser.gateway;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.process.NodeType;
+import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.node.gateway.ParallelGatewayMetadata;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
@@ -20,7 +20,7 @@ public class ParallelGatewayParser implements Parser<TaskTemporaryData, Parallel
 	}
 
 	@Override
-	public NodeType getNodeType() {
-		return NodeType.PARALLEL_GATEWAY;
+	public Type getType() {
+		return Type.PARALLEL_GATEWAY;
 	}
 }

@@ -1,7 +1,7 @@
 package com.douglei.bpm.process.parser;
 
 import com.douglei.bpm.bean.annotation.MultiInstance;
-import com.douglei.bpm.process.NodeType;
+import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.node.ProcessNodeMetadata;
 import com.douglei.bpm.process.parser.tmp.data.TemporaryData;
 
@@ -16,7 +16,7 @@ public interface Parser<P extends TemporaryData, R extends ProcessNodeMetadata> 
 	 * 
 	 * @return
 	 */
-	NodeType getNodeType();
+	Type getType();
 	
 	/**
 	 * 解析

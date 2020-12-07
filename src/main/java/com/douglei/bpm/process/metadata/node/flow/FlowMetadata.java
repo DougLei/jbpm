@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.metadata.node.flow;
 
-import com.douglei.bpm.process.NodeType;
+import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.node.ProcessNodeMetadata;
 import com.douglei.bpm.process.metadata.node.TaskMetadata;
 
@@ -35,7 +35,7 @@ public class FlowMetadata extends ProcessNodeMetadata{
 	}
 
 	@Override
-	public NodeType getType() {
-		return NodeType.FLOW;
+	public Type getType() {
+		return Type.FLOW;
 	}
 }

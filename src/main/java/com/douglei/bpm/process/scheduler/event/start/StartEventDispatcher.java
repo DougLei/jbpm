@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.executor.event.start;
+package com.douglei.bpm.process.scheduler.event.start;
 
 import java.util.Date;
 import java.util.List;
@@ -10,21 +10,21 @@ import com.douglei.bpm.module.history.task.entity.HistoryVariable;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessInstance;
 import com.douglei.bpm.module.runtime.task.entity.variable.Variable;
-import com.douglei.bpm.process.NodeType;
-import com.douglei.bpm.process.executor.Executor;
+import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.metadata.node.event.StartEventMetadata;
+import com.douglei.bpm.process.scheduler.TaskDispatcher;
 import com.douglei.orm.context.SessionContext;
 
 /**
  * 
  * @author DougLei
  */
-@Bean(clazz=Executor.class)
-public class StartEventExecutor extends Executor<StartEventMetadata, StartEventExecutionParameter> {
+@Bean(clazz=TaskDispatcher.class)
+public class StartEventDispatcher extends TaskDispatcher<StartEventMetadata, StartEventDispatchParameter> {
 	
 	@Override
-	public ExecutionResult<ProcessInstance> execute(StartEventMetadata startEvent, StartEventExecutionParameter parameter) {
+	public ExecutionResult<ProcessInstance> dispatch(StartEventMetadata startEvent, StartEventDispatchParameter parameter) {
 		/*
 		 * 1. 判断能否启动
 		 * 2. 创建流程实例
@@ -55,7 +55,7 @@ public class StartEventExecutor extends Executor<StartEventMetadata, StartEventE
 		if(historyVariables != null)
 			SessionContext.getTableSession().save(historyVariables);
 		
-		if(executors.executeFlow(startEvent.getFlows(), parameter.buildFlowExecutionParameter(processInstance.getId())))
+		if(dispatchers.dispatchFlow(startEvent.getFlows(), parameter.buildFlowDispatchParameter(processInstance.getId())))
 			return new ExecutionResult<ProcessInstance>(processInstance);
 		return new ExecutionResult<ProcessInstance>("执行["+startEvent.getName()+"]任务后, 未能匹配到合适的Flow, 使流程无法正常流转, 请联系流程管理员检查["+parameter.getProcessMetadata().getName()+"]的配置");
 	}
@@ -75,12 +75,8 @@ public class StartEventExecutor extends Executor<StartEventMetadata, StartEventE
 		return instance;
 	}
 	
-	
-	
-	
-	
 	@Override
-	public NodeType getType() {
-		return NodeType.START_EVENT;
+	public Type getType() {
+		return Type.START_EVENT;
 	}
 }

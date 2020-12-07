@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.executor.task.user;
+package com.douglei.bpm.process.scheduler.task.user;
 
 import java.util.List;
 
@@ -6,21 +6,21 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.entity.Assignee;
 import com.douglei.bpm.module.runtime.task.entity.Task;
-import com.douglei.bpm.process.NodeType;
-import com.douglei.bpm.process.executor.Executor;
-import com.douglei.bpm.process.executor.GeneralExecutionParameter;
+import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.node.task.user.UserTaskMetadata;
+import com.douglei.bpm.process.scheduler.TaskDispatcher;
+import com.douglei.bpm.process.scheduler.GeneralDispatchParameter;
 import com.douglei.orm.context.SessionContext;
 
 /**
  * 
  * @author DougLei
  */
-@Bean(clazz=Executor.class)
-public class UserTaskExecutor extends Executor<UserTaskMetadata, GeneralExecutionParameter> {
+@Bean(clazz=TaskDispatcher.class)
+public class UserTaskDispatcher extends TaskDispatcher<UserTaskMetadata, GeneralDispatchParameter> {
 
 	@Override
-	public ExecutionResult<Task> execute(UserTaskMetadata userTask, GeneralExecutionParameter parameter) {
+	public ExecutionResult<Task> dispatch(UserTaskMetadata userTask, GeneralDispatchParameter parameter) {
 		Task task = new Task(parameter.getProcdefId(), parameter.getProcinstId(), userTask);
 		SessionContext.getTableSession().save(task);
 		
@@ -32,12 +32,8 @@ public class UserTaskExecutor extends Executor<UserTaskMetadata, GeneralExecutio
 		return null;
 	}
 	
-	
-	
-	
-	
 	@Override
-	protected NodeType getType() {
-		return NodeType.USER_TASK;
+	protected Type getType() {
+		return Type.USER_TASK;
 	}
 }

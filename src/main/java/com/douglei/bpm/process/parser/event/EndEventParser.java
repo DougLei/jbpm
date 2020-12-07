@@ -1,7 +1,7 @@
 package com.douglei.bpm.process.parser.event;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.process.NodeType;
+import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.node.event.EndEventMetadata;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
@@ -20,7 +20,7 @@ public class EndEventParser implements Parser<TaskTemporaryData, EndEventMetadat
 	}
 
 	@Override
-	public NodeType getNodeType() {
-		return NodeType.END_EVENT;
+	public Type getType() {
+		return Type.END_EVENT;
 	}
 }

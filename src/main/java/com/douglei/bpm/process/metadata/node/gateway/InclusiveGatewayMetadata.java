@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.metadata.node.gateway;
 
-import com.douglei.bpm.process.NodeType;
+import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.node.TaskMetadata;
 
 /**
@@ -14,7 +14,7 @@ public class InclusiveGatewayMetadata extends TaskMetadata {
 	}
 	
 	@Override
-	public NodeType getType() {
-		return NodeType.INCLUSIVE_GATEWAY;
+	public Type getType() {
+		return Type.INCLUSIVE_GATEWAY;
 	}
 }

@@ -2,7 +2,7 @@ package com.douglei.bpm.process.metadata.node.task.user;
 
 import java.util.List;
 
-import com.douglei.bpm.process.NodeType;
+import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.node.TaskMetadata;
 import com.douglei.bpm.process.metadata.node.task.user.option.Option;
 
@@ -22,7 +22,7 @@ public class UserTaskMetadata extends TaskMetadata {
 	}
 
 	@Override
-	public NodeType getType() {
-		return NodeType.USER_TASK;
+	public Type getType() {
+		return Type.USER_TASK;
 	}
 }

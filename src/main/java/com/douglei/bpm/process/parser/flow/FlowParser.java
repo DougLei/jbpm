@@ -3,7 +3,7 @@ package com.douglei.bpm.process.parser.flow;
 import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.process.NodeType;
+import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
@@ -30,7 +30,7 @@ public class FlowParser implements Parser<FlowTemporaryData, FlowMetadata> {
 	}
 
 	@Override
-	public NodeType getNodeType() {
-		return NodeType.FLOW;
+	public Type getType() {
+		return Type.FLOW;
 	}
 }

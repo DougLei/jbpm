@@ -1,12 +1,12 @@
-package com.douglei.bpm.process.executor.flow;
+package com.douglei.bpm.process.scheduler.flow;
 
 import java.util.Map;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.process.executor.Executors;
 import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
+import com.douglei.bpm.process.scheduler.Dispatchers;
 import com.douglei.tools.instances.ognl.OgnlHandler;
 import com.douglei.tools.utils.StringUtil;
 
@@ -15,24 +15,24 @@ import com.douglei.tools.utils.StringUtil;
  * @author DougLei
  */
 @Bean
-public class FlowExecutor {
+public class FlowDispatcher {
 	private ExecutionResult<Object> success = new ExecutionResult<Object>(new Object());
 	private ExecutionResult<Object> fail = new ExecutionResult<Object>(null);
 	
 	@Autowired
-	private Executors executors;
+	private Dispatchers dispatchers;
 	
 	/**
-	 * 执行Flow
+	 * 
 	 * @param flow
 	 * @param parameter
 	 * @return 是否可以进入该Flow
 	 */
-	public ExecutionResult<Object> execute(FlowMetadata flow, FlowExecutionParameter parameter) {
+	public ExecutionResult<Object> dispatch(FlowMetadata flow, FlowDispatchParameter parameter) {
 		if(!matching(flow.getConditionExpr(), parameter.getVariableMap()))
 			return fail;
 		
-		executors.executeTask(flow.getTargetTask(), parameter);
+		dispatchers.dispatchTask(flow.getTargetTask(), parameter);
 		return success;
 	}
 	

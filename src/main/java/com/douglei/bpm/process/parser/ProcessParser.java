@@ -10,6 +10,8 @@ import java.util.Map;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.douglei.bpm.bean.CustomAutowired;
 import com.douglei.bpm.bean.annotation.Bean;
@@ -31,6 +33,7 @@ import com.douglei.tools.utils.StringUtil;
 @Bean
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class ProcessParser implements CustomAutowired{
+	private static final Logger logger = LoggerFactory.getLogger(ProcessParser.class);
 	private Map<String, Parser> parserMap = new HashMap<String, Parser>();
 	private StartEventParser startEventParser;
 	private FlowParser flowParser;
@@ -55,6 +58,7 @@ public class ProcessParser implements CustomAutowired{
 	 */
 	public ProcessMetadata parse(int processDefinitionId, String content) {
 		try {
+			logger.debug("解析的流程配置内容为: {}", content);
 			Document document = new SAXReader().read(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
 			Element processElement = document.getRootElement().element("process");
 			ProcessMetadata process = new ProcessMetadata(processDefinitionId, 

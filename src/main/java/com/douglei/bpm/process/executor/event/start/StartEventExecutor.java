@@ -55,7 +55,7 @@ public class StartEventExecutor extends Executor<StartEventMetadata, StartEventE
 		if(historyVariables != null)
 			SessionContext.getTableSession().save(historyVariables);
 		
-		if(executeFlow(startEvent, parameter.buildFlowExecutionParameter()))
+		if(executors.executeFlow(startEvent.getFlows(), parameter.buildFlowExecutionParameter()))
 			return new ExecutionResult<ProcessInstance>(processInstance);
 		return new ExecutionResult<ProcessInstance>("执行["+startEvent.getName()+"]任务后, 未能匹配到合适的Flow, 使流程无法正常流转, 请联系流程管理员检查["+parameter.getProcessMetadata().getName()+"]的配置");
 	}

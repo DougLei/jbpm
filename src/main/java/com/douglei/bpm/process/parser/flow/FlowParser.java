@@ -26,7 +26,7 @@ public class FlowParser implements Parser<FlowTemporaryData, FlowMetadata> {
 		if(VerifyTypeMatchUtil.isInteger(orderValue))
 			order = Integer.parseInt(orderValue);
 		
-		return new FlowMetadata(temporaryData.getId(), element.attributeValue("name"), getNodeType(), order, element.attributeValue("conditionExpr"));
+		return new FlowMetadata(temporaryData.getId(), element.attributeValue("name"), order, element.attributeValue("conditionExpr"));
 	}
 
 	@Override

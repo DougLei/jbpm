@@ -69,7 +69,7 @@ public class StartEventExecutionParameter implements ExecutionParameter {
 		return list;
 	}
 	
-	// 构建Flow的执行参数
+	// 构建通用执行参数
 	public FlowExecutionParameter buildFlowExecutionParameter() {
 		List<Assignee> assignees = null;
 		if(StringUtil.notEmpty(startParameter.getStartUserId())) {

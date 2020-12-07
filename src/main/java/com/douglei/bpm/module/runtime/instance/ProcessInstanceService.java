@@ -52,7 +52,7 @@ public class ProcessInstanceService {
 			return new ExecutionResult<ProcessInstance>("启动失败, ["+processDefinition.getName()+"]流程还未部署");
 		
 		ProcessMetadata processMetadata = processContainer.getProcess(processDefinition.getId());
-		return executors.execute(processMetadata.getStartEvent(), new StartEventExecutionParameter(processMetadata, parameter));
+		return executors.executeTask(processMetadata.getStartEvent(), new StartEventExecutionParameter(processMetadata, parameter));
 	}
 	
 	/**

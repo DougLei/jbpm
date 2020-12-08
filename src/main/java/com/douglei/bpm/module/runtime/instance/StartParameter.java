@@ -1,9 +1,10 @@
 package com.douglei.bpm.module.runtime.instance;
 
-import java.lang.reflect.Field;
 import java.util.Map;
 
-import com.douglei.bpm.module.runtime.task.entity.variable.Scope;
+import com.douglei.bpm.module.runtime.variable.ProcessVariableMapHandler;
+import com.douglei.bpm.module.runtime.variable.ProcessVariableMapHolder;
+import com.douglei.bpm.module.runtime.variable.Scope;
 import com.douglei.tools.utils.StringUtil;
 
 /**
@@ -25,7 +26,7 @@ public class StartParameter {
 	
 	private String businessId; // (主)业务标识
 	private String startUserId; // 启动人
-	private ProcessVariablesSetter processVariables; // 流程变量
+	private ProcessVariableMapHandler processVariableMapHandler = new ProcessVariableMapHandler(); // 流程变量
 	
 	public StartParameter(int processDefinitionId) {
 		this.processDefinitionId = processDefinitionId;
@@ -57,37 +58,18 @@ public class StartParameter {
 		return addVariable(name, Scope.GLOBAL, value);
 	}
 	public StartParameter addVariable(String name, Scope scope, Object value) {
-		if(processVariables == null)
-			processVariables = new ProcessVariablesSetter();
-		processVariables.addVariable(name, scope, value);
+		processVariableMapHandler.addVariable(name, scope, value);
 		return this;
 	}
 	public StartParameter addVariables(Map<String, Object> variables) {
 		return addVariables(Scope.GLOBAL, variables);
 	}
 	public StartParameter addVariables(Scope scope, Map<String, Object> variables) {
-		if(processVariables == null)
-			processVariables = new ProcessVariablesSetter();
-		processVariables.addVariables(scope, variables);
+		processVariableMapHandler.addVariables(scope, variables);
 		return this;
 	}
 	public StartParameter addVariables(Object object) {
-		try {
-			Class<?> clazz = object.getClass();
-			if(clazz.isAnnotationPresent(ProcessVariableBean.class)) {
-				ProcessVariableField variableField;
-				do {
-					for(Field field : clazz.getDeclaredFields()) {
-						variableField = field.getAnnotation(ProcessVariableField.class);
-						if(variableField != null) 
-							addVariable(StringUtil.isEmpty(variableField.name())?field.getName():variableField.name(), variableField.scope(), field.get(object));
-					}
-					clazz = clazz.getSuperclass();
-				}while(clazz != Object.class);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
+		processVariableMapHandler.addVariables(object);
 		return this;
 	}
 	
@@ -112,7 +94,7 @@ public class StartParameter {
 	public String getStartUserId() {
 		return startUserId;
 	}
-	public ProcessVariables getProcessVariables() {
-		return processVariables;
+	public ProcessVariableMapHolder getProcessVariableMapHolder() {
+		return processVariableMapHandler;
 	}
 }

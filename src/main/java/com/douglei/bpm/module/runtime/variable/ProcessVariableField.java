@@ -1,11 +1,9 @@
-package com.douglei.bpm.module.runtime.instance;
+package com.douglei.bpm.module.runtime.variable;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import com.douglei.bpm.module.runtime.task.entity.variable.Scope;
 
 /**
  * 

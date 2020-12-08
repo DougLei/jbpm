@@ -9,7 +9,7 @@ import com.douglei.bpm.module.history.task.entity.HistoryTask;
 import com.douglei.bpm.module.history.task.entity.HistoryVariable;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessInstance;
-import com.douglei.bpm.module.runtime.task.entity.variable.Variable;
+import com.douglei.bpm.module.runtime.variable.entity.Variable;
 import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.metadata.node.event.StartEventMetadata;
@@ -46,16 +46,16 @@ public class StartEventDispatcher extends TaskDispatcher<StartEventMetadata, Sta
 		SessionContext.getTableSession().save(historyTask);
 		
 		// 全局变量保存到运行表
-		List<Variable> variables = parameter.getGlobalVariables(processInstance.getProcdefId(), processInstance.getId());
+		List<Variable> variables = parameter.getRuntimeVariables(processInstance.getProcdefId(), processInstance.getId());
 		if(variables != null)
 			SessionContext.getTableSession().save(variables);
 		
 		// 本地变量保存到历史表
-		List<HistoryVariable>  historyVariables = parameter.getLocalVariables(processInstance.getProcdefId(), processInstance.getId(), historyTask.getId());
+		List<HistoryVariable>  historyVariables = parameter.getHistoryVariables(processInstance.getProcdefId(), processInstance.getId(), historyTask.getId());
 		if(historyVariables != null)
 			SessionContext.getTableSession().save(historyVariables);
 		
-		if(dispatchers.dispatchFlow(startEvent.getFlows(), parameter.buildFlowDispatchParameter(processInstance.getId())))
+		if(processScheduler.dispatchFlow(startEvent.getFlows(), parameter.buildFlowDispatchParameter(processInstance.getId())))
 			return new ExecutionResult<ProcessInstance>(processInstance);
 		return new ExecutionResult<ProcessInstance>("执行["+startEvent.getName()+"]任务后, 未能匹配到合适的Flow, 使流程无法正常流转, 请联系流程管理员检查["+parameter.getProcessMetadata().getName()+"]的配置");
 	}
@@ -64,7 +64,7 @@ public class StartEventDispatcher extends TaskDispatcher<StartEventMetadata, Sta
 	private ProcessInstance createProcessInstance(ProcessMetadata processMetadata, StartParameter startParameter) {
 		ProcessInstance instance = new ProcessInstance();
 		instance.setProcdefId(processMetadata.getId());
-		instance.setTitle(processMetadata.getTitle(startParameter.getProcessVariables().getVariableMap()));
+		instance.setTitle(new TitleExpression(processMetadata.getTitle()).getTitle(startParameter.getProcessVariableMapHolder().getVariableMap()));
 		instance.setBusinessId(startParameter.getBusinessId());
 		instance.setPageId(processMetadata.getPageID());
 		instance.setStartUserId(startParameter.getStartUserId());

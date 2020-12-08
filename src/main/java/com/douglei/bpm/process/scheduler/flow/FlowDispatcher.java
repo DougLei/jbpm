@@ -6,7 +6,8 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
-import com.douglei.bpm.process.scheduler.Dispatchers;
+import com.douglei.bpm.process.scheduler.DispatchException;
+import com.douglei.bpm.process.scheduler.ProcessScheduler;
 import com.douglei.tools.instances.ognl.OgnlHandler;
 import com.douglei.tools.utils.StringUtil;
 
@@ -20,7 +21,7 @@ public class FlowDispatcher {
 	private ExecutionResult<Object> fail = new ExecutionResult<Object>(null);
 	
 	@Autowired
-	private Dispatchers dispatchers;
+	private ProcessScheduler processScheduler;
 	
 	/**
 	 * 
@@ -32,7 +33,7 @@ public class FlowDispatcher {
 		if(!matching(flow.getConditionExpr(), parameter.getVariableMap()))
 			return fail;
 		
-		dispatchers.dispatchTask(flow.getTargetTask(), parameter);
+		processScheduler.dispatchTask(flow.getTargetTask(), parameter);
 		return success;
 	}
 	
@@ -40,6 +41,8 @@ public class FlowDispatcher {
 	private boolean matching(String conditionExpr, Map<String, Object> variableMap) {
 		if(StringUtil.isEmpty(conditionExpr))
 			return true;
+		if(variableMap == null)
+			throw new DispatchException("在匹配Flow时, 不存在流程变量");
 		return OgnlHandler.getSingleton().getBooleanValue(conditionExpr, variableMap);
 	}
 }

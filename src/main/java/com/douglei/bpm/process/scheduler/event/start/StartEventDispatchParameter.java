@@ -2,13 +2,11 @@ package com.douglei.bpm.process.scheduler.event.start;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.douglei.bpm.module.history.task.entity.HistoryVariable;
-import com.douglei.bpm.module.runtime.instance.ProcessVariable;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.module.runtime.task.entity.Assignee;
-import com.douglei.bpm.module.runtime.task.entity.variable.Variable;
+import com.douglei.bpm.module.runtime.variable.entity.Variable;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.scheduler.DispatchParameter;
 import com.douglei.bpm.process.scheduler.flow.FlowDispatchParameter;
@@ -37,33 +35,25 @@ public class StartEventDispatchParameter implements DispatchParameter{
 		return startParameter;
 	}
 	
-	// 获取Global变量集合
-	public List<Variable> getGlobalVariables(int processDefinitionId, int processInstanceId){
-		if(startParameter.getProcessVariables() == null)
+	// 获取运行变量集合
+	public List<Variable> getRuntimeVariables(int processDefinitionId, int processInstanceId){
+		if(!startParameter.getProcessVariableMapHolder().existsGlobalVariableMap()) 
 			return null;
 		
-		Map<String, ProcessVariable> globalVariableMap = startParameter.getProcessVariables().getGlobalVariableMap();
-		if(globalVariableMap == null)
-			return null;
-		
-		List<Variable> list = new ArrayList<Variable>(globalVariableMap.size());
-		globalVariableMap.values().forEach(processVariable -> {
+		List<Variable> list = new ArrayList<Variable>(startParameter.getProcessVariableMapHolder().getGlobalVariableMap().size());
+		startParameter.getProcessVariableMapHolder().getGlobalVariableMap().values().forEach(processVariable -> {
 			list.add(new Variable(processDefinitionId, processInstanceId, null, processVariable));
 		});
 		return list;
 	}
 	
-	// 获取Local变量集合
-	public List<HistoryVariable> getLocalVariables(int processDefinitionId, int processInstanceId, int historyTaskId){
-		if(startParameter.getProcessVariables() == null)
+	// 获取历史变量集合
+	public List<HistoryVariable> getHistoryVariables(int processDefinitionId, int processInstanceId, int historyTaskId){
+		if(!startParameter.getProcessVariableMapHolder().existsLocalVariableMap()) 
 			return null;
 		
-		Map<String, ProcessVariable> localVariableMap = startParameter.getProcessVariables().getLocalVariableMap();
-		if(localVariableMap == null)
-			return null;
-		
-		List<HistoryVariable> list = new ArrayList<HistoryVariable>(localVariableMap.size());
-		localVariableMap.values().forEach(processVariable -> {
+		List<HistoryVariable> list = new ArrayList<HistoryVariable>(startParameter.getProcessVariableMapHolder().getLocalVariableMap().size());
+		startParameter.getProcessVariableMapHolder().getLocalVariableMap().values().forEach(processVariable -> {
 			list.add(new HistoryVariable(processDefinitionId, processInstanceId, historyTaskId, processVariable));
 		});
 		return list;
@@ -76,6 +66,6 @@ public class StartEventDispatchParameter implements DispatchParameter{
 			assignees = new ArrayList<Assignee>(1);
 			assignees.add(new Assignee(startParameter.getStartUserId()));
 		}
-		return new FlowDispatchParameter(processMetadata.getId(), procinstId, assignees, startParameter.getProcessVariables().getVariableMap());
+		return new FlowDispatchParameter(processMetadata.getId(), procinstId, assignees, startParameter.getProcessVariableMapHolder().getVariableMap());
 	}
 }

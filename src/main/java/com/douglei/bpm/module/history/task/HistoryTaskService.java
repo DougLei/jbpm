@@ -12,7 +12,7 @@ import com.douglei.bpm.process.container.ProcessContainerProxy;
 public class HistoryTaskService {
 	
 	@Autowired
-	private ProcessContainerProxy processHandler;
+	private ProcessContainerProxy processContainer;
 	
 	
 	

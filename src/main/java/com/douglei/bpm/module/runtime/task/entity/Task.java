@@ -12,9 +12,9 @@ public class Task {
 	protected int id;
 	protected int procdefId;
 	protected int procinstId;
-	protected String taskKey;
-	protected String taskName;
-	protected String taskType;
+	protected String key;
+	protected String name;
+	protected String type;
 	protected Date startTime;
 	protected Date expiryTime;
 	protected String businessId;
@@ -24,9 +24,9 @@ public class Task {
 	public Task(int procdefId, int procinstId, TaskMetadata taskMetadata) {
 		this.procdefId = procdefId;
 		this.procinstId = procinstId;
-		this.taskKey = taskMetadata.getId();
-		this.taskName = taskMetadata.getName();
-		this.taskType = taskMetadata.getType().getName();
+		this.key = taskMetadata.getId();
+		this.name = taskMetadata.getName();
+		this.type = taskMetadata.getType().getName();
 		this.startTime = new Date();
 	}
 	
@@ -48,23 +48,23 @@ public class Task {
 	public void setProcinstId(int procinstId) {
 		this.procinstId = procinstId;
 	}
-	public String getTaskKey() {
-		return taskKey;
+	public String getKey() {
+		return key;
 	}
-	public void setTaskKey(String taskKey) {
-		this.taskKey = taskKey;
+	public void setKey(String key) {
+		this.key = key;
 	}
-	public String getTaskName() {
-		return taskName;
+	public String getName() {
+		return name;
 	}
-	public void setTaskName(String taskName) {
-		this.taskName = taskName;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public String getTaskType() {
-		return taskType;
+	public String getType() {
+		return type;
 	}
-	public void setTaskType(String taskType) {
-		this.taskType = taskType;
+	public void setType(String type) {
+		this.type = type;
 	}
 	public Date getStartTime() {
 		return startTime;

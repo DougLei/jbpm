@@ -20,7 +20,7 @@ import com.douglei.bpm.process.scheduler.flow.FlowDispatcher;
  */
 @Bean
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class Dispatchers implements CustomAutowired{
+public class ProcessScheduler implements CustomAutowired{
 	private Map<Type, TaskDispatcher> dispatchers = new HashMap<Type, TaskDispatcher>();
 	
 	@Autowired
@@ -49,11 +49,11 @@ public class Dispatchers implements CustomAutowired{
 	/**
 	 * 执行Flow
 	 * @param metadata
-	 * @param executionParameter
+	 * @param parameter
 	 * @return 
 	 */
-	public boolean dispatchFlow(FlowMetadata flow, FlowDispatchParameter executionParameter) {
-		return flowDispatcher.dispatch(flow, executionParameter).isSuccess();
+	public boolean dispatchFlow(FlowMetadata flow, FlowDispatchParameter parameter) {
+		return flowDispatcher.dispatch(flow, parameter).isSuccess();
 	}
 	
 	/**
@@ -62,9 +62,9 @@ public class Dispatchers implements CustomAutowired{
 	 * @param executionParameter
 	 * @return 
 	 */
-	public boolean dispatchFlow(List<FlowMetadata> flows, FlowDispatchParameter executionParameter) {
+	public boolean dispatchFlow(List<FlowMetadata> flows, FlowDispatchParameter parameter) {
 		for(FlowMetadata flow : flows) {
-			if(dispatchFlow(flow, executionParameter))
+			if(dispatchFlow(flow, parameter))
 				return true;
 		}
 		return false;

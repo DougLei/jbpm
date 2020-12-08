@@ -1,7 +1,4 @@
-package com.douglei.bpm.module.runtime.instance;
-
-import com.douglei.bpm.module.runtime.task.entity.variable.DataType;
-import com.douglei.bpm.module.runtime.task.entity.variable.Scope;
+package com.douglei.bpm.module.runtime.variable;
 
 /**
  * 流程变量
@@ -13,10 +10,10 @@ public class ProcessVariable {
 	private DataType dataType;
 	private Object value;
 	
-	ProcessVariable(String name, Scope scope, Object value) {
+	ProcessVariable(String name, Scope scope, DataType dataType, Object value) {
 		this.name = name;
 		this.scope = scope;
-		this.dataType = DataType.getByObjectValue(value);
+		this.dataType = dataType;
 		this.value = value;
 	}
 	

@@ -1,9 +1,9 @@
-package com.douglei.bpm.module.runtime.task.entity.variable;
+package com.douglei.bpm.module.runtime.variable.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.douglei.bpm.module.runtime.instance.ProcessVariable;
+import com.douglei.bpm.module.runtime.variable.ProcessVariable;
 import com.douglei.tools.utils.datatype.dateformat.DateFormatUtil;
 import com.douglei.tools.utils.serialize.JdkSerializeProcessor;
 
@@ -29,9 +29,9 @@ public class Variable {
 		this.procdefId = procdefId;
 		this.procinstId = procinstId;
 		this.taskId = taskId;
-		this.scope = processVariable.getScope().getValue();
+		this.scope = processVariable.getScope().getName();
 		this.name = processVariable.getName();
-		this.dataType = processVariable.getDataType().getValue();
+		this.dataType = processVariable.getDataType().getName();
 		if(processVariable.getValue() != null) {
 			switch (processVariable.getDataType()) {
 				case STRING:
@@ -49,7 +49,7 @@ public class Variable {
 			}
 		}
 	}
-	
+
 	public int getId() {
 		return id;
 	}

@@ -10,7 +10,7 @@ import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessInstance;
-import com.douglei.bpm.process.parser.ProcessParseException;
+import com.douglei.bpm.module.runtime.variable.Scope;
 
 public class ProcessRuntimeTest {
 	private ProcessEngine engine;
@@ -21,10 +21,11 @@ public class ProcessRuntimeTest {
 	}
 	
 	@Test
-	public void start() throws ProcessParseException {
+	public void start() {
 		StartParameter parameter = new StartParameter(1);
 		parameter.addVariable("name", "金石磊");
-		parameter.addVariable("user", new User("douglei 4 user"));
+		parameter.addVariable("day", 15);
+		parameter.addVariable("user", Scope.LOCAL, new User("douglei 4 user"));
 		parameter.setStartUserId("金石磊");
 		
 		ExecutionResult<ProcessInstance> result = engine.getRuntimeModule().getInstanceService().start(parameter);
@@ -32,6 +33,12 @@ public class ProcessRuntimeTest {
 			System.out.println("成功启动的流程实例id为["+result.getResult().getId()+"]");
 		else
 			System.out.println(result.getFailMessage());
+	}
+	
+	@Test
+	public void complete() {
+		int taskId = 2;
+		engine.getRuntimeModule().getTaskService().complete(taskId);
 	}
 }
 

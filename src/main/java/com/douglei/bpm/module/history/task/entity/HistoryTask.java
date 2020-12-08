@@ -16,6 +16,15 @@ public class HistoryTask extends Task{
 	public HistoryTask(int procdefId, int procinstId, TaskMetadata taskMetadata) {
 		super(procdefId, procinstId, taskMetadata);
 	}
+	public HistoryTask(Task task) {
+		this.procdefId = task.getProcdefId();
+		this.procinstId = task.getProcinstId();
+		this.key = task.getKey();
+		this.name = task.getName();
+		this.type = task.getType();
+		this.startTime = task.getStartTime();
+		this.endTime = new Date();
+	}
 	
 	public Date getEndTime() {
 		return endTime;

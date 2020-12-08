@@ -88,9 +88,12 @@
 		<inclusiveGateway id="inclusiveGateway1" name=""></inclusiveGateway>
 		
 		<!-- 连线, 可配置条件; 如果一个任务引出多条flow, 则是排他模式 -->
-		<flow id="flow1" name="" order="0, 排序值, 默认为0" source="startEvent1" target="userTask1" conditionExpr="配置比较表达式, 根据表达式决定是否可以走该flow; 可不配置, 默认比较结果为true">
+		<flow id="flow1" name="" order="0, 排序值, 默认为0" source="startEvent1" target="userTask1">
 			<!-- 监听器, 按照配置的顺序依次执行 -->
 			<listener value="" />
+			<conditionExpr>
+				<![CDATA[ 配置比较表达式, 根据表达式决定是否可以走该flow; 可不配置, 默认比较结果为true ]]>
+			</conditionExpr>
 		</flow>
 	</process>
 	

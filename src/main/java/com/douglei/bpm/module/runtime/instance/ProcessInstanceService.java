@@ -7,7 +7,7 @@ import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessInstance;
 import com.douglei.bpm.process.container.ProcessContainerProxy;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
-import com.douglei.bpm.process.scheduler.Dispatchers;
+import com.douglei.bpm.process.scheduler.ProcessScheduler;
 import com.douglei.bpm.process.scheduler.event.start.StartEventDispatchParameter;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
@@ -24,7 +24,7 @@ public class ProcessInstanceService {
 	private ProcessContainerProxy processContainer;
 	
 	@Autowired
-	private Dispatchers dispatchers;
+	private ProcessScheduler processScheduler;
 	
 	/**
 	 * 启动流程
@@ -52,7 +52,7 @@ public class ProcessInstanceService {
 			return new ExecutionResult<ProcessInstance>("启动失败, ["+processDefinition.getName()+"]流程还未部署");
 		
 		ProcessMetadata processMetadata = processContainer.getProcess(processDefinition.getId());
-		return dispatchers.dispatchTask(processMetadata.getStartEvent(), new StartEventDispatchParameter(processMetadata, parameter));
+		return processScheduler.dispatchTask(processMetadata.getStartEvent(), new StartEventDispatchParameter(processMetadata, parameter));
 	}
 	
 	/**

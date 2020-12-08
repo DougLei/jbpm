@@ -26,7 +26,14 @@ public class FlowParser implements Parser<FlowTemporaryData, FlowMetadata> {
 		if(VerifyTypeMatchUtil.isInteger(orderValue))
 			order = Integer.parseInt(orderValue);
 		
-		return new FlowMetadata(temporaryData.getId(), element.attributeValue("name"), order, element.attributeValue("conditionExpr"));
+		String conditionExpr = null;
+		Element conditionExprElement = element.element("conditionExpr");
+		if(conditionExprElement != null) {
+			conditionExpr = conditionExprElement.getTextTrim();
+			conditionExpr = conditionExpr.substring(2, conditionExpr.length()-1);
+		}
+		
+		return new FlowMetadata(temporaryData.getId(), element.attributeValue("name"), order, conditionExpr);
 	}
 
 	@Override

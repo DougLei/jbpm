@@ -14,7 +14,7 @@ import com.douglei.bpm.process.metadata.node.TaskMetadata;
 public abstract class TaskDispatcher<M extends TaskMetadata, EM extends DispatchParameter> {
 	
 	@Autowired
-	protected Dispatchers dispatchers;
+	protected ProcessScheduler processScheduler;
 	
 	/**
 	 * 

@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.douglei.bpm.expression.Expression;
-import com.douglei.bpm.expression.ExpressionConstants;
 import com.douglei.bpm.process.metadata.node.TaskMetadata;
 import com.douglei.bpm.process.metadata.node.event.StartEventMetadata;
 import com.douglei.tools.utils.StringUtil;
@@ -17,7 +15,7 @@ import com.douglei.tools.utils.StringUtil;
 public class ProcessMetadata implements Serializable {
 	private int id; 
 	private String name;
-	private Expression titleExpression;
+	private String title;
 	private String pageID;
 	
 	private StartEventMetadata startEvent;
@@ -26,7 +24,7 @@ public class ProcessMetadata implements Serializable {
 	public ProcessMetadata(int processDefinitionId, String code, String version, String name, String title, String pageID) {
 		this.id = processDefinitionId;
 		this.name = StringUtil.isEmpty(name)?(code+":"+version):name;
-		this.titleExpression = new Expression(StringUtil.isEmpty(title)?this.name:title);
+		this.title = StringUtil.isEmpty(title)?this.name:title;
 		this.pageID = pageID;
 	}
 	public void setStartEvent(StartEventMetadata startEvent) {
@@ -42,20 +40,9 @@ public class ProcessMetadata implements Serializable {
 	public String getName() {
 		return name;
 	}
-	public String getTitle(Map<String, Object> variables) {
-		String ts = titleExpression.getSource();
-		if(variables == null || !titleExpression.exists())
-			return ts;
-		
-		Object value = null;
-		do {
-			value = titleExpression.getValue(variables);
-			if(value != null)
-				ts = ts.replaceAll(ExpressionConstants.PREFIX_4_REGEX + titleExpression.getExpression() + ExpressionConstants.SUFFIX, value.toString());
-		}while(titleExpression.next());
-		return ts;
+	public String getTitle() {
+		return title;
 	}
-	
 	public String getPageID() {
 		return pageID;
 	}

@@ -2,17 +2,25 @@
 <bpm-configuration>
 	<process code="vocation" version="version" name="请假" title="#{name}的请假申请" pageID="全局页面标识">
 		<!-- 开始事件, 一个流程中只能有一个开始 -->
-		<startEvent id="startEvent" name=""></startEvent>
+		<startEvent id="startEvent" name="开始"></startEvent>
 		<!-- 结束事件, 一个流程中可以有多个结束 -->
-		<endEvent id="endEvent1" name=""></endEvent>
+		<endEvent id="endEvent" name="结束"></endEvent>
 		
 		<!-- 用户任务 -->
-		<userTask id="userTask1" name="任务名称" pageID="属于任务的页面标识, 优先级高于全局页面标识xx" timeLimit="办理时限的表达式, 设置当前用户任务需要在多长时间内办理, 不配置则没有时限约束, 这里的表达式还要体现出工作日/自然日">
-		</userTask>
+		<userTask id="userTask1" name="员工发起申请"></userTask>
+		<userTask id="userTask2" name="经理审批"></userTask>
+		<userTask id="userTask3" name="老板审批"></userTask>
 		
 		<!-- 连线, 可配置条件 -->
-		<flow id="flow1" name="" order="0, 排序值, 默认为0" source="startEvent" target="userTask1"  />
-		<flow id="flow2" name="" order="0, 排序值, 默认为0" source="userTask1" target="endEvent1"  />
+		<flow id="flow1" source="startEvent" target="userTask1" />
+		<flow id="flow2" source="userTask1" target="userTask2">
+			<conditionExpr><![CDATA[ #{day <= 3} ]]></conditionExpr>
+		</flow>
+		<flow id="flow4" source="userTask1" target="userTask3">
+			<conditionExpr><![CDATA[ #{day > 3} ]]></conditionExpr>
+		</flow>
+		<flow id="flow3" source="userTask2" target="userTask3" />
+		<flow id="flow5" source="userTask3" target="endEvent" />
 	</process>
 	
 	<!-- 配置流程图的结构, 主要就是记录画布的长宽，以及各个节点的坐标，长宽等 -->

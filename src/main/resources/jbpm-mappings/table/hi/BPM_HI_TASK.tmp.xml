@@ -6,9 +6,9 @@
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
 			<column name="PROCDEF_ID" property="procdefId" dataType="number" length="10" nullable="false"/>
 			<column name="PROCINST_ID" property="procinstId" dataType="number" length="10" nullable="false"/>
-			<column name="TASK_KEY" property="taskKey" dataType="string" length="50" nullable="false"/>
-			<column name="TASK_NAME" property="taskName" dataType="nstring" length="100" nullable="false"/>
-			<column name="TASK_TYPE" property="taskType" dataType="string" length="20" nullable="false"/>
+			<column name="KEY_" property="key" dataType="string" length="50" nullable="false"/>
+			<column name="NAME_" property="name" dataType="nstring" length="100" nullable="false"/>
+			<column name="TYPE_" property="type" dataType="string" length="20" nullable="false"/>
 			<column name="START_TIME" property="startTime" dataType="datetime" nullable="false" />
 			<column name="EXPIRY_TIME" property="expiryTime" dataType="datetime" />
 			<column name="END_TIME" property="endTime" dataType="datetime" nullable="false" />

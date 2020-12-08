@@ -1,7 +1,7 @@
 package com.douglei.bpm.module.history.task.entity;
 
-import com.douglei.bpm.module.runtime.instance.ProcessVariable;
-import com.douglei.bpm.module.runtime.task.entity.variable.Variable;
+import com.douglei.bpm.module.runtime.variable.ProcessVariable;
+import com.douglei.bpm.module.runtime.variable.entity.Variable;
 
 /**
  * 

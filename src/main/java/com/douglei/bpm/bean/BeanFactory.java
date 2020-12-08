@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.douglei.aop.ProxyBean;
-import com.douglei.bpm.ProcessEngineException;
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.bean.annotation.DefaultInstance;
@@ -56,16 +55,14 @@ public class BeanFactory {
 	 * 执行自动装配
 	 */
 	public void autowireBeans() {
-		if(beanContainer.isEmpty())
-			throw new ProcessEngineException("禁止重复调用["+BeanFactory.class.getName()+".autowireBeans()]方法");
-		
 		try {
+			beanContainer.put(BeanFactoryProxy.class, new BeanFactoryProxy(this));
 			autowireBeans(beanContainer.values());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			beanContainer.clear();
-			defaultBeanContainer.clear();
+//			beanContainer.clear();
+//			defaultBeanContainer.clear();
 		}
 	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -78,7 +75,7 @@ public class BeanFactory {
 		}
 	}
 	// 设置当前对象的属性
-	private void setFields(Object object) throws Exception {
+	void setFields(Object object) throws Exception {
 		if(object instanceof CustomAutowired) 
 			((CustomAutowired)object).setFields(beanContainer);
 		

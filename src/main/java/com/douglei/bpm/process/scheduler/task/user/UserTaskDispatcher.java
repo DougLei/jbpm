@@ -20,7 +20,7 @@ import com.douglei.orm.context.SessionContext;
 public class UserTaskDispatcher extends TaskDispatcher<UserTaskMetadata, GeneralDispatchParameter> {
 
 	@Override
-	public ExecutionResult<Task> dispatch(UserTaskMetadata userTask, GeneralDispatchParameter parameter) {
+	public ExecutionResult dispatch(UserTaskMetadata userTask, GeneralDispatchParameter parameter) {
 		Task task = new Task(parameter.getProcdefId(), parameter.getProcinstId(), userTask);
 		SessionContext.getTableSession().save(task);
 		

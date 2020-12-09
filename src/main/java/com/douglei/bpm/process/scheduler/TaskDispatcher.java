@@ -22,7 +22,7 @@ public abstract class TaskDispatcher<M extends TaskMetadata, EM extends Dispatch
 	 * @param parameter
 	 * @return 
 	 */
-	public abstract ExecutionResult<?> dispatch(M task, EM parameter);
+	public abstract ExecutionResult dispatch(M task, EM parameter);
 	
 	/**
 	 * 获取调度器类型

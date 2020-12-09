@@ -22,9 +22,18 @@ public class TaskService {
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult<Integer> complete(int taskId) {
+	public ExecutionResult complete(int taskId) {
 		return commandExecutor.execute(new CompleteTaskCommand(taskId));
 	}
 	
-	
+	/**
+	 * 认领指定id的任务
+	 * @param taskId
+	 * @param userId
+	 * @return
+	 */
+	public ExecutionResult claim(int taskId, String userId){
+		
+		return ExecutionResult.getSuccessInstance();
+	}
 }

@@ -22,12 +22,12 @@ public class ProcessTypeService {
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult<ProcessType> insert(ProcessType type) {
+	public ExecutionResult insert(ProcessType type) {
 		if(SessionContext.getSQLSession().uniqueQuery_("ProcessType", "query4ValidateCodeExists", type) != null)
-			return new ExecutionResult<ProcessType>("已存在编码为["+type.getCode()+"]的流程类型");
+			return new ExecutionResult("已存在编码为["+type.getCode()+"]的流程类型");
 		
 		SessionContext.getTableSession().save(type);
-		return new ExecutionResult<ProcessType>(type);
+		return ExecutionResult.getSuccessInstance();
 	}
 	
 	/**
@@ -36,13 +36,13 @@ public class ProcessTypeService {
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult<ProcessType> update(ProcessType type) {
+	public ExecutionResult update(ProcessType type) {
 		Object[] obj = SessionContext.getSQLSession().uniqueQuery_("ProcessType", "query4ValidateCodeExists", type);
 		if(obj != null && type.getId() != Integer.parseInt(obj[0].toString())) 
-			return new ExecutionResult<ProcessType>("已存在编码为["+type.getCode()+"]的流程类型");
+			return new ExecutionResult("已存在编码为["+type.getCode()+"]的流程类型");
 		
 		SessionContext.getTableSession().update(type);
-		return new ExecutionResult<ProcessType>(type);
+		return ExecutionResult.getSuccessInstance();
 	}
 	
 	/**
@@ -52,16 +52,16 @@ public class ProcessTypeService {
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult<Integer> delete(int processTypeId, boolean strict) {
+	public ExecutionResult delete(int processTypeId, boolean strict) {
 		List<Object> paramList = Arrays.asList(processTypeId);
 		
 		int count = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_("select count(id) from bpm_re_procdef where type_id = ?", paramList)[0].toString());
 		if(count > 0 && !strict)
-			return new ExecutionResult<Integer>("该流程类型关联了["+count+"]条流程, 无法删除");
+			return new ExecutionResult("该流程类型关联了["+count+"]条流程, 无法删除");
 
 		SessionContext.getSqlSession().executeUpdate("delete bpm_re_proctype where id=?", paramList);
 		if(count > 0) 
 			SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set type_id=0 where type_id=?", paramList);
-		return new ExecutionResult<Integer>(processTypeId);
+		return ExecutionResult.getSuccessInstance();
 	}
 }

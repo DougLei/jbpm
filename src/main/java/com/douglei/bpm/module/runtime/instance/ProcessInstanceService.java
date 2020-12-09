@@ -32,24 +32,24 @@ public class ProcessInstanceService {
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult<ProcessInstance> start(StartParameter parameter) {
+	public ExecutionResult start(StartParameter parameter) {
 		ProcessDefinition processDefinition = SessionContext.getSQLSession().queryFirst(ProcessDefinition.class, "ProcessDefinition", "query4Start", parameter);
 		switch (parameter.getStartMode()) {
 			case StartParameter.BY_PROCESS_DEFINITION_ID:
 				if(processDefinition == null || processDefinition.getState() == ProcessDefinition.DELETE) 
-					return new ExecutionResult<ProcessInstance>("启动失败, 不存在id为["+parameter.getProcessDefinitionId()+"]的流程");
+					return new ExecutionResult("启动失败, 不存在id为["+parameter.getProcessDefinitionId()+"]的流程");
 				break;
 			case StartParameter.BY_PROCESS_DEFINITION_CODE:
 				if(processDefinition == null || processDefinition.getState() == ProcessDefinition.DELETE) 
-					return new ExecutionResult<ProcessInstance>("启动失败, 不存在code为["+parameter.getCode()+"]的流程");
+					return new ExecutionResult("启动失败, 不存在code为["+parameter.getCode()+"]的流程");
 				break;
 			case StartParameter.BY_PROCESS_DEFINITION_CODE_VERSION:
 				if(processDefinition == null || processDefinition.getState() == ProcessDefinition.DELETE) 
-					return new ExecutionResult<ProcessInstance>("启动失败, 不存在code为["+parameter.getCode()+"], version为["+parameter.getVersion()+"]的流程");
+					return new ExecutionResult("启动失败, 不存在code为["+parameter.getCode()+"], version为["+parameter.getVersion()+"]的流程");
 				break;
 		}
 		if(processDefinition.getState() == ProcessDefinition.UNDEPLOY)
-			return new ExecutionResult<ProcessInstance>("启动失败, ["+processDefinition.getName()+"]流程还未部署");
+			return new ExecutionResult("启动失败, ["+processDefinition.getName()+"]流程还未部署");
 		
 		ProcessMetadata processMetadata = processContainer.getProcess(processDefinition.getId());
 		return processScheduler.dispatchTask(processMetadata.getStartEvent(), new StartEventDispatchParameter(processMetadata, parameter));

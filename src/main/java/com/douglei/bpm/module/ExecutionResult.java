@@ -4,31 +4,33 @@ package com.douglei.bpm.module;
  * 执行结果
  * @author DougLei
  */
-public class ExecutionResult<T> {
-	private boolean success;
+public class ExecutionResult {
+	private boolean success; // 是否成功
 	
-	// 记录执行失败时的消息
-	private String failMessage;
+	private String failMessage; // 记录执行失败时的消息
 	public ExecutionResult(String failMessage) {
 		this.failMessage = failMessage;
-	}
-	public boolean isFail() {
-		return !success;
 	}
 	public String getFailMessage() {
 		return failMessage;
 	}
-	
-	// 记录执行成功时返回的实例
-	private T result;
-	public ExecutionResult(T result) {
-		this.success = true;
-		this.result = result;
-	}
 	public boolean isSuccess() {
 		return success;
 	}
-	public T getResult() {
-		return result;
+	public boolean isFail() {
+		return !success;
+	}
+	
+	private ExecutionResult() {
+		this.success = true;
+	}
+	private static final ExecutionResult SUCCESS_INSTANCE = new ExecutionResult();
+	public static final ExecutionResult getSuccessInstance() {
+		return SUCCESS_INSTANCE;
+	}
+	
+	private static final ExecutionResult DEFAULT_FAIL_INSTANCE = new ExecutionResult("Fail");
+	public static final ExecutionResult getDefaultFailInstance() {
+		return DEFAULT_FAIL_INSTANCE;
 	}
 }

@@ -24,7 +24,7 @@ import com.douglei.orm.context.SessionContext;
 public class StartEventDispatcher extends TaskDispatcher<StartEventMetadata, StartEventDispatchParameter> {
 	
 	@Override
-	public ExecutionResult<ProcessInstance> dispatch(StartEventMetadata startEvent, StartEventDispatchParameter parameter) {
+	public ExecutionResult dispatch(StartEventMetadata startEvent, StartEventDispatchParameter parameter) {
 		/*
 		 * 1. 判断能否启动
 		 * 2. 创建流程实例
@@ -56,8 +56,8 @@ public class StartEventDispatcher extends TaskDispatcher<StartEventMetadata, Sta
 			SessionContext.getTableSession().save(historyVariables);
 		
 		if(processScheduler.dispatchFlow(startEvent.getFlows(), parameter.buildFlowDispatchParameter(processInstance.getId())))
-			return new ExecutionResult<ProcessInstance>(processInstance);
-		return new ExecutionResult<ProcessInstance>("执行["+startEvent.getName()+"]任务后, 未能匹配到合适的Flow, 使流程无法正常流转, 请联系流程管理员检查["+parameter.getProcessMetadata().getName()+"]的配置");
+			return ExecutionResult.getSuccessInstance();
+		return new ExecutionResult("执行["+startEvent.getName()+"]任务后, 未能匹配到合适的Flow, 使流程无法正常流转, 请联系流程管理员检查["+parameter.getProcessMetadata().getName()+"]的配置");
 	}
 	
 	// 创建流程实例

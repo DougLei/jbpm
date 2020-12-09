@@ -22,7 +22,7 @@ import com.douglei.orm.context.SessionContext;
  * 完成任务命令
  * @author DougLei
  */
-public class CompleteTaskCommand implements Command<ExecutionResult<Integer>> {
+public class CompleteTaskCommand implements Command<ExecutionResult> {
 	private int taskId;
 	private List<Object> taskIdParams;
 	
@@ -38,10 +38,10 @@ public class CompleteTaskCommand implements Command<ExecutionResult<Integer>> {
 	private ProcessScheduler processScheduler;
 
 	@Override
-	public ExecutionResult<Integer> execute() {
+	public ExecutionResult execute() {
 		Task task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where id = ?", taskIdParams);
 		if(task == null)
-			return new ExecutionResult<Integer>("不存在id为["+taskId+"]的任务");
+			return new ExecutionResult("不存在id为["+taskId+"]的任务");
 		
 		// 将任务从运行任务表删除
 		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_task where id = ?", taskIdParams);
@@ -54,7 +54,7 @@ public class CompleteTaskCommand implements Command<ExecutionResult<Integer>> {
 		Map<String, Object> variableMap = getVariableMap(historyTask);
 		
 		processScheduler.dispatchFlow(processContainer.getProcess(task.getProcdefId()).getTask(task.getKey()).getFlows(), new FlowDispatchParameter(task.getProcdefId(), task.getProcinstId(), null, variableMap)); 
-		return new ExecutionResult<Integer>(taskId);
+		return ExecutionResult.getSuccessInstance();
 	}
 	
 	// 获取指定任务id的流程变量map集合

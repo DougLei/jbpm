@@ -11,15 +11,23 @@
 			order by subversion desc
 		</content>
 		
+		<!-- 删除流程定义信息 -->
+		<content name="delete" type="delete">
+			delete bpm_re_procdef where code=#{code} and version=#{version} 
+			<if test="tenantId != null and tenantId != ''">
+				and tenant_id = #{tenantId}
+			</if>
+		</content>
+		
 		<!-- 启动流程时查询流程定义 -->
 		<content name="query4Start" type="select">
 			select id, name, state from bpm_re_procdef 
 			
 			<switch>
-				<if test="startMode == 1">
+				<if test="mode == 1">
 					where id = #{processDefinitionId, dataType=number} 
 				</if>
-				<if test="startMode == 2">
+				<if test="mode == 2">
 					where code = #{code} and version in (
 						select version from bpm_re_procdef  where id in (select max(id) from bpm_re_procdef where code = #{code} and subversion=0 and state != 2
 						<if test="tenantId != null and tenantId != ''">
@@ -32,7 +40,7 @@
 					</if>
 					order by subversion desc 
 				</if>
-				<if test="startMode == 3">
+				<if test="mode == 3">
 					where code = #{code} and version = #{version} 
 					<if test="tenantId != null and tenantId != ''">
 						and tenant_id = #{tenantId} 

@@ -4,6 +4,7 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.CommandExecutor;
 import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.runtime.task.command.CompleteTaskCommand;
 import com.douglei.orm.context.transaction.component.Transaction;
 
 /**

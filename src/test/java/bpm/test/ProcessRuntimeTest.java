@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.runtime.instance.StartParameter;
+import com.douglei.bpm.module.runtime.instance.command.StartParameter;
 import com.douglei.bpm.module.runtime.variable.Scope;
 
 public class ProcessRuntimeTest {
@@ -28,7 +28,7 @@ public class ProcessRuntimeTest {
 		parameter.addVariable("user", Scope.LOCAL, new User("douglei 4 user"));
 		parameter.setStartUserId("金石磊");
 		
-		ExecutionResult result = engine.getRuntimeModule().getInstanceService().start(parameter);
+		ExecutionResult result = engine.getRuntimeModule().getProcessInstanceService().start(parameter);
 		if(result.isSuccess())
 			System.out.println("成功启动的流程实例id为["+processDefinitionId+"]");
 		else

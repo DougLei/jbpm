@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.douglei.bpm.module.history.task.entity.HistoryVariable;
-import com.douglei.bpm.module.runtime.instance.StartParameter;
+import com.douglei.bpm.module.runtime.instance.command.StartParameter;
 import com.douglei.bpm.module.runtime.task.entity.Assignee;
 import com.douglei.bpm.module.runtime.variable.entity.Variable;
 import com.douglei.bpm.process.metadata.ProcessMetadata;

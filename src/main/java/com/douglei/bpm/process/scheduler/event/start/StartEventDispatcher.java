@@ -7,7 +7,7 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.task.entity.HistoryTask;
 import com.douglei.bpm.module.history.task.entity.HistoryVariable;
-import com.douglei.bpm.module.runtime.instance.StartParameter;
+import com.douglei.bpm.module.runtime.instance.command.StartParameter;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessInstance;
 import com.douglei.bpm.module.runtime.variable.entity.Variable;
 import com.douglei.bpm.process.Type;

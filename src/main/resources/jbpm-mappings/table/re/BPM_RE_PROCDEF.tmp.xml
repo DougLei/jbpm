@@ -9,9 +9,10 @@
 			<column name="CODE" property="code" dataType="string" length="50" nullable="false" />
 			<column name="VERSION" property="version" dataType="string" length="50" nullable="false" />
 			<column name="SUBVERSION" property="subversion" dataType="number" length="4" defaultValue="0" nullable="false" />
+			<column name="NEWEST" property="newest" dataType="number" length="1" nullable="false" />
 			<column name="CONTENT_" property="content" dataType="clob" nullable="false" />
 			<column name="SIGNATURE" property="signature" dataType="string" length="32" nullable="false" />
-			<column name="STATE" property="state" dataType="number" length="1" defaultValue="0" nullable="false"/>
+			<column name="STATE" property="state" dataType="string" length="10" nullable="false"/>
 			<column name="DESCRIPTION" property="description" dataType="nstring" length="150" />
 			<column name="TENANT_ID" property="tenantId" dataType="nstring" length="150" />
 		</columns>

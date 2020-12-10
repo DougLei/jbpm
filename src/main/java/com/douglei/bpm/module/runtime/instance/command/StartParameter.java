@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.instance;
+package com.douglei.bpm.module.runtime.instance.command;
 
 import java.util.Map;
 
@@ -16,7 +16,7 @@ public class StartParameter {
 	static final byte BY_PROCESS_DEFINITION_CODE= 2; // 使用流程定义的code启动最新版本的流程
 	static final byte BY_PROCESS_DEFINITION_CODE_VERSION = 3; // 使用流程定义的code和version启动最新版本的流程
 	
-	private byte startMode;
+	private byte mode;
 	
 	private int processDefinitionId; // 流程定义的id
 	
@@ -30,7 +30,7 @@ public class StartParameter {
 	
 	public StartParameter(int processDefinitionId) {
 		this.processDefinitionId = processDefinitionId;
-		this.startMode = BY_PROCESS_DEFINITION_ID;
+		this.mode = BY_PROCESS_DEFINITION_ID;
 	}
 	public StartParameter(String code) {
 		this(code, null, null);
@@ -42,7 +42,7 @@ public class StartParameter {
 		this.code = code;
 		this.version = version;
 		this.tenantId = tenantId;
-		this.startMode = StringUtil.isEmpty(version)?BY_PROCESS_DEFINITION_CODE:BY_PROCESS_DEFINITION_CODE_VERSION;
+		this.mode = StringUtil.isEmpty(version)?BY_PROCESS_DEFINITION_CODE:BY_PROCESS_DEFINITION_CODE_VERSION;
 	}
 	
 	public StartParameter setBusinessId(String businessId) {
@@ -73,8 +73,8 @@ public class StartParameter {
 		return this;
 	}
 	
-	public byte getStartMode() {
-		return startMode;
+	public byte getMode() {
+		return mode;
 	}
 	public int getProcessDefinitionId() {
 		return processDefinitionId;

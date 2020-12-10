@@ -5,19 +5,16 @@ package com.douglei.bpm.module.repository.definition.entity;
  * @author DougLei
  */
 public class ProcessDefinition {
-	public static final byte UNDEPLOY = 0; // 未部署: 0
-	public static final byte DEPLOY = 1; // 已部署:  1
-	public static final byte DELETE = 2; // 被删除: 2
-	
 	private int id;
 	private int typeId;
 	private String name;
 	private String code;
 	private String version;
 	private int subversion;
+	private int newest;
 	private String content;
 	private String signature;
-	private int state;
+	private State state;
 	private String description;
 	private String tenantId;
 	
@@ -26,6 +23,7 @@ public class ProcessDefinition {
 		this.name = name;
 		this.code = code;
 		this.version = version;
+		this.state = State.INITIAL;
 	}
 	
 	public int getId() {
@@ -66,6 +64,12 @@ public class ProcessDefinition {
 	public void setSubversion(int subversion) {
 		this.subversion = subversion;
 	}
+	public int getNewest() {
+		return newest;
+	}
+	public void setNewest(int newest) {
+		this.newest = newest;
+	}
 	public String getContent() {
 		return content;
 	}
@@ -78,11 +82,11 @@ public class ProcessDefinition {
 	public void setSignature(String signature) {
 		this.signature = signature;
 	}
-	public int getState() {
-		return state;
+	public String getState() {
+		return state.getName();
 	}
-	public void setState(int state) {
-		this.state = state;
+	public void setState(String state) {
+		this.state = State.getByString(state);
 	}
 	public String getDescription() {
 		return description;

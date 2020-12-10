@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.task;
+package com.douglei.bpm.module.runtime.task.command;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -13,13 +13,13 @@ import com.douglei.bpm.module.runtime.task.TaskService;
 public class RuntimeModule{
 	
 	@Autowired
-	private ProcessInstanceService instanceService;
+	private ProcessInstanceService processInstanceService;
 	
 	@Autowired
 	private TaskService taskService;
 
-	public ProcessInstanceService getInstanceService() {
-		return instanceService;
+	public ProcessInstanceService getProcessInstanceService() {
+		return processInstanceService;
 	}
 	public TaskService getTaskService() {
 		return taskService;

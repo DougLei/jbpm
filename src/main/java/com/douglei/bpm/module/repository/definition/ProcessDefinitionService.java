@@ -1,15 +1,14 @@
 package com.douglei.bpm.module.repository.definition;
 
 import java.util.Arrays;
-import java.util.List;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.history.HistoryModule;
+import com.douglei.bpm.module.history.instance.HistoryProcessInstanceService;
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
-import com.douglei.bpm.module.runtime.RuntimeModule;
 import com.douglei.bpm.module.runtime.instance.ProcessInstanceHandlePolicy;
+import com.douglei.bpm.module.runtime.instance.ProcessInstanceService;
 import com.douglei.bpm.process.container.ProcessContainerProxy;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
@@ -22,10 +21,10 @@ import com.douglei.orm.context.transaction.component.Transaction;
 public class ProcessDefinitionService {
 	
 	@Autowired
-	private RuntimeModule runtimeModule;
+	private ProcessInstanceService processInstanceService;
 	
 	@Autowired
-	private HistoryModule historyModule;
+	private HistoryProcessInstanceService historyProcessInstanceService;
 	
 	@Autowired
 	private ProcessContainerProxy processContainer;
@@ -33,7 +32,7 @@ public class ProcessDefinitionService {
 	/**
 	 * 更新流程定义的状态
 	 * @param processDefinitionId
-	 * @param state {@link ProcessDefinitionStateConstants}
+	 * @param state
 	 */
 	private void updateState(int processDefinitionId, byte state) {
 		SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set state=? where id=?", Arrays.asList(state, processDefinitionId));
@@ -63,18 +62,21 @@ public class ProcessDefinitionService {
 				processDefinition.setContent(null);
 				processDefinition.setSignature(null);
 				SessionContext.getTableSession().update(processDefinition);
-			}else if(!runtimeModule.getInstanceService().exists(exProcessDefinition.getId()) && !historyModule.getHistoryInstanceService().exists(exProcessDefinition.getId())) { // 修改了内容, 但旧的流程定义不存在实例, 进行update
+			}else if(!processInstanceService.exists(exProcessDefinition.getId()) && !historyProcessInstanceService.exists(exProcessDefinition.getId())) { // 修改了内容, 但旧的流程定义不存在实例, 进行update
 				processDefinition.setId(exProcessDefinition.getId());
 				processDefinition.setSubversion(exProcessDefinition.getSubversion());
 				processDefinition.setState(exProcessDefinition.getState());
 				SessionContext.getTableSession().update(processDefinition); 
-			}else { // 修改了内容, 且旧的流程定义存在实例, 根据参数strict的值, 进行save, 或提示操作失败
+			}else { // 修改了内容, 且旧的流程定义存在实例, 根据参数strict的值, 进行升级save, 或提示操作失败
 				if(!strict) 
 					return new ExecutionResult("保存失败, ["+processDefinition.getName()+"]流程已存在实例");
 				
+				// 将上一个subversion的流程定义状态改为删除
+				updateState(exProcessDefinition.getId(), ProcessDefinition.DELETE);
+				
 				processDefinition.setSubversion(exProcessDefinition.getSubversion()+1);
 				processDefinition.setState(exProcessDefinition.getState());
-				SessionContext.getTableSession().save(processDefinition); 
+				SessionContext.getTableSession().save(processDefinition);
 			}
 		}
 		
@@ -91,14 +93,14 @@ public class ProcessDefinitionService {
 	 */
 	@Transaction
 	public ExecutionResult deploy(int processDefinitionId, ProcessInstanceHandlePolicy runtime) {
-		ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, state, content_ from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
+		ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select name, code, version, state, content_, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null || processDefinition.getState() == ProcessDefinition.DELETE)
 			return new ExecutionResult("部署失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(processDefinition.getState() == ProcessDefinition.DEPLOY)
-			return new ExecutionResult("部署失败, id为["+processDefinitionId+"]的流程已经部署");
+			return new ExecutionResult("部署失败, ["+processDefinition.getName()+"]流程已部署");
 		
-		if(runtime != null && runtimeModule.getInstanceService().exists(processDefinitionId))
-			runtimeModule.getInstanceService().handle(processDefinitionId, runtime);
+		if(runtime != null && processInstanceService.exists(processDefinition.getCode(), processDefinition.getVersion(), processDefinition.getTenantId()))
+			processInstanceService.handle(processDefinition.getCode(), processDefinition.getVersion(), processDefinition.getTenantId(), runtime);
 		
 		updateState(processDefinitionId, ProcessDefinition.DEPLOY);
 		processContainer.addProcess(processDefinition);
@@ -114,16 +116,16 @@ public class ProcessDefinitionService {
 	 */
 	@Transaction
 	public ExecutionResult undeploy(int processDefinitionId, ProcessInstanceHandlePolicy runtime, ProcessInstanceHandlePolicy history) {
-		ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, code, version, subversion, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
+		ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select name, code, version, state, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null || processDefinition.getState() == ProcessDefinition.DELETE)
 			return new ExecutionResult("取消部署失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(processDefinition.getState() == ProcessDefinition.UNDEPLOY)
-			return new ExecutionResult("取消部署失败, id为["+processDefinitionId+"]的流程还未部署");
+			return new ExecutionResult("取消部署失败, ["+processDefinition.getName()+"]流程还未部署");
 		
-		if(runtime != null && runtimeModule.getInstanceService().exists(processDefinitionId)) 
-			runtimeModule.getInstanceService().handle(processDefinitionId, runtime);
-		if(history != null && historyModule.getHistoryInstanceService().exists(processDefinitionId)) 
-			historyModule.getHistoryInstanceService().handle(processDefinitionId, history);
+		if(runtime != null && processInstanceService.exists(processDefinition.getCode(), processDefinition.getVersion(), processDefinition.getTenantId())) 
+			processInstanceService.handle(processDefinition.getCode(), processDefinition.getVersion(), processDefinition.getTenantId(), runtime);
+		if(history != null && historyProcessInstanceService.exists(processDefinition.getCode(), processDefinition.getVersion(), processDefinition.getTenantId())) 
+			historyProcessInstanceService.handle(processDefinition.getCode(), processDefinition.getVersion(), processDefinition.getTenantId(), history);
 		
 		updateState(processDefinitionId, ProcessDefinition.UNDEPLOY);
 		processContainer.deleteProcess(processDefinitionId);
@@ -138,20 +140,18 @@ public class ProcessDefinitionService {
 	 */
 	@Transaction
 	public ExecutionResult delete(int processDefinitionId, boolean strict) {
-		List<Object> paramList = Arrays.asList(processDefinitionId);
-		
-		ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select name, state from bpm_re_procdef where id=?", paramList);
+		ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select name, code, version, state, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null || processDefinition.getState() == ProcessDefinition.DELETE)
 			return new ExecutionResult("删除失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(processDefinition.getState() == ProcessDefinition.DEPLOY)
 			return new ExecutionResult("删除失败, ["+processDefinition.getName()+"]流程已部署, 请先取消部署");
 		
-		if(runtimeModule.getInstanceService().exists(processDefinitionId) || historyModule.getHistoryInstanceService().exists(processDefinitionId)) {
+		if(processInstanceService.exists(processDefinition.getCode(), processDefinition.getVersion(), processDefinition.getTenantId()) || historyProcessInstanceService.exists(processDefinition.getCode(), processDefinition.getVersion(), processDefinition.getTenantId())) {
 			if(!strict)
 				return new ExecutionResult("删除失败, ["+processDefinition.getName()+"]流程已存在实例");
 			updateState(processDefinitionId, ProcessDefinition.DELETE);
 		} else {
-			SessionContext.getSqlSession().executeUpdate("delete bpm_re_procdef where id=?", paramList);
+			SessionContext.getSQLSession().executeUpdate("ProcessDefinition", "delete", processDefinition);
 		}
 		return ExecutionResult.getDefaultSuccessInstance();
 	}

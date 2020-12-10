@@ -32,7 +32,7 @@ public class FlowDispatcher {
 			return ExecutionResult.getDefaultFailInstance();
 		
 		processScheduler.dispatchTask(flow.getTargetTask(), parameter);
-		return ExecutionResult.getSuccessInstance();
+		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	
 	// 根据流程变量, 判断当前Flow的conditionExpr是否匹配

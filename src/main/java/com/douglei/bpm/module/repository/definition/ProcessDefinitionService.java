@@ -80,7 +80,7 @@ public class ProcessDefinitionService {
 		
 		if(processDefinition.getState() == ProcessDefinition.DEPLOY && processDefinition.getContent() != null) 
 			processContainer.addProcess(processDefinition);
-		return ExecutionResult.getSuccessInstance();
+		return new ExecutionResult(processDefinition);
 	}
 	
 	/**
@@ -102,7 +102,7 @@ public class ProcessDefinitionService {
 		
 		updateState(processDefinitionId, ProcessDefinition.DEPLOY);
 		processContainer.addProcess(processDefinition);
-		return ExecutionResult.getSuccessInstance();
+		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	
 	/**
@@ -127,7 +127,7 @@ public class ProcessDefinitionService {
 		
 		updateState(processDefinitionId, ProcessDefinition.UNDEPLOY);
 		processContainer.deleteProcess(processDefinitionId);
-		return ExecutionResult.getSuccessInstance();
+		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	
 	/**
@@ -153,6 +153,6 @@ public class ProcessDefinitionService {
 		} else {
 			SessionContext.getSqlSession().executeUpdate("delete bpm_re_procdef where id=?", paramList);
 		}
-		return ExecutionResult.getSuccessInstance();
+		return ExecutionResult.getDefaultSuccessInstance();
 	}
 }

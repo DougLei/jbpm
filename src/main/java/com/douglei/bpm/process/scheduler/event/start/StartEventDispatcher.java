@@ -56,7 +56,7 @@ public class StartEventDispatcher extends TaskDispatcher<StartEventMetadata, Sta
 			SessionContext.getTableSession().save(historyVariables);
 		
 		if(processScheduler.dispatchFlow(startEvent.getFlows(), parameter.buildFlowDispatchParameter(processInstance.getId())))
-			return ExecutionResult.getSuccessInstance();
+			return ExecutionResult.getDefaultSuccessInstance();
 		return new ExecutionResult("执行["+startEvent.getName()+"]任务后, 未能匹配到合适的Flow, 使流程无法正常流转, 请联系流程管理员检查["+parameter.getProcessMetadata().getName()+"]的配置");
 	}
 	

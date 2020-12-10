@@ -22,7 +22,7 @@ public class ProcessTypeTest {
 		type.setCode("t_code");
 		type.setName("测试类型");
 		type.setTenantId("douglei");
-		ExecutionResult<ProcessType> result = engine.getRepositoryModule().getTypeService().insert(type);
+		ExecutionResult result = engine.getRepositoryModule().getTypeService().insert(type);
 		
 		if(result.isSuccess())
 			System.out.println("流程类型插入成功: id=" + type.getId());
@@ -36,7 +36,7 @@ public class ProcessTypeTest {
 		type.setId(4);
 		type.setCode("test_code2");
 		type.setName("测试类型xxxx");
-		ExecutionResult<ProcessType> result = engine.getRepositoryModule().getTypeService().update(type);
+		ExecutionResult result = engine.getRepositoryModule().getTypeService().update(type);
 		
 		if(result.isSuccess())
 			System.out.println("流程类型修改成功: id=" + type.getId());
@@ -47,7 +47,7 @@ public class ProcessTypeTest {
 	@Test
 	public void delete() {
 		int typeId = 3;
-		ExecutionResult<Integer> result = engine.getRepositoryModule().getTypeService().delete(typeId, false);
+		ExecutionResult result = engine.getRepositoryModule().getTypeService().delete(typeId, false);
 		
 		if(result.isSuccess())
 			System.out.println("流程类型删除成功: id=" + typeId);

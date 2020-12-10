@@ -21,12 +21,18 @@ public class ExecutionResult {
 		return !success;
 	}
 	
-	private ExecutionResult() {
+	private Object object; // 执行成功时可以传递需要的实例
+	public ExecutionResult(Object object) {
 		this.success = true;
+		this.object = object;
 	}
-	private static final ExecutionResult SUCCESS_INSTANCE = new ExecutionResult();
-	public static final ExecutionResult getSuccessInstance() {
-		return SUCCESS_INSTANCE;
+	public Object getObject() {
+		return object;
+	}
+	
+	private static final ExecutionResult DEFAULT_SUCCESS_INSTANCE = new ExecutionResult(new Object());
+	public static final ExecutionResult getDefaultSuccessInstance() {
+		return DEFAULT_SUCCESS_INSTANCE;
 	}
 	
 	private static final ExecutionResult DEFAULT_FAIL_INSTANCE = new ExecutionResult("Fail");

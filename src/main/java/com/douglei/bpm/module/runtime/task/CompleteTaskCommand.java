@@ -54,7 +54,7 @@ public class CompleteTaskCommand implements Command<ExecutionResult> {
 		Map<String, Object> variableMap = getVariableMap(historyTask);
 		
 		processScheduler.dispatchFlow(processContainer.getProcess(task.getProcdefId()).getTask(task.getKey()).getFlows(), new FlowDispatchParameter(task.getProcdefId(), task.getProcinstId(), null, variableMap)); 
-		return ExecutionResult.getSuccessInstance();
+		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	
 	// 获取指定任务id的流程变量map集合

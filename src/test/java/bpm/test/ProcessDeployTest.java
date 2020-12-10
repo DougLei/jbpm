@@ -24,14 +24,18 @@ public class ProcessDeployTest {
 		ProcessDefinitionBuilder builder = new ProcessDefinitionBuilder(new ClasspathFile("test.bpm.xml"));
 		ExecutionResult result = engine.getRepositoryModule().getDefinitionService().insert(builder, false);
 		if(result.isSuccess())
-			System.out.println("插入成功一条流程定义信息, 其id为: "+result.getResult().getId());
+			System.out.println("插入成功一条流程定义信息, 其id为: "+ ((ProcessDefinition)result.getObject()).getId());
+		else
+			System.out.println(result.getFailMessage());
 	}
 	
 	@Test
 	public void deploy() throws ProcessParseException {
 		int processDefinitionId= 1;
-		ExecutionResult<Integer> result = engine.getRepositoryModule().getDefinitionService().deploy(processDefinitionId, null);
+		ExecutionResult result = engine.getRepositoryModule().getDefinitionService().deploy(processDefinitionId, null);
 		if(result.isSuccess())
 			System.out.println("id为["+processDefinitionId+"]的流程定义信息部署成功");
+		else
+			System.out.println(result.getFailMessage());
 	}
 }

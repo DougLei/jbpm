@@ -34,6 +34,6 @@ public class TaskService {
 	 */
 	public ExecutionResult claim(int taskId, String userId){
 		
-		return ExecutionResult.getSuccessInstance();
+		return ExecutionResult.getDefaultSuccessInstance();
 	}
 }

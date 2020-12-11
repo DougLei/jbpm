@@ -16,7 +16,6 @@ import com.douglei.orm.context.SessionContext;
  */
 public class StartProcessCommand implements Command<ExecutionResult>{
 	private StartParameter startParameter;
-	
 	public StartProcessCommand(StartParameter startParameter) {
 		this.startParameter = startParameter;
 	}
@@ -29,23 +28,23 @@ public class StartProcessCommand implements Command<ExecutionResult>{
 	
 	@Override
 	public ExecutionResult execute() {
-		ProcessDefinition processDefinition = SessionContext.getSQLSession().queryFirst(ProcessDefinition.class, "ProcessDefinition", "query4Start", startParameter);
+		ProcessDefinition processDefinition = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "query4Start", startParameter);
 		switch (startParameter.getMode()) {
 			case StartParameter.BY_PROCESS_DEFINITION_ID:
-				if(processDefinition == null || processDefinition.getState() == ProcessDefinition.DELETE) 
+				if(processDefinition == null) 
 					return new ExecutionResult("启动失败, 不存在id为["+startParameter.getProcessDefinitionId()+"]的流程");
 				break;
 			case StartParameter.BY_PROCESS_DEFINITION_CODE:
-				if(processDefinition == null || processDefinition.getState() == ProcessDefinition.DELETE) 
+				if(processDefinition == null) 
 					return new ExecutionResult("启动失败, 不存在code为["+startParameter.getCode()+"]的流程");
 				break;
 			case StartParameter.BY_PROCESS_DEFINITION_CODE_VERSION:
-				if(processDefinition == null || processDefinition.getState() == ProcessDefinition.DELETE) 
+				if(processDefinition == null) 
 					return new ExecutionResult("启动失败, 不存在code为["+startParameter.getCode()+"], version为["+startParameter.getVersion()+"]的流程");
 				break;
 		}
-		if(processDefinition.getState() == ProcessDefinition.UNDEPLOY)
-			return new ExecutionResult("启动失败, ["+processDefinition.getName()+"]流程还未部署");
+		if(!processDefinition.getStateInstance().supportStart())
+			return new ExecutionResult("启动失败, ["+processDefinition.getName()+"]流程处于["+processDefinition.getState()+"]状态, 无法启动");
 		
 		ProcessMetadata processMetadata = processContainer.getProcess(processDefinition.getId());
 		return processScheduler.dispatchTask(processMetadata.getStartEvent(), new StartEventDispatchParameter(processMetadata, startParameter));

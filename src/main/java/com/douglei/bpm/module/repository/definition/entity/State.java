@@ -5,36 +5,114 @@ package com.douglei.bpm.module.repository.definition.entity;
  * @author DougLei
  */
 public enum State {
-	INITIAL, // 初始化
-	DEPLOY, // 部署
-	UNDEPLOY, // 未部署
-	INVALID, // 无效
-	DELETE; // 被删除
+	
+	// 初始化
+	INITIAL() {
+		@Override
+		public boolean supportPhysicalDelete() {
+			return true;
+		}
+		@Override
+		public boolean supportConvert(State targetState) {
+			switch(targetState) {
+				case INITIAL:
+				case DEPLOY:
+				case DELETE:
+					return true;
+				default:
+					return false;
+			}
+		}
+	}, 
+	
+	// 部署
+	DEPLOY() {
+		@Override
+		public boolean supportStart() {
+			return true;
+		}
+		@Override
+		public boolean supportConvert(State targetState) {
+			switch(targetState) {
+				case DEPLOY:
+				case UNDEPLOY:
+					return true;
+				default:
+					return false;
+			}
+		}
+	}, 
+	
+	// 未部署
+	UNDEPLOY() {
+		@Override
+		public boolean supportConvert(State targetState) {
+			switch(targetState) {
+				case UNDEPLOY:
+				case DEPLOY:
+				case DELETE:
+					return true;
+				default:
+					return false;
+			}
+		}
+	}, 
+	
+	// 无效
+	INVALID() {
+		@Override
+		public boolean supportPhysicalDelete() {
+			return true;
+		}
+		@Override
+		public boolean supportConvert(State targetState) {
+			switch(targetState) {
+				case INVALID:
+					return true;
+				default:
+					return false;
+			}
+		}
+	}, 
+	
+	// 删除
+	DELETE() {
+		@Override
+		public boolean supportPhysicalDelete() {
+			return true;
+		}
+		@Override
+		public boolean supportConvert(State targetState) {
+			switch(targetState) {
+				case DELETE:
+				case UNDEPLOY:
+					return true;
+				default:
+					return false;
+			}
+		}
+	}; 
 
-	private String name;
-	private State() {
-		this.name = name().toLowerCase();
-	}
-	public String getName() {
-		return name;
+	/**
+	 * 当前状态是是否支持物理删除
+	 * @return
+	 */
+	public boolean supportPhysicalDelete() {
+		return false;
 	}
 	
 	/**
-	 * 根据字符串值获取对应的状态枚举实例
-	 * @param str
+	 * 当前状态是是否支持启动
 	 * @return
 	 */
-	public static State getByString(String str) {
-		if(INITIAL.name.equals(str))
-			return INITIAL;
-		if(DEPLOY.name.equals(str))
-			return DEPLOY;
-		if(UNDEPLOY.name.equals(str))
-			return UNDEPLOY;
-		if(INVALID.name.equals(str))
-			return INVALID;
-		if(DELETE.name.equals(str))
-			return DELETE;
-		throw new NullPointerException("不存在值为["+str+"]的流程定义状态");
+	public boolean supportStart() {
+		return false;
 	}
+	
+	/**
+	 * 当前状态是否支持转换为目标状态
+	 * @param targetState
+	 * @return
+	 */
+	public abstract boolean supportConvert(State targetState);
 }

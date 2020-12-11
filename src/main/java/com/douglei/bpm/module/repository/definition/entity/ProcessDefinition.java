@@ -5,13 +5,14 @@ package com.douglei.bpm.module.repository.definition.entity;
  * @author DougLei
  */
 public class ProcessDefinition {
-	private int id;
+	private Integer id;
 	private int typeId;
 	private String name;
 	private String code;
 	private String version;
-	private int subversion;
 	private int newest;
+	private int subversion;
+	private int subnewest;
 	private String content;
 	private String signature;
 	private State state;
@@ -23,13 +24,14 @@ public class ProcessDefinition {
 		this.name = name;
 		this.code = code;
 		this.version = version;
+		this.subnewest = 1;
 		this.state = State.INITIAL;
 	}
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public int getTypeId() {
@@ -58,17 +60,29 @@ public class ProcessDefinition {
 	public void setVersion(String version) {
 		this.version = version;
 	}
-	public int getSubversion() {
-		return subversion;
-	}
-	public void setSubversion(int subversion) {
-		this.subversion = subversion;
+	public boolean isNewest() {
+		return newest == 1;
 	}
 	public int getNewest() {
 		return newest;
 	}
 	public void setNewest(int newest) {
 		this.newest = newest;
+	}
+	public int getSubversion() {
+		return subversion;
+	}
+	public void setSubversion(int subversion) {
+		this.subversion = subversion;
+	}
+	public boolean isSubnewest() {
+		return subnewest == 1;
+	}
+	public int getSubnewest() {
+		return subnewest;
+	}
+	public void setSubnewest(int subnewest) {
+		this.subnewest = subnewest;
 	}
 	public String getContent() {
 		return content;
@@ -82,11 +96,17 @@ public class ProcessDefinition {
 	public void setSignature(String signature) {
 		this.signature = signature;
 	}
+	public State getStateInstance() {
+		return state;
+	}
+	public void setStateInstance(State state) {
+		this.state = state;
+	}
 	public String getState() {
-		return state.getName();
+		return state.name();
 	}
 	public void setState(String state) {
-		this.state = State.getByString(state);
+		this.state = State.valueOf(state);
 	}
 	public String getDescription() {
 		return description;

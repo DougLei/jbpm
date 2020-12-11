@@ -15,11 +15,12 @@ import com.douglei.tools.instances.file.reader.FileBufferedReader;
 import com.douglei.tools.utils.StringUtil;
 
 /**
- * 流程定义的构建器
+ * 
  * @author DougLei
  */
 public class ProcessDefinitionBuilder {
 	private ProcessDefinition processDefinition;
+	private boolean strict; // 如果构建出的流程定义已经存在实例, 根据该参数决定是无法保存本次的流程定义(false), 或是强制更新子版本来保存(true)
 	
 	/**
 	 * 根据文件构建流程定义实例
@@ -120,12 +121,30 @@ public class ProcessDefinitionBuilder {
 	}
 	
 	/**
+	 * 设置是否强制保存流程定义
+	 * @param strict
+	 */
+	public void setStrict(boolean strict) {
+		this.strict = strict;
+	}
+
+	/**
 	 * 设置流程定义的类型id
 	 * @param typeId
 	 * @return
 	 */
 	public ProcessDefinitionBuilder setTypeId(int typeId) {
 		processDefinition.setTypeId(typeId);
+		return this;
+	}
+	
+	/**
+	 * 设置流程定义是否是最新版本
+	 * @param isNewest
+	 * @return
+	 */
+	public ProcessDefinitionBuilder setNewest(boolean isNewest) {
+		processDefinition.setNewest(isNewest?1:0);
 		return this;
 	}
 	
@@ -157,7 +176,14 @@ public class ProcessDefinitionBuilder {
 		return processDefinition;
 	}
 	
-	
+	/**
+	 * 是否要强制保存
+	 * @return
+	 */
+	boolean isStrict() {
+		return strict;
+	}
+
 	/**
 	 * 流程的基础属性
 	 * @author DougLei

@@ -4,50 +4,75 @@
 		
 		<!-- 保存时查询流程定义 -->
 		<content name="query4Save" type="select">
-			select id, subversion, signature, state from bpm_re_procdef where code = #{code} and version = #{version} 
+			select id, subversion, signature, state from bpm_re_procdef where code = #{code} and version = #{version} and subnewest=1 
 			<if test="tenantId != null and tenantId != ''">
 				and tenant_id = #{tenantId}
+			</if>
+		</content>
+		
+		<!-- 根据code和version, 查询上一个子版本的流程定义 -->
+		<content name="queryPreSubversion" type="select">
+			select id, subversion from bpm_re_procdef where code = #{code} and version = #{version} 
+			<if test="tenantId != null">
+				and tenant_id = #{tenantId} 
 			</if>
 			order by subversion desc
 		</content>
 		
+		<!-- 根据code和version, 查询最新子版本的流程定义 -->
+		<content name="querySubnewestSubversion" type="select">
+			select id, type_id, subversion, state from bpm_re_procdef where subnewest=1 and code = #{code} and version = #{version} 
+			<if test="tenantId != null">
+				and tenant_id = #{tenantId} 
+			</if>
+		</content>
+		
 		<!-- 删除流程定义信息 -->
 		<content name="delete" type="delete">
-			delete bpm_re_procdef where code=#{code} and version=#{version} 
-			<if test="tenantId != null and tenantId != ''">
-				and tenant_id = #{tenantId}
-			</if>
+			delete bpm_re_procdef where 
+			<switch>
+				<if test="id != null">
+					id = #{id, dataType=number}
+				</if>
+				<else>
+					code = #{code} and version = #{version}
+					<if test="tenantId != null">
+						and tenant_id = #{tenantId}
+					</if>
+				</else>
+			</switch>
 		</content>
 		
 		<!-- 启动流程时查询流程定义 -->
 		<content name="query4Start" type="select">
-			select id, name, state from bpm_re_procdef 
-			
+			select id, name, state from bpm_re_procdef where 
 			<switch>
 				<if test="mode == 1">
-					where id = #{processDefinitionId, dataType=number} 
+					id = #{processDefinitionId, dataType=number} 
 				</if>
 				<if test="mode == 2">
-					where code = #{code} and version in (
-						select version from bpm_re_procdef  where id in (select max(id) from bpm_re_procdef where code = #{code} and subversion=0 and state != 2
-						<if test="tenantId != null and tenantId != ''">
+					code = #{code} and version in (
+						select version from bpm_re_procdef where 
+						<if test="tenantId != null">
 							and tenant_id = #{tenantId} 
 						</if>
-						)
 					)
-					<if test="tenantId != null and tenantId != ''">
+					<if test="tenantId != null">
 						and tenant_id = #{tenantId} 
 					</if>
 					order by subversion desc 
 				</if>
 				<if test="mode == 3">
-					where code = #{code} and version = #{version} 
-					<if test="tenantId != null and tenantId != ''">
+					code = #{code} and version = #{version} 
+					<if test="tenantId != null">
 						and tenant_id = #{tenantId} 
 					</if>
-					order by subversion desc
 				</if>
+				<else>
+					1=2 
+				</else>
 			</switch>
+			and subnewest=1
 		</content>
 		
 	</sql>

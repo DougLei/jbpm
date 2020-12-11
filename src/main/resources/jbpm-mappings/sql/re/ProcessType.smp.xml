@@ -5,7 +5,7 @@
 		<content name="query4ValidateCodeExists" type="select">
 			select id from bpm_re_proctype where code = #{code}
 			
-			<if test="tenantId != null and tenantId != ''">
+			<if test="tenantId != null">
 				and tenant_id = #{tenantId}
 			</if>
 		</content>

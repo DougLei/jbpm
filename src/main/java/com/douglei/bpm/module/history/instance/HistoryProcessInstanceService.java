@@ -1,6 +1,7 @@
 package com.douglei.bpm.module.history.instance;
 
 import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
 import com.douglei.bpm.module.runtime.instance.ProcessInstanceHandlePolicy;
 
 /**
@@ -11,45 +12,21 @@ import com.douglei.bpm.module.runtime.instance.ProcessInstanceHandlePolicy;
 public class HistoryProcessInstanceService {
 	
 	/**
-	 * 判断指定code和version的流程, 是否存在历史实例
-	 * @param processDefinitionId
+	 * 判断指定的流程定义, 是否存在历史实例
+	 * @param processDefinition
 	 * @return
 	 */
-	public boolean exists(int processDefinitionId) {
-		// TODO 判断指定的流程定义id, 是否存在历史实例
+	public boolean exists(ProcessDefinition processDefinition) {
+		// TODO 
 		return false;
 	}
 	
 	/**
-	 * 处理指定id的流程, 相关的所有历史实例
+	 * 处理指定的流程定义, 相关的所有历史实例
 	 * @param processDefinitionId
 	 * @param policy 对实例的处理策略
 	 */
-	public void handle(int processDefinitionId, ProcessInstanceHandlePolicy policy) {
-		// TODO Auto-generated method stub
-	}
-
-	/**
-	 * 判断指定code和version的流程, 是否存在历史实例
-	 * @param code
-	 * @param version
-	 * @param tenantId
-	 * @return
-	 */
-	public boolean exists(String code, String version, String tenantId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/**
-	 * 处理指定code和version的流程, 相关的所有历史实例
-	 * @param code
-	 * @param version
-	 * @param tenantId
-	 * @param policy 对实例的处理策略
-	 */
-	public void handle(String code, String version, String tenantId, ProcessInstanceHandlePolicy policy) {
-		// TODO Auto-generated method stub
-		
+	public void handle(ProcessDefinition processDefinition, ProcessInstanceHandlePolicy policy) {
+		// TODO 处理指定id的流程定义, 相关的所有运行实例
 	}
 }

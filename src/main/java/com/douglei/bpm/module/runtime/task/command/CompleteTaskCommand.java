@@ -25,7 +25,6 @@ import com.douglei.orm.context.SessionContext;
 public class CompleteTaskCommand implements Command<ExecutionResult> {
 	private int taskId;
 	private List<Object> taskIdParams;
-	
 	public CompleteTaskCommand(int taskId) {
 		this.taskId = taskId;
 		this.taskIdParams = Arrays.asList(taskId);

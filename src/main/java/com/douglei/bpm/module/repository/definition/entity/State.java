@@ -1,21 +1,18 @@
 package com.douglei.bpm.module.repository.definition.entity;
 
 /**
- * 
+ * 流程定义状态
  * @author DougLei
  */
 public enum State {
 	
-	// 初始化
-	INITIAL() {
-		@Override
-		public boolean supportPhysicalDelete() {
-			return true;
-		}
+	/**
+	 * 初始化
+	 */
+	INITIAL(true, false, true, true, false){
 		@Override
 		public boolean supportConvert(State targetState) {
 			switch(targetState) {
-				case INITIAL:
 				case DEPLOY:
 				case DELETE:
 					return true;
@@ -25,16 +22,13 @@ public enum State {
 		}
 	}, 
 	
-	// 部署
-	DEPLOY() {
-		@Override
-		public boolean supportStart() {
-			return true;
-		}
+	/**
+	 * 部署
+	 */
+	DEPLOY(false, true, false, false, true){
 		@Override
 		public boolean supportConvert(State targetState) {
 			switch(targetState) {
-				case DEPLOY:
 				case UNDEPLOY:
 					return true;
 				default:
@@ -43,12 +37,13 @@ public enum State {
 		}
 	}, 
 	
-	// 未部署
-	UNDEPLOY() {
+	/**
+	 * 未部署
+	 */
+	UNDEPLOY(true, false, true, false, false){
 		@Override
 		public boolean supportConvert(State targetState) {
 			switch(targetState) {
-				case UNDEPLOY:
 				case DEPLOY:
 				case DELETE:
 					return true;
@@ -58,33 +53,18 @@ public enum State {
 		}
 	}, 
 	
-	// 无效
-	INVALID() {
-		@Override
-		public boolean supportPhysicalDelete() {
-			return true;
-		}
-		@Override
-		public boolean supportConvert(State targetState) {
-			switch(targetState) {
-				case INVALID:
-					return true;
-				default:
-					return false;
-			}
-		}
-	}, 
+	/**
+	 * 无效
+	 */
+	INVALID(false, false, false, true, false),
 	
-	// 删除
-	DELETE() {
-		@Override
-		public boolean supportPhysicalDelete() {
-			return true;
-		}
+	/**
+	 * 删除
+	 */
+	DELETE(false, false, false, true, false){
 		@Override
 		public boolean supportConvert(State targetState) {
 			switch(targetState) {
-				case DELETE:
 				case UNDEPLOY:
 					return true;
 				default:
@@ -93,20 +73,33 @@ public enum State {
 		}
 	}; 
 
-	/**
-	 * 当前状态是是否支持物理删除
-	 * @return
-	 */
-	public boolean supportPhysicalDelete() {
-		return false;
+	private boolean supportDeploy; // 当前状态是是否支持部署
+	private boolean supportUnDeploy; // 当前状态是是否支持取消部署
+	private boolean supportDelete; // 当前状态是是否支持删除
+	private boolean supportPhysicalDelete; // 当前状态是是否支持物理删除
+	private boolean supportStart; // 当前状态是是否支持启动
+	private State(boolean supportDeploy, boolean supportUnDeploy, boolean supportDelete, boolean supportPhysicalDelete, boolean supportStart) {
+		this.supportDeploy = supportDeploy;
+		this.supportUnDeploy = supportUnDeploy;
+		this.supportDelete = supportDelete;
+		this.supportPhysicalDelete = supportPhysicalDelete;
+		this.supportStart = supportStart;
 	}
 	
-	/**
-	 * 当前状态是是否支持启动
-	 * @return
-	 */
+	public boolean supportDeploy() {
+		return supportDeploy;
+	}
+	public boolean supportUnDeploy() {
+		return supportUnDeploy;
+	}
+	public boolean supportDelete() {
+		return supportDelete;
+	}
+	public boolean supportPhysicalDelete() {
+		return supportPhysicalDelete;
+	}
 	public boolean supportStart() {
-		return false;
+		return supportStart;
 	}
 	
 	/**
@@ -114,5 +107,7 @@ public enum State {
 	 * @param targetState
 	 * @return
 	 */
-	public abstract boolean supportConvert(State targetState);
+	public boolean supportConvert(State targetState) {
+		return false;
+	}
 }

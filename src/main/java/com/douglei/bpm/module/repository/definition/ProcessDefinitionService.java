@@ -37,7 +37,9 @@ public class ProcessDefinitionService {
 	 */
 	@Transaction
 	public ExecutionResult insert(ProcessDefinitionBuilder builder) {
+		// TODO 增加处理最新版本的功能
 		ProcessDefinition processDefinition = builder.getProcessDefinition();
+		
 		ProcessDefinition exProcessDefinition = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "query4Save", processDefinition);
 		if(exProcessDefinition == null) {
 			// 新的流程定义, 进行save
@@ -48,6 +50,7 @@ public class ProcessDefinitionService {
 			
 			if(exProcessDefinition.getSignature().equals(processDefinition.getSignature())){ // 没有修改流程定义的内容, 进行update
 				processDefinition.setId(exProcessDefinition.getId());
+				processDefinition.setNewest(exProcessDefinition.getNewest());
 				processDefinition.setSubversion(exProcessDefinition.getSubversion());
 				processDefinition.setStateInstance(exProcessDefinition.getStateInstance());
 				processDefinition.setContent(null);
@@ -56,6 +59,7 @@ public class ProcessDefinitionService {
 			}else if(exProcessDefinition.getStateInstance() == State.INITIAL 
 					|| (!processInstanceService.exists(exProcessDefinition) && !historyProcessInstanceService.exists(exProcessDefinition))) { // 修改了内容, 但旧的流程不存在实例, 进行update
 				processDefinition.setId(exProcessDefinition.getId());
+				processDefinition.setNewest(exProcessDefinition.getNewest());
 				processDefinition.setSubversion(exProcessDefinition.getSubversion());
 				processDefinition.setStateInstance(exProcessDefinition.getStateInstance());
 				SessionContext.getTableSession().update(processDefinition); 
@@ -88,7 +92,7 @@ public class ProcessDefinitionService {
 			return new ExecutionResult("部署失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.isSubnewest())
 			return new ExecutionResult("部署失败, ["+processDefinition.getName()+"]流程非最新子版本");
-		if(!processDefinition.getStateInstance().supportConvert(State.DEPLOY))
+		if(!processDefinition.getStateInstance().supportDeploy())
 			return new ExecutionResult("部署失败, ["+processDefinition.getName()+"]流程处于["+processDefinition.getState()+"]状态");
 		
 		if(runtimeProcessInstanceHandlePolicy != null && processInstanceService.exists(processDefinition))
@@ -113,7 +117,7 @@ public class ProcessDefinitionService {
 			return new ExecutionResult("取消部署失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.isSubnewest())
 			return new ExecutionResult("取消部署失败, ["+processDefinition.getName()+"]流程非最新子版本");
-		if(!processDefinition.getStateInstance().supportConvert(State.UNDEPLOY))
+		if(!processDefinition.getStateInstance().supportUnDeploy())
 			return new ExecutionResult("取消部署失败, ["+processDefinition.getName()+"]流程处于["+processDefinition.getState()+"]状态");
 		
 		if(runtimeProcessInstanceHandlePolicy != null && processInstanceService.exists(processDefinition)) 
@@ -134,12 +138,13 @@ public class ProcessDefinitionService {
 	 */
 	@Transaction
 	public ExecutionResult delete(int processDefinitionId, boolean strict) {
+		// TODO 增加处理最新版本的功能
 		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select name, code, version, subnewest, state, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
 			return new ExecutionResult("删除失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.isSubnewest())
 			return new ExecutionResult("删除失败, ["+processDefinition.getName()+"]流程非最新子版本");
-		if(!processDefinition.getStateInstance().supportConvert(State.DELETE))
+		if(!processDefinition.getStateInstance().supportDelete())
 			return new ExecutionResult("删除失败, ["+processDefinition.getName()+"]流程处于["+processDefinition.getState()+"]状态");
 		
 		if(processInstanceService.exists(processDefinition) || historyProcessInstanceService.exists(processDefinition)) {
@@ -159,6 +164,7 @@ public class ProcessDefinitionService {
 	 */
 	@Transaction
 	public ExecutionResult delete4Physical(int processDefinitionId) {
+		// TODO 增加处理最新版本的功能
 		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select id, type_id, name, code, version, subversion, subnewest, state, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
 			return new ExecutionResult("删除失败, 不存在id为["+processDefinitionId+"]的流程");
@@ -172,7 +178,7 @@ public class ProcessDefinitionService {
 		SessionContext.getSQLSession().executeUpdate("ProcessDefinition", "delete", processDefinition);
 		
 		if(processDefinition.isSubnewest() && processDefinition.getSubversion() > 0) { // 如果被删除的流程是最新子版本, 且子版本值不为0, 需要将上一个子版本的流程自动设置为最新子版本
-			ProcessDefinition beforeProcessDefinition = SessionContext.getSQLSession().queryFirst(ProcessDefinition.class, "ProcessDefinition", "queryPreSubversion", processDefinition);
+			ProcessDefinition beforeProcessDefinition = SessionContext.getSQLSession().queryFirst(ProcessDefinition.class, "ProcessDefinition", "querySubversions", processDefinition);
 			
 			if(beforeProcessDefinition != null) {
 				beforeProcessDefinition.setTypeId(processDefinition.getTypeId());
@@ -185,34 +191,68 @@ public class ProcessDefinitionService {
 	}
 	
 	/**
-	 * 修改流程定义的最新子版本
+	 * 设置流程定义的最新版本
+	 * @param processDefinitionId
+	 * @return
+	 */
+	public ExecutionResult setNewest(int processDefinitionId) {
+		// TODO 增加处理最新版本的功能
+		
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	
+	/**
+	 * 设置流程定义的最新子版本
 	 * @param processDefinitionId
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult updateNewestSubversion(int processDefinitionId) {
+	public ExecutionResult setSubnewest(int processDefinitionId) {
 		ProcessDefinition targetProcessDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select id, name, code, version, subversion, subnewest, state, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(targetProcessDefinition == null)
-			return new ExecutionResult("修改最新子版本失败, 不存在id为["+processDefinitionId+"]的流程");
+			return new ExecutionResult("设置最新子版本失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(targetProcessDefinition.isSubnewest())
-			return new ExecutionResult("修改最新子版本失败, ["+targetProcessDefinition.getName()+"]流程就是最新子版本");
+			return new ExecutionResult("设置最新子版本失败, ["+targetProcessDefinition.getName()+"]流程就是最新子版本");
 		
 		// 进行必要的数据交换后, 执行update
-		ProcessDefinition subnewestProcessDefinition = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "querySubnewestSubversion", targetProcessDefinition);
+		ProcessDefinition subnewestProcessDefinition = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "querySubnewest", targetProcessDefinition);
 		int typeId = subnewestProcessDefinition.getTypeId();
+		int newest = subnewestProcessDefinition.getNewest();
 		State state = subnewestProcessDefinition.getStateInstance();
 		
 		subnewestProcessDefinition.setTypeId(0);
+		subnewestProcessDefinition.setNewest(0);
 		subnewestProcessDefinition.setSubnewest(0);
-		subnewestProcessDefinition.setStateInstance(targetProcessDefinition.getStateInstance());
+		subnewestProcessDefinition.setStateInstance(targetProcessDefinition.getStateInstance()); // targetProcessDefinition的state, 逻辑上只能是State.INVALID
 		SessionContext.getTableSession().update(subnewestProcessDefinition);
 		
 		targetProcessDefinition.setTypeId(typeId);
+		targetProcessDefinition.setNewest(newest);
 		targetProcessDefinition.setSubnewest(1);
 		targetProcessDefinition.setSubversion(subnewestProcessDefinition.getSubversion()+1);
 		targetProcessDefinition.setStateInstance(state);
 		SessionContext.getTableSession().update(targetProcessDefinition);
 		
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	
+	/**
+	 * 还原流程的状态, 从{@link State.DELETE}还原为{@link State.UNDEPLOY}
+	 * @param processDefinitionId
+	 * @param targetState
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult restoreStateDelete2UnDeploy(int processDefinitionId) {
+		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select name, subnewest, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
+		if(processDefinition == null)
+			return new ExecutionResult("还原流程状态失败, 不存在id为["+processDefinitionId+"]的流程");
+		if(!processDefinition.isSubnewest())
+			return new ExecutionResult("还原流程状态失败, ["+processDefinition.getName()+"]流程非最新子版本");
+		if(processDefinition.getStateInstance() != State.DELETE)
+			return new ExecutionResult("还原流程状态失败, 不能将["+processDefinition.getState()+"]状态还原为["+State.UNDEPLOY+"]状态");
+
+		updateState_(processDefinitionId, State.UNDEPLOY);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	

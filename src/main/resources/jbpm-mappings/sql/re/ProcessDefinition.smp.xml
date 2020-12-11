@@ -4,14 +4,14 @@
 		
 		<!-- 保存时查询流程定义 -->
 		<content name="query4Save" type="select">
-			select id, subversion, signature, state from bpm_re_procdef where code = #{code} and version = #{version} and subnewest=1 
+			select id, newest, subversion, signature, state from bpm_re_procdef where code = #{code} and version = #{version} and subnewest=1 
 			<if test="tenantId != null and tenantId != ''">
 				and tenant_id = #{tenantId}
 			</if>
 		</content>
 		
-		<!-- 根据code和version, 查询上一个子版本的流程定义 -->
-		<content name="queryPreSubversion" type="select">
+		<!-- 根据code和version, 查询相关的流程定义集合, 并根据子版本的值倒序排列 -->
+		<content name="querySubversions" type="select">
 			select id, subversion from bpm_re_procdef where code = #{code} and version = #{version} 
 			<if test="tenantId != null">
 				and tenant_id = #{tenantId} 
@@ -20,8 +20,8 @@
 		</content>
 		
 		<!-- 根据code和version, 查询最新子版本的流程定义 -->
-		<content name="querySubnewestSubversion" type="select">
-			select id, type_id, subversion, state from bpm_re_procdef where subnewest=1 and code = #{code} and version = #{version} 
+		<content name="querySubnewest" type="select">
+			select id, type_id, newest, subversion, state from bpm_re_procdef where subnewest=1 and code = #{code} and version = #{version} 
 			<if test="tenantId != null">
 				and tenant_id = #{tenantId} 
 			</if>

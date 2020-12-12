@@ -4,6 +4,7 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
+import com.douglei.bpm.module.repository.definition.entity.State;
 import com.douglei.bpm.process.container.ProcessContainerProxy;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.scheduler.ProcessScheduler;
@@ -36,15 +37,15 @@ public class StartProcessCommand implements Command<ExecutionResult>{
 				break;
 			case StartParameter.BY_PROCESS_DEFINITION_CODE:
 				if(processDefinition == null) 
-					return new ExecutionResult("启动失败, 不存在code为["+startParameter.getCode()+"]的流程");
+					return new ExecutionResult("启动失败, 不存在code为["+startParameter.getCode()+"]的流程; 或未设置其主版本");
 				break;
 			case StartParameter.BY_PROCESS_DEFINITION_CODE_VERSION:
 				if(processDefinition == null) 
 					return new ExecutionResult("启动失败, 不存在code为["+startParameter.getCode()+"], version为["+startParameter.getVersion()+"]的流程");
 				break;
 		}
-		if(!processDefinition.getStateInstance().supportStart())
-			return new ExecutionResult("启动失败, ["+processDefinition.getName()+"]流程处于["+processDefinition.getState()+"]状态, 无法启动");
+		if(processDefinition.getStateInstance() != State.DEPLOY)
+			return new ExecutionResult("启动失败, ["+processDefinition.getName()+"]流程还未部署");
 		
 		ProcessMetadata processMetadata = processContainer.getProcess(processDefinition.getId());
 		return processScheduler.dispatchTask(processMetadata.getStartEvent(), new StartEventDispatchParameter(processMetadata, startParameter));

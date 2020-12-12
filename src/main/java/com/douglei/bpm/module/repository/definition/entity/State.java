@@ -9,7 +9,7 @@ public enum State {
 	/**
 	 * 初始化
 	 */
-	INITIAL(true, false, true, true, false){
+	INITIAL(true, false, true, false){
 		@Override
 		public boolean supportConvert(State targetState) {
 			switch(targetState) {
@@ -25,7 +25,7 @@ public enum State {
 	/**
 	 * 部署
 	 */
-	DEPLOY(false, true, false, false, true){
+	DEPLOY(false, true, false, false){
 		@Override
 		public boolean supportConvert(State targetState) {
 			switch(targetState) {
@@ -40,7 +40,7 @@ public enum State {
 	/**
 	 * 未部署
 	 */
-	UNDEPLOY(true, false, true, false, false){
+	UNDEPLOY(true, false, true, false){
 		@Override
 		public boolean supportConvert(State targetState) {
 			switch(targetState) {
@@ -56,12 +56,12 @@ public enum State {
 	/**
 	 * 无效
 	 */
-	INVALID(false, false, false, true, false),
+	INVALID(false, false, false, true),
 	
 	/**
 	 * 删除
 	 */
-	DELETE(false, false, false, true, false){
+	DELETE(false, false, false, true){
 		@Override
 		public boolean supportConvert(State targetState) {
 			switch(targetState) {
@@ -77,13 +77,11 @@ public enum State {
 	private boolean supportUnDeploy; // 当前状态是是否支持取消部署
 	private boolean supportDelete; // 当前状态是是否支持删除
 	private boolean supportPhysicalDelete; // 当前状态是是否支持物理删除
-	private boolean supportStart; // 当前状态是是否支持启动
-	private State(boolean supportDeploy, boolean supportUnDeploy, boolean supportDelete, boolean supportPhysicalDelete, boolean supportStart) {
+	private State(boolean supportDeploy, boolean supportUnDeploy, boolean supportDelete, boolean supportPhysicalDelete) {
 		this.supportDeploy = supportDeploy;
 		this.supportUnDeploy = supportUnDeploy;
 		this.supportDelete = supportDelete;
 		this.supportPhysicalDelete = supportPhysicalDelete;
-		this.supportStart = supportStart;
 	}
 	
 	public boolean supportDeploy() {
@@ -97,9 +95,6 @@ public enum State {
 	}
 	public boolean supportPhysicalDelete() {
 		return supportPhysicalDelete;
-	}
-	public boolean supportStart() {
-		return supportStart;
 	}
 	
 	/**

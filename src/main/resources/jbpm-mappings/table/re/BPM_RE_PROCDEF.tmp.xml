@@ -8,9 +8,9 @@
 			<column name="NAME" property="name" dataType="nstring" length="50" nullable="false" />
 			<column name="CODE" property="code" dataType="string" length="50" nullable="false" />
 			<column name="VERSION" property="version" dataType="string" length="50" nullable="false" />
-			<column name="NEWEST" property="newest" dataType="number" length="1" nullable="false" />
+			<column name="IS_MAJOR_VERSION" property="majorVersion" dataType="number" length="1" nullable="false" />
 			<column name="SUBVERSION" property="subversion" dataType="number" length="4" defaultValue="0" nullable="false" />
-			<column name="SUBNEWEST" property="subnewest" dataType="number" length="1" nullable="false" />
+			<column name="IS_MAJOR_SUBVERSION" property="majorSubversion" dataType="number" length="1" nullable="false" />
 			<column name="CONTENT_" property="content" dataType="clob" nullable="false" />
 			<column name="SIGNATURE" property="signature" dataType="string" length="32" nullable="false" />
 			<column name="STATE" property="state" dataType="string" length="8" nullable="false"/>

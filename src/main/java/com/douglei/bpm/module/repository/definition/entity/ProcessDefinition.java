@@ -10,9 +10,9 @@ public class ProcessDefinition {
 	private String name;
 	private String code;
 	private String version;
-	private int newest;
+	private int isMajorVersion;
 	private int subversion;
-	private int subnewest;
+	private int isMajorSubversion;
 	private String content;
 	private String signature;
 	private State state;
@@ -24,7 +24,7 @@ public class ProcessDefinition {
 		this.name = name;
 		this.code = code;
 		this.version = version;
-		this.subnewest = 1;
+		this.isMajorSubversion = 1;
 		this.state = State.INITIAL;
 	}
 	
@@ -60,14 +60,14 @@ public class ProcessDefinition {
 	public void setVersion(String version) {
 		this.version = version;
 	}
-	public boolean isNewest() {
-		return newest == 1;
+	public boolean isMajorVersion() {
+		return isMajorVersion == 1;
 	}
-	public int getNewest() {
-		return newest;
+	public int getIsMajorVersion() {
+		return isMajorVersion;
 	}
-	public void setNewest(int newest) {
-		this.newest = newest;
+	public void setIsMajorVersion(int isMajorVersion) {
+		this.isMajorVersion = isMajorVersion;
 	}
 	public int getSubversion() {
 		return subversion;
@@ -75,14 +75,14 @@ public class ProcessDefinition {
 	public void setSubversion(int subversion) {
 		this.subversion = subversion;
 	}
-	public boolean isSubnewest() {
-		return subnewest == 1;
+	public boolean isMajorSubversion() {
+		return isMajorSubversion == 1;
 	}
-	public int getSubnewest() {
-		return subnewest;
+	public int getIsMajorSubversion() {
+		return isMajorSubversion;
 	}
-	public void setSubnewest(int subnewest) {
-		this.subnewest = subnewest;
+	public void setIsMajorSubversion(int isMajorSubversion) {
+		this.isMajorSubversion = isMajorSubversion;
 	}
 	public String getContent() {
 		return content;

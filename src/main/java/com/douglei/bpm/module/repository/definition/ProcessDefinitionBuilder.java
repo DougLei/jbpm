@@ -139,16 +139,6 @@ public class ProcessDefinitionBuilder {
 	}
 	
 	/**
-	 * 设置流程定义是否是最新版本
-	 * @param isNewest
-	 * @return
-	 */
-	public ProcessDefinitionBuilder setNewest(boolean isNewest) {
-		processDefinition.setNewest(isNewest?1:0);
-		return this;
-	}
-	
-	/**
 	 * 设置流程定义的描述
 	 * @param description
 	 * @return

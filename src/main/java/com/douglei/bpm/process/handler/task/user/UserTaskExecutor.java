@@ -2,11 +2,13 @@ package com.douglei.bpm.process.handler.task.user;
 
 import java.util.List;
 
+import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.entity.Assignee;
 import com.douglei.bpm.module.runtime.task.entity.Task;
 import com.douglei.bpm.process.Type;
+import com.douglei.bpm.process.handler.ProcessHandlers;
 import com.douglei.bpm.process.handler.TaskDispatchParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.metadata.node.task.user.UserTaskMetadata;
@@ -19,6 +21,9 @@ import com.douglei.orm.context.SessionContext;
 @Bean(clazz=TaskHandler.class)
 public class UserTaskExecutor extends TaskHandler<UserTaskMetadata, TaskDispatchParameter>{
 
+	@Autowired
+	private ProcessHandlers handlers;
+	
 	@Override
 	public ExecutionResult startup(UserTaskMetadata userTask, TaskDispatchParameter parameter) {
 		Task task = new Task(parameter.getProcdefId(), parameter.getProcinstId(), userTask);

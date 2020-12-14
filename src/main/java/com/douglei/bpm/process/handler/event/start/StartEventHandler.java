@@ -52,7 +52,7 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		if(historyVariables != null)
 			SessionContext.getTableSession().save(historyVariables);
 		
-		taskDispatcher.dispatch(startEvent, parameter.getStartParameter().getProcessVariableMapHolder().getVariableMap());
+		taskDispatcher.dispatch(startEvent, parameter.buildDispatchParameter(processInstance.getId()));
 		return new ExecutionResult(processInstance);
 	}
 	

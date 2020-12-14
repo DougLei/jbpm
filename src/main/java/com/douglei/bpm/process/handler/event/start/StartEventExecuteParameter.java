@@ -5,9 +5,12 @@ import java.util.List;
 
 import com.douglei.bpm.module.history.task.entity.HistoryVariable;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
+import com.douglei.bpm.module.runtime.task.entity.Assignee;
 import com.douglei.bpm.module.runtime.variable.entity.Variable;
 import com.douglei.bpm.process.handler.ExecuteParameter;
+import com.douglei.bpm.process.handler.TaskDispatchParameter;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
+import com.douglei.tools.utils.StringUtil;
 
 /**
  * 
@@ -54,5 +57,15 @@ public class StartEventExecuteParameter implements ExecuteParameter {
 			list.add(new HistoryVariable(processDefinitionId, processInstanceId, historyTaskId, processVariable));
 		});
 		return list;
+	}
+	
+	// 构建调度参数
+	public TaskDispatchParameter buildDispatchParameter(int procinstId) {
+		List<Assignee> assignees = null;
+		if(StringUtil.notEmpty(startParameter.getStartUserId())) {
+			assignees = new ArrayList<Assignee>(1);
+			assignees.add(new Assignee(startParameter.getStartUserId()));
+		}
+		return new TaskDispatchParameter(processMetadata.getId(), procinstId, assignees, startParameter.getProcessVariableMapHolder().getVariableMap());
 	}
 }

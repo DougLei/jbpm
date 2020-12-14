@@ -40,7 +40,7 @@ public class ProcessInstanceService {
 				break;
 			case StartParameter.BY_PROCESS_DEFINITION_CODE:
 				if(processDefinition == null) 
-					return new ExecutionResult("启动失败, 不存在code为["+parameter.getCode()+"]的流程; 或未设置其主版本");
+					return new ExecutionResult("启动失败, 不存在code为["+parameter.getCode()+"]的流程; 或未设置其流程的主版本");
 				break;
 			case StartParameter.BY_PROCESS_DEFINITION_CODE_VERSION:
 				if(processDefinition == null) 

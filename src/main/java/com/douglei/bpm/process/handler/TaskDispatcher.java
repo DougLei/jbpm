@@ -22,16 +22,17 @@ public class TaskDispatcher {
 	/**
 	 * 对task中的flows进行调度, 选择第一条匹配的flow执行
 	 * @param flows
-	 * @param variableMap
+	 * @param parameter
+	 * @throws TaskDispatchException
 	 */
-	public void dispatch(TaskMetadata task, Map<String, Object> variableMap) {
+	public void dispatch(TaskMetadata task, TaskDispatchParameter parameter) throws TaskDispatchException{
 		for(FlowMetadata flow : task.getFlows()) {
-			if(matching(flow, variableMap)) {
-				processHandlers.startup(flow.getTargetTask(), null);
+			if(matching(flow, parameter.getVariableMap())) {
+				processHandlers.startup(flow.getTargetTask(), parameter);
 				return;
 			}
 		}
-		throw new TaskDispatchException("执行["+task.getName()+"]任务后, 未能匹配到合适的Flow, 使流程无法正常流转");
+		throw new TaskDispatchException("执行["+task.getName()+"]任务后, 未能调度到匹配的Flow");
 	}
 	
 	/**

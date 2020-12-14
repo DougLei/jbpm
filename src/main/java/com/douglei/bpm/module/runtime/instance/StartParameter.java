@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.instance.command;
+package com.douglei.bpm.module.runtime.instance;
 
 import java.util.Map;
 
@@ -16,7 +16,7 @@ public class StartParameter {
 	static final byte BY_PROCESS_DEFINITION_CODE= 2; // 使用流程定义的code启动主版本的流程
 	static final byte BY_PROCESS_DEFINITION_CODE_VERSION = 3; // 使用流程定义的code和version启动主要子版本的流程
 	
-	private byte mode;
+	private byte mode; // 启动模式
 	
 	private int processDefinitionId; // 流程定义的id
 	

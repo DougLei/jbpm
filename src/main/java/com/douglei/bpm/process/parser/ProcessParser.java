@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.douglei.bpm.bean.CustomAutowired;
 import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.metadata.node.TaskMetadata;
 import com.douglei.bpm.process.metadata.node.event.EndEventMetadata;
@@ -41,9 +42,9 @@ public class ProcessParser implements CustomAutowired{
 	@Override
 	public void setFields(Map<Class<?>, Object> beanContainer) {
 		((List<Parser>)beanContainer.get(Parser.class)).forEach(parser -> {
-			if(parser.getClass() == StartEventParser.class) {
+			if(parser.getType() == Type.START_EVENT) {
 				startEventParser = (StartEventParser) parser;
-			}else if(parser.getClass() == FlowParser.class) {
+			}else if(parser.getType() == Type.FLOW) {
 				flowParser = (FlowParser) parser;
 			}
 			parserMap.put(parser.getType().getName(), parser);

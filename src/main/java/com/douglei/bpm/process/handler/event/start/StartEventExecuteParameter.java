@@ -1,26 +1,23 @@
-package com.douglei.bpm.process.scheduler.event.start;
+package com.douglei.bpm.process.handler.event.start;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.douglei.bpm.module.history.task.entity.HistoryVariable;
-import com.douglei.bpm.module.runtime.instance.command.StartParameter;
-import com.douglei.bpm.module.runtime.task.entity.Assignee;
+import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.module.runtime.variable.entity.Variable;
+import com.douglei.bpm.process.handler.ExecuteParameter;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
-import com.douglei.bpm.process.scheduler.DispatchParameter;
-import com.douglei.bpm.process.scheduler.flow.FlowDispatchParameter;
-import com.douglei.tools.utils.StringUtil;
 
 /**
  * 
  * @author DougLei
  */
-public class StartEventDispatchParameter implements DispatchParameter{
+public class StartEventExecuteParameter implements ExecuteParameter {
 	private ProcessMetadata processMetadata;
 	private StartParameter startParameter;
 	
-	public StartEventDispatchParameter(ProcessMetadata processMetadata, StartParameter startParameter) {
+	public StartEventExecuteParameter(ProcessMetadata processMetadata, StartParameter startParameter) {
 		this.processMetadata = processMetadata;
 		this.startParameter = startParameter;
 	}
@@ -57,15 +54,5 @@ public class StartEventDispatchParameter implements DispatchParameter{
 			list.add(new HistoryVariable(processDefinitionId, processInstanceId, historyTaskId, processVariable));
 		});
 		return list;
-	}
-	
-	// 构建Flow的调度参数
-	public FlowDispatchParameter buildFlowDispatchParameter(int procinstId) {
-		List<Assignee> assignees = null;
-		if(StringUtil.notEmpty(startParameter.getStartUserId())) {
-			assignees = new ArrayList<Assignee>(1);
-			assignees.add(new Assignee(startParameter.getStartUserId()));
-		}
-		return new FlowDispatchParameter(processMetadata.getId(), procinstId, assignees, startParameter.getProcessVariableMapHolder().getVariableMap());
 	}
 }

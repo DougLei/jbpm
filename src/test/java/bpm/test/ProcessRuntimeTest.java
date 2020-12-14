@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.runtime.instance.command.StartParameter;
+import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.module.runtime.variable.Scope;
 
 public class ProcessRuntimeTest {

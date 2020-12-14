@@ -4,6 +4,7 @@ package com.douglei.bpm.module;
  * 执行结果
  * @author DougLei
  */
+@SuppressWarnings("unchecked")
 public class ExecutionResult {
 	private boolean success; // 是否成功
 	
@@ -28,6 +29,9 @@ public class ExecutionResult {
 	}
 	public Object getObject() {
 		return object;
+	}
+	public <T> T getObject(Class<T> clazz) {
+		return (T) object;
 	}
 	
 	private static final ExecutionResult DEFAULT_SUCCESS_INSTANCE = new ExecutionResult(new Object());

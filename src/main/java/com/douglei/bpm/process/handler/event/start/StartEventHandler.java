@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.scheduler.event.start;
+package com.douglei.bpm.process.handler.event.start;
 
 import java.util.Date;
 import java.util.List;
@@ -7,36 +7,33 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.task.entity.HistoryTask;
 import com.douglei.bpm.module.history.task.entity.HistoryVariable;
-import com.douglei.bpm.module.runtime.instance.command.StartParameter;
+import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.module.runtime.instance.entity.ProcessInstance;
 import com.douglei.bpm.module.runtime.variable.entity.Variable;
 import com.douglei.bpm.process.Type;
+import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.metadata.node.event.StartEventMetadata;
-import com.douglei.bpm.process.scheduler.TaskDispatcher;
 import com.douglei.orm.context.SessionContext;
 
 /**
  * 
  * @author DougLei
  */
-@Bean(clazz=TaskDispatcher.class)
-public class StartEventDispatcher extends TaskDispatcher<StartEventMetadata, StartEventDispatchParameter> {
-	
+@Bean(clazz=TaskHandler.class)
+public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEventExecuteParameter> {
+
 	@Override
-	public ExecutionResult dispatch(StartEventMetadata startEvent, StartEventDispatchParameter parameter) {
-		/*
-		 * 1. 判断能否启动
-		 * 2. 创建流程实例
-		 * 3. 创建启动的历史任务
-		 * 4. 保存流程变量; 全局变量保存到运行表, 本地变量保存到历史表,  瞬时变量丢弃
-		 * 5. 执行流处理; 需要传入所有相关的流程变量
-		 * 
-		 */
+	public ExecutionResult startup(StartEventMetadata startEvent, StartEventExecuteParameter parameter) {
 		// TODO 启动条件
 //		if(起始事件判断当前的启动条件不满足)
 //			return new ExecutionResult<ProcessRuntimeInstance>("不能启动", "");
 		
+		return execute(startEvent, parameter);
+	}
+	
+	@Override
+	public ExecutionResult execute(StartEventMetadata startEvent, StartEventExecuteParameter parameter) {
 		// 创建流程实例
 		ProcessInstance processInstance = createProcessInstance(parameter.getProcessMetadata(), parameter.getStartParameter());
 		
@@ -55,9 +52,8 @@ public class StartEventDispatcher extends TaskDispatcher<StartEventMetadata, Sta
 		if(historyVariables != null)
 			SessionContext.getTableSession().save(historyVariables);
 		
-		if(processScheduler.dispatchFlow(startEvent.getFlows(), parameter.buildFlowDispatchParameter(processInstance.getId())))
-			return ExecutionResult.getDefaultSuccessInstance();
-		return new ExecutionResult("执行["+startEvent.getName()+"]任务后, 未能匹配到合适的Flow, 使流程无法正常流转, 请联系流程管理员检查["+parameter.getProcessMetadata().getName()+"]的配置");
+		taskDispatcher.dispatch(startEvent, parameter.getStartParameter().getProcessVariableMapHolder().getVariableMap());
+		return new ExecutionResult(processInstance);
 	}
 	
 	// 创建流程实例
@@ -74,7 +70,7 @@ public class StartEventDispatcher extends TaskDispatcher<StartEventMetadata, Sta
 		SessionContext.getTableSession().save(instance);
 		return instance;
 	}
-	
+
 	@Override
 	public Type getType() {
 		return Type.START_EVENT;

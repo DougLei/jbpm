@@ -56,13 +56,12 @@ public class BeanFactory {
 	 */
 	public void autowireBeans() {
 		try {
-			beanContainer.put(BeanFactoryProxy.class, new BeanFactoryProxy(this));
 			autowireBeans(beanContainer.values());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-//			beanContainer.clear();
-//			defaultBeanContainer.clear();
+			beanContainer.clear();
+			defaultBeanContainer.clear();
 		}
 	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })

@@ -5,14 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.douglei.bpm.module.runtime.variable.entity.Variable;
 import com.douglei.tools.utils.StringUtil;
 
 /**
  * 
  * @author DougLei
  */
-public class ProcessVariableMapHandler extends ProcessVariableMapHolder{
+public class VariableEntityMapHandler extends VariableEntityMapHolder{
 	
 	/**
 	 * 添加变量
@@ -21,7 +20,7 @@ public class ProcessVariableMapHandler extends ProcessVariableMapHolder{
 	 * @param value
 	 */
 	public void addVariable(String name, Scope scope, Object value) {
-		addVariable(name, scope, DataType.getByObjectValue(value), value);
+		addVariable(name, scope, DataType.getByObject(value), value);
 	}
 	
 	/**
@@ -35,16 +34,16 @@ public class ProcessVariableMapHandler extends ProcessVariableMapHolder{
 		switch(scope) {
 			case GLOBAL:
 				if(globalVariableMap == null)
-					globalVariableMap = new HashMap<String, ProcessVariable>();
-				globalVariableMap.put(name, new ProcessVariable(name, scope, dataType, value));
+					globalVariableMap = new HashMap<String, VariableEntity>();
+				globalVariableMap.put(name, new VariableEntity(name, scope, dataType, value));
 				
 				if(!existsInLocalVariableMap(name) && !existsInTransientVariableNames(name))
 					put2VariableMap(name, value);
 				break;
 			case LOCAL:
 				if(localVariableMap == null)
-					localVariableMap = new HashMap<String, ProcessVariable>();
-				localVariableMap.put(name, new ProcessVariable(name, scope, dataType, value));
+					localVariableMap = new HashMap<String, VariableEntity>();
+				localVariableMap.put(name, new VariableEntity(name, scope, dataType, value));
 				
 				if(!existsInTransientVariableNames(name))
 					put2VariableMap(name, value);
@@ -96,11 +95,11 @@ public class ProcessVariableMapHandler extends ProcessVariableMapHolder{
 	public void addVariables(Object object) {
 		try {
 			Class<?> clazz = object.getClass();
-			if(clazz.isAnnotationPresent(ProcessVariableBean.class)) {
-				ProcessVariableField variableField;
+			if(clazz.isAnnotationPresent(VariableEntityBean.class)) {
+				VariableEntityField variableField;
 				do {
 					for(Field field : clazz.getDeclaredFields()) {
-						variableField = field.getAnnotation(ProcessVariableField.class);
+						variableField = field.getAnnotation(VariableEntityField.class);
 						if(variableField != null) 
 							addVariable(StringUtil.isEmpty(variableField.name())?field.getName():variableField.name(), variableField.scope(), field.get(object));
 					}

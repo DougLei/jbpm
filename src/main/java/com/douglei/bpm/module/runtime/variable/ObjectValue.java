@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.variable.entity;
+package com.douglei.bpm.module.runtime.variable;
 
 import java.io.Serializable;
 

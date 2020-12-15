@@ -15,6 +15,10 @@ public class StartEventMetadata extends TaskMetadata {
 		this.conditionExpr = conditionExpr;
 	}
 	
+	public String getConditionExpr() {
+		return conditionExpr;
+	}
+
 	@Override
 	public Type getType() {
 		return Type.START_EVENT;

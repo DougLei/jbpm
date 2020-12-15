@@ -7,10 +7,10 @@ import java.util.Map;
  * 
  * @author DougLei
  */
-public abstract class ProcessVariableMapHolder {
+public abstract class VariableEntityMapHolder {
 	protected Map<String, Object> variableMap;
-	protected Map<String, ProcessVariable> globalVariableMap;
-	protected Map<String, ProcessVariable> localVariableMap;
+	protected Map<String, VariableEntity> globalVariableMap;
+	protected Map<String, VariableEntity> localVariableMap;
 	protected List<String> transientVariableNames;
 	
 	/**
@@ -24,14 +24,14 @@ public abstract class ProcessVariableMapHolder {
 	 * 获取GLOBAL范围的变量map
 	 * @return
 	 */
-	public Map<String, ProcessVariable> getGlobalVariableMap() {
+	public Map<String, VariableEntity> getGlobalVariableMap() {
 		return globalVariableMap;
 	}
 	/**
 	 * 获取LOCAL范围的变量map
 	 * @return
 	 */
-	public Map<String, ProcessVariable> getLocalVariableMap() {
+	public Map<String, VariableEntity> getLocalVariableMap() {
 		return localVariableMap;
 	}
 	

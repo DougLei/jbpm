@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.repository.type.entity;
+package com.douglei.bpm.module.repository.type;
 
 /**
  * 流程类型实体

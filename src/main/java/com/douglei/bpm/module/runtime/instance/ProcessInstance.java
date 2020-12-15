@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.instance.entity;
+package com.douglei.bpm.module.runtime.instance;
 
 import java.util.Date;
 

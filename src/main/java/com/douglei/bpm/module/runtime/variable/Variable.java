@@ -1,9 +1,8 @@
-package com.douglei.bpm.module.runtime.variable.entity;
+package com.douglei.bpm.module.runtime.variable;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.douglei.bpm.module.runtime.variable.ProcessVariable;
 import com.douglei.tools.utils.datatype.dateformat.DateFormatUtil;
 import com.douglei.tools.utils.serialize.JdkSerializeProcessor;
 
@@ -25,7 +24,7 @@ public class Variable {
 	protected byte[] objectVal;
 	
 	public Variable() {}
-	public Variable(int procdefId, int procinstId, Integer taskId, ProcessVariable processVariable) {
+	public Variable(int procdefId, int procinstId, Integer taskId, VariableEntity processVariable) {
 		this.procdefId = procdefId;
 		this.procinstId = procinstId;
 		this.taskId = taskId;

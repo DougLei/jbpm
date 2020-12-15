@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.task.entity;
+package com.douglei.bpm.module.runtime.task.assignee;
 
 import java.util.Date;
 

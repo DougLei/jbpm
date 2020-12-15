@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.task.entity;
+package com.douglei.bpm.module.runtime.task;
 
 import java.util.Date;
 

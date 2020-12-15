@@ -1,7 +1,7 @@
 package com.douglei.bpm.module.history.instance;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
+import com.douglei.bpm.module.repository.definition.ProcessDefinition;
 import com.douglei.bpm.module.runtime.instance.ProcessInstanceHandlePolicy;
 
 /**

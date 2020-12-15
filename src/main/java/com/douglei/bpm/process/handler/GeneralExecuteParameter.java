@@ -1,8 +1,6 @@
 package com.douglei.bpm.process.handler;
 
-import java.util.List;
-
-import com.douglei.bpm.module.runtime.task.entity.Assignee;
+import com.douglei.bpm.module.runtime.task.assignee.Assigners;
 
 /**
  * 
@@ -11,7 +9,7 @@ import com.douglei.bpm.module.runtime.task.entity.Assignee;
 public class GeneralExecuteParameter implements ExecuteParameter{
 	protected Integer procdefId;
 	protected Integer procinstId;
-	protected List<Assignee> assignees;
+	protected Assigners assigners;
 	
 	public Integer getProcdefId() {
 		return procdefId;
@@ -19,7 +17,7 @@ public class GeneralExecuteParameter implements ExecuteParameter{
 	public Integer getProcinstId() {
 		return procinstId;
 	}
-	public List<Assignee> getAssignees() {
-		return assignees;
+	public Assigners getAssigners() {
+		return assigners;
 	}
 }

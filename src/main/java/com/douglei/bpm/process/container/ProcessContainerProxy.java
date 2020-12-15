@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
+import com.douglei.bpm.module.repository.definition.ProcessDefinition;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.parser.ProcessParser;
 import com.douglei.orm.context.SessionContext;

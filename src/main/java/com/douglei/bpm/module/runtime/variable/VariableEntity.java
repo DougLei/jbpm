@@ -4,13 +4,13 @@ package com.douglei.bpm.module.runtime.variable;
  * 流程变量
  * @author DougLei
  */
-public class ProcessVariable {
+public class VariableEntity {
 	private String name;
 	private Scope scope;
 	private DataType dataType;
 	private Object value;
 	
-	ProcessVariable(String name, Scope scope, DataType dataType, Object value) {
+	VariableEntity(String name, Scope scope, DataType dataType, Object value) {
 		this.name = name;
 		this.scope = scope;
 		this.dataType = dataType;

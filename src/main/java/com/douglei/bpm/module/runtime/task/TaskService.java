@@ -5,7 +5,6 @@ import java.util.Arrays;
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.runtime.task.entity.Task;
 import com.douglei.bpm.process.container.ProcessContainerProxy;
 import com.douglei.bpm.process.handler.GeneralExecuteParameter;
 import com.douglei.bpm.process.handler.ProcessHandlers;

@@ -7,8 +7,6 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.instance.HistoryProcessInstanceService;
-import com.douglei.bpm.module.repository.definition.entity.ProcessDefinition;
-import com.douglei.bpm.module.repository.definition.entity.State;
 import com.douglei.bpm.module.runtime.instance.ProcessInstanceHandlePolicy;
 import com.douglei.bpm.module.runtime.instance.ProcessInstanceService;
 import com.douglei.bpm.process.container.ProcessContainerProxy;

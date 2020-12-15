@@ -6,7 +6,7 @@ import org.junit.Test;
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.repository.type.entity.ProcessType;
+import com.douglei.bpm.module.repository.type.ProcessType;
 
 public class ProcessTypeTest {
 	private ProcessEngine engine;

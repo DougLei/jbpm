@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.repository.definition.entity;
+package com.douglei.bpm.module.repository.definition;
 
 /**
  * 流程定义状态

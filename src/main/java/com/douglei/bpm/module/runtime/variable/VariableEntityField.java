@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD) // 表示注解的作用对象，ElementType.TYPE表示类，ElementType.METHOD表示方法...
 @Retention(RetentionPolicy.RUNTIME) // 注解的保留机制，表示是运行时注解
-public @interface ProcessVariableField {
+public @interface VariableEntityField {
 	
 	/**
 	 * 变量名, 默认即属性名

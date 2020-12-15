@@ -2,9 +2,9 @@ package com.douglei.bpm.module.runtime.instance;
 
 import java.util.Map;
 
-import com.douglei.bpm.module.runtime.variable.ProcessVariableMapHandler;
-import com.douglei.bpm.module.runtime.variable.ProcessVariableMapHolder;
 import com.douglei.bpm.module.runtime.variable.Scope;
+import com.douglei.bpm.module.runtime.variable.VariableEntityMapHandler;
+import com.douglei.bpm.module.runtime.variable.VariableEntityMapHolder;
 import com.douglei.tools.utils.StringUtil;
 
 /**
@@ -26,7 +26,7 @@ public class StartParameter {
 	
 	private String businessId; // (主)业务标识
 	private String startUserId; // 启动人
-	private ProcessVariableMapHandler processVariableMapHandler = new ProcessVariableMapHandler(); // 流程变量
+	private VariableEntityMapHandler variableEntityMapHandler = new VariableEntityMapHandler(); // 流程变量
 	
 	public StartParameter(int processDefinitionId) {
 		this.processDefinitionId = processDefinitionId;
@@ -45,10 +45,21 @@ public class StartParameter {
 		this.mode = StringUtil.isEmpty(version)?BY_PROCESS_DEFINITION_CODE:BY_PROCESS_DEFINITION_CODE_VERSION;
 	}
 	
+	/**
+	 * 设置业务标识
+	 * @param businessId
+	 * @return
+	 */
 	public StartParameter setBusinessId(String businessId) {
 		this.businessId = businessId;
 		return this;
 	}
+	
+	/**
+	 * 设置启动人标识
+	 * @param startUserId
+	 * @return
+	 */
 	public StartParameter setStartUserId(String startUserId) {
 		this.startUserId = startUserId;
 		return this;
@@ -58,18 +69,18 @@ public class StartParameter {
 		return addVariable(name, Scope.GLOBAL, value);
 	}
 	public StartParameter addVariable(String name, Scope scope, Object value) {
-		processVariableMapHandler.addVariable(name, scope, value);
+		variableEntityMapHandler.addVariable(name, scope, value);
 		return this;
 	}
 	public StartParameter addVariables(Map<String, Object> variables) {
 		return addVariables(Scope.GLOBAL, variables);
 	}
 	public StartParameter addVariables(Scope scope, Map<String, Object> variables) {
-		processVariableMapHandler.addVariables(scope, variables);
+		variableEntityMapHandler.addVariables(scope, variables);
 		return this;
 	}
 	public StartParameter addVariables(Object object) {
-		processVariableMapHandler.addVariables(object);
+		variableEntityMapHandler.addVariables(object);
 		return this;
 	}
 	
@@ -94,7 +105,7 @@ public class StartParameter {
 	public String getStartUserId() {
 		return startUserId;
 	}
-	public ProcessVariableMapHolder getProcessVariableMapHolder() {
-		return processVariableMapHandler;
+	public VariableEntityMapHolder getVariableEntityMapHolder() {
+		return variableEntityMapHandler;
 	}
 }

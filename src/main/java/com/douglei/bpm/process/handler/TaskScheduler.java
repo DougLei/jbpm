@@ -14,7 +14,7 @@ import com.douglei.tools.utils.StringUtil;
  * @author DougLei
  */
 @Bean
-public class TaskDispatcher {
+public class TaskScheduler {
 	
 	@Autowired
 	private ProcessHandlers processHandlers;

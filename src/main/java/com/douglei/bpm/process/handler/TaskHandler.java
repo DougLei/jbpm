@@ -11,10 +11,10 @@ import com.douglei.bpm.process.metadata.node.TaskMetadata;
  * @author DougLei
  */
 @MultiInstance
-public abstract class TaskHandler<M extends TaskMetadata, EM extends ExecuteParameter> {
+public abstract class TaskHandler<M extends TaskMetadata, P extends ExecuteParameter> {
 	
 	@Autowired
-	protected TaskDispatcher taskDispatcher;
+	protected TaskScheduler taskScheduler;
 	
 	/**
 	 * 启动任务
@@ -22,7 +22,7 @@ public abstract class TaskHandler<M extends TaskMetadata, EM extends ExecutePara
 	 * @param executeParameter
 	 * @return
 	 */
-	public abstract ExecutionResult startup(M taskMetadata, EM executeParameter);
+	public abstract ExecutionResult startup(M taskMetadata, P executeParameter);
 	
 	/**
 	 * 执行任务
@@ -30,10 +30,10 @@ public abstract class TaskHandler<M extends TaskMetadata, EM extends ExecutePara
 	 * @param executeParameter
 	 * @return
 	 */
-	public abstract ExecutionResult execute(M taskMetadata, EM executeParameter);
+	public abstract ExecutionResult execute(M taskMetadata, P executeParameter);
 
 	/**
-	 * 获取任务类型
+	 * 获取类型
 	 * @return
 	 */
 	public abstract Type getType();

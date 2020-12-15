@@ -33,7 +33,7 @@ public class ProcessHandlers implements CustomAutowired{
 	 * @return
 	 */
 	public ExecutionResult startup(TaskMetadata task, ExecuteParameter executeParameter) {
-		return getTaskHandler(task.getType()).startup(task, executeParameter);
+		return taskHandlerMap.get(task.getType()).startup(task, executeParameter);
 	}
 	
 	/**
@@ -43,18 +43,6 @@ public class ProcessHandlers implements CustomAutowired{
 	 * @return
 	 */
 	public ExecutionResult execute(TaskMetadata task, ExecuteParameter executeParameter) {
-		return getTaskHandler(task.getType()).execute(task, executeParameter);
-	}
-	
-	/**
-	 * 获取任务处理器
-	 * @param taskType
-	 * @return
-	 */
-	private TaskHandler getTaskHandler(Type taskType) {
-		TaskHandler taskHandler = taskHandlerMap.get(taskType);
-		if(taskHandler == null)
-			throw new NullPointerException("不支持["+taskType.getName()+"]类型的处理器");
-		return taskHandler;
+		return taskHandlerMap.get(task.getType()).execute(task, executeParameter);
 	}
 }

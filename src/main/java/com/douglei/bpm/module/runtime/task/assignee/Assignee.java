@@ -14,7 +14,8 @@ public class Assignee {
 	protected Date startTime;
 	
 	public Assignee() {}
-	public Assignee(String userId) {
+	public Assignee(int taskId, String userId) {
+		this.taskId = taskId;
 		this.userId = userId;
 	}
 

@@ -27,7 +27,7 @@ public class Assigners {
 	 */
 	public List<Assignee> getAssigneeList(int taskId) {
 		List<Assignee> list = new ArrayList<Assignee>(assigners.size());
-		assigners.forEach(assigner -> list.add(new Assignee(assigner.getUserId())));
+		assigners.forEach(assigner -> list.add(new Assignee(taskId, assigner.getUserId())));
 		return list;
 	}
 }

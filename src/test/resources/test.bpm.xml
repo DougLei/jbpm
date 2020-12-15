@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpm-configuration>
-	<process code="vocation" version="version" name="请假" title="#{name}的请假申请" pageID="全局页面标识">
+	<process code="vocation" version="v2020" name="请假" title="#{name}的请假申请">
 		<!-- 开始事件, 一个流程中只能有一个开始 -->
 		<startEvent id="startEvent" name="开始"></startEvent>
 		<!-- 结束事件, 一个流程中可以有多个结束 -->

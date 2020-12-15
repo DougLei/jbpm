@@ -100,10 +100,10 @@ public class ProcessInstanceService {
 	
 	/**
 	 * 判断指定的流程定义, 是否存在运行实例
-	 * @param processDefinition
+	 * @param processDefinitionId
 	 * @return
 	 */
-	public boolean exists(ProcessDefinition processDefinition) {
+	public boolean exists(int processDefinitionId) {
 		// TODO 
 		return false;
 	}
@@ -113,7 +113,7 @@ public class ProcessInstanceService {
 	 * @param processDefinitionId
 	 * @param policy 对实例的处理策略
 	 */
-	public void handle(ProcessDefinition processDefinition, ProcessInstanceHandlePolicy policy) {
+	public void handle(int processDefinitionId, ProcessInstanceHandlePolicy policy) {
 		// TODO 处理指定id的流程定义, 相关的所有运行实例
 	}
 }

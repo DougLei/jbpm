@@ -1,7 +1,6 @@
 package com.douglei.bpm.module.history.instance;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.repository.definition.ProcessDefinition;
 import com.douglei.bpm.module.runtime.instance.ProcessInstanceHandlePolicy;
 
 /**
@@ -13,10 +12,10 @@ public class HistoryProcessInstanceService {
 	
 	/**
 	 * 判断指定的流程定义, 是否存在历史实例
-	 * @param processDefinition
+	 * @param processDefinitionId
 	 * @return
 	 */
-	public boolean exists(ProcessDefinition processDefinition) {
+	public boolean exists(int processDefinitionId) {
 		// TODO 
 		return false;
 	}
@@ -26,7 +25,7 @@ public class HistoryProcessInstanceService {
 	 * @param processDefinitionId
 	 * @param policy 对实例的处理策略
 	 */
-	public void handle(ProcessDefinition processDefinition, ProcessInstanceHandlePolicy policy) {
+	public void handle(int processDefinitionId, ProcessInstanceHandlePolicy policy) {
 		// TODO 处理指定id的流程定义, 相关的所有运行实例
 	}
 }

@@ -54,7 +54,7 @@ public class ProcessDefinitionService {
 				processDefinition.setSignature(null);
 				SessionContext.getTableSession().update(processDefinition);
 			}else if(exProcessDefinition.getStateInstance() == State.INITIAL 
-					|| (!processInstanceService.exists(exProcessDefinition) && !historyProcessInstanceService.exists(exProcessDefinition))) { // 修改了内容, 但旧的流程不存在实例, 进行update
+					|| (!processInstanceService.exists(exProcessDefinition.getId()) && !historyProcessInstanceService.exists(exProcessDefinition.getId()))) { // 修改了内容, 但旧的流程不存在实例, 进行update
 				processDefinition.setId(exProcessDefinition.getId());
 				processDefinition.setIsMajorVersion(exProcessDefinition.getIsMajorVersion());
 				processDefinition.setSubversion(exProcessDefinition.getSubversion());
@@ -86,7 +86,7 @@ public class ProcessDefinitionService {
 	 */
 	@Transaction
 	public ExecutionResult deploy(int processDefinitionId, ProcessInstanceHandlePolicy runtimeProcessInstanceHandlePolicy) {
-		ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, name, code, version, is_major_subversion, state, content_, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
+		ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select name, code, version, is_major_subversion, state, content_, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
 			return new ExecutionResult("部署失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.isMajorSubversion())
@@ -94,8 +94,8 @@ public class ProcessDefinitionService {
 		if(!processDefinition.getStateInstance().supportDeploy())
 			return new ExecutionResult("部署失败, ["+processDefinition.getName()+"]流程处于["+processDefinition.getState()+"]状态");
 		
-		if(runtimeProcessInstanceHandlePolicy != null && processInstanceService.exists(processDefinition))
-			processInstanceService.handle(processDefinition, runtimeProcessInstanceHandlePolicy);
+		if(runtimeProcessInstanceHandlePolicy != null && processInstanceService.exists(processDefinitionId))
+			processInstanceService.handle(processDefinitionId, runtimeProcessInstanceHandlePolicy);
 		
 		updateState_(processDefinitionId, State.DEPLOY);
 		processContainer.addProcess(processDefinition);
@@ -119,10 +119,10 @@ public class ProcessDefinitionService {
 		if(!processDefinition.getStateInstance().supportUnDeploy())
 			return new ExecutionResult("取消部署失败, ["+processDefinition.getName()+"]流程处于["+processDefinition.getState()+"]状态");
 		
-		if(runtimeProcessInstanceHandlePolicy != null && processInstanceService.exists(processDefinition)) 
-			processInstanceService.handle(processDefinition, runtimeProcessInstanceHandlePolicy);
-		if(historyProcessInstanceHandlePolicy != null && historyProcessInstanceService.exists(processDefinition)) 
-			historyProcessInstanceService.handle(processDefinition, historyProcessInstanceHandlePolicy);
+		if(runtimeProcessInstanceHandlePolicy != null && processInstanceService.exists(processDefinitionId)) 
+			processInstanceService.handle(processDefinitionId, runtimeProcessInstanceHandlePolicy);
+		if(historyProcessInstanceHandlePolicy != null && historyProcessInstanceService.exists(processDefinitionId)) 
+			historyProcessInstanceService.handle(processDefinitionId, historyProcessInstanceHandlePolicy);
 		
 		updateState_(processDefinitionId, State.UNDEPLOY);
 		processContainer.deleteProcess(processDefinitionId);
@@ -144,7 +144,7 @@ public class ProcessDefinitionService {
 			return new ExecutionResult("删除失败, ["+processDefinition.getName()+"]流程不是主要子版本");
 		if(!processDefinition.getStateInstance().supportDelete())
 			return new ExecutionResult("删除失败, ["+processDefinition.getName()+"]流程处于["+processDefinition.getState()+"]状态");
-		if((processInstanceService.exists(processDefinition) || historyProcessInstanceService.exists(processDefinition)) && !strict) 
+		if((processInstanceService.exists(processDefinitionId) || historyProcessInstanceService.exists(processDefinitionId)) && !strict) 
 			return new ExecutionResult("删除失败, ["+processDefinition.getName()+"]流程存在实例");
 		
 		updateState_(processDefinitionId, State.DELETE);
@@ -158,16 +158,16 @@ public class ProcessDefinitionService {
 	 */
 	@Transaction
 	public ExecutionResult delete4Physical(int processDefinitionId) {
-		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select id, type_id, name, code, version, subversion, is_major_subversion, state, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
+		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select type_id, name, code, version, subversion, is_major_subversion, state, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
 			return new ExecutionResult("删除失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.getStateInstance().supportPhysicalDelete())
 			return new ExecutionResult("删除失败, ["+processDefinition.getName()+"]流程处于["+processDefinition.getState()+"]状态");
 		
-		if(processInstanceService.exists(processDefinition))
-			processInstanceService.handle(processDefinition, ProcessInstanceHandlePolicy.DELETE);
-		if(historyProcessInstanceService.exists(processDefinition))
-			historyProcessInstanceService.handle(processDefinition, ProcessInstanceHandlePolicy.DELETE);
+		if(processInstanceService.exists(processDefinitionId))
+			processInstanceService.handle(processDefinitionId, ProcessInstanceHandlePolicy.DELETE);
+		if(historyProcessInstanceService.exists(processDefinitionId))
+			historyProcessInstanceService.handle(processDefinitionId, ProcessInstanceHandlePolicy.DELETE);
 		SessionContext.getSqlSession().executeUpdate("delete bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		
 		if(processDefinition.isMajorSubversion() && processDefinition.getSubversion() > 0) { // 如果被删除的流程是主要子版本, 且子版本值不为0, 需要将上一个子版本的流程自动设置为主要子版本, 主要版本同理

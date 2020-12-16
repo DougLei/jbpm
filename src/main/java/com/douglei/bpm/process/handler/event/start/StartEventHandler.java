@@ -4,18 +4,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.task.entity.HistoryTask;
 import com.douglei.bpm.module.history.task.entity.HistoryVariable;
 import com.douglei.bpm.module.runtime.instance.ProcessInstance;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
-import com.douglei.bpm.module.runtime.task.assignee.AssignerBuilder;
 import com.douglei.bpm.module.runtime.task.assignee.Assigners;
 import com.douglei.bpm.module.runtime.variable.Variable;
 import com.douglei.bpm.module.runtime.variable.VariableEntityMapHolder;
 import com.douglei.bpm.process.Type;
+import com.douglei.bpm.process.handler.AbstractTaskHandler;
 import com.douglei.bpm.process.handler.TaskDispatchParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
@@ -27,11 +26,8 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 @Bean(clazz=TaskHandler.class)
-public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEventExecuteParameter, StartEventExecuteParameter> {
+public class StartEventHandler extends AbstractTaskHandler implements TaskHandler<StartEventMetadata, StartEventExecuteParameter, StartEventExecuteParameter> {
 
-	@Autowired
-	private AssignerBuilder assignerBuilder;
-	
 	@Override
 	public ExecutionResult startup(StartEventMetadata startEvent, StartEventExecuteParameter executeParameter) {
 //		if(OgnlHandler.getSingleton().getBooleanValue(startEvent.getConditionExpr(), parameter.getStartParameter().getProcessVariableMapHolder().getVariableMap()))

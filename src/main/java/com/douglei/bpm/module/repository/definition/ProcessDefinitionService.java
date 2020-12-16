@@ -246,7 +246,7 @@ public class ProcessDefinitionService {
 	}
 	
 	/**
-	 * 还原流程的状态, 从{@link State.DELETE}还原为{@link State.UNDEPLOY}
+	 * 还原流程的状态, 从{@link HandleState.DELETE}还原为{@link HandleState.UNDEPLOY}
 	 * @param processDefinitionId
 	 * @param targetState
 	 * @return

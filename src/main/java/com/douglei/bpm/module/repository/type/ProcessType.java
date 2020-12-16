@@ -1,7 +1,7 @@
 package com.douglei.bpm.module.repository.type;
 
 /**
- * 流程类型实体
+ * 流程类型
  * @author DougLei
  */
 public class ProcessType {

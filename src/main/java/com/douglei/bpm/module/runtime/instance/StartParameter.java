@@ -12,13 +12,10 @@ import com.douglei.tools.utils.StringUtil;
  * @author DougLei
  */
 public class StartParameter {
-	static final byte BY_PROCESS_DEFINITION_ID = 1; // 使用流程定义的id启动流程
-	static final byte BY_PROCESS_DEFINITION_CODE= 2; // 使用流程定义的code启动主版本的流程
-	static final byte BY_PROCESS_DEFINITION_CODE_VERSION = 3; // 使用流程定义的code和version启动主要子版本的流程
+	static final byte BY_PROCESS_DEFINITION_CODE= 1; // 使用流程定义的code启动主版本的流程
+	static final byte BY_PROCESS_DEFINITION_CODE_VERSION = 2; // 使用流程定义的code和version启动主要子版本的流程
 	
 	private byte mode; // 启动模式
-	
-	private int processDefinitionId; // 流程定义的id
 	
 	private String code; // 流程code
 	private String version; // 流程版本
@@ -28,10 +25,6 @@ public class StartParameter {
 	private String startUserId; // 启动人
 	private VariableEntityMapHandler variableEntityMapHandler = new VariableEntityMapHandler(); // 流程变量
 	
-	public StartParameter(int processDefinitionId) {
-		this.processDefinitionId = processDefinitionId;
-		this.mode = BY_PROCESS_DEFINITION_ID;
-	}
 	public StartParameter(String code) {
 		this(code, null, null);
 	}
@@ -86,9 +79,6 @@ public class StartParameter {
 	
 	public byte getMode() {
 		return mode;
-	}
-	public int getProcessDefinitionId() {
-		return processDefinitionId;
 	}
 	public String getCode() {
 		return code;

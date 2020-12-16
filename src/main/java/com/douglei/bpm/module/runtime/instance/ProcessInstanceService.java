@@ -34,10 +34,6 @@ public class ProcessInstanceService {
 	public ExecutionResult start(StartParameter parameter) {
 		ProcessDefinition processDefinition = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "query4Start", parameter);
 		switch (parameter.getMode()) {
-			case StartParameter.BY_PROCESS_DEFINITION_ID:
-				if(processDefinition == null) 
-					return new ExecutionResult("启动失败, 不存在id为["+parameter.getProcessDefinitionId()+"]的流程");
-				break;
 			case StartParameter.BY_PROCESS_DEFINITION_CODE:
 				if(processDefinition == null) 
 					return new ExecutionResult("启动失败, 不存在code为["+parameter.getCode()+"]的流程; 或未设置其流程的主版本");

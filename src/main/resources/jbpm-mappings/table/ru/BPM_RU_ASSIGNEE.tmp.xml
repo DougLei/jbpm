@@ -4,10 +4,14 @@
 	<table name="BPM_RU_ASSIGNEE" class="com.douglei.bpm.module.runtime.task.assignee.Assignee" createMode="create" strict="true">
 		<columns>
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
-			<column name="TASK_ID" property="taskId" dataType="number" length="10" nullable="false"/>
+			<column name="TASK_ID" property="taskId" dataType="number" length="10" nullable="false" />
+			<column name="ORDER" property="order" dataType="number" length="5" defaultValue="0" nullable="false" />
 			<column name="USER_ID" property="userId" dataType="nstring" length="150" nullable="false" />
-			<column name="IS_HANDLING" property="isHandling" dataType="number" length="1" defaultValue="0"/>
-			<column name="START_TIME" property="startTime" dataType="datetime"/>
+			<column name="PARENT_USER_ID" property="parentUserId" dataType="nstring" length="150" />
+			<column name="MODE" property="mode" dataType="string" length="8" nullable="false" />
+			<column name="HANDLE_STATE" property="handleState" dataType="string" length="8" nullable="false" />
+			<column name="START_TIME" property="startTime" dataType="datetime" />
+			<column name="FINISHED_TIME" property="finishedTime" dataType="datetime" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

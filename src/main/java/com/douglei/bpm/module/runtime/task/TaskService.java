@@ -37,7 +37,7 @@ public class TaskService {
 			return new ExecutionResult("不存在id为["+taskId+"]的任务");
 		
 		ProcessMetadata processMetadata = processContainer.getProcess(task.getProcdefId());
-		return processExecutors.execute(processMetadata.getTask(task.getKey()), new GeneralExecuteParameter());
+		return processExecutors.execute(processMetadata.getTask(task.getKey()), new GeneralExecuteParameter(task));
 	}
 	
 	/**

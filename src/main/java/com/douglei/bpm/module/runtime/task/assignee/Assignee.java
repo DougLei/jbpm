@@ -9,9 +9,13 @@ import java.util.Date;
 public class Assignee {
 	protected int id;
 	protected int taskId;
+	protected int order;
 	protected String userId;
-	protected int isHandling;
+	protected String parentUserId;
+	protected Mode mode;
+	protected HandleState handleState;
 	protected Date startTime;
+	protected Date finishedTime;
 	
 	public Assignee() {}
 	public Assignee(int taskId, String userId) {
@@ -31,22 +35,58 @@ public class Assignee {
 	public void setTaskId(int taskId) {
 		this.taskId = taskId;
 	}
+	public int getOrder() {
+		return order;
+	}
+	public void setOrder(int order) {
+		this.order = order;
+	}
 	public String getUserId() {
 		return userId;
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public int getIsHandling() {
-		return isHandling;
+	public String getParentUserId() {
+		return parentUserId;
 	}
-	public void setIsHandling(int isHandling) {
-		this.isHandling = isHandling;
+	public void setParentUserId(String parentUserId) {
+		this.parentUserId = parentUserId;
+	}
+	public Mode getModeInstance() {
+		return mode;
+	}
+	public void setModeInstance(Mode mode) {
+		this.mode = mode;
+	}
+	public String getMode() {
+		return mode.name();
+	}
+	public void setMode(String mode) {
+		this.mode = Mode.valueOf(mode) ;
+	}
+	public HandleState getHandleStateInstance() {
+		return handleState;
+	}
+	public void setHandleStateInstance(HandleState handleState) {
+		this.handleState = handleState;
+	}
+	public String getHandleState() {
+		return handleState.name();
+	}
+	public void setHandleState(String handleState) {
+		this.handleState = HandleState.valueOf(handleState);
 	}
 	public Date getStartTime() {
 		return startTime;
 	}
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
+	}
+	public Date getFinishedTime() {
+		return finishedTime;
+	}
+	public void setFinishedTime(Date finishedTime) {
+		this.finishedTime = finishedTime;
 	}
 }

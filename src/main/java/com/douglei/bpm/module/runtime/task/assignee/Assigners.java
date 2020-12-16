@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class Assigners {
 	private List<Assigner> assigners;
+	public Assigners() {}
 	public Assigners(List<Assigner> assigners) {
 		this.assigners = assigners;
 	}
@@ -19,6 +20,13 @@ public class Assigners {
 	public List<Assigner> getAssigners() {
 		return assigners;
 	}
+	public void addAssigner(Assigner assigner) {
+		if(assigners == null)
+			assigners = new ArrayList<Assigner>();
+		else if(assigners.contains(assigner))
+			return;
+		assigners.add(assigner);
+	}
 
 	/**
 	 * 获取运行指派信息集合
@@ -28,6 +36,9 @@ public class Assigners {
 	public List<Assignee> getAssigneeList(int taskId) {
 		List<Assignee> list = new ArrayList<Assignee>(assigners.size());
 		assigners.forEach(assigner -> list.add(new Assignee(taskId, assigner.getUserId())));
+		
+		// TODO 提前委托的指派人, 就要在这里处理
+		
 		return list;
 	}
 }

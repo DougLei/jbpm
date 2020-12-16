@@ -1,5 +1,6 @@
 package com.douglei.bpm.process.handler;
 
+import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.module.runtime.task.assignee.Assigners;
 
 /**
@@ -7,17 +8,28 @@ import com.douglei.bpm.module.runtime.task.assignee.Assigners;
  * @author DougLei
  */
 public class GeneralExecuteParameter implements ExecuteParameter{
-	protected Integer procdefId;
-	protected Integer procinstId;
+	private Task taskInstance;
 	protected Assigners assigners;
 	
+	protected GeneralExecuteParameter() {}
+	public GeneralExecuteParameter(Task taskInstance) {
+		this(taskInstance, null);
+	}
+	public GeneralExecuteParameter(Task taskInstance, Assigners assigners) {
+		this.taskInstance = taskInstance;
+		this.assigners = assigners;
+	}
+	
 	public Integer getProcdefId() {
-		return procdefId;
+		return taskInstance.getProcdefId();
 	}
 	public Integer getProcinstId() {
-		return procinstId;
+		return taskInstance.getProcinstId();
 	}
-	public Assigners getAssigners() {
+	public Task getTaskInstance() {
+		return taskInstance;
+	}
+	public final Assigners getAssigners() {
 		return assigners;
 	}
 }

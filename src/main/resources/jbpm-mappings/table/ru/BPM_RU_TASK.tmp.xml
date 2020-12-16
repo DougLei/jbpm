@@ -7,8 +7,8 @@
 			<column name="PROCDEF_ID" property="procdefId" dataType="number" length="10" nullable="false"/>
 			<column name="PROCINST_ID" property="procinstId" dataType="number" length="10" nullable="false"/>
 			<column name="KEY_" property="key" dataType="string" length="50" nullable="false"/>
-			<column name="NAME_" property="name" dataType="nstring" length="100" nullable="false"/>
-			<column name="TYPE_" property="type" dataType="string" length="20" nullable="false"/>
+			<column name="NAME" property="name" dataType="nstring" length="100" nullable="false"/>
+			<column name="TYPE" property="type" dataType="string" length="20" nullable="false"/>
 			<column name="START_TIME" property="startTime" dataType="datetime" nullable="false" />
 			<column name="EXPIRY_TIME" property="expiryTime" dataType="datetime" />
 			<column name="BUSINESS_ID" property="businessId" dataType="string" length="100"/>

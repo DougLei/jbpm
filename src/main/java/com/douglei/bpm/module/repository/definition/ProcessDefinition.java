@@ -1,7 +1,7 @@
 package com.douglei.bpm.module.repository.definition;
 
 /**
- * 
+ * 流程定义
  * @author DougLei
  */
 public class ProcessDefinition {

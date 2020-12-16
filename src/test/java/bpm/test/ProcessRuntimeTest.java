@@ -22,7 +22,7 @@ public class ProcessRuntimeTest {
 	@Test
 	public void start() {
 		int processDefinitionId = 1;
-		StartParameter parameter = new StartParameter(processDefinitionId);
+		StartParameter parameter = new StartParameter("vocation", "v2020");
 		parameter.addVariable("name", "金石磊");
 		parameter.addVariable("day", 15);
 		parameter.addVariable("user", Scope.LOCAL, new User("douglei 4 user"));

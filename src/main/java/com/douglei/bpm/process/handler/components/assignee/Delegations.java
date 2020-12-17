@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.douglei.bpm.module.runtime.task.Assignee;
+import com.douglei.bpm.module.runtime.task.AssigneeMode;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.orm.context.SessionContext;
 
@@ -63,8 +64,10 @@ class Delegations {
 	 */
 	public void addAssignee(int taskId, String parentAssigneeUserId, String assigneeUserId, List<Assignee> assigneeList) {
 		Assignee assignee = new Assignee(taskId, assigneeUserId);
-		if(parentAssigneeUserId != null)
+		if(parentAssigneeUserId != null) {
 			assignee.setParentUserId(parentAssigneeUserId);
+			assignee.setModeInstance(AssigneeMode.DELEGATE);
+		}
 		assigneeList.add(assignee);
 		
 		if(map == null) // 没有委托

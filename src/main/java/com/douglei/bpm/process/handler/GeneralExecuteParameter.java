@@ -1,35 +1,31 @@
 package com.douglei.bpm.process.handler;
 
+import java.util.List;
+
 import com.douglei.bpm.module.runtime.task.Task;
-import com.douglei.bpm.module.runtime.task.assignee.Assigners;
+import com.douglei.bpm.process.handler.components.assignee.Assigner;
+import com.douglei.bpm.process.metadata.ProcessMetadata;
 
 /**
  * 
  * @author DougLei
  */
-public class GeneralExecuteParameter implements ExecuteParameter{
+public class GeneralExecuteParameter extends ExecuteParameter{
 	private Task taskInstance;
-	protected Assigners assigners;
 	
-	protected GeneralExecuteParameter() {}
 	public GeneralExecuteParameter(Task taskInstance) {
-		this(taskInstance, null);
+		this(taskInstance, null, null);
 	}
-	public GeneralExecuteParameter(Task taskInstance, Assigners assigners) {
+	public GeneralExecuteParameter(Task taskInstance, ProcessMetadata processMetadata, List<Assigner> assigners) {
+		super(processMetadata, assigners);
 		this.taskInstance = taskInstance;
-		this.assigners = assigners;
 	}
 	
-	public Integer getProcdefId() {
-		return taskInstance.getProcdefId();
-	}
-	public Integer getProcinstId() {
-		return taskInstance.getProcinstId();
-	}
 	public Task getTaskInstance() {
 		return taskInstance;
 	}
-	public final Assigners getAssigners() {
-		return assigners;
+	@Override
+	public int getProcinstId() {
+		return taskInstance.getProcinstId();
 	}
 }

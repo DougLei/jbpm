@@ -1,5 +1,6 @@
 package com.douglei.bpm.process.handler;
 
+import com.douglei.bpm.bean.annotation.MultiInstance;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.node.TaskMetadata;
@@ -8,6 +9,7 @@ import com.douglei.bpm.process.metadata.node.TaskMetadata;
  * 
  * @author DougLei
  */
+@MultiInstance
 public interface TaskHandler<M extends TaskMetadata, S extends ExecuteParameter, P extends ExecuteParameter> {
 	
 	/**

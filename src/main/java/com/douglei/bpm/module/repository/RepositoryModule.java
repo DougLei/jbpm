@@ -3,6 +3,7 @@ package com.douglei.bpm.module.repository;
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.repository.definition.ProcessDefinitionService;
+import com.douglei.bpm.module.repository.delegation.ProcessDelegationService;
 import com.douglei.bpm.module.repository.type.ProcessTypeService;
 
 /**
@@ -18,10 +19,17 @@ public class RepositoryModule {
 	@Autowired
 	private ProcessDefinitionService definitionService;
 
+	@Autowired
+	private ProcessDelegationService delegationService;
+	
+	
 	public ProcessTypeService getTypeService() {
 		return typeService;
 	}
 	public ProcessDefinitionService getDefinitionService() {
 		return definitionService;
+	}
+	public ProcessDelegationService getDelegationService() {
+		return delegationService;
 	}
 }

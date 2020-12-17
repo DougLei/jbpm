@@ -5,37 +5,36 @@ import java.util.List;
 import java.util.Map;
 
 import com.douglei.bpm.bean.annotation.Autowired;
-import com.douglei.bpm.bean.annotation.MultiInstance;
 import com.douglei.bpm.module.history.task.entity.HistoryTask;
 import com.douglei.bpm.module.history.task.entity.HistoryVariable;
 import com.douglei.bpm.module.runtime.task.Task;
-import com.douglei.bpm.module.runtime.task.assignee.AssignerBuilder;
-import com.douglei.bpm.module.runtime.task.assignee.Assigners;
 import com.douglei.bpm.module.runtime.variable.Variable;
 import com.douglei.bpm.module.runtime.variable.VariableEntityMapHandler;
+import com.douglei.bpm.process.handler.components.assignee.AssignerFactory;
+import com.douglei.bpm.process.handler.components.scheduler.TaskDispatchParameter;
+import com.douglei.bpm.process.handler.components.scheduler.TaskScheduler;
 import com.douglei.orm.context.SessionContext;
-import com.douglei.orm.context.transaction.component.Transaction;
 
 /**
  * 任务处理器
  * @author DougLei
  */
-@MultiInstance
 public abstract class AbstractTaskHandler {
 	
 	@Autowired
 	protected TaskScheduler taskScheduler;
 	
 	@Autowired
-	protected AssignerBuilder assignerBuilder;
+	protected AssignerFactory assignerFactory;
 	
 	/**
 	 * 完成任务
-	 * @param currentTask
+	 * @param executeParameter
 	 * @return 
 	 */
-	@Transaction
-	protected final TaskDispatchParameter completeTask(Task currentTask) {
+	protected final TaskDispatchParameter completeTask(GeneralExecuteParameter executeParameter) {
+		Task currentTask = executeParameter.getTaskInstance();
+		
 		// 从运行任务表中删除任务
 		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_task where id = ?", currentTask.getTaskIdParam());	
 
@@ -44,7 +43,7 @@ public abstract class AbstractTaskHandler {
 		SessionContext.getTableSession().save(historyTask);	
 		
 		Map<String, Object> variableMap = handleAndGetFinalVariableMap(currentTask, historyTask);
-		return new TaskDispatchParameter(currentTask.getProcdefId(), currentTask.getProcinstId(), new Assigners(assignerBuilder.build()), variableMap);
+		return new TaskDispatchParameter(currentTask.getProcinstId(), variableMap, executeParameter);
 	}
 	// 处理并获取最终的流程变量Map集合
 	private Map<String, Object> handleAndGetFinalVariableMap(Task currentTask, HistoryTask historyTask){ 

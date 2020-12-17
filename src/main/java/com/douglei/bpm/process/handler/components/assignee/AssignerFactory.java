@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.task.assignee;
+package com.douglei.bpm.process.handler.components.assignee;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,16 +8,16 @@ import com.douglei.bpm.bean.annotation.DefaultInstance;
 import com.douglei.orm.context.SessionContext;
 
 /**
- * 指派信息构建器
+ * 指派人信息工厂
  * @author DougLei
  */
-@DefaultInstance(clazz = AssignerBuilderImpl.class)
-public abstract class AssignerBuilder {
+@DefaultInstance(clazz = AssignerFactoryImpl.class)
+public abstract class AssignerFactory {
 
 	/**
-	 * 根据指派的用户标识, 获取指派信息集合
+	 * 根据指派人的唯一标识, 获取指派人的信息集合
 	 * <p>
-	 * 如果需要和数据库交互, 例如查询, 则可以直接使用 {@link SessionContext} 提供的静态方法, 获取和数据库的连接, 具体如下
+	 * 当需要和数据库交互,  则可以直接使用 {@link SessionContext} 提供的静态方法, 获取和数据库的连接, 具体方法如下: 
 	 * <pre>
 	 * SessionContext.getSession()
 	 * SessionContext.getSqlSession()
@@ -27,10 +27,10 @@ public abstract class AssignerBuilder {
 	 * @param assignedUserIds
 	 * @return 
 	 */
-	public final List<Assigner> build(String... assignedUserIds){
+	public final List<Assigner> create(String... assignedUserIds){
 		if(assignedUserIds == null || assignedUserIds.length == 0)
 			return null;
-		return build(Arrays.asList(assignedUserIds));
+		return create(Arrays.asList(assignedUserIds));
 	}
 	
 	/**
@@ -38,7 +38,7 @@ public abstract class AssignerBuilder {
 	 * @param assignedUserIds
 	 * @return
 	 */
-	public List<Assigner> build(List<String> assignedUserIds) {
+	public List<Assigner> create(List<String> assignedUserIds) {
 		List<Assigner> list = new ArrayList<Assigner>(assignedUserIds.size());
 		assignedUserIds.forEach(assignedUserId -> list.add(new Assigner(assignedUserId)));
 		return list;

@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.task.assignee;
+package com.douglei.bpm.module.runtime.task;
 
 import java.util.Date;
 
@@ -12,7 +12,7 @@ public class Assignee {
 	protected int order;
 	protected String userId;
 	protected String parentUserId;
-	protected Mode mode;
+	protected AssigneeMode mode;
 	protected HandleState handleState;
 	protected Date startTime;
 	protected Date finishedTime;
@@ -21,6 +21,8 @@ public class Assignee {
 	public Assignee(int taskId, String userId) {
 		this.taskId = taskId;
 		this.userId = userId;
+		this.mode = AssigneeMode.ASSIGN;
+		this.handleState = HandleState.UNHANDLE;
 	}
 
 	public int getId() {
@@ -53,17 +55,17 @@ public class Assignee {
 	public void setParentUserId(String parentUserId) {
 		this.parentUserId = parentUserId;
 	}
-	public Mode getModeInstance() {
+	public AssigneeMode getModeInstance() {
 		return mode;
 	}
-	public void setModeInstance(Mode mode) {
+	public void setModeInstance(AssigneeMode mode) {
 		this.mode = mode;
 	}
 	public String getMode() {
 		return mode.name();
 	}
 	public void setMode(String mode) {
-		this.mode = Mode.valueOf(mode) ;
+		this.mode = AssigneeMode.valueOf(mode) ;
 	}
 	public HandleState getHandleStateInstance() {
 		return handleState;

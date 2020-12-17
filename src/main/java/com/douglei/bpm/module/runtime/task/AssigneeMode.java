@@ -1,10 +1,10 @@
-package com.douglei.bpm.module.runtime.task.assignee;
+package com.douglei.bpm.module.runtime.task;
 
 /**
  * 指派的模式
  * @author DougLei
  */
-public enum Mode {
+public enum AssigneeMode {
 	
 	/**
 	 * 配置文件中的配置

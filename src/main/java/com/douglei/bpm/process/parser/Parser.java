@@ -10,7 +10,7 @@ import com.douglei.bpm.process.parser.tmp.data.TemporaryData;
  * @author DougLei
  */
 @MultiInstance
-public interface Parser<P extends TemporaryData, R extends ProcessNodeMetadata> {
+public interface Parser<T extends TemporaryData, M extends ProcessNodeMetadata> {
 	
 	/**
 	 * 
@@ -24,5 +24,5 @@ public interface Parser<P extends TemporaryData, R extends ProcessNodeMetadata> 
 	 * @return
 	 * @throws ProcessParseException
 	 */
-	R parse(P temporaryData) throws ProcessParseException;
+	M parse(T temporaryData) throws ProcessParseException;
 }

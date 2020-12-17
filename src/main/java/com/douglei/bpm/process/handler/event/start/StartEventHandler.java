@@ -10,13 +10,12 @@ import com.douglei.bpm.module.history.task.entity.HistoryTask;
 import com.douglei.bpm.module.history.task.entity.HistoryVariable;
 import com.douglei.bpm.module.runtime.instance.ProcessInstance;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
-import com.douglei.bpm.module.runtime.task.assignee.Assigners;
 import com.douglei.bpm.module.runtime.variable.Variable;
 import com.douglei.bpm.module.runtime.variable.VariableEntityMapHolder;
 import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.handler.AbstractTaskHandler;
-import com.douglei.bpm.process.handler.TaskDispatchParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
+import com.douglei.bpm.process.handler.components.scheduler.TaskDispatchParameter;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.metadata.node.event.StartEventMetadata;
 import com.douglei.orm.context.SessionContext;
@@ -49,8 +48,11 @@ public class StartEventHandler extends AbstractTaskHandler implements TaskHandle
 		saveHistoryVariables(executeParameter.getVariableEntityMapHolder(), historyTask);
 		
 		taskScheduler.dispatch(startEvent, 
-				new TaskDispatchParameter(processInstance.getProcdefId(), processInstance.getId(), 
-						new Assigners(assignerBuilder.build(executeParameter.getStartParameter().getStartUserId())), executeParameter.getVariableEntityMapHolder().getVariableMap()));
+				new TaskDispatchParameter(
+						processInstance.getId(), 
+						executeParameter.getVariableEntityMapHolder().getVariableMap(),
+						executeParameter.getProcessMetadata(),
+						assignerFactory.create(executeParameter.getStartParameter().getStartUserId())));
 		return new ExecutionResult(processInstance);
 	}
 	

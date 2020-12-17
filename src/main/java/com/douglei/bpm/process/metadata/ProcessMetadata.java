@@ -14,6 +14,8 @@ import com.douglei.tools.utils.StringUtil;
  */
 public class ProcessMetadata implements Serializable {
 	private int id; 
+	private String code;
+	private String version;
 	private String name;
 	private String title;
 	private String pageID;
@@ -23,6 +25,8 @@ public class ProcessMetadata implements Serializable {
 	
 	public ProcessMetadata(int processDefinitionId, String code, String version, String name, String title, String pageID) {
 		this.id = processDefinitionId;
+		this.code = code;
+		this.version = version;
 		this.name = StringUtil.isEmpty(name)?(code+":"+version):name;
 		this.title = StringUtil.isEmpty(title)?this.name:title;
 		this.pageID = pageID;
@@ -36,6 +40,12 @@ public class ProcessMetadata implements Serializable {
 	
 	public int getId() {
 		return id;
+	}
+	public String getCode() {
+		return code;
+	}
+	public String getVersion() {
+		return version;
 	}
 	public String getName() {
 		return name;

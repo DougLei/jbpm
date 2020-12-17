@@ -9,22 +9,23 @@ import com.douglei.bpm.process.metadata.ProcessMetadata;
  * 
  * @author DougLei
  */
-public class StartEventExecuteParameter implements ExecuteParameter {
-	private ProcessMetadata processMetadata;
+public class StartEventExecuteParameter extends ExecuteParameter {
 	private StartParameter startParameter;
 	
 	public StartEventExecuteParameter(ProcessMetadata processMetadata, StartParameter startParameter) {
-		this.processMetadata = processMetadata;
+		super(processMetadata);
 		this.startParameter = startParameter;
 	}
 
-	public ProcessMetadata getProcessMetadata() {
-		return processMetadata;
-	}
 	public StartParameter getStartParameter() {
 		return startParameter;
 	}
 	public VariableEntityMapHolder getVariableEntityMapHolder() {
 		return startParameter.getVariableEntityMapHolder();
+	}
+
+	@Override
+	public int getProcinstId() {
+		throw new IllegalArgumentException("StartEvent的执行参数, 不存在流程实例id");
 	}
 }

@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.task.assignee;
+package com.douglei.bpm.module.runtime.task;
 
 /**
  * 指派人的办理状态

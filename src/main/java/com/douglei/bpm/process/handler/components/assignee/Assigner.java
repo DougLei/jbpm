@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.task.assignee;
+package com.douglei.bpm.process.handler.components.assignee;
 
 /**
  * 
@@ -11,10 +11,5 @@ public class Assigner {
 	}
 	public final String getUserId() {
 		return userId;
-	}
-	
-	@Override
-	public final boolean equals(Object obj) {
-		return userId.equals(((Assigner) obj).userId);
 	}
 }

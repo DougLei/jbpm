@@ -1,7 +1,5 @@
 package com.douglei.bpm.module.repository.delegation;
 
-import java.util.Date;
-
 /**
  * 流程委托
  * @author DougLei
@@ -9,10 +7,11 @@ import java.util.Date;
 public class ProcessDelegation {
 	private int id;
 	private String clientId;
-	private String trusteeId;
-	private Date startDate;
-	private Date endDate;
+	private String assigneeId;
+	private Long startTime;
+	private Long endTime;
 	private String reason;
+	private String tenantId;
 	
 	public int getId() {
 		return id;
@@ -26,28 +25,34 @@ public class ProcessDelegation {
 	public void setClientId(String clientId) {
 		this.clientId = clientId;
 	}
-	public String getTrusteeId() {
-		return trusteeId;
+	public String getAssigneeId() {
+		return assigneeId;
 	}
-	public void setTrusteeId(String trusteeId) {
-		this.trusteeId = trusteeId;
+	public void setAssigneeId(String assigneeId) {
+		this.assigneeId = assigneeId;
 	}
-	public Date getStartDate() {
-		return startDate;
+	public Long getStartTime() {
+		return startTime;
 	}
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+	public void setStartTime(Long startTime) {
+		this.startTime = startTime;
 	}
-	public Date getEndDate() {
-		return endDate;
+	public Long getEndTime() {
+		return endTime;
 	}
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+	public void setEndTime(Long endTime) {
+		this.endTime = endTime;
 	}
 	public String getReason() {
 		return reason;
 	}
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+	public String getTenantId() {
+		return tenantId;
+	}
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 }

@@ -7,7 +7,7 @@ import java.util.Map.Entry;
  * 
  * @author DougLei
  */
-public class MultiDelegation {
+class MultiDelegation {
 	private Map<String, Delegation> delegationMap;
 
 	// 添加具体的委托

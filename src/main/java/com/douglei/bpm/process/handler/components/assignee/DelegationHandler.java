@@ -15,43 +15,45 @@ import com.douglei.orm.context.SessionContext;
  * 
  * @author DougLei
  */
-class Delegations {
+class DelegationHandler {
 	private Map<String, String> map;
-	private Delegations children;
+	private DelegationHandler children;
 
-	public Delegations(List<DelegationInfo> list, DelegationQueryCondition queryCondition, String processCode, String processVersion) {
+	public DelegationHandler(List<DelegationInfo> list, DelegationQueryCondition queryCondition, String processCode, String processVersion) {
 		if(list.isEmpty())
 			return;
 		
-		// 将查询结果组装成 <指派人id, 具体的委托类实例> 结构
-		Map<String, Delegation> delegationInfoMap = new HashMap<String, Delegation>();
-		Delegation temp;
+		// 将查询结果组装成 <指派人id, (多个)具体的委托类实例> 结构
+		Map<String, MultiDelegation> delegationInfoMap = new HashMap<String, MultiDelegation>();
+		MultiDelegation temp;
 		for(DelegationInfo delegationInfo : list) {
 			temp = delegationInfoMap.get(delegationInfo.getClientId());
 			if(temp == null) {
-				temp = new Delegation(delegationInfo.getAssigneeId());
+				temp = new MultiDelegation();
 				delegationInfoMap.put(delegationInfo.getClientId(), temp);
 			}
-			temp.addDetail(delegationInfo.getProcdefCode(), delegationInfo.getProcdefVersion());
+			temp.addDelegation(delegationInfo);
 		}
 		
 		// 筛选出需要委托的数据, 并进行递归操作
 		List<String> assigneeUserIds = null;
-		for(Entry<String, Delegation> entry : delegationInfoMap.entrySet()) {
-			if(entry.getValue().isDelegate(processCode, processVersion)) {
+		String assigneeUserId = null;
+		for(Entry<String, MultiDelegation> entry : delegationInfoMap.entrySet()) {
+			assigneeUserId = entry.getValue().isDelegate(processCode, processVersion);
+			if(assigneeUserId != null) {
 				if(this.map == null)
 					this.map = new HashMap<String, String>();
-				this.map.put(entry.getKey(), entry.getValue().getAssigneeUserId());
+				this.map.put(entry.getKey(), assigneeUserId);
 				
 				if(assigneeUserIds == null) 
 					assigneeUserIds = new ArrayList<String>(delegationInfoMap.size());
-				assigneeUserIds.add(entry.getValue().getAssigneeUserId());
+				assigneeUserIds.add(assigneeUserId);
 			}
 		}
 		
 		if(this.map != null) { // 证明有委托, 递归去查询是否还有二次委托 
 			queryCondition.updateUserIds(assigneeUserIds);
-			this.children = new Delegations(SessionContext.getSQLSession().query(DelegationInfo.class, "TaskAssignee", "queryDelegations", queryCondition), queryCondition, processCode, processVersion);
+			this.children = new DelegationHandler(SessionContext.getSQLSession().query(DelegationInfo.class, "TaskAssignee", "queryDelegations", queryCondition), queryCondition, processCode, processVersion);
 		}
 	}
 

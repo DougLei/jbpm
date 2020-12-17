@@ -8,12 +8,8 @@ import java.util.List;
  * @author DougLei
  */
 class Delegation {
-	private String assigneeUserId;
 	private List<DelegationProcess> details;
 	
-	public Delegation(String assigneeUserId) {
-		this.assigneeUserId = assigneeUserId;
-	}
 	public void addDetail(String processCode, String processVersion) {
 		if(processCode == null)
 			return;
@@ -31,8 +27,5 @@ class Delegation {
 				return true;
 		}
 		return false;
-	}
-	public String getAssigneeUserId() {
-		return assigneeUserId;
 	}
 }

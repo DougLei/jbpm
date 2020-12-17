@@ -15,14 +15,14 @@ import com.douglei.orm.context.SessionContext;
 public class AssigneeHandler {
 	private int taskId;
 	private Assigners assigners;
-	private Delegations delegations;
+	private DelegationHandler delegationHandler;
 	
 	public AssigneeHandler(Task currentTask, ExecuteParameter parameter) {
 		this.taskId = currentTask.getId();
 		this.assigners = parameter.getAssigners();
 		
 		DelegationQueryCondition queryCondition = new DelegationQueryCondition(currentTask.getStartTime().getTime(), assigners);
-		this.delegations = new Delegations(
+		this.delegationHandler = new DelegationHandler(
 				SessionContext.getSQLSession().query(DelegationInfo.class, "TaskAssignee", "queryDelegations", queryCondition), 
 				queryCondition,
 				parameter.getProcessMetadata().getCode(),
@@ -31,7 +31,7 @@ public class AssigneeHandler {
 	
 	public List<Assignee> getAssigneeList() {
 		List<Assignee> assigneeList = new ArrayList<Assignee>(assigners.size() + 5); // +5是备用的长度
-		assigners.getList().forEach(assigner -> delegations.addAssignee(taskId, null, assigner.getUserId(), assigneeList));
+		assigners.getList().forEach(assigner -> delegationHandler.addAssignee(taskId, null, assigner.getUserId(), assigneeList));
 		return assigneeList;
 	}
 }

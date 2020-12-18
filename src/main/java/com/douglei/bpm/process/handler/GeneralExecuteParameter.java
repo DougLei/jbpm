@@ -19,7 +19,7 @@ public class GeneralExecuteParameter extends ExecuteParameter{
 		return taskInstance;
 	}
 	@Override
-	public int getProcinstId() {
+	public String getProcinstId() {
 		return taskInstance.getProcinstId();
 	}
 }

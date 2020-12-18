@@ -14,16 +14,16 @@ import com.douglei.bpm.process.metadata.ProcessMetadata;
  * @author DougLei
  */
 public class TaskDispatchParameter extends ExecuteParameter{
-	private int procinstId;
+	private String procinstId;
 	private Map<String, Object> variableMap;
 
-	public TaskDispatchParameter(int procinstId, Map<String, Object> variableMap, GeneralExecuteParameter executeParameter) {
+	public TaskDispatchParameter(String procinstId, Map<String, Object> variableMap, GeneralExecuteParameter executeParameter) {
 		super.processMetadata = executeParameter.getProcessMetadata();
 		super.assigners = executeParameter.getAssigners();
 		this.procinstId = procinstId;
 		this.variableMap = variableMap;
 	}
-	public TaskDispatchParameter(int procinstId, Map<String, Object> variableMap, ProcessMetadata processMetadata, List<Assigner> assigners) {
+	public TaskDispatchParameter(String procinstId, Map<String, Object> variableMap, ProcessMetadata processMetadata, List<Assigner> assigners) {
 		super.processMetadata = processMetadata;
 		super.assigners = new Assigners(assigners);
 		this.procinstId = procinstId;
@@ -35,7 +35,7 @@ public class TaskDispatchParameter extends ExecuteParameter{
 	}
 
 	@Override
-	public int getProcinstId() {
+	public String getProcinstId() {
 		return procinstId;
 	}
 }

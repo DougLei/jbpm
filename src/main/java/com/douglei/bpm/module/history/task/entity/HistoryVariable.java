@@ -10,7 +10,7 @@ import com.douglei.bpm.module.runtime.variable.VariableEntity;
 public class HistoryVariable extends Variable{
 
 	public HistoryVariable() {}
-	public HistoryVariable(int procdefId, int procinstId, Integer taskId, VariableEntity processVariable) {
-		super(procdefId, procinstId, taskId, processVariable);
+	public HistoryVariable(String procinstId, Integer taskId, VariableEntity processVariable) {
+		super(procinstId, taskId, processVariable);
 	}
 }

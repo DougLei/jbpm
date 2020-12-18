@@ -62,7 +62,7 @@ public abstract class AbstractTaskHandler {
 		if(variableEntityMapHandler.existsLocalVariableMap()) {	
 			List<HistoryVariable> historyVariables = new ArrayList<HistoryVariable>(variableEntityMapHandler.getLocalVariableMap().size());	
 			variableEntityMapHandler.getLocalVariableMap().values().forEach(variableEntity -> {	
-				historyVariables.add(new HistoryVariable(historyTask.getProcdefId(), historyTask.getProcinstId(), historyTask.getId(), variableEntity));	
+				historyVariables.add(new HistoryVariable(historyTask.getProcinstId(), historyTask.getId(), variableEntity));	
 			});	
 			SessionContext.getTableSession().save(historyVariables);	
 		}	

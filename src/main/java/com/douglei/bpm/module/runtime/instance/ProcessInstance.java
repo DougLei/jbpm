@@ -8,6 +8,7 @@ import java.util.Date;
  */
 public class ProcessInstance {
 	protected int id;
+	protected String procinstId;
 	protected int procdefId;
 	protected String title;
 	protected String businessId;
@@ -22,6 +23,12 @@ public class ProcessInstance {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public String getProcinstId() {
+		return procinstId;
+	}
+	public void setProcinstId(String procinstId) {
+		this.procinstId = procinstId;
 	}
 	public int getProcdefId() {
 		return procdefId;

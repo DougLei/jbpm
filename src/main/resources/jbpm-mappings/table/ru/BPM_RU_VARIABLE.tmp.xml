@@ -4,8 +4,7 @@
 	<table name="BPM_RU_VARIABLE" class="com.douglei.bpm.module.runtime.variable.Variable" createMode="create" strict="true">
 		<columns>
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
-			<column name="PROCDEF_ID" property="procdefId" dataType="number" length="10" nullable="false" />
-			<column name="PROCINST_ID" property="procinstId" dataType="number" length="10" nullable="false" />
+			<column name="PROCINST_ID" property="procinstId" dataType="char" length="36" nullable="false"/>
 			<column name="TASK_ID" property="taskId" dataType="number" length="10" />
 			<column name="SCOPE" property="scope" dataType="string" length="9" />
 			<column name="NAME" property="name" dataType="nstring" length="150" />

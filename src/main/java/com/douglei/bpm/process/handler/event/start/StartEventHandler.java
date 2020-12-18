@@ -40,7 +40,7 @@ public class StartEventHandler extends AbstractTaskHandler implements TaskHandle
 		ProcessInstance processInstance = createProcessInstance(executeParameter.getProcessMetadata(), executeParameter.getStartParameter());
 		
 		// 创建流程任务(因为是开始事件, 所以直接创建历史任务结束即可)
-		HistoryTask historyTask = new HistoryTask(processInstance.getProcdefId(), processInstance.getId(), startEvent);
+		HistoryTask historyTask = new HistoryTask(processInstance.getProcdefId(), processInstance.getProcinstId(), startEvent);
 		historyTask.setEndTime(historyTask.getStartTime());
 		SessionContext.getTableSession().save(historyTask);
 		
@@ -49,7 +49,7 @@ public class StartEventHandler extends AbstractTaskHandler implements TaskHandle
 		
 		taskScheduler.dispatch(startEvent, 
 				new TaskDispatchParameter(
-						processInstance.getId(), 
+						processInstance.getProcinstId(), 
 						executeParameter.getVariableEntityMapHolder().getVariableMap(),
 						executeParameter.getProcessMetadata(),
 						assignerFactory.create(executeParameter.getStartParameter().getStartUserId())));
@@ -78,7 +78,7 @@ public class StartEventHandler extends AbstractTaskHandler implements TaskHandle
 		
 		List<Variable> variables = new ArrayList<Variable>(processVariableMapHolder.getGlobalVariableMap().size());
 		processVariableMapHolder.getGlobalVariableMap().values().forEach(processVariable -> {
-			variables.add(new Variable(processInstance.getProcdefId(), processInstance.getId(), null, processVariable));
+			variables.add(new Variable(processInstance.getProcinstId(), null, processVariable));
 		});
 		SessionContext.getTableSession().save(variables);
 	}
@@ -90,7 +90,7 @@ public class StartEventHandler extends AbstractTaskHandler implements TaskHandle
 		
 		List<HistoryVariable> variables = new ArrayList<HistoryVariable>(processVariableMapHolder.getLocalVariableMap().size());
 		processVariableMapHolder.getLocalVariableMap().values().forEach(processVariable -> {
-			variables.add(new HistoryVariable(historyTask.getProcdefId(), historyTask.getProcinstId(), historyTask.getId(), processVariable));
+			variables.add(new HistoryVariable(historyTask.getProcinstId(), historyTask.getId(), processVariable));
 		});
 		SessionContext.getTableSession().save(variables);
 	}

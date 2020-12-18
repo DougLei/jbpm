@@ -13,7 +13,7 @@ import com.douglei.bpm.process.metadata.node.TaskMetadata;
 public class Task {
 	protected int id;
 	protected int procdefId;
-	protected int procinstId;
+	protected String procinstId;
 	protected String key;
 	protected String name;
 	protected String type;
@@ -21,9 +21,10 @@ public class Task {
 	protected Date expiryTime;
 	protected String businessId;
 	protected String pageId;
+	protected String groupId;
 	
 	public Task() {}
-	public Task(int procdefId, int procinstId, TaskMetadata taskMetadata) {
+	public Task(int procdefId, String procinstId, TaskMetadata taskMetadata) {
 		this.procdefId = procdefId;
 		this.procinstId = procinstId;
 		this.key = taskMetadata.getId();
@@ -44,10 +45,10 @@ public class Task {
 	public void setProcdefId(int procdefId) {
 		this.procdefId = procdefId;
 	}
-	public int getProcinstId() {
+	public String getProcinstId() {
 		return procinstId;
 	}
-	public void setProcinstId(int procinstId) {
+	public void setProcinstId(String procinstId) {
 		this.procinstId = procinstId;
 	}
 	public String getKey() {
@@ -92,7 +93,13 @@ public class Task {
 	public void setPageId(String pageId) {
 		this.pageId = pageId;
 	}
-	
+	public String getGroupId() {
+		return groupId;
+	}
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
+	}
+
 	private List<Object> taskIdParam;
 	public List<Object> getTaskIdParam(){
 		if(taskIdParam == null)

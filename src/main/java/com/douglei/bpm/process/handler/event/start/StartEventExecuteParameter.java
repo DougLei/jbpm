@@ -25,7 +25,7 @@ public class StartEventExecuteParameter extends ExecuteParameter {
 	}
 
 	@Override
-	public int getProcinstId() {
+	public String getProcinstId() {
 		throw new IllegalArgumentException("StartEvent的执行参数, 不存在流程实例id");
 	}
 }

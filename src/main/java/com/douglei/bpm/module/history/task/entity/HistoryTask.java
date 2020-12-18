@@ -13,7 +13,7 @@ public class HistoryTask extends Task{
 	private Date endTime;
 
 	public HistoryTask() {}
-	public HistoryTask(int procdefId, int procinstId, TaskMetadata taskMetadata) {
+	public HistoryTask(int procdefId, String procinstId, TaskMetadata taskMetadata) {
 		super(procdefId, procinstId, taskMetadata);
 	}
 	public HistoryTask(Task task) {

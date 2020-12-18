@@ -21,5 +21,5 @@ public abstract class ExecuteParameter {
 	public final int getProcdefId() {
 		return processMetadata.getId();
 	}
-	public abstract int getProcinstId();
+	public abstract String getProcinstId();
 }

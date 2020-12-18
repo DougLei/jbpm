@@ -13,7 +13,7 @@ public class StartEventExecuteParameter extends ExecuteParameter {
 	private StartParameter startParameter;
 	
 	public StartEventExecuteParameter(ProcessMetadata processMetadata, StartParameter startParameter) {
-		super(processMetadata);
+		super.processMetadata = processMetadata;
 		this.startParameter = startParameter;
 	}
 

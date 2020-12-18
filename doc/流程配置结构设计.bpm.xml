@@ -45,7 +45,7 @@
 			</candidate>
 			
 			<!-- 在当前任务时, 可以执行的操作 -->
-			<option type="saveForm" name="保存表单" order="0, 排序值, 默认为0"></option>
+			<option type="saveForm" name="保存表单" order="0, 排序值, 默认为0"></option><!-- 对引擎来说, 就是更新流程变量 -->
 			<option type="toStartingLink" name="退回起始环节" order="0, 排序值, 默认为0"></option>
 			<option type="toPreviousLink" name="退回上一环节" order="0, 排序值, 默认为0"></option>
 			<option type="toDesignatedLink" name="退回指定环节" order="0, 排序值, 默认为0" target="userTask1"></option><!-- 该option可配置多个 -->

@@ -6,6 +6,7 @@ import java.util.Map;
 import com.douglei.bpm.process.handler.ExecuteParameter;
 import com.douglei.bpm.process.handler.GeneralExecuteParameter;
 import com.douglei.bpm.process.handler.components.assignee.Assigner;
+import com.douglei.bpm.process.handler.components.assignee.Assigners;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 
 /**
@@ -17,12 +18,14 @@ public class TaskDispatchParameter extends ExecuteParameter{
 	private Map<String, Object> variableMap;
 
 	public TaskDispatchParameter(int procinstId, Map<String, Object> variableMap, GeneralExecuteParameter executeParameter) {
-		super(executeParameter.getProcessMetadata(), executeParameter.getAssigners());
+		super.processMetadata = executeParameter.getProcessMetadata();
+		super.assigners = executeParameter.getAssigners();
 		this.procinstId = procinstId;
 		this.variableMap = variableMap;
 	}
 	public TaskDispatchParameter(int procinstId, Map<String, Object> variableMap, ProcessMetadata processMetadata, List<Assigner> assigners) {
-		super(processMetadata, assigners);
+		super.processMetadata = processMetadata;
+		super.assigners = new Assigners(assigners);
 		this.procinstId = procinstId;
 		this.variableMap = variableMap;
 	}

@@ -50,6 +50,9 @@ public class ProcessDelegation {
 	public void setReason(String reason) {
 		this.reason = reason;
 	}
+	public boolean isEnabled() {
+		return isEnabled == 1;
+	}
 	public Integer getIsEnabled() {
 		return isEnabled;
 	}

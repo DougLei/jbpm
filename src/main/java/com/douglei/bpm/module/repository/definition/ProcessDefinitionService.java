@@ -86,7 +86,7 @@ public class ProcessDefinitionService {
 	 */
 	@Transaction
 	public ExecutionResult deploy(int processDefinitionId, ProcessInstanceHandlePolicy runtimeProcessInstanceHandlePolicy) {
-		ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select name, code, version, is_major_subversion, state, content_, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
+		ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, name, code, version, is_major_subversion, state, content_, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
 			return new ExecutionResult("部署失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.isMajorSubversion())

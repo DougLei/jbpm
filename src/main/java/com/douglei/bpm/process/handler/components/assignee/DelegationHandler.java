@@ -16,7 +16,7 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 class DelegationHandler {
-	private Map<String, String> map;
+	private Map<String, String> map; // 指派和委托的映射map, <指派的用户id, 委托的用户id>
 	private DelegationHandler children;
 
 	public DelegationHandler(List<DelegationInfo> list, DelegationQueryCondition queryCondition, String processCode, String processVersion) {
@@ -84,100 +84,81 @@ class DelegationHandler {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+ * 多委托实例, 用来记录一个用户的多个委托
+ * @author DougLei
+ */
+class MultiDelegation {
+	private Map<String, Delegation> delegationMap = new HashMap<String, Delegation>();
+
+	// 添加具体的委托
+	public void addDelegation(DelegationInfo delegationInfo) {
+		Delegation delegation = delegationMap.get(delegationInfo.getAssigneeId());
+		if(delegation == null) {
+			delegation = new Delegation();
+			delegationMap.put(delegationInfo.getAssigneeId(), delegation);
+		}
+		delegation.addDetail(delegationInfo.getProcdefCode(), delegationInfo.getProcdefVersion());
+	}
+
+	// 是否要委托, 返回委托的用户唯一标识
+	public String isDelegate(String processCode, String processVersion) {
+		for(Entry<String, Delegation> entry : delegationMap.entrySet()) {
+			if(entry.getValue().isDelegate(processCode, processVersion)) {
+				return entry.getKey();
+			}
+		}
+		return null;
+	}
+}
+
+/**
+ * 具体的一个委托
+ * @author DougLei
+ */
+class Delegation {
+	private List<DelegationProcess> details;
+	
+	// 添加具体的委托流程
+	public void addDetail(String processCode, String processVersion) {
+		if(processCode == null)
+			return;
+		if(details == null)
+			details = new ArrayList<DelegationProcess>(5);
+		details.add(new DelegationProcess(processCode, processVersion));
+	}
+	
+	// 是否要委托
+	public boolean isDelegate(String processCode, String processVersion) {
+		if(details == null)
+			return true;
+		for (DelegationProcess process : details) {
+			if(process.matching(processCode, processVersion))
+				return true;
+		}
+		return false;
+	}
+}
+
+/**
+ * 具体的一个委托流程
+ * @author DougLei
+ */
+class DelegationProcess {
+	private String code;
+	private String version;
+	
+	public DelegationProcess(String code, String version) {
+		this.code = code;
+		this.version = version;
+	}
+	
+	// 是否匹配, 可以委托指定code和version的流程
+	public boolean matching(String processCode, String processVersion) {
+		if(code.equals(processCode)) {
+			if(version == null || version.equals(processVersion))
+				return true;
+		}
+		return false;
+	}
+}

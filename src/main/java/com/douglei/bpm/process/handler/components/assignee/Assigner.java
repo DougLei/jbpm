@@ -12,4 +12,9 @@ public class Assigner {
 	public final String getUserId() {
 		return userId;
 	}
+	
+	@Override
+	public String toString() {
+		return "Assigner [userId=" + userId + "]";
+	}
 }

@@ -12,6 +12,7 @@ public class DelegationQueryCondition {
 	private List<String> userIds;
 	
 	DelegationQueryCondition(long currentTime, Assigners assigners) {
+		this.currentTime = currentTime;
 		this.userIds = new ArrayList<String>(assigners.size());
 		assigners.getList().forEach(assigner -> this.userIds.add(assigner.getUserId()));
 	}

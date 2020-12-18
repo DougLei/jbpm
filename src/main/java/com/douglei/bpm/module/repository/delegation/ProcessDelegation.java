@@ -11,6 +11,7 @@ public class ProcessDelegation {
 	private Long startTime;
 	private Long endTime;
 	private String reason;
+	private Integer isEnabled;
 	private String tenantId;
 	
 	public int getId() {
@@ -48,6 +49,12 @@ public class ProcessDelegation {
 	}
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+	public Integer getIsEnabled() {
+		return isEnabled;
+	}
+	public void setIsEnabled(Integer isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 	public String getTenantId() {
 		return tenantId;

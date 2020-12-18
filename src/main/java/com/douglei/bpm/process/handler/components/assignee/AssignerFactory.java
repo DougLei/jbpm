@@ -15,7 +15,7 @@ import com.douglei.orm.context.SessionContext;
 public abstract class AssignerFactory {
 
 	/**
-	 * 根据指派人的唯一标识, 获取指派人的信息集合
+	 * 根据指派人的id, 获取指派人的信息集合
 	 * <p>
 	 * 当需要和数据库交互,  则可以直接使用 {@link SessionContext} 提供的静态方法, 获取和数据库的连接, 具体方法如下: 
 	 * <pre>

@@ -16,7 +16,7 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 class DelegationHandler {
-	private Map<String, String> map; // 指派和委托的映射map, <指派的用户id, 委托的用户id>
+	private Map<String, Delegation> map; // 指派和委托的映射map, <指派的用户id, 委托的用户id>
 	private DelegationHandler children;
 
 	public DelegationHandler(List<DelegationInfo> list, DelegationQueryCondition queryCondition, String processCode, String processVersion) {
@@ -37,17 +37,17 @@ class DelegationHandler {
 		
 		// 筛选出需要委托的数据, 并进行递归操作
 		List<String> assigneeUserIds = null;
-		String assigneeUserId = null;
+		Delegation delegation = null;
 		for(Entry<String, MultiDelegation> entry : delegationInfoMap.entrySet()) {
-			assigneeUserId = entry.getValue().isDelegate(processCode, processVersion);
-			if(assigneeUserId != null) {
+			delegation = entry.getValue().isDelegate(processCode, processVersion);
+			if(delegation != null) {
 				if(this.map == null)
-					this.map = new HashMap<String, String>();
-				this.map.put(entry.getKey(), assigneeUserId);
+					this.map = new HashMap<String, Delegation>();
+				this.map.put(entry.getKey(), delegation);
 				
 				if(assigneeUserIds == null) 
 					assigneeUserIds = new ArrayList<String>(delegationInfoMap.size());
-				assigneeUserIds.add(assigneeUserId);
+				assigneeUserIds.add(delegation.getUserId());
 			}
 		}
 		
@@ -62,24 +62,26 @@ class DelegationHandler {
 	 * @param taskId
 	 * @param parentAssigneeUserId
 	 * @param assigneeUserId
+	 * @param remark 记录委托的原因
 	 * @param assigneeList
 	 */
-	public void addAssignee(int taskId, String parentAssigneeUserId, String assigneeUserId, List<Assignee> assigneeList) {
+	public void addAssignee(int taskId, String parentAssigneeUserId, String assigneeUserId, String remark, List<Assignee> assigneeList) {
 		Assignee assignee = new Assignee(taskId, assigneeUserId);
 		if(parentAssigneeUserId != null) {
 			assignee.setParentUserId(parentAssigneeUserId);
+			assignee.setRemark(remark);
 			assignee.setModeInstance(AssigneeMode.DELEGATE);
 		}
 		assigneeList.add(assignee);
 		
 		if(map == null) // 没有委托
 			return;
-		String delegationUserId = map.get(assigneeUserId);
-		if(delegationUserId == null) // 没有委托
+		Delegation delegation = map.get(assigneeUserId);
+		if(delegation == null) // 没有委托
 			return;
 		
 		assignee.setHandleStateInstance(HandleState.INVALID);
-		children.addAssignee(taskId, assigneeUserId, delegationUserId, assigneeList);
+		children.addAssignee(taskId, assigneeUserId, delegation.getUserId(), delegation.getRemark(), assigneeList);
 	}
 }
 
@@ -95,17 +97,17 @@ class MultiDelegation {
 	public void addDelegation(DelegationInfo delegationInfo) {
 		Delegation delegation = delegationMap.get(delegationInfo.getAssigneeId());
 		if(delegation == null) {
-			delegation = new Delegation();
+			delegation = new Delegation(delegationInfo.getAssigneeId(), delegationInfo.getReason());
 			delegationMap.put(delegationInfo.getAssigneeId(), delegation);
 		}
 		delegation.addDetail(delegationInfo.getProcdefCode(), delegationInfo.getProcdefVersion());
 	}
 
-	// 是否要委托, 返回委托的用户唯一标识
-	public String isDelegate(String processCode, String processVersion) {
-		for(Entry<String, Delegation> entry : delegationMap.entrySet()) {
-			if(entry.getValue().isDelegate(processCode, processVersion)) {
-				return entry.getKey();
+	// 是否要委托, 返回委托的用户id
+	public Delegation isDelegate(String processCode, String processVersion) {
+		for(Delegation delegation : delegationMap.values()) {
+			if(delegation.isDelegate(processCode, processVersion)) {
+				return delegation;
 			}
 		}
 		return null;
@@ -117,8 +119,21 @@ class MultiDelegation {
  * @author DougLei
  */
 class Delegation {
+	private String userId;
+	private String remark;
 	private List<DelegationProcess> details;
 	
+	public Delegation(String userId, String remark) {
+		this.userId = userId;
+		this.remark = remark;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public String getRemark() {
+		return remark;
+	}
+
 	// 添加具体的委托流程
 	public void addDetail(String processCode, String processVersion) {
 		if(processCode == null)

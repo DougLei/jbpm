@@ -4,9 +4,9 @@
 	
 		<!-- 查询指派的人员配置的委托信息 -->
 		<content name="queryDelegations" type="select">
-			select client_id, assignee_id, procdef_code, procdef_version from bpm_re_delegation p
+			select client_id, assignee_id, reason, procdef_code, procdef_version from bpm_re_delegation p
 				left join bpm_re_delegation_detail s on (p.id = s.delegation_id)
-					where p.start_time &lt; #{currentTime, dataType=number, length=13} and p.end_time &gt; #{currentTime, dataType=number, length=13} 
+					where p.is_enabled=1 and p.start_time &lt; #{currentTime, dataType=number, length=13} and p.end_time &gt; #{currentTime, dataType=number, length=13} 
 					<foreach collection="userIds" alias="userId" open="and p.client_id in (" separator="," close=")">
 						#{userId}
 					</foreach>

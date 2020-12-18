@@ -9,9 +9,9 @@ import java.util.Date;
 public class Assignee {
 	protected int id;
 	protected int taskId;
-	protected int order;
 	protected String userId;
 	protected String parentUserId;
+	protected String remark;
 	protected AssigneeMode mode;
 	protected HandleState handleState;
 	protected Date startTime;
@@ -37,12 +37,6 @@ public class Assignee {
 	public void setTaskId(int taskId) {
 		this.taskId = taskId;
 	}
-	public int getOrder() {
-		return order;
-	}
-	public void setOrder(int order) {
-		this.order = order;
-	}
 	public String getUserId() {
 		return userId;
 	}
@@ -54,6 +48,12 @@ public class Assignee {
 	}
 	public void setParentUserId(String parentUserId) {
 		this.parentUserId = parentUserId;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 	public AssigneeMode getModeInstance() {
 		return mode;

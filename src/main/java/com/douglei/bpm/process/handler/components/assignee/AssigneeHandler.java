@@ -29,9 +29,13 @@ public class AssigneeHandler {
 				parameter.getProcessMetadata().getVersion());
 	}
 	
+	/**
+	 * 获取最终的指派信息集合
+	 * @return
+	 */
 	public List<Assignee> getAssigneeList() {
 		List<Assignee> assigneeList = new ArrayList<Assignee>(assigners.size() + 5); // +5是备用的长度
-		assigners.getList().forEach(assigner -> delegationHandler.addAssignee(taskId, null, assigner.getUserId(), assigneeList));
+		assigners.getList().forEach(assigner -> delegationHandler.addAssignee(taskId, null, assigner.getUserId(), null, assigneeList));
 		return assigneeList;
 	}
 }

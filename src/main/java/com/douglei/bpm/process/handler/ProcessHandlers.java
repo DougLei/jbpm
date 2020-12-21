@@ -37,12 +37,12 @@ public class ProcessHandlers implements CustomAutowired{
 	}
 	
 	/**
-	 * 执行任务
+	 * 完成任务
 	 * @param task
 	 * @param executeParameter
 	 * @return
 	 */
-	public ExecutionResult execute(TaskMetadata task, ExecuteParameter executeParameter) {
-		return taskHandlerMap.get(task.getType()).execute(task, executeParameter);
+	public ExecutionResult complete(TaskMetadata task, ExecuteParameter executeParameter) {
+		return taskHandlerMap.get(task.getType()).complete(task, executeParameter);
 	}
 }

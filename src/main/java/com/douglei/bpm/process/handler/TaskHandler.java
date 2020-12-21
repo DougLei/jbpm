@@ -21,12 +21,12 @@ public interface TaskHandler<M extends TaskMetadata, S extends ExecuteParameter,
 	ExecutionResult startup(M taskMetadata, S executeParameter);
 	
 	/**
-	 * 执行任务
+	 * 完成任务
 	 * @param taskMetadata
 	 * @param executeParameter
 	 * @return
 	 */
-	ExecutionResult execute(M taskMetadata, P executeParameter);
+	ExecutionResult complete(M taskMetadata, P executeParameter);
 
 	/**
 	 * 获取类型

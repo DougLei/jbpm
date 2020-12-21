@@ -28,11 +28,11 @@ public class StartEventHandler extends AbstractTaskHandler implements TaskHandle
 	public ExecutionResult startup(StartEventMetadata startEvent, StartEventExecuteParameter executeParameter) {
 //		if(OgnlHandler.getSingleton().getBooleanValue(startEvent.getConditionExpr(), parameter.getStartParameter().getProcessVariableMapHolder().getVariableMap()))
 //			return new ExecutionResult("启动失败, 不满足启动条件");
-		return execute(startEvent, executeParameter);
+		return complete(startEvent, executeParameter);
 	}
 	
 	@Override
-	public ExecutionResult execute(StartEventMetadata startEvent, StartEventExecuteParameter executeParameter) {
+	public ExecutionResult complete(StartEventMetadata startEvent, StartEventExecuteParameter executeParameter) {
 		// 创建流程实例
 		ProcessInstance processInstance = createProcessInstance(executeParameter.getProcessMetadata(), executeParameter.getStartParameter());
 		

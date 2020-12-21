@@ -24,11 +24,11 @@ public class EndEventHandler extends AbstractTaskHandler implements TaskHandler<
 
 	@Override
 	public ExecutionResult startup(EndEventMetadata endEvent, TaskDispatchParameter executeParameter) {
-		return execute(endEvent, executeParameter);
+		return complete(endEvent, executeParameter);
 	}
 
 	@Override
-	public ExecutionResult execute(EndEventMetadata endEvent, TaskDispatchParameter executeParameter) {
+	public ExecutionResult complete(EndEventMetadata endEvent, TaskDispatchParameter executeParameter) {
 		// 创建流程任务(因为是结束事件, 所以直接创建历史任务结束即可)
 		HistoryTask historyTask = new HistoryTask(executeParameter.getProcdefId(), executeParameter.getProcinstId(), endEvent);
 		historyTask.setEndTime(historyTask.getStartTime());

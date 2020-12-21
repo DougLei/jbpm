@@ -30,7 +30,7 @@ public class UserTaskHandler extends AbstractTaskHandler implements TaskHandler<
 	}
 
 	@Override
-	public ExecutionResult execute(UserTaskMetadata userTask, GeneralExecuteParameter executeParameter) {
+	public ExecutionResult complete(UserTaskMetadata userTask, GeneralExecuteParameter executeParameter) {
 		TaskDispatchParameter taskDispatchParameter = completeTask(executeParameter);
 		taskScheduler.dispatch(userTask, taskDispatchParameter);
 		return ExecutionResult.getDefaultSuccessInstance();

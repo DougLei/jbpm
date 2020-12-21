@@ -46,21 +46,21 @@ public class ProcessTypeService {
 	
 	/**
 	 * 删除类型
-	 * @param processTypeId
+	 * @param typeId
 	 * @param strict 是否进行强制删除; 强制删除时, 如果被删除的类型下存在流程定义, 则将这些流程定义的类型值改为0(默认类型)
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult delete(int processTypeId, boolean strict) {
-		List<Object> paramList = Arrays.asList(processTypeId);
+	public ExecutionResult delete(int typeId, boolean strict) {
+		List<Object> param = Arrays.asList(typeId);
 		
-		int count = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_("select count(id) from bpm_re_procdef where type_id = ?", paramList)[0].toString());
+		int count = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_("select count(id) from bpm_re_procdef where type_id = ?", param)[0].toString());
 		if(count > 0 && !strict)
 			return new ExecutionResult("该流程类型关联了["+count+"]条流程, 无法删除");
 
-		SessionContext.getSqlSession().executeUpdate("delete bpm_re_proctype where id=?", paramList);
+		SessionContext.getSqlSession().executeUpdate("delete bpm_re_proctype where id=?", param);
 		if(count > 0) 
-			SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set type_id=0 where type_id=?", paramList);
+			SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set type_id=0 where type_id=?", param);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 }

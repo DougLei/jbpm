@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.history.task.HistoryVariable;
+import com.douglei.bpm.module.history.variable.HistoryVariable;
 import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.module.runtime.variable.Variable;
 import com.douglei.orm.context.SessionContext;

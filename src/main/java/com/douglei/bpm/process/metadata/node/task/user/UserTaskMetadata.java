@@ -22,6 +22,11 @@ public class UserTaskMetadata extends TaskMetadata {
 	}
 
 	@Override
+	public boolean supportUserIntervention() {
+		return true;
+	}
+
+	@Override
 	public Type getType() {
 		return Type.USER_TASK;
 	}

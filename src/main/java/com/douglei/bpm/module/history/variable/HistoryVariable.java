@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.history.task;
+package com.douglei.bpm.module.history.variable;
 
 import com.douglei.bpm.module.runtime.variable.Variable;
 import com.douglei.bpm.process.handler.components.variable.VariableEntity;

@@ -42,6 +42,10 @@ public abstract class AbstractTaskHandler {
 		HistoryTask historyTask = new HistoryTask(currentTask);	
 		SessionContext.getTableSession().save(historyTask);	
 		
+		// 处理指派表信息
+		// TODO
+		
+		
 		Map<String, Object> variableMap = variableHandler.followTaskDispatch(currentTask, historyTask.getId());
 		return new TaskDispatchParameter(currentTask.getProcinstId(), variableMap, executeParameter);
 	}

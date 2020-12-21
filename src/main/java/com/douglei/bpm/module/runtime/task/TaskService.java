@@ -25,10 +25,18 @@ public class TaskService {
 	private ProcessContainerProxy processContainer;
 	
 	@Autowired
-	private ProcessHandlers processExecutors;
+	private ProcessHandlers processHandlers;
 	
 	@Autowired
 	private AssignerFactory assignerFactory;
+	
+	// 获取任务实例
+	private Task getTaskInstance(int taskId) {
+		Task task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where id = ?", Arrays.asList(taskId));
+		if(task == null)
+			throw new NullPointerException("不存在id为["+taskId+"]的任务");
+		return task;
+	}
 	
 	/**
 	 * 认领指定id的任务
@@ -37,6 +45,15 @@ public class TaskService {
 	 * @return
 	 */
 	public ExecutionResult claim(int taskId, String userId){
+		Task task = getTaskInstance(taskId);
+		
+		/*
+		 * 该任务可不可以认领
+		 * userId能不能认领（有没有指派给userId）
+		 * userId是不是已经认领
+		 * userId可不可以认领（有没有被其他人认领）
+		 */
+		// 去看看这个任务中有没有指派userId; 再看是否已经领取; 再看是否可以领取
 		
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
@@ -50,13 +67,11 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult complete(int taskId, String userId, String... assigneeUserIds) {
-		Task task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where id = ?", Arrays.asList(taskId));
-		if(task == null)
-			return new ExecutionResult("不存在id为["+taskId+"]的任务");
+		Task task = getTaskInstance(taskId);
 		
 		// TODO 判断操作的用户是否已经认领了任务
 		
 		ProcessMetadata processMetadata = processContainer.getProcess(task.getProcdefId());
-		return processExecutors.execute(processMetadata.getTask(task.getKey()), new GeneralExecuteParameter(task, processMetadata, new Assigners(assignerFactory.create(assigneeUserIds))));
+		return processHandlers.execute(processMetadata.getTask(task.getKey()), new GeneralExecuteParameter(task, processMetadata, new Assigners(assignerFactory.create(assigneeUserIds))));
 	}
 }

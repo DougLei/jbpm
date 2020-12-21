@@ -43,4 +43,12 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 	public List<FlowMetadata> getFlows() {
 		return flows;
 	}
+	
+	/**
+	 * 当前任务是否支持用户介入
+	 * @return
+	 */
+	public boolean supportUserIntervention() {
+		return false;
+	}
 }

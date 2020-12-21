@@ -4,6 +4,7 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.repository.definition.ProcessDefinitionService;
 import com.douglei.bpm.module.repository.delegation.ProcessDelegationService;
+import com.douglei.bpm.module.repository.suggest.SuggestService;
 import com.douglei.bpm.module.repository.type.ProcessTypeService;
 
 /**
@@ -22,6 +23,9 @@ public class RepositoryModule {
 	@Autowired
 	private ProcessDelegationService delegationService;
 	
+	@Autowired
+	private SuggestService suggestService;
+	
 	
 	public ProcessTypeService getTypeService() {
 		return typeService;
@@ -31,5 +35,8 @@ public class RepositoryModule {
 	}
 	public ProcessDelegationService getDelegationService() {
 		return delegationService;
+	}
+	public SuggestService getSuggestService() {
+		return suggestService;
 	}
 }

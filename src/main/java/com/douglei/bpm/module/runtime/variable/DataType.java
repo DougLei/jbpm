@@ -15,31 +15,9 @@ public enum DataType {
 	DATETIME(Date.class, java.sql.Date.class, Timestamp.class),
 	OBJECT;
 	
-	private String name;
 	private Class<?>[] supportClasses;
 	private DataType(Class<?>... supportClasses) {
-		this.name = name().toLowerCase();
 		this.supportClasses = supportClasses;
-	}
-	public String getName() {
-		return name;
-	}
-	
-	/**
-	 * 根据字符串值获取对应的类型枚举实例
-	 * @param str
-	 * @return
-	 */
-	public static DataType getByString(String str) {
-		if(STRING.name.equals(str))
-			return STRING;
-		if(NUMBER.name.equals(str))
-			return NUMBER;
-		if(DATETIME.name.equals(str))
-			return DATETIME;
-		if(OBJECT.name.equals(str))
-			return OBJECT;
-		throw new NullPointerException("不存在值为["+str+"]的变量数据类型");
 	}
 	
 	/**

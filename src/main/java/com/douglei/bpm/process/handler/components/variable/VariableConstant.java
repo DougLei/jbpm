@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.variable;
+package com.douglei.bpm.process.handler.components.variable;
 
 import java.util.regex.Pattern;
 

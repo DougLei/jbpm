@@ -13,7 +13,7 @@
 			<column name="EXPIRY_TIME" property="expiryTime" dataType="datetime" />
 			<column name="BUSINESS_ID" property="businessId" dataType="string" length="100"/>
 			<column name="PAGE_ID" property="pageId" dataType="string" length="500"/>
-			<column name="GROUP_ID" property="groupId" dataType="char" length="36" nullable="false"/>
+			<column name="GROUP_ID" property="groupId" dataType="char" length="36" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

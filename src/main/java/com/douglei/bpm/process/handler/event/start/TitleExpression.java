@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
-import com.douglei.bpm.module.runtime.variable.VariableConstant;
+import com.douglei.bpm.process.handler.components.variable.VariableConstant;
 import com.douglei.tools.instances.ognl.OgnlHandler;
 
 /**

@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.history.task.entity;
+package com.douglei.bpm.module.history.task;
 
 import java.util.Date;
 
@@ -17,12 +17,16 @@ public class HistoryTask extends Task{
 		super(procdefId, procinstId, taskMetadata);
 	}
 	public HistoryTask(Task task) {
-		this.procdefId = task.getProcdefId();
-		this.procinstId = task.getProcinstId();
-		this.key = task.getKey();
-		this.name = task.getName();
-		this.type = task.getType();
-		this.startTime = task.getStartTime();
+		super.procdefId = task.getProcdefId();
+		super.procinstId = task.getProcinstId();
+		super.key = task.getKey();
+		super.name = task.getName();
+		super.type = task.getType();
+		super.startTime = task.getStartTime();
+		super.expiryTime = task.getExpiryTime();
+		super.businessId = task.getBusinessId();
+		super.pageId = task.getPageId();
+		super.groupId = task.getGroupId();
 		this.endTime = new Date();
 	}
 	

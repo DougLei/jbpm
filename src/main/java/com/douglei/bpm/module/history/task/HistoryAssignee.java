@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.history.task.entity;
+package com.douglei.bpm.module.history.task;
 
 import com.douglei.bpm.module.runtime.task.Assignee;
 

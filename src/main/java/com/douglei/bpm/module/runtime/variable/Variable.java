@@ -3,6 +3,7 @@ package com.douglei.bpm.module.runtime.variable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.douglei.bpm.process.handler.components.variable.VariableEntity;
 import com.douglei.tools.utils.datatype.dateformat.DateFormatUtil;
 import com.douglei.tools.utils.serialize.JdkSerializeProcessor;
 
@@ -23,25 +24,25 @@ public class Variable {
 	protected byte[] objectVal;
 	
 	public Variable() {}
-	public Variable(String procinstId, Integer taskId, VariableEntity processVariable) {
+	public Variable(String procinstId, Integer taskId, VariableEntity variableEntity) {
 		this.procinstId = procinstId;
 		this.taskId = taskId;
-		this.scope = processVariable.getScope().getName();
-		this.name = processVariable.getName();
-		this.dataType = processVariable.getDataType().getName();
-		if(processVariable.getValue() != null) {
-			switch (processVariable.getDataType()) {
+		this.scope = variableEntity.getScope().name();
+		this.name = variableEntity.getName();
+		this.dataType = variableEntity.getDataType().name();
+		if(variableEntity.getValue() != null) {
+			switch (variableEntity.getDataType()) {
 				case STRING:
-					this.stringVal = processVariable.getValue().toString();
+					this.stringVal = variableEntity.getValue().toString();
 					break;
 				case NUMBER:
-					this.numberVal = new BigDecimal(processVariable.getValue().toString());
+					this.numberVal = new BigDecimal(variableEntity.getValue().toString());
 					break;
 				case DATETIME:
-					this.dateVal = DateFormatUtil.parseDate(processVariable.getValue());
+					this.dateVal = DateFormatUtil.parseDate(variableEntity.getValue());
 					break;
 				case OBJECT:
-					this.objectVal = JdkSerializeProcessor.serialize2ByteArray(new ObjectValue(processVariable.getValue()));
+					this.objectVal = JdkSerializeProcessor.serialize2ByteArray(new ObjectValue(variableEntity.getValue()));
 					break;
 			}
 		}

@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.variable;
+package com.douglei.bpm.process.handler.components.variable;
 
 import java.util.List;
 import java.util.Map;
@@ -7,7 +7,7 @@ import java.util.Map;
  * 
  * @author DougLei
  */
-public abstract class VariableEntityMapHolder {
+public abstract class VariableMapHolder {
 	protected Map<String, Object> variableMap;
 	protected Map<String, VariableEntity> globalVariableMap;
 	protected Map<String, VariableEntity> localVariableMap;

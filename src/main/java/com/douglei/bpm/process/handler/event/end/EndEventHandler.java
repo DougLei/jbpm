@@ -1,8 +1,13 @@
 package com.douglei.bpm.process.handler.event.end;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.history.task.entity.HistoryTask;
+import com.douglei.bpm.module.history.instance.HistoryProcessInstance;
+import com.douglei.bpm.module.history.task.HistoryTask;
+import com.douglei.bpm.module.runtime.instance.ProcessInstance;
 import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.handler.AbstractTaskHandler;
 import com.douglei.bpm.process.handler.TaskHandler;
@@ -30,12 +35,13 @@ public class EndEventHandler extends AbstractTaskHandler implements TaskHandler<
 		SessionContext.getTableSession().save(historyTask);
 		
 		// 将实例保存到历史
+		List<Object> procinstId = Arrays.asList(executeParameter.getProcinstId());
+		ProcessInstance processInstance = SessionContext.getTableSession().uniqueQuery(ProcessInstance.class, "select * from bpm_ru_procinst where procinst_id=?", procinstId);
+		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_procinst where procinst_id=?", procinstId);
+		SessionContext.getTableSession().save(new HistoryProcessInstance(processInstance, null));
 		
-		
-		// 将变量保存到历史表
-		
-		
-		
+		// 结束变量调度
+		variableHandler.endDispatch(executeParameter.getProcinstId());
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	

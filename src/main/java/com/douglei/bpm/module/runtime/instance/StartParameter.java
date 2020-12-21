@@ -3,8 +3,8 @@ package com.douglei.bpm.module.runtime.instance;
 import java.util.Map;
 
 import com.douglei.bpm.module.runtime.variable.Scope;
-import com.douglei.bpm.module.runtime.variable.VariableEntityMapHandler;
-import com.douglei.bpm.module.runtime.variable.VariableEntityMapHolder;
+import com.douglei.bpm.process.handler.components.variable.VariableMapHandler;
+import com.douglei.bpm.process.handler.components.variable.VariableMapHolder;
 import com.douglei.tools.utils.StringUtil;
 
 /**
@@ -23,7 +23,7 @@ public class StartParameter {
 	
 	private String businessId; // (主)业务标识
 	private String startUserId; // 启动人
-	private VariableEntityMapHandler variableEntityMapHandler = new VariableEntityMapHandler(); // 流程变量
+	private VariableMapHandler variableMapHandler = new VariableMapHandler(); // 流程变量
 	
 	public StartParameter(String code) {
 		this(code, null, null);
@@ -62,18 +62,18 @@ public class StartParameter {
 		return addVariable(name, Scope.GLOBAL, value);
 	}
 	public StartParameter addVariable(String name, Scope scope, Object value) {
-		variableEntityMapHandler.addVariable(name, scope, value);
+		variableMapHandler.addVariable(name, scope, value);
 		return this;
 	}
 	public StartParameter addVariables(Map<String, Object> variables) {
 		return addVariables(Scope.GLOBAL, variables);
 	}
 	public StartParameter addVariables(Scope scope, Map<String, Object> variables) {
-		variableEntityMapHandler.addVariables(scope, variables);
+		variableMapHandler.addVariables(scope, variables);
 		return this;
 	}
 	public StartParameter addVariables(Object object) {
-		variableEntityMapHandler.addVariables(object);
+		variableMapHandler.addVariables(object);
 		return this;
 	}
 	
@@ -95,7 +95,7 @@ public class StartParameter {
 	public String getStartUserId() {
 		return startUserId;
 	}
-	public VariableEntityMapHolder getVariableEntityMapHolder() {
-		return variableEntityMapHandler;
+	public VariableMapHolder getVariableMapHolder() {
+		return variableMapHandler;
 	}
 }

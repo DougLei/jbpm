@@ -1,17 +1,14 @@
 package com.douglei.bpm.process.handler.event.start;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.history.task.entity.HistoryTask;
-import com.douglei.bpm.module.history.task.entity.HistoryVariable;
+import com.douglei.bpm.module.history.task.HistoryTask;
 import com.douglei.bpm.module.runtime.instance.ProcessInstance;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
-import com.douglei.bpm.module.runtime.variable.Variable;
-import com.douglei.bpm.module.runtime.variable.VariableEntityMapHolder;
 import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.handler.AbstractTaskHandler;
 import com.douglei.bpm.process.handler.TaskHandler;
@@ -44,13 +41,11 @@ public class StartEventHandler extends AbstractTaskHandler implements TaskHandle
 		historyTask.setEndTime(historyTask.getStartTime());
 		SessionContext.getTableSession().save(historyTask);
 		
-		saveRuntimeVariables(executeParameter.getVariableEntityMapHolder(), processInstance);
-		saveHistoryVariables(executeParameter.getVariableEntityMapHolder(), historyTask);
-		
+		Map<String, Object> variableMap = variableHandler.startDispatch(processInstance.getProcinstId(), historyTask.getId(), executeParameter.getVariableMapHolder());
 		taskScheduler.dispatch(startEvent, 
 				new TaskDispatchParameter(
 						processInstance.getProcinstId(), 
-						executeParameter.getVariableEntityMapHolder().getVariableMap(),
+						variableMap,
 						executeParameter.getProcessMetadata(),
 						assignerFactory.create(executeParameter.getStartParameter().getStartUserId())));
 		return new ExecutionResult(processInstance);
@@ -60,7 +55,8 @@ public class StartEventHandler extends AbstractTaskHandler implements TaskHandle
 	private ProcessInstance createProcessInstance(ProcessMetadata processMetadata, StartParameter startParameter) {
 		ProcessInstance instance = new ProcessInstance();
 		instance.setProcdefId(processMetadata.getId());
-		instance.setTitle(new TitleExpression(processMetadata.getTitle()).getTitle(startParameter.getVariableEntityMapHolder().getVariableMap()));
+		instance.setProcinstId(UUID.randomUUID().toString());
+		instance.setTitle(new TitleExpression(processMetadata.getTitle()).getTitle(startParameter.getVariableMapHolder().getVariableMap()));
 		instance.setBusinessId(startParameter.getBusinessId());
 		instance.setPageId(processMetadata.getPageID());
 		instance.setStartUserId(startParameter.getStartUserId());
@@ -69,30 +65,6 @@ public class StartEventHandler extends AbstractTaskHandler implements TaskHandle
 		
 		SessionContext.getTableSession().save(instance);
 		return instance;
-	}
-	
-	// 保存运行变量, 即GLOBAL变量
-	private void saveRuntimeVariables(VariableEntityMapHolder processVariableMapHolder, ProcessInstance processInstance) {
-		if(!processVariableMapHolder.existsGlobalVariableMap()) 
-			return;
-		
-		List<Variable> variables = new ArrayList<Variable>(processVariableMapHolder.getGlobalVariableMap().size());
-		processVariableMapHolder.getGlobalVariableMap().values().forEach(processVariable -> {
-			variables.add(new Variable(processInstance.getProcinstId(), null, processVariable));
-		});
-		SessionContext.getTableSession().save(variables);
-	}
-
-	// 保存历史变量, 即LOCAL变量
-	private void saveHistoryVariables(VariableEntityMapHolder processVariableMapHolder, HistoryTask historyTask) {
-		if(!processVariableMapHolder.existsLocalVariableMap()) 
-			return;
-		
-		List<HistoryVariable> variables = new ArrayList<HistoryVariable>(processVariableMapHolder.getLocalVariableMap().size());
-		processVariableMapHolder.getLocalVariableMap().values().forEach(processVariable -> {
-			variables.add(new HistoryVariable(historyTask.getProcinstId(), historyTask.getId(), processVariable));
-		});
-		SessionContext.getTableSession().save(variables);
 	}
 	
 	@Override

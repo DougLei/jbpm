@@ -1,8 +1,8 @@
 package com.douglei.bpm.process.handler.event.start;
 
 import com.douglei.bpm.module.runtime.instance.StartParameter;
-import com.douglei.bpm.module.runtime.variable.VariableEntityMapHolder;
 import com.douglei.bpm.process.handler.ExecuteParameter;
+import com.douglei.bpm.process.handler.components.variable.VariableMapHolder;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 
 /**
@@ -20,8 +20,8 @@ public class StartEventExecuteParameter extends ExecuteParameter {
 	public StartParameter getStartParameter() {
 		return startParameter;
 	}
-	public VariableEntityMapHolder getVariableEntityMapHolder() {
-		return startParameter.getVariableEntityMapHolder();
+	public VariableMapHolder getVariableMapHolder() {
+		return startParameter.getVariableMapHolder();
 	}
 
 	@Override

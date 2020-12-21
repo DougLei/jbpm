@@ -6,9 +6,9 @@
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
 			<column name="PROCINST_ID" property="procinstId" dataType="char" length="36" nullable="false"/>
 			<column name="TASK_ID" property="taskId" dataType="number" length="10" />
-			<column name="SCOPE" property="scope" dataType="string" length="9" />
-			<column name="NAME" property="name" dataType="nstring" length="150" />
-			<column name="DATA_TYPE" property="dataType" dataType="string" length="10" />
+			<column name="SCOPE" property="scope" dataType="string" length="9" nullable="false"/>
+			<column name="NAME" property="name" dataType="nstring" length="150" nullable="false"/>
+			<column name="DATA_TYPE" property="dataType" dataType="string" length="8" nullable="false"/>
 			<column name="STRING_VAL" property="stringVal" dataType="nstring" length="2000" />
 			<column name="NUMBER_VAL" property="numberVal" dataType="number" length="20" precision="4" />
 			<column name="DATE_VAL" property="dateVal" dataType="datetime" />

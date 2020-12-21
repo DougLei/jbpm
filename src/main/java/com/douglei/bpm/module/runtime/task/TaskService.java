@@ -57,6 +57,6 @@ public class TaskService {
 		// TODO 判断操作的用户是否已经认领了任务
 		
 		ProcessMetadata processMetadata = processContainer.getProcess(task.getProcdefId());
-		return processExecutors.execute(processMetadata.getTask(task.getKey()), new GeneralExecuteParameter(task, new Assigners(assignerFactory.create(assigneeUserIds))));
+		return processExecutors.execute(processMetadata.getTask(task.getKey()), new GeneralExecuteParameter(task, processMetadata, new Assigners(assignerFactory.create(assigneeUserIds))));
 	}
 }

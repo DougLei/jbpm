@@ -1,17 +1,20 @@
-package com.douglei.bpm.module.runtime.variable;
+package com.douglei.bpm.process.handler.components.variable;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.douglei.bpm.module.runtime.variable.DataType;
+import com.douglei.bpm.module.runtime.variable.Scope;
+import com.douglei.bpm.module.runtime.variable.Variable;
 import com.douglei.tools.utils.StringUtil;
 
 /**
  * 
  * @author DougLei
  */
-public class VariableEntityMapHandler extends VariableEntityMapHolder{
+public class VariableMapHandler extends VariableMapHolder{
 	
 	/**
 	 * 添加变量
@@ -20,7 +23,7 @@ public class VariableEntityMapHandler extends VariableEntityMapHolder{
 	 * @param value
 	 */
 	public void addVariable(String name, Scope scope, Object value) {
-		addVariable(name, scope, DataType.getByObject(value), value);
+		addVariable(null, name, scope, DataType.getByObject(value), value);
 	}
 	
 	/**
@@ -31,11 +34,15 @@ public class VariableEntityMapHandler extends VariableEntityMapHolder{
 	 * @param value
 	 */
 	public void addVariable(String name, Scope scope, DataType dataType, Object value) {
+		addVariable(null, name, scope, dataType, value);
+	}
+	// 添加变量
+	private void addVariable(Integer taskId, String name, Scope scope, DataType dataType, Object value) {
 		switch(scope) {
 			case GLOBAL:
 				if(globalVariableMap == null)
 					globalVariableMap = new HashMap<String, VariableEntity>();
-				globalVariableMap.put(name, new VariableEntity(name, scope, dataType, value));
+				globalVariableMap.put(name, new VariableEntity(taskId, name, scope, dataType, value));
 				
 				if(!existsInLocalVariableMap(name) && !existsInTransientVariableNames(name))
 					put2VariableMap(name, value);
@@ -43,7 +50,7 @@ public class VariableEntityMapHandler extends VariableEntityMapHolder{
 			case LOCAL:
 				if(localVariableMap == null)
 					localVariableMap = new HashMap<String, VariableEntity>();
-				localVariableMap.put(name, new VariableEntity(name, scope, dataType, value));
+				localVariableMap.put(name, new VariableEntity(taskId, name, scope, dataType, value));
 				
 				if(!existsInTransientVariableNames(name))
 					put2VariableMap(name, value);
@@ -95,11 +102,11 @@ public class VariableEntityMapHandler extends VariableEntityMapHolder{
 	public void addVariables(Object object) {
 		try {
 			Class<?> clazz = object.getClass();
-			if(clazz.isAnnotationPresent(VariableEntityBean.class)) {
-				VariableEntityField variableField;
+			if(clazz.isAnnotationPresent(VariableBean.class)) {
+				VariableField variableField;
 				do {
 					for(Field field : clazz.getDeclaredFields()) {
-						variableField = field.getAnnotation(VariableEntityField.class);
+						variableField = field.getAnnotation(VariableField.class);
 						if(variableField != null) 
 							addVariable(StringUtil.isEmpty(variableField.name())?field.getName():variableField.name(), variableField.scope(), field.get(object));
 					}
@@ -116,7 +123,7 @@ public class VariableEntityMapHandler extends VariableEntityMapHolder{
 	 * @param variable
 	 */
 	public void addVariable(Variable variable) {
-		DataType dataType = DataType.getByString(variable.getDataType());
+		DataType dataType = DataType.valueOf(variable.getDataType());
 		Object value = null;
 		switch(dataType) {
 			case STRING:
@@ -132,6 +139,6 @@ public class VariableEntityMapHandler extends VariableEntityMapHolder{
 				value = variable.getObjectVal();
 				break;
 		}
-		addVariable(variable.getName(), Scope.getByString(variable.getScope()), dataType, value);
+		addVariable(variable.getTaskId(), variable.getName(), Scope.valueOf(variable.getScope()), dataType, value);
 	}
 }

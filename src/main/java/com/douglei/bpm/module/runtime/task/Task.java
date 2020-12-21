@@ -1,8 +1,6 @@
 package com.douglei.bpm.module.runtime.task;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import com.douglei.bpm.process.metadata.node.TaskMetadata;
 
@@ -98,12 +96,5 @@ public class Task {
 	}
 	public void setGroupId(String groupId) {
 		this.groupId = groupId;
-	}
-
-	private List<Object> taskIdParam;
-	public List<Object> getTaskIdParam(){
-		if(taskIdParam == null)
-			taskIdParam = Arrays.asList(id);
-		return taskIdParam;
 	}
 }

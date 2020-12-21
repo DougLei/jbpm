@@ -37,7 +37,7 @@ public class ProcessRuntimeTest {
 	
 	@Test
 	public void complete() {
-		int taskId = 1;
+		int taskId = 2;
 		ExecutionResult result = engine.getRuntimeModule().getTaskService().complete(taskId, "");
 		if(result.isSuccess())
 			System.out.println("成功完成id为["+taskId+"]的任务");

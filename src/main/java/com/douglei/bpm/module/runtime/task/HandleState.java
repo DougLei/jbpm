@@ -19,10 +19,28 @@ public enum HandleState {
 	/**
 	 * 已认领
 	 */
-	CLAIM,
+	CLAIM {
+		@Override
+		public boolean isClaim() {
+			return true;
+		}
+	},
 	
 	/**
 	 * 办理完成
 	 */
-	FINISHED;
+	FINISHED{
+		@Override
+		public boolean isClaim() {
+			return true;
+		}
+	};
+	
+	/**
+	 * 是否已认领
+	 * @return
+	 */
+	public boolean isClaim() {
+		return false;
+	}
 }

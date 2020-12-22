@@ -38,7 +38,7 @@ public class ClaimTaskCmd implements Command{
 		Assignee assignee = SessionContext.getSqlSession().uniqueQuery(Assignee.class, "select id, group_id, handle_state from bpm_ru_assignee where taskinst_id=? and user_id=?", Arrays.asList(taskEntity.getTask().getTaskinstId(), userId));
 		if(assignee == null)
 			return new ExecutionResult("认领失败, 指定的userId没有["+taskEntity.getName()+"]任务的认领权限");
-		if(assignee.getHandleStateInstance() == HandleState.CLAIM || assignee.getHandleStateInstance() == HandleState.FINISHED)
+		if(assignee.getHandleStateInstance().isClaim())
 			return new ExecutionResult("认领失败, 指定的userId已认领["+taskEntity.getName()+"]任务");
 		
 		

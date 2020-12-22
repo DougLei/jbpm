@@ -7,22 +7,22 @@ package com.douglei.bpm.module.runtime.task;
 public enum HandleState {
 	
 	/**
-	 * 未办理
+	 * 未认领
 	 */
-	UNHANDLE,
-	
-	/**
-	 * 办理中
-	 */
-	HANDLING,
-	
-	/**
-	 * 办理完成
-	 */
-	FINISHED,
+	UNCLAIM,
 	
 	/**
 	 * 无效
 	 */
-	INVALID;
+	INVALID,
+	
+	/**
+	 * 已认领
+	 */
+	CLAIM,
+	
+	/**
+	 * 办理完成
+	 */
+	FINISHED;
 }

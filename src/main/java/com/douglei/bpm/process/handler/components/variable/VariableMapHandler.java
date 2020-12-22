@@ -37,12 +37,12 @@ public class VariableMapHandler extends VariableMapHolder{
 		addVariable(null, name, scope, dataType, value);
 	}
 	// 添加变量
-	private void addVariable(Integer taskId, String name, Scope scope, DataType dataType, Object value) {
+	private void addVariable(String taskinstId, String name, Scope scope, DataType dataType, Object value) {
 		switch(scope) {
 			case GLOBAL:
 				if(globalVariableMap == null)
 					globalVariableMap = new HashMap<String, VariableEntity>();
-				globalVariableMap.put(name, new VariableEntity(taskId, name, scope, dataType, value));
+				globalVariableMap.put(name, new VariableEntity(taskinstId, name, scope, dataType, value));
 				
 				if(!existsInLocalVariableMap(name) && !existsInTransientVariableNames(name))
 					put2VariableMap(name, value);
@@ -50,7 +50,7 @@ public class VariableMapHandler extends VariableMapHolder{
 			case LOCAL:
 				if(localVariableMap == null)
 					localVariableMap = new HashMap<String, VariableEntity>();
-				localVariableMap.put(name, new VariableEntity(taskId, name, scope, dataType, value));
+				localVariableMap.put(name, new VariableEntity(taskinstId, name, scope, dataType, value));
 				
 				if(!existsInTransientVariableNames(name))
 					put2VariableMap(name, value);
@@ -139,6 +139,6 @@ public class VariableMapHandler extends VariableMapHolder{
 				value = variable.getObjectVal();
 				break;
 		}
-		addVariable(variable.getTaskId(), variable.getName(), Scope.valueOf(variable.getScope()), dataType, value);
+		addVariable(variable.getTaskinstId(), variable.getName(), Scope.valueOf(variable.getScope()), dataType, value);
 	}
 }

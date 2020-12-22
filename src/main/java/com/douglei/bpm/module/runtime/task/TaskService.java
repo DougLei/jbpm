@@ -1,17 +1,12 @@
 package com.douglei.bpm.module.runtime.task;
 
-import java.util.Arrays;
-
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.module.CommandExecutor;
 import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.runtime.task.command.ClaimTaskCmd;
+import com.douglei.bpm.module.runtime.task.command.CompleteTaskCmd;
 import com.douglei.bpm.process.container.ProcessContainerProxy;
-import com.douglei.bpm.process.handler.GeneralExecuteParameter;
-import com.douglei.bpm.process.handler.ProcessHandlers;
-import com.douglei.bpm.process.handler.components.assignee.AssignerFactory;
-import com.douglei.bpm.process.handler.components.assignee.Assigners;
-import com.douglei.bpm.process.metadata.ProcessMetadata;
-import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
 
 /**
@@ -25,18 +20,7 @@ public class TaskService {
 	private ProcessContainerProxy processContainer;
 	
 	@Autowired
-	private ProcessHandlers processHandlers;
-	
-	@Autowired
-	private AssignerFactory assignerFactory;
-	
-	// 获取任务实例
-	private Task getTaskInstance(int taskId) {
-		Task task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where id = ?", Arrays.asList(taskId));
-		if(task == null)
-			throw new NullPointerException("不存在id为["+taskId+"]的任务");
-		return task;
-	}
+	private CommandExecutor commandExecutor;
 	
 	/**
 	 * 认领指定id的任务
@@ -44,18 +28,21 @@ public class TaskService {
 	 * @param userId
 	 * @return
 	 */
+	@Transaction
 	public ExecutionResult claim(int taskId, String userId){
-		Task task = getTaskInstance(taskId);
-		
-		/*
-		 * 该任务可不可以认领
-		 * userId能不能认领（有没有指派给userId）
-		 * userId是不是已经认领
-		 * userId可不可以认领（有没有被其他人认领）
-		 */
-		// 去看看这个任务中有没有指派userId; 再看是否已经领取; 再看是否可以领取
-		
-		return ExecutionResult.getDefaultSuccessInstance();
+		TaskEntity taskEntity = new TaskEntity(taskId, processContainer);
+		return commandExecutor.execute(new ClaimTaskCmd(taskEntity, userId));
+	}
+	/**
+	 * 认领指定id的任务
+	 * @param taskinstId
+	 * @param userId
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult claim(String taskinstId, String userId){
+		TaskEntity taskEntity = new TaskEntity(taskinstId, processContainer);
+		return commandExecutor.execute(new ClaimTaskCmd(taskEntity, userId));
 	}
 	
 	/**
@@ -67,11 +54,19 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult complete(int taskId, String userId, String... assigneeUserIds) {
-		Task task = getTaskInstance(taskId);
-		
-		// TODO 判断操作的用户是否已经认领了任务
-		
-		ProcessMetadata processMetadata = processContainer.getProcess(task.getProcdefId());
-		return processHandlers.complete(processMetadata.getTask(task.getKey()), new GeneralExecuteParameter(task, processMetadata, new Assigners(assignerFactory.create(assigneeUserIds))));
+		TaskEntity taskEntity = new TaskEntity(taskId, processContainer);
+		return commandExecutor.execute(new CompleteTaskCmd(taskEntity, userId, assigneeUserIds));
+	}
+	/**
+	 * 完成指定id的任务
+	 * @param taskinstId
+	 * @param userId
+	 * @param assigneeUserIds 指派的用户ids
+	 * @return 
+	 */
+	@Transaction
+	public ExecutionResult complete(String taskinstId, String userId, String... assigneeUserIds) {
+		TaskEntity taskEntity = new TaskEntity(taskinstId, processContainer);
+		return commandExecutor.execute(new CompleteTaskCmd(taskEntity, userId, assigneeUserIds));
 	}
 }

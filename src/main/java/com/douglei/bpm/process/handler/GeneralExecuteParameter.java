@@ -1,8 +1,8 @@
 package com.douglei.bpm.process.handler;
 
 import com.douglei.bpm.module.runtime.task.Task;
+import com.douglei.bpm.module.runtime.task.TaskEntity;
 import com.douglei.bpm.process.handler.components.assignee.Assigners;
-import com.douglei.bpm.process.metadata.ProcessMetadata;
 
 /**
  * 
@@ -11,10 +11,10 @@ import com.douglei.bpm.process.metadata.ProcessMetadata;
 public class GeneralExecuteParameter extends ExecuteParameter{
 	private Task taskInstance;
 	
-	public GeneralExecuteParameter(Task taskInstance, ProcessMetadata processMetadata, Assigners assigners) {
-		super.processMetadata = processMetadata;
+	public GeneralExecuteParameter(TaskEntity taskInstance, Assigners assigners) {
+		super.processMetadata = taskInstance.getProcessMetadata();
 		super.assigners = assigners;
-		this.taskInstance = taskInstance;
+		this.taskInstance = taskInstance.getTask();
 	}
 	
 	public Task getTaskInstance() {

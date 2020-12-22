@@ -45,10 +45,10 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 	}
 	
 	/**
-	 * 当前任务是否支持用户介入
+	 * 当前任务是否支持用户处理
 	 * @return
 	 */
-	public boolean supportUserIntervention() {
+	public boolean supportUserHandling() {
 		return false;
 	}
 }

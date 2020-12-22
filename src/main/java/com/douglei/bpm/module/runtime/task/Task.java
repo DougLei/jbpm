@@ -1,6 +1,7 @@
 package com.douglei.bpm.module.runtime.task;
 
 import java.util.Date;
+import java.util.UUID;
 
 import com.douglei.bpm.process.metadata.node.TaskMetadata;
 
@@ -12,6 +13,7 @@ public class Task {
 	protected int id;
 	protected int procdefId;
 	protected String procinstId;
+	protected String taskinstId;
 	protected String key;
 	protected String name;
 	protected String type;
@@ -25,6 +27,7 @@ public class Task {
 	public Task(int procdefId, String procinstId, TaskMetadata taskMetadata) {
 		this.procdefId = procdefId;
 		this.procinstId = procinstId;
+		this.taskinstId = UUID.randomUUID().toString();
 		this.key = taskMetadata.getId();
 		this.name = taskMetadata.getName();
 		this.type = taskMetadata.getType().getName();
@@ -48,6 +51,12 @@ public class Task {
 	}
 	public void setProcinstId(String procinstId) {
 		this.procinstId = procinstId;
+	}
+	public String getTaskinstId() {
+		return taskinstId;
+	}
+	public void setTaskinstId(String taskinstId) {
+		this.taskinstId = taskinstId;
 	}
 	public String getKey() {
 		return key;

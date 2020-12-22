@@ -8,22 +8,22 @@ import com.douglei.bpm.module.runtime.variable.Scope;
  * @author DougLei
  */
 public class VariableEntity {
-	private Integer taskId; // 关联的taskId
+	private String taskinstId; // 关联的taskinstId
 	private String name;
 	private Scope scope;
 	private DataType dataType;
 	private Object value;
 	
-	VariableEntity(Integer taskId, String name, Scope scope, DataType dataType, Object value) {
-		this.taskId = taskId;
+	VariableEntity(String taskinstId, String name, Scope scope, DataType dataType, Object value) {
+		this.taskinstId = taskinstId;
 		this.name = name;
 		this.scope = scope;
 		this.dataType = dataType;
 		this.value = value;
 	}
 	
-	public Integer getTaskId() {
-		return taskId;
+	public String getTaskinstId() {
+		return taskinstId;
 	}
 	public String getName() {
 		return name;

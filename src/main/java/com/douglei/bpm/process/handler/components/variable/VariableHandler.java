@@ -7,7 +7,6 @@ import java.util.Map;
 
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.history.variable.HistoryVariable;
-import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.module.runtime.variable.Variable;
 import com.douglei.orm.context.SessionContext;
 
@@ -31,24 +30,24 @@ public class VariableHandler {
 	
 	/**
 	 * 跟随任务调度
-	 * @param currentTask
-	 * @param historyTask
+	 * @param procinstId
+	 * @param taskinstId 
 	 * @return 当前任务的变量map集合
 	 */
-	public Map<String, Object> followTaskDispatch(Task currentTask, int historyTask) {
-		VariableMapHolder variableMapHolder = getVariableMapHolder(currentTask.getProcinstId());
+	public Map<String, Object> followTaskDispatch(String procinstId, String taskinstId) {
+		VariableMapHolder variableMapHolder = getVariableMapHolder(procinstId);
 		if(variableMapHolder == null)
 			return null;
 		
 		// 将Local和Transient范围的变量从运行变量表删除	
 		if(variableMapHolder.existsLocalVariableMap() || variableMapHolder.existsTransientVariable())	
-			SessionContext.getSqlSession().executeUpdate("delete bpm_ru_variable where task_id = ?", Arrays.asList(currentTask.getId()));	
+			SessionContext.getSqlSession().executeUpdate("delete bpm_ru_variable where taskinst_id = ?", Arrays.asList(taskinstId));	
 		
 		// 将Local范围的变量保存到历史变量表	
 		if(variableMapHolder.existsLocalVariableMap()) {	
 			List<HistoryVariable> historyVariables = new ArrayList<HistoryVariable>(variableMapHolder.getLocalVariableMap().size());	
 			variableMapHolder.getLocalVariableMap().values().forEach(variableEntity -> {	
-				historyVariables.add(new HistoryVariable(currentTask.getProcinstId(), historyTask, variableEntity));	
+				historyVariables.add(new HistoryVariable(procinstId, taskinstId, variableEntity));	
 			});	
 			SessionContext.getTableSession().save(historyVariables);	
 		}	
@@ -58,11 +57,11 @@ public class VariableHandler {
 	/**
 	 * 开始调度, 用在StartEvent
 	 * @param procinstId
-	 * @param startEventId 
+	 * @param startEventTaskinstId 
 	 * @param variableMapHolder
 	 * @return StartEvent的变量map集合
 	 */
-	public Map<String, Object> startDispatch(String procinstId, int startEventId, VariableMapHolder variableMapHolder) {
+	public Map<String, Object> startDispatch(String procinstId, String startEventTaskinstId, VariableMapHolder variableMapHolder) {
 		// 保存Global范围的变量到运行表
 		if(variableMapHolder.existsGlobalVariableMap()) {
 			List<Variable> variables = new ArrayList<Variable>(variableMapHolder.getGlobalVariableMap().size());
@@ -76,7 +75,7 @@ public class VariableHandler {
 		if(variableMapHolder.existsLocalVariableMap()) {
 			List<HistoryVariable> variables = new ArrayList<HistoryVariable>(variableMapHolder.getLocalVariableMap().size());
 			variableMapHolder.getLocalVariableMap().values().forEach(processVariable -> {
-				variables.add(new HistoryVariable(procinstId, startEventId, processVariable));
+				variables.add(new HistoryVariable(procinstId, startEventTaskinstId, processVariable));
 			});
 			SessionContext.getTableSession().save(variables);
 		}
@@ -104,7 +103,7 @@ public class VariableHandler {
 		}
 		if(variableMapHolder.existsLocalVariableMap()) {	
 			variableMapHolder.getLocalVariableMap().values().forEach(variableEntity -> {	
-				historyVariables.add(new HistoryVariable(procinstId, variableEntity.getTaskId(), variableEntity));	
+				historyVariables.add(new HistoryVariable(procinstId, variableEntity.getTaskinstId(), variableEntity));	
 			});	
 		}	
 		if(!historyVariables.isEmpty())

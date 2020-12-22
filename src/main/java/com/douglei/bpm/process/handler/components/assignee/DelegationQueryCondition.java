@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 指派人委托查询器
+ * 指派人委托查询条件
  * @author DougLei
  */
 public class DelegationQueryCondition {

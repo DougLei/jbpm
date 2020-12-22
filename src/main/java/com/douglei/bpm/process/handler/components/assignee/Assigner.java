@@ -1,7 +1,7 @@
 package com.douglei.bpm.process.handler.components.assignee;
 
 /**
- * 
+ * 指派人信息类
  * @author DougLei
  */
 public class Assigner {

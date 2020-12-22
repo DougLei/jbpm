@@ -3,7 +3,7 @@ package com.douglei.bpm.process.handler.components.assignee;
 import java.util.List;
 
 /**
- * 
+ * 指派人的集合(包装类)
  * @author DougLei
  */
 public class Assigners {

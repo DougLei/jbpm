@@ -16,26 +16,32 @@ import com.douglei.orm.context.SessionContext;
  * 
  * @author DougLei
  */
-@Bean(clazz=TaskHandler.class)
-public class UserTaskHandler extends AbstractTaskHandler implements TaskHandler<UserTaskMetadata, TaskDispatchParameter, GeneralExecuteParameter> {
+@Bean(clazz = TaskHandler.class)
+public class UserTaskHandler extends AbstractTaskHandler
+		implements TaskHandler<UserTaskMetadata, TaskDispatchParameter, GeneralExecuteParameter> {
 
 	@Override
 	public ExecutionResult startup(UserTaskMetadata userTask, TaskDispatchParameter parameter) {
 		Task task = new Task(parameter.getProcdefId(), parameter.getProcinstId(), userTask);
 		SessionContext.getTableSession().save(task);
-		
-		if(!parameter.getAssigners().isEmpty()) 
-			SessionContext.getTableSession().save(new AssigneeHandler(task, parameter).getAssigneeList());
+
+		if (!parameter.getAssigners().isEmpty())
+			SessionContext.getTableSession().save(new AssigneeHandler(
+							parameter.getProcessMetadata().getCode(),
+							parameter.getProcessMetadata().getVersion(), 
+							parameter.getAssigners())
+					.getAssigneeList(task.getTaskinstId()));
 		return new ExecutionResult(task);
 	}
 
 	@Override
 	public ExecutionResult complete(UserTaskMetadata userTask, GeneralExecuteParameter executeParameter) {
 		TaskDispatchParameter taskDispatchParameter = completeTask(executeParameter);
+
 		taskScheduler.dispatch(userTask, taskDispatchParameter);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
-	
+
 	@Override
 	public Type getType() {
 		return Type.USER_TASK;

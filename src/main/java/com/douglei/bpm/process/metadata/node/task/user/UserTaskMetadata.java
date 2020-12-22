@@ -22,7 +22,7 @@ public class UserTaskMetadata extends TaskMetadata {
 	}
 
 	@Override
-	public boolean supportUserIntervention() {
+	public boolean supportUserHandling() {
 		return true;
 	}
 

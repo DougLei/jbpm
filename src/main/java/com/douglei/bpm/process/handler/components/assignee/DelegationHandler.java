@@ -12,7 +12,7 @@ import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.orm.context.SessionContext;
 
 /**
- * 
+ * 委托信息处理器
  * @author DougLei
  */
 class DelegationHandler {
@@ -53,20 +53,21 @@ class DelegationHandler {
 		
 		if(this.map != null) { // 证明有委托, 递归去查询是否还有二次委托 
 			queryCondition.updateUserIds(assigneeUserIds);
-			this.children = new DelegationHandler(SessionContext.getSQLSession().query(DelegationInfo.class, "TaskAssignee", "queryDelegations", queryCondition), queryCondition, processCode, processVersion);
+			this.children = new DelegationHandler(SessionContext.getSQLSession().query(DelegationInfo.class, "Assignee", "queryDelegations", queryCondition), queryCondition, processCode, processVersion);
 		}
 	}
 
 	/**
 	 * 添加指派信息
-	 * @param taskId
+	 * @param taskinstId
+	 * @param groupId
 	 * @param parentAssigneeUserId
 	 * @param assigneeUserId
 	 * @param remark 记录委托的原因
 	 * @param assigneeList
 	 */
-	public void addAssignee(int taskId, String parentAssigneeUserId, String assigneeUserId, String remark, List<Assignee> assigneeList) {
-		Assignee assignee = new Assignee(taskId, assigneeUserId);
+	public void addAssignee(String taskinstId, String groupId, String parentAssigneeUserId, String assigneeUserId, String remark, List<Assignee> assigneeList) {
+		Assignee assignee = new Assignee(taskinstId, assigneeUserId);
 		if(parentAssigneeUserId != null) {
 			assignee.setParentUserId(parentAssigneeUserId);
 			assignee.setRemark(remark);
@@ -81,7 +82,7 @@ class DelegationHandler {
 			return;
 		
 		assignee.setHandleStateInstance(HandleState.INVALID);
-		children.addAssignee(taskId, assigneeUserId, delegation.getUserId(), delegation.getRemark(), assigneeList);
+		children.addAssignee(taskinstId, groupId, assigneeUserId, delegation.getUserId(), delegation.getRemark(), assigneeList);
 	}
 }
 

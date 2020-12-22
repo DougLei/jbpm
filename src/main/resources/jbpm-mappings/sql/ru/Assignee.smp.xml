@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping-configuration>
-	<sql namespace="TaskAssignee">
+	<sql namespace="Assignee">
 	
 		<!-- 查询指派的人员配置的委托信息 -->
 		<content name="queryDelegations" type="select">
@@ -10,6 +10,14 @@
 					<foreach collection="userIds" alias="userId" open="and p.client_id in (" separator="," close=")">
 						#{userId}
 					</foreach>
+		</content>
+		
+		<!-- 根据parentUserIds查询对应上一层的指派信息集合 -->
+		<content name="queryAssigneeListByParentUserIds" type="select">
+			select * from bpm_ru_assignee where taskinst_id= #{taskinstId} 
+				<foreach collection="parentUserIds" alias="parentUserId" open="and user_id in (" separator="," close=")">
+					#{parentUserId}
+				</foreach>
 		</content>
 		
 	</sql>

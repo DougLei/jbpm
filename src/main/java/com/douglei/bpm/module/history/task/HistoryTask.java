@@ -19,6 +19,7 @@ public class HistoryTask extends Task{
 	public HistoryTask(Task task) {
 		super.procdefId = task.getProcdefId();
 		super.procinstId = task.getProcinstId();
+		super.taskinstId = task.getTaskinstId();
 		super.key = task.getKey();
 		super.name = task.getName();
 		super.type = task.getType();

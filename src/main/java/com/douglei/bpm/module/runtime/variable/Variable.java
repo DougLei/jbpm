@@ -14,7 +14,7 @@ import com.douglei.tools.utils.serialize.JdkSerializeProcessor;
 public class Variable {
 	protected int id;
 	protected String procinstId;
-	protected Integer taskId;
+	protected String taskinstId;
 	protected String scope;
 	protected String name;
 	protected String dataType;
@@ -24,9 +24,9 @@ public class Variable {
 	protected byte[] objectVal;
 	
 	public Variable() {}
-	public Variable(String procinstId, Integer taskId, VariableEntity variableEntity) {
+	public Variable(String procinstId, String taskinstId, VariableEntity variableEntity) {
 		this.procinstId = procinstId;
-		this.taskId = taskId;
+		this.taskinstId = taskinstId;
 		this.scope = variableEntity.getScope().name();
 		this.name = variableEntity.getName();
 		this.dataType = variableEntity.getDataType().name();
@@ -60,11 +60,11 @@ public class Variable {
 	public void setProcinstId(String procinstId) {
 		this.procinstId = procinstId;
 	}
-	public Integer getTaskId() {
-		return taskId;
+	public String getTaskinstId() {
+		return taskinstId;
 	}
-	public void setTaskId(Integer taskId) {
-		this.taskId = taskId;
+	public void setTaskinstId(String taskinstId) {
+		this.taskinstId = taskinstId;
 	}
 	public String getScope() {
 		return scope;

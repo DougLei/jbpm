@@ -41,7 +41,7 @@ public class StartEventHandler extends AbstractTaskHandler implements TaskHandle
 		historyTask.setEndTime(historyTask.getStartTime());
 		SessionContext.getTableSession().save(historyTask);
 		
-		Map<String, Object> variableMap = variableHandler.startDispatch(processInstance.getProcinstId(), historyTask.getId(), executeParameter.getVariableMapHolder());
+		Map<String, Object> variableMap = variableHandler.startDispatch(processInstance.getProcinstId(), historyTask.getTaskinstId(), executeParameter.getVariableMapHolder());
 		taskScheduler.dispatch(startEvent, 
 				new TaskDispatchParameter(
 						processInstance.getProcinstId(), 

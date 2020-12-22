@@ -36,9 +36,21 @@ public class ProcessRuntimeTest {
 	}
 	
 	@Test
+	public void claim() {
+		int taskId = 1;
+		String userId = "金石磊";
+		ExecutionResult result = engine.getRuntimeModule().getTaskService().claim(taskId, userId);
+		if(result.isSuccess())
+			System.out.println("成功认领id为["+taskId+"]的任务");
+		else
+			System.out.println(result.getFailMessage());
+	}
+	
+	@Test
 	public void complete() {
-		int taskId = 2;
-		ExecutionResult result = engine.getRuntimeModule().getTaskService().complete(taskId, "");
+		int taskId = 1;
+		String userId = "金石磊";
+		ExecutionResult result = engine.getRuntimeModule().getTaskService().complete(taskId, userId);
 		if(result.isSuccess())
 			System.out.println("成功完成id为["+taskId+"]的任务");
 		else

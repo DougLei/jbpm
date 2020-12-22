@@ -1,7 +1,7 @@
 package com.douglei.bpm.process.handler.components.assignee;
 
 /**
- * 
+ * 委托信息
  * @author DougLei
  */
 public class DelegationInfo {

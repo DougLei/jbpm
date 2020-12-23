@@ -6,6 +6,7 @@ import com.douglei.bpm.module.CommandExecutor;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.command.ClaimTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.CompleteTaskCmd;
+import com.douglei.bpm.module.runtime.task.command.UnclaimTaskCmd;
 import com.douglei.bpm.process.container.ProcessContainerProxy;
 import com.douglei.orm.context.transaction.component.Transaction;
 
@@ -43,6 +44,29 @@ public class TaskService {
 	public ExecutionResult claim(String taskinstId, String userId){
 		TaskEntity taskEntity = new TaskEntity(taskinstId, processContainer);
 		return commandExecutor.execute(new ClaimTaskCmd(taskEntity, userId));
+	}
+	
+	/**
+	 * 取消认领指定id的任务
+	 * @param taskId
+	 * @param userId
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult unclaim(int taskId, String userId){
+		TaskEntity taskEntity = new TaskEntity(taskId, processContainer);
+		return commandExecutor.execute(new UnclaimTaskCmd(taskEntity, userId));
+	}
+	/**
+	 * 取消认领指定id的任务
+	 * @param taskinstId
+	 * @param userId
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult unclaim(String taskinstId, String userId){
+		TaskEntity taskEntity = new TaskEntity(taskinstId, processContainer);
+		return commandExecutor.execute(new UnclaimTaskCmd(taskEntity, userId));
 	}
 	
 	/**

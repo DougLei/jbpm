@@ -5,16 +5,16 @@
 		<columns>
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
 			<column name="TASKINST_ID" property="taskinstId" dataType="char" length="36" nullable="false"/>
-			<column name="GROUP_ID" property="groupId" dataType="char" length="36" nullable="false"/>
+			<column name="GROUP_ID" property="groupId" dataType="number" length="5" nullable="false"/>
 			<column name="USER_ID" property="userId" dataType="nstring" length="150" nullable="false" />
 			<column name="PARENT_USER_ID" property="parentUserId" dataType="nstring" length="150" />
 			<column name="REMARK" property="remark" dataType="nstring" length="300" />
 			<column name="MODE" property="mode" dataType="string" length="8" nullable="false" />
 			<column name="HANDLE_STATE" property="handleState" dataType="string" length="8" nullable="false" />
-			<column name="START_TIME" property="startTime" dataType="datetime" />
+			<column name="CLAIM_TIME" property="claimTime" dataType="datetime" />
 			<column name="ATTITUDE" property="attitude" dataType="string" length="8" />
 			<column name="SUGGEST" property="suggest" dataType="nstring" length="300" />
-			<column name="FINISHED_TIME" property="finishedTime" dataType="datetime" />
+			<column name="FINISH_TIME" property="finishTime" dataType="datetime" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

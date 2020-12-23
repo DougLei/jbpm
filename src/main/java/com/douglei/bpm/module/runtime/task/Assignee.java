@@ -1,7 +1,6 @@
 package com.douglei.bpm.module.runtime.task;
 
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * 
@@ -10,22 +9,22 @@ import java.util.UUID;
 public class Assignee {
 	protected int id;
 	protected String taskinstId;
-	protected String groupId;
+	protected int groupId;
 	protected String userId;
 	protected String parentUserId;
 	protected String remark;
 	protected AssigneeMode mode;
 	protected HandleState handleState;
-	protected Date startTime;
+	protected Date claimTime;
 	
 	protected Attitude attitude;
 	protected String suggest;
-	protected Date finishedTime;
+	protected Date finishTime;
 	
 	public Assignee() {}
-	public Assignee(String taskinstId, String userId) {
+	public Assignee(String taskinstId, String userId, int groupId) {
 		this.taskinstId = taskinstId;
-		this.groupId = UUID.randomUUID().toString();
+		this.groupId = groupId;
 		this.userId = userId;
 		this.mode = AssigneeMode.ASSIGN;
 		this.handleState = HandleState.UNCLAIM;
@@ -43,10 +42,10 @@ public class Assignee {
 	public void setTaskinstId(String taskinstId) {
 		this.taskinstId = taskinstId;
 	}
-	public String getGroupId() {
+	public int getGroupId() {
 		return groupId;
 	}
-	public void setGroupId(String groupId) {
+	public void setGroupId(int groupId) {
 		this.groupId = groupId;
 	}
 	public String getUserId() {
@@ -91,11 +90,11 @@ public class Assignee {
 	public void setHandleState(String handleState) {
 		this.handleState = HandleState.valueOf(handleState);
 	}
-	public Date getStartTime() {
-		return startTime;
+	public Date getClaimTime() {
+		return claimTime;
 	}
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
+	public void setClaimTime(Date claimTime) {
+		this.claimTime = claimTime;
 	}
 	public Attitude getAttitudeInstance() {
 		return attitude;
@@ -119,10 +118,10 @@ public class Assignee {
 	public void setSuggest(String suggest) {
 		this.suggest = suggest;
 	}
-	public Date getFinishedTime() {
-		return finishedTime;
+	public Date getFinishTime() {
+		return finishTime;
 	}
-	public void setFinishedTime(Date finishedTime) {
-		this.finishedTime = finishedTime;
+	public void setFinishTime(Date finishTime) {
+		this.finishTime = finishTime;
 	}
 }

@@ -9,19 +9,29 @@ public enum HandleState {
 	/**
 	 * 未认领
 	 */
-	UNCLAIM,
+	UNCLAIM {
+		@Override
+		public boolean unClaim() {
+			return true;
+		}
+	},
 	
 	/**
 	 * 无效
 	 */
-	INVALID,
+	INVALID {
+		@Override
+		public boolean unClaim() {
+			return true;
+		}
+	},
 	
 	/**
 	 * 已认领
 	 */
-	CLAIM {
+	CLAIMED {
 		@Override
-		public boolean isClaim() {
+		public boolean isClaimed() {
 			return true;
 		}
 	},
@@ -31,16 +41,34 @@ public enum HandleState {
 	 */
 	FINISHED{
 		@Override
-		public boolean isClaim() {
+		public boolean isClaimed() {
+			return true;
+		}
+		@Override
+		public boolean isFinished() {
 			return true;
 		}
 	};
 	
 	/**
+	 * 是否未认领
+	 * @return
+	 */
+	public boolean unClaim() {
+		return false;
+	}
+	/**
 	 * 是否已认领
 	 * @return
 	 */
-	public boolean isClaim() {
+	public boolean isClaimed() {
+		return false;
+	}
+	/**
+	 * 是否已经完成
+	 * @return
+	 */
+	public boolean isFinished() {
 		return false;
 	}
 }

@@ -66,8 +66,8 @@ class DelegationHandler {
 	 * @param remark 记录委托的原因
 	 * @param assigneeList
 	 */
-	public void addAssignee(String taskinstId, String groupId, String parentAssigneeUserId, String assigneeUserId, String remark, List<Assignee> assigneeList) {
-		Assignee assignee = new Assignee(taskinstId, assigneeUserId);
+	public void addAssignee(String taskinstId, int groupId, String parentAssigneeUserId, String assigneeUserId, String remark, List<Assignee> assigneeList) {
+		Assignee assignee = new Assignee(taskinstId, assigneeUserId, groupId);
 		if(parentAssigneeUserId != null) {
 			assignee.setParentUserId(parentAssigneeUserId);
 			assignee.setRemark(remark);

@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.douglei.bpm.ProcessEngineException;
 import com.douglei.bpm.module.Command;
+import com.douglei.bpm.module.CommandExecuteException;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.AssigneeMode;
@@ -74,7 +74,7 @@ public class ClaimTaskCmd implements Command{
 				"select handle_state from bpm_ru_assignee where taskinst_id=? and and mode <> ? handle_state <> ?", 
 				Arrays.asList(taskEntity.getTask().getTaskinstId(), AssigneeMode.ASSIST.name(), HandleState.INVALID.name()));
 		if(assigneeList.isEmpty())
-			throw new ProcessEngineException("认领失败, id为["+taskEntity.getTask().getId()+"]的任务, 没有查询到任何有效的指派信息");
+			throw new CommandExecuteException("认领失败, id为["+taskEntity.getTask().getId()+"]的任务, 没有查询到任何有效的指派信息");
 		
 //		int totalCount = assigneeList.size(); // 记录的是可以认领的总人数
 		int claimCount = 0; // 已经认领的数量

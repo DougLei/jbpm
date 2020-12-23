@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.module.Command;
+import com.douglei.bpm.module.CommandExecuteException;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
@@ -41,13 +42,15 @@ public class CompleteTaskCmd implements Command {
 	public ExecutionResult execute() {
 		if(taskEntity.supportUserHandling()) {
 			if(StringUtil.isEmpty(userId))
-				return new ExecutionResult("办理失败, 办理["+taskEntity.getName()+"]任务需要提供userId");
+				throw new CommandExecuteException("办理失败, 办理["+taskEntity.getName()+"]任务需要提供userId");
 			
-			Assignee assignee = SessionContext.getSqlSession().uniqueQuery(Assignee.class, "select id, group_id, handle_state from bpm_ru_assignee where taskinst_id=? and user_id=?", Arrays.asList(taskEntity.getTask().getTaskinstId(), userId));
-			if(assignee == null || assignee.getHandleStateInstance() == HandleState.UNCLAIM || assignee.getHandleStateInstance() == HandleState.INVALID)
+			Assignee assignee = SessionContext.getSqlSession().uniqueQuery(Assignee.class, "select handle_state from bpm_ru_assignee where taskinst_id=? and user_id=?", Arrays.asList(taskEntity.getTask().getTaskinstId(), userId));
+			if(assignee == null)
+				return new ExecutionResult("办理失败, 指定的userId没有["+taskEntity.getName()+"]任务的办理权限");
+			if(assignee.getHandleStateInstance().unClaim())
 				return new ExecutionResult("办理失败, 指定的userId未认领["+taskEntity.getName()+"]任务");
 			if(assignee.getHandleStateInstance() == HandleState.FINISHED)
-				return new ExecutionResult("办理失败, 指定的userId已办理过["+taskEntity.getName()+"]任务");
+				return new ExecutionResult("办理失败, 指定的userId已完成["+taskEntity.getName()+"]任务的办理");
 		}
 		return processHandlers.complete(taskEntity.getTaskMetadata(), new GeneralExecuteParameter(taskEntity, new Assigners(assignerFactory.create(assigneeUserIds))));
 	}

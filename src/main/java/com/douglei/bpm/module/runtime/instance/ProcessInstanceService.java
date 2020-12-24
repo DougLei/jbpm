@@ -2,14 +2,9 @@ package com.douglei.bpm.module.runtime.instance;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.module.CommandExecutor;
 import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.repository.definition.ProcessDefinition;
-import com.douglei.bpm.module.repository.definition.State;
-import com.douglei.bpm.process.container.ProcessContainerProxy;
-import com.douglei.bpm.process.handler.ProcessHandlers;
-import com.douglei.bpm.process.handler.event.start.StartEventExecuteParameter;
-import com.douglei.bpm.process.metadata.ProcessMetadata;
-import com.douglei.orm.context.SessionContext;
+import com.douglei.bpm.module.runtime.instance.command.StartProcessCmd;
 import com.douglei.orm.context.transaction.component.Transaction;
 
 /**
@@ -20,10 +15,7 @@ import com.douglei.orm.context.transaction.component.Transaction;
 public class ProcessInstanceService {
 	
 	@Autowired
-	private ProcessContainerProxy processContainer;
-	
-	@Autowired
-	private ProcessHandlers processHandlers;
+	private CommandExecutor commandExecutor;
 	
 	/**
 	 * 启动流程
@@ -32,22 +24,7 @@ public class ProcessInstanceService {
 	 */
 	@Transaction
 	public ExecutionResult start(StartParameter parameter) {
-		ProcessDefinition processDefinition = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "query4Start", parameter);
-		switch (parameter.getMode()) {
-			case StartParameter.BY_PROCESS_DEFINITION_CODE:
-				if(processDefinition == null) 
-					return new ExecutionResult("启动失败, 不存在code为["+parameter.getCode()+"]的流程; 或未设置其流程的主版本");
-				break;
-			case StartParameter.BY_PROCESS_DEFINITION_CODE_VERSION:
-				if(processDefinition == null) 
-					return new ExecutionResult("启动失败, 不存在code为["+parameter.getCode()+"], version为["+parameter.getVersion()+"]的流程");
-				break;
-		}
-		if(processDefinition.getStateInstance() != State.DEPLOY)
-			return new ExecutionResult("启动失败, ["+processDefinition.getName()+"]流程还未部署");
-		
-		ProcessMetadata processMetadata = processContainer.getProcess(processDefinition.getId());
-		return processHandlers.startup(processMetadata.getStartEvent(), new StartEventExecuteParameter(processMetadata, parameter));
+		return commandExecutor.execute(new StartProcessCmd(parameter));
 	}
 	
 	/**

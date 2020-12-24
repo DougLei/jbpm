@@ -3,15 +3,12 @@ package com.douglei.bpm.process.handler.event.end;
 import java.util.Arrays;
 import java.util.List;
 
-import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.instance.HistoryProcessInstance;
 import com.douglei.bpm.module.history.task.HistoryTask;
 import com.douglei.bpm.module.runtime.instance.ProcessInstance;
-import com.douglei.bpm.process.Type;
-import com.douglei.bpm.process.handler.AbstractTaskHandler;
+import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
-import com.douglei.bpm.process.handler.components.scheduler.TaskDispatchParameter;
 import com.douglei.bpm.process.metadata.node.event.EndEventMetadata;
 import com.douglei.orm.context.SessionContext;
 
@@ -19,34 +16,27 @@ import com.douglei.orm.context.SessionContext;
  * 
  * @author DougLei
  */
-@Bean(clazz=TaskHandler.class)
-public class EndEventHandler extends AbstractTaskHandler implements TaskHandler<EndEventMetadata, TaskDispatchParameter, TaskDispatchParameter> {
+public class EndEventHandler extends TaskHandler<EndEventMetadata, GeneralHandleParameter> {
 
 	@Override
-	public ExecutionResult startup(EndEventMetadata endEvent, TaskDispatchParameter executeParameter) {
-		return complete(endEvent, executeParameter);
+	public ExecutionResult startup() {
+		return handle();
 	}
 
 	@Override
-	public ExecutionResult complete(EndEventMetadata endEvent, TaskDispatchParameter executeParameter) {
+	public ExecutionResult handle() {
 		// 创建流程任务(因为是结束事件, 所以直接创建历史任务结束即可)
-		HistoryTask historyTask = new HistoryTask(executeParameter.getProcdefId(), executeParameter.getProcinstId(), endEvent);
-		historyTask.setEndTime(historyTask.getStartTime());
+		HistoryTask historyTask = new HistoryTask(handleParameter.getProcessEntity().getProcessMetadata().getId(), handleParameter.getProcessEntity().getProcinstId(), taskMetadata);
 		SessionContext.getTableSession().save(historyTask);
 		
 		// 将实例保存到历史
-		List<Object> procinstId = Arrays.asList(executeParameter.getProcinstId());
+		List<Object> procinstId = Arrays.asList(handleParameter.getProcessEntity().getProcinstId());
 		ProcessInstance processInstance = SessionContext.getTableSession().uniqueQuery(ProcessInstance.class, "select * from bpm_ru_procinst where procinst_id=?", procinstId);
 		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_procinst where procinst_id=?", procinstId);
 		SessionContext.getTableSession().save(new HistoryProcessInstance(processInstance, null));
 		
 		// 结束变量调度
-		variableHandler.endDispatch(executeParameter.getProcinstId());
+		beanInstances.getVariableScheduler().endDispatch(handleParameter.getProcessEntity().getProcinstId());
 		return ExecutionResult.getDefaultSuccessInstance();
-	}
-	
-	@Override
-	public Type getType() {
-		return Type.END_EVENT;
 	}
 }

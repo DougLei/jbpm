@@ -9,7 +9,7 @@ import java.util.Date;
 public class Assignee {
 	protected int id;
 	protected String taskinstId;
-	protected int groupId;
+	protected Integer groupId;
 	protected String userId;
 	protected String parentUserId;
 	protected String remark;
@@ -22,7 +22,7 @@ public class Assignee {
 	protected Date finishTime;
 	
 	public Assignee() {}
-	public Assignee(String taskinstId, String userId, int groupId) {
+	public Assignee(String taskinstId, String userId, Integer groupId) {
 		this.taskinstId = taskinstId;
 		this.groupId = groupId;
 		this.userId = userId;
@@ -42,10 +42,10 @@ public class Assignee {
 	public void setTaskinstId(String taskinstId) {
 		this.taskinstId = taskinstId;
 	}
-	public int getGroupId() {
+	public Integer getGroupId() {
 		return groupId;
 	}
-	public void setGroupId(int groupId) {
+	public void setGroupId(Integer groupId) {
 		this.groupId = groupId;
 	}
 	public String getUserId() {

@@ -12,10 +12,9 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 public class TaskEntity {
-	private Task task;
-	
 	private ProcessMetadata processMetadata;
 	private TaskMetadata taskMetadata;
+	private Task task;
 	
 	TaskEntity(int taskId, ProcessContainerProxy container) {
 		task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where id=?", Arrays.asList(taskId));
@@ -33,9 +32,6 @@ public class TaskEntity {
 		taskMetadata = processMetadata.getTask(task.getKey());
 	}
 
-	public Task getTask() {
-		return task;
-	}
 	public ProcessMetadata getProcessMetadata() {
 		return processMetadata;
 	}
@@ -47,5 +43,8 @@ public class TaskEntity {
 	}
 	public boolean supportUserHandling() {
 		return taskMetadata.supportUserHandling();
+	}
+	public Task getTask() {
+		return task;
 	}
 }

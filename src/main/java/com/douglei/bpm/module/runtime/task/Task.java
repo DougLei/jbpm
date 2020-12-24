@@ -32,6 +32,7 @@ public class Task {
 		this.name = taskMetadata.getName();
 		this.type = taskMetadata.getType().getName();
 		this.startTime = new Date();
+		this.pageId = taskMetadata.getPageID();
 	}
 	
 	public int getId() {

@@ -1,6 +1,6 @@
 package com.douglei.bpm.module;
 
-import com.douglei.bpm.bean.BeanFactoryProxy;
+import com.douglei.bpm.bean.BeanInstances;
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 
@@ -12,7 +12,7 @@ import com.douglei.bpm.bean.annotation.Bean;
 public class CommandExecutor {
 	
 	@Autowired
-	private BeanFactoryProxy beanFactory;
+	private BeanInstances beanInstances;
 	
 	/**
 	 * 执行命令
@@ -20,8 +20,6 @@ public class CommandExecutor {
 	 * @return
 	 */
 	public ExecutionResult execute(Command command) {
-		if(command.autowiredRequired())
-			beanFactory.autowireBean(command);
-		return command.execute();
+		return command.execute(beanInstances);
 	}
 }

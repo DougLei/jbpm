@@ -5,7 +5,7 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.CommandExecutor;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.command.ClaimTaskCmd;
-import com.douglei.bpm.module.runtime.task.command.CompleteTaskCmd;
+import com.douglei.bpm.module.runtime.task.command.HandleTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.UnclaimTaskCmd;
 import com.douglei.bpm.process.container.ProcessContainerProxy;
 import com.douglei.orm.context.transaction.component.Transaction;
@@ -70,27 +70,25 @@ public class TaskService {
 	}
 	
 	/**
-	 * 完成指定id的任务
+	 * 办理指定id的任务
 	 * @param taskId
-	 * @param userId
-	 * @param assigneeUserIds 指派的用户ids
+	 * @param parameter
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult complete(int taskId, String userId, String... assigneeUserIds) {
+	public ExecutionResult handle(int taskId, TaskHandleParameter parameter) {
 		TaskEntity taskEntity = new TaskEntity(taskId, processContainer);
-		return commandExecutor.execute(new CompleteTaskCmd(taskEntity, userId, assigneeUserIds));
+		return commandExecutor.execute(new HandleTaskCmd(taskEntity, parameter));
 	}
 	/**
-	 * 完成指定id的任务
+	 * 办理指定id的任务
 	 * @param taskinstId
-	 * @param userId
-	 * @param assigneeUserIds 指派的用户ids
+	 * @param parameter
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult complete(String taskinstId, String userId, String... assigneeUserIds) {
+	public ExecutionResult handle(String taskinstId, TaskHandleParameter parameter) {
 		TaskEntity taskEntity = new TaskEntity(taskinstId, processContainer);
-		return commandExecutor.execute(new CompleteTaskCmd(taskEntity, userId, assigneeUserIds));
+		return commandExecutor.execute(new HandleTaskCmd(taskEntity, parameter));
 	}
 }

@@ -56,13 +56,12 @@ public class BeanFactory {
 	 */
 	public void autowireBeans() {
 		try {
-			registerCustomBean(BeanFactoryProxy.class, new BeanFactoryProxy(this));
 			autowireBeans(beanContainer.values());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-//			beanContainer.clear();
-//			defaultBeanContainer.clear();
+			beanContainer.clear();
+			defaultBeanContainer.clear();
 		}
 	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -75,7 +74,7 @@ public class BeanFactory {
 		}
 	}
 	// 设置当前对象的属性
-	void setFields(Object object) throws Exception {
+	private void setFields(Object object) throws Exception {
 		if(object instanceof CustomAutowired) 
 			((CustomAutowired)object).setFields(beanContainer);
 		

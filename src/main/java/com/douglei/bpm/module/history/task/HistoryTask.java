@@ -15,6 +15,7 @@ public class HistoryTask extends Task{
 	public HistoryTask() {}
 	public HistoryTask(int procdefId, String procinstId, TaskMetadata taskMetadata) {
 		super(procdefId, procinstId, taskMetadata);
+		this.endTime = super.startTime;
 	}
 	public HistoryTask(Task task) {
 		super.procdefId = task.getProcdefId();

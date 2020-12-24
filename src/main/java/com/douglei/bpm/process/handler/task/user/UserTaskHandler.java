@@ -1,14 +1,14 @@
 package com.douglei.bpm.process.handler.task.user;
 
-import com.douglei.bpm.bean.annotation.Bean;
+import java.util.Arrays;
+
 import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.Task;
-import com.douglei.bpm.process.Type;
-import com.douglei.bpm.process.handler.AbstractTaskHandler;
-import com.douglei.bpm.process.handler.GeneralExecuteParameter;
+import com.douglei.bpm.process.handler.GeneralHandleParameter;
+import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.TaskHandler;
-import com.douglei.bpm.process.handler.components.assignee.AssigneeHandler;
-import com.douglei.bpm.process.handler.components.scheduler.TaskDispatchParameter;
+import com.douglei.bpm.process.handler.task.user.assignee.AssignedUserHandler;
 import com.douglei.bpm.process.metadata.node.task.user.UserTaskMetadata;
 import com.douglei.orm.context.SessionContext;
 
@@ -16,34 +16,42 @@ import com.douglei.orm.context.SessionContext;
  * 
  * @author DougLei
  */
-@Bean(clazz = TaskHandler.class)
-public class UserTaskHandler extends AbstractTaskHandler
-		implements TaskHandler<UserTaskMetadata, TaskDispatchParameter, GeneralExecuteParameter> {
+public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandleParameter> {
 
+	// TODO 这里增加一个处理指派人的方法
+	
 	@Override
-	public ExecutionResult startup(UserTaskMetadata userTask, TaskDispatchParameter parameter) {
-		Task task = new Task(parameter.getProcdefId(), parameter.getProcinstId(), userTask);
+	public ExecutionResult startup() {
+		if(handleParameter.getUserEntity().getAssignedUsers().isEmpty())
+			throw new TaskHandleException("id为["+taskMetadata.getId()+"], name为["+taskMetadata.getName()+"]的任务没有指派具体的办理人员");
+		
+		Task task = new Task(handleParameter.getProcessEntity().getProcessMetadata().getId(), handleParameter.getProcessEntity().getProcinstId(), taskMetadata);
 		SessionContext.getTableSession().save(task);
-
-		if (!parameter.getAssigners().isEmpty())
-			SessionContext.getTableSession().save(new AssigneeHandler(
-							parameter.getProcessMetadata().getCode(),
-							parameter.getProcessMetadata().getVersion(), 
-							parameter.getAssigners())
-					.getAssigneeList(task.getTaskinstId()));
+		
+		SessionContext.getTableSession().save(
+				new AssignedUserHandler(handleParameter.getProcessEntity().getProcessMetadata().getCode(), 
+						handleParameter.getProcessEntity().getProcessMetadata().getVersion(), 
+						handleParameter.getUserEntity().getAssignedUsers())
+				.getAssigneeList(task.getTaskinstId()));
 		return new ExecutionResult(task);
 	}
 
 	@Override
-	public ExecutionResult complete(UserTaskMetadata userTask, GeneralExecuteParameter executeParameter) {
-		TaskDispatchParameter taskDispatchParameter = completeTask(executeParameter);
-
-		taskScheduler.dispatch(userTask, taskDispatchParameter);
+	public ExecutionResult handle() {
+		// 处理当前办理任务的用户信息: 将办理状态改为完成
+		SessionContext.getSqlSession().executeUpdate(
+				"update bpm_ru_assignee set handle_state=?, attitude=?, suggest=?, finish_time=? where taskinst_id=? and user_id=? and handle_state=?", 
+				Arrays.asList(HandleState.FINISHED.name(),
+						handleParameter.getUserEntity().getAttitude(), 
+						handleParameter.getUserEntity().getSuggest(),
+						handleParameter.getCurrentDate(), 
+						handleParameter.getTaskInstance().getTaskinstId(), 
+						handleParameter.getUserEntity().getHandledUser().getUserId(),
+						HandleState.CLAIMED.name()));
+		
+		completeTask();
+		
+		beanInstances.getTaskHandlerUtil().dispatch(taskMetadata, handleParameter);
 		return ExecutionResult.getDefaultSuccessInstance();
-	}
-
-	@Override
-	public Type getType() {
-		return Type.USER_TASK;
 	}
 }

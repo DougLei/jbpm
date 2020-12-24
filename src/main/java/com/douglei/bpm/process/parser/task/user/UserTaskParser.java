@@ -1,5 +1,7 @@
 package com.douglei.bpm.process.parser.task.user;
 
+import org.dom4j.Element;
+
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.node.task.user.UserTaskMetadata;
@@ -17,7 +19,8 @@ public class UserTaskParser implements Parser<TaskTemporaryData, UserTaskMetadat
 	@Override
 	public UserTaskMetadata parse(TaskTemporaryData temporaryData) throws ProcessParseException {
 		// TODO 
-		return new UserTaskMetadata(temporaryData.getId(), "");
+		Element element = temporaryData.getElement();
+		return new UserTaskMetadata(temporaryData.getId(), element.attributeValue("name"), element.attributeValue("pageID"));
 	}
 
 	@Override

@@ -40,7 +40,10 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 		}
 	};
 
-	public List<FlowMetadata> getFlows() {
+	public String getPageID() {
+		return null;
+	}
+	public final List<FlowMetadata> getFlows() {
 		return flows;
 	}
 	

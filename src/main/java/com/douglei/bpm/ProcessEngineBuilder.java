@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.douglei.bpm.bean.BeanFactory;
 import com.douglei.bpm.process.container.ProcessContainer;
-import com.douglei.bpm.process.handler.components.assignee.AssignerFactory;
+import com.douglei.bpm.process.handler.UserFactory;
 import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
 import com.douglei.orm.context.RegistrationResult;
@@ -113,12 +113,12 @@ public class ProcessEngineBuilder {
 	}
 	
 	/**
-	 * 设置指派人信息工厂
+	 * 设置用户信息工厂
 	 * @param factory
 	 * @return
 	 */
-	public ProcessEngineBuilder setAssignerFactory(AssignerFactory factory) {
-		beanFactory.registerCustomBean(AssignerFactory.class, factory);
+	public ProcessEngineBuilder setUserFactory(UserFactory factory) {
+		beanFactory.registerCustomBean(UserFactory.class, factory);
 		return this;
 	}
 	

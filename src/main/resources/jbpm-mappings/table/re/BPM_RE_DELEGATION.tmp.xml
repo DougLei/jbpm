@@ -4,12 +4,13 @@
 	<table name="BPM_RE_DELEGATION" class="com.douglei.bpm.module.repository.delegation.ProcessDelegation" createMode="create" strict="true">
 		<columns>
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
-			<column name="CLIENT_ID" property="clientId" dataType="nstring" length="150" nullable="false" />
-			<column name="ASSIGNEE_ID" property="trusteeId" dataType="nstring" length="150" nullable="false" />
+			<column name="USER_ID" property="userId" dataType="nstring" length="150" nullable="false" />
+			<column name="ASSIGNED_USER_ID" property="assignedUserId" dataType="nstring" length="150" nullable="false" />
 			<column name="START_TIME" property="startTime" dataType="number" length="13" nullable="false" />
 			<column name="END_TIME" property="endTime" dataType="number" length="13" nullable="false" />
 			<column name="REASON" property="reason" dataType="nstring" length="300" nullable="false" />
-			<column name="IS_ENABLED" property="isEnabled" dataType="number" length="1" defaultValue="1" nullable="false" />
+			<column name="ACCEPT_TIME" property="acceptTime" dataType="datetime" />
+			<column name="IS_ENABLED" property="isEnabled" dataType="number" length="1" nullable="false" />
 			<column name="TENANT_ID" property="tenantId" dataType="nstring" length="150" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>

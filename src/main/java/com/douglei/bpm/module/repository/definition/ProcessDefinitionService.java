@@ -88,7 +88,7 @@ public class ProcessDefinitionService {
 	public ExecutionResult deploy(int processDefinitionId, ProcessInstanceHandlePolicy runtimeProcessInstanceHandlePolicy) {
 		ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, name, code, version, is_major_subversion, state, content_, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
-			throw new NullPointerException("部署失败, 不存在id为["+processDefinitionId+"]的流程");
+			return new ExecutionResult("部署失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.isMajorSubversion())
 			return new ExecutionResult("部署失败, ["+processDefinition.getName()+"]流程不是主要子版本");
 		if(!processDefinition.getStateInstance().supportDeploy())
@@ -113,7 +113,7 @@ public class ProcessDefinitionService {
 	public ExecutionResult undeploy(int processDefinitionId, ProcessInstanceHandlePolicy runtimeProcessInstanceHandlePolicy, ProcessInstanceHandlePolicy historyProcessInstanceHandlePolicy) {
 		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select name, code, version, is_major_subversion, state, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
-			throw new NullPointerException("取消部署失败, 不存在id为["+processDefinitionId+"]的流程");
+			return new ExecutionResult("取消部署失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.isMajorSubversion())
 			return new ExecutionResult("取消部署失败, ["+processDefinition.getName()+"]流程不是主要子版本");
 		if(!processDefinition.getStateInstance().supportUnDeploy())
@@ -139,7 +139,7 @@ public class ProcessDefinitionService {
 	public ExecutionResult delete(int processDefinitionId, boolean strict) {
 		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select name, code, version, is_major_subversion, state, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
-			throw new NullPointerException("删除失败, 不存在id为["+processDefinitionId+"]的流程");
+			return new ExecutionResult("删除失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.isMajorSubversion())
 			return new ExecutionResult("删除失败, ["+processDefinition.getName()+"]流程不是主要子版本");
 		if(!processDefinition.getStateInstance().supportDelete())
@@ -160,7 +160,7 @@ public class ProcessDefinitionService {
 	public ExecutionResult delete4Physical(int processDefinitionId) {
 		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select type_id, name, code, version, subversion, is_major_subversion, state, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
-			throw new NullPointerException("删除失败, 不存在id为["+processDefinitionId+"]的流程");
+			return new ExecutionResult("删除失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.getStateInstance().supportPhysicalDelete())
 			return new ExecutionResult("删除失败, ["+processDefinition.getName()+"]流程处于["+processDefinition.getState()+"]状态");
 		
@@ -192,7 +192,7 @@ public class ProcessDefinitionService {
 		List<Object> paramList = Arrays.asList(processDefinitionId);
 		ProcessDefinition targetProcessDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select id, name, code, is_major_version, is_major_subversion, state, tenant_id from bpm_re_procdef where id=?", paramList);
 		if(targetProcessDefinition == null)
-			throw new NullPointerException("设置主版本失败, 不存在id为["+processDefinitionId+"]的流程");
+			return new ExecutionResult("设置主版本失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(targetProcessDefinition.isMajorVersion())
 			return new ExecutionResult("设置主版本失败, ["+targetProcessDefinition.getName()+"]流程就是主版本");
 		if(!targetProcessDefinition.isMajorSubversion())
@@ -216,14 +216,14 @@ public class ProcessDefinitionService {
 	public ExecutionResult setMajorSubversion(int processDefinitionId) {
 		ProcessDefinition targetProcessDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select id, name, code, version, subversion, is_major_subversion, state, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(targetProcessDefinition == null)
-			throw new NullPointerException("设置主要子版本失败, 不存在id为["+processDefinitionId+"]的流程");
+			return new ExecutionResult("设置主要子版本失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(targetProcessDefinition.isMajorSubversion())
 			return new ExecutionResult("设置主要子版本失败, ["+targetProcessDefinition.getName()+"]流程就是主要子版本");
 		
 		// 进行必要的数据交换后, 执行update
 		ProcessDefinition majorSubversionProcessDefinition = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "queryMajorSubversion", targetProcessDefinition);
 		if(majorSubversionProcessDefinition == null)
-			throw new NullPointerException("设置流程的主要子版本时, 未查询到code=["+targetProcessDefinition.getCode()+"], version=["+targetProcessDefinition.getVersion()+"]的主要子版本数据");
+			return new ExecutionResult("设置流程的主要子版本时, 未查询到code=["+targetProcessDefinition.getCode()+"], version=["+targetProcessDefinition.getVersion()+"]的主要子版本数据");
 		
 		int typeId = majorSubversionProcessDefinition.getTypeId();
 		int isMajorVersion = majorSubversionProcessDefinition.getIsMajorVersion();
@@ -255,7 +255,7 @@ public class ProcessDefinitionService {
 	public ExecutionResult restoreStateDelete2UnDeploy(int processDefinitionId) {
 		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select name, is_major_subversion, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
-			throw new NullPointerException("还原流程状态失败, 不存在id为["+processDefinitionId+"]的流程");
+			return new ExecutionResult("还原流程状态失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.isMajorSubversion())
 			return new ExecutionResult("还原流程状态失败, ["+processDefinition.getName()+"]流程不是主要子版本");
 		if(processDefinition.getStateInstance() != State.DELETE)
@@ -275,7 +275,7 @@ public class ProcessDefinitionService {
 	public ExecutionResult updateState(int processDefinitionId, State targetState) {
 		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select name, is_major_subversion, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
-			throw new NullPointerException("修改流程状态失败, 不存在id为["+processDefinitionId+"]的流程");
+			return new ExecutionResult("修改流程状态失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.isMajorSubversion())
 			return new ExecutionResult("修改流程状态失败, ["+processDefinition.getName()+"]流程不是主要子版本");
 		if(!processDefinition.getStateInstance().supportConvert(targetState))

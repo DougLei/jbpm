@@ -1,17 +1,20 @@
 package com.douglei.bpm.module.repository.delegation;
 
+import java.util.Date;
+
 /**
  * 流程委托
  * @author DougLei
  */
 public class ProcessDelegation {
 	private int id;
-	private String clientId;
-	private String assigneeId;
+	private String userId;
+	private String assignedUserId;
 	private Long startTime;
 	private Long endTime;
 	private String reason;
-	private Integer isEnabled;
+	private Date acceptTime;
+	private int isEnabled;
 	private String tenantId;
 	
 	public int getId() {
@@ -20,17 +23,17 @@ public class ProcessDelegation {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getClientId() {
-		return clientId;
+	public String getUserId() {
+		return userId;
 	}
-	public void setClientId(String clientId) {
-		this.clientId = clientId;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
-	public String getAssigneeId() {
-		return assigneeId;
+	public String getAssignedUserId() {
+		return assignedUserId;
 	}
-	public void setAssigneeId(String assigneeId) {
-		this.assigneeId = assigneeId;
+	public void setAssignedUserId(String assignedUserId) {
+		this.assignedUserId = assignedUserId;
 	}
 	public Long getStartTime() {
 		return startTime;
@@ -50,13 +53,19 @@ public class ProcessDelegation {
 	public void setReason(String reason) {
 		this.reason = reason;
 	}
+	public Date getAcceptTime() {
+		return acceptTime;
+	}
+	public void setAcceptTime(Date acceptTime) {
+		this.acceptTime = acceptTime;
+	}
 	public boolean isEnabled() {
 		return isEnabled == 1;
 	}
-	public Integer getIsEnabled() {
+	public int getIsEnabled() {
 		return isEnabled;
 	}
-	public void setIsEnabled(Integer isEnabled) {
+	public void setIsEnabled(int isEnabled) {
 		this.isEnabled = isEnabled;
 	}
 	public String getTenantId() {

@@ -2,21 +2,13 @@ package com.douglei.bpm.process.handler.gateway;
 
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.task.HistoryTask;
-import com.douglei.bpm.process.handler.GeneralHandleParameter;
-import com.douglei.bpm.process.handler.TaskHandler;
-import com.douglei.bpm.process.metadata.node.task.user.UserTaskMetadata;
 import com.douglei.orm.context.SessionContext;
 
 /**
  * 
  * @author DougLei
  */
-public class ExclusiveGatewayHandler extends TaskHandler<UserTaskMetadata, GeneralHandleParameter>{
-
-	@Override
-	public ExecutionResult startup() {
-		return handle();
-	}
+public class ExclusiveGatewayHandler extends AbstractGatewayHandler{
 
 	@Override
 	public ExecutionResult handle() {
@@ -24,7 +16,7 @@ public class ExclusiveGatewayHandler extends TaskHandler<UserTaskMetadata, Gener
 		HistoryTask historyTask = new HistoryTask(handleParameter.getProcessEntity().getProcessMetadata().getId(), handleParameter.getProcessEntity().getProcinstId(), taskMetadata);
 		SessionContext.getTableSession().save(historyTask);
 		
-		
+		beanInstances.getTaskHandlerUtil().dispatch(taskMetadata, handleParameter);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 }

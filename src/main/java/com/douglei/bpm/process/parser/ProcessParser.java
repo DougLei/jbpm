@@ -154,12 +154,15 @@ public class ProcessParser implements CustomAutowired{
 						throw new ProcessParseException("流程中不存在id=["+flowTemporaryData.getTarget()+"]的任务");
 					
 					if(!sourceTask.supportMultiFlow() && sourceTask.getFlows().size() == 1)
-						throw new ProcessParseException("流程中id=[" + sourceTask.getId() + "]的任务不支持配置多Flow");
+						throw new ProcessParseException("流程中id=[" + sourceTask.getId() + "]的["+sourceTask.getType()+"]任务, 不支持配置多Flow");
 					
 					FlowMetadata flow = flowParser.parse(flowTemporaryData);
-					if(!sourceTask.supportMultiFlow() && StringUtil.notEmpty(flow.getConditionExpr()))
-						throw new ProcessParseException("流程中id=[" + sourceTask.getId() + "]的任务因为不支持配置多Flow, 所以其关联的Flow中不能配置条件表达式");
-					
+					if(flow.getConditionExpr() != null) {
+						if(!sourceTask.supportFlowConditionExpr())
+							throw new ProcessParseException("流程中id=[" + sourceTask.getId() + "]的["+sourceTask.getType()+"]任务, 不支持给关联的Flow中配置条件表达式");
+						if(!sourceTask.supportMultiFlow())
+							throw new ProcessParseException("流程中id=[" + sourceTask.getId() + "]的["+sourceTask.getType()+"]任务, 因为不支持配置多Flow, 所以其关联的Flow中不能配置条件表达式");
+					}
 					sourceTask.addFlow(flow);
 					
 					TaskMetadata targetTask = null;

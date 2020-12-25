@@ -1,6 +1,7 @@
 package com.douglei.bpm.process.handler;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,7 @@ import com.douglei.bpm.module.runtime.variable.Variable;
 import com.douglei.tools.utils.StringUtil;
 
 /**
- * 流程变量(集合包装类)
+ * 
  * @author DougLei
  */
 public class VariableEntities {
@@ -22,6 +23,14 @@ public class VariableEntities {
 	
 	public VariableEntities() {}
 	public VariableEntities(List<Variable> variables) {
+		appendVariables(variables);
+	}
+	
+	/**
+	 * 追加变量(集合)
+	 * @param variables
+	 */
+	public void appendVariables(List<Variable> variables) {
 		if(variables.isEmpty()) 
 			return;
 		for (Variable variable : variables) 
@@ -169,22 +178,143 @@ public class VariableEntities {
 				break;
 		}
 	}
-	// 判断指定的变量名, 是否存在于local变量集合中
-	private boolean existsInLocalVariable(String name) {
-		if(localVariableMap == null)
-			return false;
-		return localVariableMap.containsKey(name);
-	}
-	// 判断指定的变量名, 是否存在于transient变量名集合中
-	private boolean existsInTransientVariable(String name) {
-		if(transientVariableMap == null)
-			return false;
-		return transientVariableMap.containsKey(name);
-	}
 	// 给variables中添加数据
 	private void addVariable_(String name, Object value) {
 		if(variableMap == null)
 			variableMap = new HashMap<String, Object>();
 		variableMap.put(name, value);
+	}
+	
+	/**
+	 * 判断指定的变量名, 是否存在于global变量集合中
+	 * @param name
+	 * @return
+	 */
+	public boolean existsInGlobalVariable(String name) {
+		if(globalVariableMap == null)
+			return false;
+		return globalVariableMap.containsKey(name);
+	}
+	
+	/**
+	 * 判断指定的变量名, 是否存在于local变量集合中
+	 * @param name
+	 * @return
+	 */
+	public boolean existsInLocalVariable(String name) {
+		if(localVariableMap == null)
+			return false;
+		return localVariableMap.containsKey(name);
+	}
+	
+	/**
+	 * 判断指定的变量名, 是否存在于transient变量名集合中
+	 * @param name
+	 * @return
+	 */
+	public boolean existsInTransientVariable(String name) {
+		if(transientVariableMap == null)
+			return false;
+		return transientVariableMap.containsKey(name);
+	}
+	
+	/**
+	 * 移除指定name的流程变量
+	 * @param name
+	 */
+	public void removeVariable(String name) {
+		if(variableMap != null)
+			variableMap.remove(name);
+	}
+	/**
+	 * 移除所有流程变量
+	 * @param name
+	 */
+	public void removeAllVariable() {
+		if(variableMap != null)
+			variableMap.clear();
+	}
+	
+	/**
+	 * 移除global范围中, 指定name的流程变量
+	 * @param name
+	 */
+	public void removeGlobalVariable(String name) {
+		boolean removed = false; // 是否移除成功
+		if(globalVariableMap != null) 
+			removed = globalVariableMap.remove(name) != null;
+		if(!removed || existsInLocalVariable(name) || existsInTransientVariable(name))
+			return;
+		removeVariable(name);
+	}
+	/**
+	 * 移除global范围中所有流程变量
+	 */
+	public void removeAllGlobalVariable() {
+		if(globalVariableMap == null || globalVariableMap.isEmpty())
+			return;
+		
+		List<String> names = new ArrayList<String>(globalVariableMap.size());
+		globalVariableMap.keySet().forEach(key -> names.add(key));
+		names.forEach(name -> removeGlobalVariable(name));
+	}
+	
+	/**
+	 * 移除local范围中, 指定name的流程变量
+	 * @param name
+	 */
+	public void removeLocalVariable(String name) {
+		boolean removed = false; // 是否移除成功
+		if(localVariableMap != null) 
+			removed = localVariableMap.remove(name) != null;
+		if(!removed || existsInTransientVariable(name))
+			return;
+		removeVariable(name);
+		
+		// 补充变量
+		if(existsInGlobalVariable(name)) 
+			addVariable_(name, globalVariableMap.get(name));
+	}
+	/**
+	 * 移除local范围中所有流程变量
+	 */
+	public void removeAllLocalVariable() {
+		if(localVariableMap == null || localVariableMap.isEmpty())
+			return;
+		
+		List<String> names = new ArrayList<String>(localVariableMap.size());
+		localVariableMap.keySet().forEach(key -> names.add(key));
+		names.forEach(name -> removeLocalVariable(name));
+	}
+	
+	/**
+	 * 移除transient范围中, 指定name的流程变量
+	 * @param name
+	 */
+	public void removeTransientVariable(String name) {
+		boolean removed = false; // 是否移除成功
+		if(transientVariableMap != null) 
+			removed = transientVariableMap.remove(name) != null;
+		if(!removed)
+			return;
+		removeVariable(name);
+		
+		// 补充变量
+		if(existsInLocalVariable(name)) {
+			addVariable_(name, localVariableMap.get(name));
+		}else if(existsInGlobalVariable(name)) {
+			addVariable_(name, globalVariableMap.get(name));
+		}
+	}
+	/**
+	 * 移除transient范围中所有流程变量
+	 */
+	public void removeAllTransientVariable() {
+		if(transientVariableMap == null || transientVariableMap.isEmpty())
+			return;
+		
+		List<String> names = new ArrayList<String>(transientVariableMap.size());
+		transientVariableMap.keySet().forEach(key -> names.add(key));
+		names.forEach(name -> removeTransientVariable(name));
 	}
 }

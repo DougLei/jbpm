@@ -60,6 +60,6 @@ public class HandleTaskCmd implements Command {
 				beanInstances.getUserFactory().create(parameter.getUserId()), 
 				parameter.getSuggest(), 
 				parameter.getAttitude(), 
-				beanInstances.getUserFactory().create(parameter.getAssigneeUserIds())));
+				beanInstances.getUserFactory().create(parameter.getAssignedUserIds())));
 	}
 }

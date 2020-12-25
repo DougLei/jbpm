@@ -29,8 +29,9 @@ public class ProcessRuntimeTest {
 		parameter.addVariable("name", "金石磊");
 		parameter.addVariable("day", 15);
 		parameter.addVariable("user", Scope.LOCAL, new User("douglei 4 user"));
-		parameter.setStartUserId("金石磊");
+		parameter.setUserId("金石磊");
 		parameter.addAssignedUserId("douglei");
+		
 		
 		ExecutionResult result = engine.getRuntimeModule().getProcessInstanceService().start(parameter);
 		if(result.isSuccess())
@@ -54,7 +55,11 @@ public class ProcessRuntimeTest {
 	public void handle() {
 		int taskId = 2;
 		String userId = "chengrong";
-		ExecutionResult result = engine.getRuntimeModule().getTaskService().handle(taskId, new TaskHandleParameter(userId, "同意了", Attitude.AGREE));
+		
+		TaskHandleParameter parameter = new TaskHandleParameter();
+		parameter.setUserId(userId).setSuggest("同意了").setAttitude(Attitude.AGREE);
+		
+		ExecutionResult result = engine.getRuntimeModule().getTaskService().handle(taskId, parameter);
 		if(result.isSuccess())
 			System.out.println("成功完成id为["+taskId+"]的任务");
 		else

@@ -28,7 +28,7 @@ public abstract class SingleFlowTaskMetadata extends TaskMetadata {
 	}
 	
 	@Override
-	public List<FlowMetadata> getFlows() {
+	public final List<FlowMetadata> getFlows() {
 		if(flow == null)
 			return Collections.emptyList();
 		return Arrays.asList(flow);
@@ -37,5 +37,10 @@ public abstract class SingleFlowTaskMetadata extends TaskMetadata {
 	@Override
 	public final FlowMetadata getDefaultFlow() {
 		return null;
+	}
+
+	@Override
+	public final boolean supportFlowConditionExpr() {
+		return false;
 	}
 }

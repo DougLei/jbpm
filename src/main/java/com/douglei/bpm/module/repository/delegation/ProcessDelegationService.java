@@ -20,6 +20,7 @@ public class ProcessDelegationService {
 	 * 添加
 	 * 修改
 	 * 
+	 * 查看详细委托冲突
 	 * 
 	 * 
 	 * 主要验证的内容
@@ -27,7 +28,6 @@ public class ProcessDelegationService {
 	 * 2.在委托了某个code的流程和指定具体version的流程时, 要分析数据, 就不保存具体version的
 	 * 
 	 * */
-	
 	
 	
 	
@@ -68,7 +68,7 @@ public class ProcessDelegationService {
 			return new ExecutionResult("接受委托失败, 不存在id为["+delegationId+"]的委托");
 		if(!delegation.getAssignedUserId().equals(assigneeUserId))
 			return new ExecutionResult("接受委托失败, 委托配置的接受人id与实际接受人id不一致");
-		if(delegation.getAcceptTime() != null)
+		if(delegation.isAccept())
 			return new ExecutionResult("接受委托失败, 委托已被接受");
 		
 		Date current = new Date();
@@ -91,7 +91,7 @@ public class ProcessDelegationService {
 			return new ExecutionResult("启用委托失败, 不存在id为["+delegationId+"]的委托");
 		if(delegation.isEnabled())
 			return new ExecutionResult("启用委托失败, 委托已启用");
-		if(delegation.getAcceptTime() == null)
+		if(!delegation.isAccept())
 			return new ExecutionResult("启用委托失败, 委托还未被指派人接受");
 		if(delegation.getEndTime() < new Date().getTime())
 			return new ExecutionResult("启用委托失败, 当前时间已晚于委托配置的结束时间");

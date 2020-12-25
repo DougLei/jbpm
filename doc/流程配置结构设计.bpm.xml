@@ -80,20 +80,27 @@
 		<!-- 邮件任务, 暂不实现 -->
 		<emailTask id="emailTask1" name=""></emailTask>
 		
-		<!-- 排他网关, defaultFlow-->
-		<exclusiveGateway id="exclusiveGateway1" name="" defaultFlow=""></exclusiveGateway>
+		<!-- 排他网关-->
+		<exclusiveGateway id="exclusiveGateway1" name="" defaultFlow="">
+			<!-- (即时的)变量继承配置, 在继承上一个任务的流程变量后, 可使用哪些范围的流程变量; 可不配置, 默认只使用global范围的流程变量; 如果配置了, 则使用指定范围的流程变量 -->
+			<!-- 属性值为true时, 表示继承; 否则表示不继承; 配置值不区分大小写; 如果未配置某个属性, 则默认值为false -->
+			<variableExtend global="true" local="false" transient="false"></variableExtend>
+		</exclusiveGateway>
 		<!-- 并行网关 -->
-		<parallelGateway id="parallelGateway1" name=""></parallelGateway>
+		<parallelGateway id="parallelGateway1" name="" defaultFlow="">
+			<scope value=""></scope>
+		</parallelGateway>
 		<!-- 包容网关 -->
-		<inclusiveGateway id="inclusiveGateway1" name=""></inclusiveGateway>
+		<inclusiveGateway id="inclusiveGateway1" name="" defaultFlow="">
+			<scope value=""></scope>
+		</inclusiveGateway>
 		
 		<!-- 连线, 可配置条件; 如果一个任务引出多条flow, 则是排他模式 -->
 		<flow id="flow1" name="" order="0, 排序值, 默认为0" source="startEvent1" target="userTask1">
-			<!-- 监听器, 按照配置的顺序依次执行 -->
-			<listener value="" />
 			<conditionExpr>
 				<![CDATA[ 配置比较表达式, 根据表达式决定是否可以走该flow; 可不配置, 默认比较结果为true ]]>
 			</conditionExpr>
+			<listener value="完整的类路径" /><!-- 监听器, 按照配置的顺序依次执行,  可配置多组 -->
 		</flow>
 	</process>
 	

@@ -12,7 +12,7 @@
 			<column name="SUBVERSION" property="subversion" dataType="number" length="4" defaultValue="0" nullable="false" />
 			<column name="IS_MAJOR_SUBVERSION" property="isMajorSubversion" dataType="number" length="1" nullable="false" />
 			<column name="CONTENT_" property="content" dataType="clob" nullable="false" />
-			<column name="SIGNATURE" property="signature" dataType="string" length="32" nullable="false" />
+			<column name="SIGNATURE" property="signature" dataType="char" length="32" nullable="false" />
 			<column name="STATE" property="state" dataType="string" length="8" nullable="false"/>
 			<column name="DESCRIPTION" property="description" dataType="nstring" length="300" />
 			<column name="TENANT_ID" property="tenantId" dataType="nstring" length="150" />

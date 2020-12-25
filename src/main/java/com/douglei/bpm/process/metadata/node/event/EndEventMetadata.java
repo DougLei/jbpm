@@ -38,7 +38,13 @@ public class EndEventMetadata extends TaskMetadata {
 	}
 	
 	@Override
+	public boolean supportFlowConditionExpr() {
+		throw new ProcessEngineException("EndEvent不能使用Flow");
+	}
+	
+	@Override
 	public Type getType() {
 		return Type.END_EVENT;
 	}
+
 }

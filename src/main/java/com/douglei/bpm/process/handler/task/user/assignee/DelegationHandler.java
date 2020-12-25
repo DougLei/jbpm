@@ -16,6 +16,10 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 class DelegationHandler {
+	// TODO 如果出现循环依赖, 要即时抛出异常, 否则系统会出现死循环！！！！！
+	
+	
+	
 	private Map<String, Delegation> map; // 指派和委托的映射map, <指派的用户id, 委托的用户id>
 	private DelegationHandler children;
 

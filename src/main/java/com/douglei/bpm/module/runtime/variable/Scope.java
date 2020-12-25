@@ -5,7 +5,15 @@ package com.douglei.bpm.module.runtime.variable;
  * @author DougLei
  */
 public enum Scope {
-	GLOBAL,
-	LOCAL,
-	TRANSIENT;
+	GLOBAL(5),
+	LOCAL(3),
+	TRANSIENT(1);
+	
+	private int weight; // 权值
+	private Scope(int weight) {
+		this.weight = weight;
+	}
+	public int getWeight() {
+		return weight;
+	}
 }

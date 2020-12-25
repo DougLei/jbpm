@@ -7,7 +7,7 @@ import java.util.Date;
  * @author DougLei
  */
 public class ProcessDelegation {
-	private int id;
+	private Integer id;
 	private String userId;
 	private String assignedUserId;
 	private Long startTime;
@@ -17,10 +17,10 @@ public class ProcessDelegation {
 	private int isEnabled;
 	private String tenantId;
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getUserId() {
@@ -52,6 +52,9 @@ public class ProcessDelegation {
 	}
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+	public boolean isAccept() {
+		return acceptTime != null;
 	}
 	public Date getAcceptTime() {
 		return acceptTime;

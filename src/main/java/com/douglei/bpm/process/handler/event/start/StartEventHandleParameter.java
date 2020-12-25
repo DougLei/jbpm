@@ -18,7 +18,7 @@ public class StartEventHandleParameter extends GeneralHandleParameter {
 	
 	public StartEventHandleParameter(BeanInstances beanInstances, ProcessMetadata processMetadata, StartParameter parameter) {
 		super.processEntity = new ProcessEntity(UUID.randomUUID().toString(), processMetadata);
-		super.userEntity = new UserEntity(beanInstances.getUserFactory().create(parameter.getStartUserId()), beanInstances.getUserFactory().create(parameter.getAssignedUserIds()));
+		super.userEntity = new UserEntity(beanInstances.getUserFactory().create(parameter.getUserId()), beanInstances.getUserFactory().create(parameter.getAssignedUserIds()));
 		super.variableEntities = parameter.getVariableEntities();
 		this.parameter = parameter;
 	}
@@ -26,8 +26,8 @@ public class StartEventHandleParameter extends GeneralHandleParameter {
 	public String getBusinessId() {
 		return parameter.getBusinessId();
 	}
-	public String getStartUserId() {
-		return parameter.getStartUserId();
+	public String getUserId() {
+		return parameter.getUserId();
 	}
 	public String getTenantId() {
 		return parameter.getTenantId();

@@ -8,6 +8,7 @@ import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.bpm.process.parser.tmp.data.FlowTemporaryData;
+import com.douglei.tools.utils.StringUtil;
 import com.douglei.tools.utils.datatype.VerifyTypeMatchUtil;
 
 /**
@@ -29,8 +30,9 @@ public class FlowParser implements Parser<FlowTemporaryData, FlowMetadata> {
 		String conditionExpr = null;
 		Element conditionExprElement = element.element("conditionExpr");
 		if(conditionExprElement != null) {
-			conditionExpr = conditionExprElement.getTextTrim();
-			conditionExpr = conditionExpr.substring(2, conditionExpr.length()-1);
+			String tmp = conditionExprElement.getTextTrim();
+			if(StringUtil.notEmpty(tmp))
+				conditionExpr = tmp.substring(2, tmp.length()-1);
 		}
 		
 		return new FlowMetadata(temporaryData.getId(), element.attributeValue("name"), order, conditionExpr);

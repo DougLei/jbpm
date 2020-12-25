@@ -4,21 +4,19 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.node.gateway.InclusiveGatewayMetadata;
 import com.douglei.bpm.process.parser.Parser;
-import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.bpm.process.parser.tmp.data.TaskTemporaryData;
 
 /**
  * 
  * @author DougLei
  */
 @Bean(clazz=Parser.class)
-public class InclusiveGatewayParser implements Parser<TaskTemporaryData, InclusiveGatewayMetadata> {
+public class InclusiveGatewayParser extends AbstractGatewayParser {
 
 	@Override
-	public InclusiveGatewayMetadata parse(TaskTemporaryData temporaryData) throws ProcessParseException {
-		return new InclusiveGatewayMetadata(temporaryData.getId(), temporaryData.getElement().attributeValue("name"), temporaryData.getElement().attributeValue("defaultFlow"));
+	protected InclusiveGatewayMetadata createGatewayMetadata(String id, String name, String defaultFlowId, int excludeScopeWeight) {
+		return new InclusiveGatewayMetadata(id, name, defaultFlowId, excludeScopeWeight);
 	}
-
+	
 	@Override
 	public Type getType() {
 		return Type.INCLUSIVE_GATEWAY;

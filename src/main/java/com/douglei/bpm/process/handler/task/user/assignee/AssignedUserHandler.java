@@ -23,7 +23,8 @@ public class AssignedUserHandler {
 		this.delegationHandler = new DelegationHandler(
 				SessionContext.getSQLSession().query(DelegationInfo.class, "Assignee", "queryDelegations", queryCondition), 
 				queryCondition,
-				code, version);
+				code, 
+				version);
 	}
 	
 	/**

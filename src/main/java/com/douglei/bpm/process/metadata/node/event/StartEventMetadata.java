@@ -1,13 +1,13 @@
 package com.douglei.bpm.process.metadata.node.event;
 
 import com.douglei.bpm.process.Type;
-import com.douglei.bpm.process.metadata.node.TaskMetadata;
+import com.douglei.bpm.process.metadata.node.SingleFlowTaskMetadata;
 
 /**
  * 
  * @author DougLei
  */
-public class StartEventMetadata extends TaskMetadata {
+public class StartEventMetadata extends SingleFlowTaskMetadata {
 	private String conditionExpr; // 启动条件表达式
 	
 	public StartEventMetadata(String id, String name, String conditionExpr) {

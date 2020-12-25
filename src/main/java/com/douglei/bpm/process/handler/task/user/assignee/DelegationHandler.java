@@ -120,9 +120,9 @@ class MultiDelegation {
  * @author DougLei
  */
 class Delegation {
-	private String userId;
+	private String userId; // 被委托的用户id
 	private String remark;
-	private List<DelegationProcess> details;
+	private List<DelegationProcess> details; // 具体委托的流程集合
 	
 	public Delegation(String userId, String remark) {
 		this.userId = userId;

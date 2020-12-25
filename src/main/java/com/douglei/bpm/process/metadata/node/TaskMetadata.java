@@ -1,7 +1,5 @@
 package com.douglei.bpm.process.metadata.node;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
@@ -11,40 +9,41 @@ import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
  * @author DougLei
  */
 public abstract class TaskMetadata extends ProcessNodeMetadata{
-	protected List<FlowMetadata> flows = new ArrayList<FlowMetadata>(4);
 	
 	protected TaskMetadata(String id, String name) {
 		super(id, name);
 	}
 	
 	/**
-	 * 添加连线
+	 * 当前任务是否支持多Flow
+	 * @return
+	 */
+	public abstract boolean supportMultiFlow();
+	
+	/**
+	 * 添加Flow
 	 * @param flow
 	 */
-	public final void addFlow(FlowMetadata flow) {
-		flows.add(flow);
-		if(flows.size() > 1) 
-			flows.sort(flowComparator);
-	}
+	public abstract void addFlow(FlowMetadata flow);
 	
-	// 流排序的比较器
-	private static Comparator<FlowMetadata> flowComparator = new Comparator<FlowMetadata>() {
-		@Override
-		public int compare(FlowMetadata f1, FlowMetadata f2) {
-			if(f1.getOrder() == f2.getOrder()) {
-				return 0;
-			}else if(f1.getOrder() < f2.getOrder()) {
-				return -1;
-			}
-			return 1;
-		}
-	};
-
+	/**
+	 * 获取flow集合
+	 * @return
+	 */
+	public abstract List<FlowMetadata> getFlows();
+	
+	/**
+	 * 获取默认flow, 可为null
+	 * @return
+	 */
+	public abstract FlowMetadata getDefaultFlow();
+	
+	/**
+	 * 获取pageID, 可为null
+	 * @return
+	 */
 	public String getPageID() {
 		return null;
-	}
-	public final List<FlowMetadata> getFlows() {
-		return flows;
 	}
 	
 	/**

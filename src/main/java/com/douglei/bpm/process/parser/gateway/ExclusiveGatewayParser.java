@@ -16,7 +16,7 @@ public class ExclusiveGatewayParser implements Parser<TaskTemporaryData, Exclusi
 
 	@Override
 	public ExclusiveGatewayMetadata parse(TaskTemporaryData temporaryData) throws ProcessParseException {
-		return new ExclusiveGatewayMetadata(temporaryData.getId(), temporaryData.getElement().attributeValue("name"));
+		return new ExclusiveGatewayMetadata(temporaryData.getId(), temporaryData.getElement().attributeValue("name"), temporaryData.getElement().attributeValue("defaultFlow"));
 	}
 
 	@Override

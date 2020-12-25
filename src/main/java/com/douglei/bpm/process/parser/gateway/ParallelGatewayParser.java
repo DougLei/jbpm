@@ -16,7 +16,7 @@ public class ParallelGatewayParser implements Parser<TaskTemporaryData, Parallel
 
 	@Override
 	public ParallelGatewayMetadata parse(TaskTemporaryData temporaryData) throws ProcessParseException {
-		return new ParallelGatewayMetadata(temporaryData.getId(), temporaryData.getElement().attributeValue("name"));
+		return new ParallelGatewayMetadata(temporaryData.getId(), temporaryData.getElement().attributeValue("name"), temporaryData.getElement().attributeValue("defaultFlow"));
 	}
 
 	@Override

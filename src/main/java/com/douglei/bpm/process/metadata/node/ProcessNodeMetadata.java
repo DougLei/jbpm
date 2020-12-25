@@ -10,8 +10,8 @@ import com.douglei.tools.utils.StringUtil;
  * @author DougLei
  */
 public abstract class ProcessNodeMetadata implements Serializable {
-	protected String id;
-	protected String name;
+	private String id;
+	private String name;
 	
 	protected ProcessNodeMetadata(String id, String name) {
 		this.id = id;

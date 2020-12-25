@@ -18,7 +18,8 @@
 		<endEvent id="endEvent1" name=""></endEvent>
 		
 		<!-- 用户任务 -->
-		<userTask id="userTask1" name="任务名称" pageID="属于任务的页面标识, 优先级高于全局页面标识" timeLimit="办理时限的表达式, 设置当前用户任务需要在多长时间内办理, 不配置则没有时限约束, 这里的表达式还要体现出工作日/自然日">
+		<!-- defaultFlow: 默认Flow的id, 可不配置; 当配置了多条线时, 如果线的条件都不满足, 引擎会根据配置的defaultFlow进行流转, 如果没有配置, 引擎会抛出异常 -->
+		<userTask id="userTask1" name="任务名称" defaultFlow="" pageID="属于任务的页面标识, 优先级高于全局页面标识" timeLimit="办理时限的表达式, 设置当前用户任务需要在多长时间内办理, 不配置则没有时限约束, 这里的表达式还要体现出工作日/自然日">
 			<!-- 当前任务候选人相关配置 -->
 			<candidate>
 				<!-- 候选人指派策略(从上一环节进入当前环节时指派候选人的策略) -->
@@ -79,8 +80,8 @@
 		<!-- 邮件任务, 暂不实现 -->
 		<emailTask id="emailTask1" name=""></emailTask>
 		
-		<!-- 排他网关 -->
-		<exclusiveGateway id="exclusiveGateway1" name=""></exclusiveGateway>
+		<!-- 排他网关, defaultFlow-->
+		<exclusiveGateway id="exclusiveGateway1" name="" defaultFlow=""></exclusiveGateway>
 		<!-- 并行网关 -->
 		<parallelGateway id="parallelGateway1" name=""></parallelGateway>
 		<!-- 包容网关 -->

@@ -85,7 +85,11 @@ public class TaskHandlerUtil {
 				return;
 			}
 		}
-		throw new TaskDispatchException("执行["+taskMetadata.getName()+"]任务时, 未能匹配到满足条件的Flow");
+		
+		FlowMetadata defaultFlow = taskMetadata.getDefaultFlow();
+		if(defaultFlow == null)
+			throw new TaskDispatchException("执行["+taskMetadata.getName()+"]任务时, 未能匹配到满足条件的Flow");
+		startup(defaultFlow.getTargetTask(), parameter);
 	}
 	
 	/**
@@ -100,8 +104,8 @@ public class TaskHandlerUtil {
 		String conditionExpr = flowMetadata.getConditionExpr();
 		if(StringUtil.isEmpty(conditionExpr))
 			return true;
-		if(variableMap == null)
-			throw new TaskDispatchException("在匹配Flow时, 未找到流程变量");
+		if(variableMap == null) // TODO 有待调整, 具体看后续条件表达式的写法定
+			return false;
 		return OgnlHandler.getSingleton().getBooleanValue(conditionExpr, variableMap);
 	}
 }

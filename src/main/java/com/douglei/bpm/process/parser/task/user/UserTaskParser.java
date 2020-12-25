@@ -20,7 +20,7 @@ public class UserTaskParser implements Parser<TaskTemporaryData, UserTaskMetadat
 	public UserTaskMetadata parse(TaskTemporaryData temporaryData) throws ProcessParseException {
 		// TODO 
 		Element element = temporaryData.getElement();
-		return new UserTaskMetadata(temporaryData.getId(), element.attributeValue("name"), element.attributeValue("pageID"));
+		return new UserTaskMetadata(temporaryData.getId(), element.attributeValue("name"), element.attributeValue("defaultFlow"), element.attributeValue("pageID"));
 	}
 
 	@Override

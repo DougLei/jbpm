@@ -20,6 +20,12 @@ public class ProcessDelegationService {
 	 * 添加
 	 * 修改
 	 * 
+	 * 
+	 * 
+	 * 主要验证的内容
+	 * 1.在同一个时间内相互委托, 特别是有时间差的这种情况
+	 * 2.在委托了某个code的流程和指定具体version的流程时, 要分析数据, 就不保存具体version的
+	 * 
 	 * */
 	
 	
@@ -59,7 +65,7 @@ public class ProcessDelegationService {
 	public ExecutionResult accept(int delegationId, String assigneeUserId) {
 		ProcessDelegation delegation = SessionContext.getSqlSession().uniqueQuery(ProcessDelegation.class, "select assigned_user_id, end_time, accept_time from bpm_re_delegation where id=?", Arrays.asList(delegationId));
 		if(delegation == null)
-			return new ExecutionResult("接受委托失败, 不存在id为["+delegationId+"]的委托配置");
+			return new ExecutionResult("接受委托失败, 不存在id为["+delegationId+"]的委托");
 		if(!delegation.getAssignedUserId().equals(assigneeUserId))
 			return new ExecutionResult("接受委托失败, 委托配置的接受人id与实际接受人id不一致");
 		if(delegation.getAcceptTime() != null)
@@ -82,7 +88,7 @@ public class ProcessDelegationService {
 	public ExecutionResult enabled(int delegationId) {
 		ProcessDelegation delegation = SessionContext.getSqlSession().uniqueQuery(ProcessDelegation.class, "select end_time, accept_time, is_enabled from bpm_re_delegation where id=?", Arrays.asList(delegationId));
 		if(delegation == null)
-			return new ExecutionResult("启用委托失败, 不存在id为["+delegationId+"]的委托配置");
+			return new ExecutionResult("启用委托失败, 不存在id为["+delegationId+"]的委托");
 		if(delegation.isEnabled())
 			return new ExecutionResult("启用委托失败, 委托已启用");
 		if(delegation.getAcceptTime() == null)
@@ -103,7 +109,7 @@ public class ProcessDelegationService {
 	public ExecutionResult disabled(int delegationId) {
 		Object[] obj = SessionContext.getSqlSession().uniqueQuery_("select is_enabled from bpm_re_delegation where id=?", Arrays.asList(delegationId));
 		if(obj == null)
-			return new ExecutionResult("禁用委托失败, 不存在id为["+delegationId+"]的委托配置");
+			return new ExecutionResult("禁用委托失败, 不存在id为["+delegationId+"]的委托");
 		if("0".equals(obj[0].toString()))
 			return new ExecutionResult("禁用委托失败, 委托已禁用");
 		
@@ -123,11 +129,27 @@ public class ProcessDelegationService {
 	 */
 	public ExecutionResult delete(int delegationId) {
 		List<Object> paramList = Arrays.asList(delegationId);
-		if(SessionContext.getSqlSession().uniqueQuery_("select id from bpm_re_delegation where id=?", paramList) == null)
-			return new ExecutionResult("删除委托失败, 不存在id为["+delegationId+"]的委托配置");
-		
-		SessionContext.getSqlSession().executeUpdate("delete bpm_re_delegation where id=?", paramList);
-		SessionContext.getSqlSession().executeUpdate("delete bpm_re_delegation_detail where delegation_id=?", paramList);
+		if(SessionContext.getSqlSession().executeUpdate("delete bpm_re_delegation where id=?", paramList) == 1)
+			SessionContext.getSqlSession().executeUpdate("delete bpm_re_delegation_detail where delegation_id=?", paramList);
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	
+	/**
+	 * 删除委托明细
+	 * @param delegationDetailIds
+	 * @return
+	 */
+	public ExecutionResult deleteDetail(int... delegationDetailIds) {
+		SessionContext.getSQLSession().executeUpdate("ProcessDelegation", "deleteDelegationDetails", delegationDetailIds);
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	/**
+	 * 删除委托明细
+	 * @param delegationDetailIds
+	 * @return
+	 */
+	public ExecutionResult deleteDetail(List<Integer> delegationDetailIds) {
+		SessionContext.getSQLSession().executeUpdate("ProcessDelegation", "deleteDelegationDetails", delegationDetailIds);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 }

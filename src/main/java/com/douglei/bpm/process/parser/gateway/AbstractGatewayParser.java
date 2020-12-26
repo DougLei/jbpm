@@ -21,7 +21,8 @@ public abstract class AbstractGatewayParser implements Parser<TaskTemporaryData,
 				temporaryData.getId(), 
 				element.attributeValue("name"), 
 				element.attributeValue("defaultFlow"), 
-				parseVariableExtend(element.element("variableExtend")));
+				parseVariableExtend(element.element("variableExtend")),
+				element);
 	}
 
 	// 解析变量继承配置, 返回不继承的流程变量范围权值和
@@ -31,7 +32,7 @@ public abstract class AbstractGatewayParser implements Parser<TaskTemporaryData,
 		
 		int unextendScopeWeight = 0;
 		String value = element.attributeValue("global");
-		if(value == null || !"true".equalsIgnoreCase(value))
+		if(value != null && !"true".equalsIgnoreCase(value))
 			unextendScopeWeight += Scope.GLOBAL.getWeight();
 		
 		value = element.attributeValue("local");
@@ -46,5 +47,5 @@ public abstract class AbstractGatewayParser implements Parser<TaskTemporaryData,
 	}
 	
 	// 创建网关元数据实例
-	protected abstract AbstractGatewayMetadata createGatewayMetadata(String id, String name, String defaultFlowId, int unextendScopeWeight);
+	protected abstract AbstractGatewayMetadata createGatewayMetadata(String id, String name, String defaultFlowId, int unextendScopeWeight, Element element);
 }

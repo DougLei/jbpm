@@ -28,4 +28,10 @@ truncate table BPM_HI_VARIABLE
 truncate table BPM_HI_ASSIGNEE
 
 
+
+
+
+Element element = new SAXReader().read(new File("D:\\workspace4\\jbpm\\doc\\流程配置结构设计.bpm.xml"))
+				.getRootElement().element("process").element("parallelGateway");
+
 */

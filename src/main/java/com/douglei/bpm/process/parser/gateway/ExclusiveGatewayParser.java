@@ -1,5 +1,7 @@
 package com.douglei.bpm.process.parser.gateway;
 
+import org.dom4j.Element;
+
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.gateway.ExclusiveGatewayMetadata;
@@ -13,8 +15,8 @@ import com.douglei.bpm.process.parser.Parser;
 public class ExclusiveGatewayParser extends AbstractGatewayParser {
 
 	@Override
-	protected ExclusiveGatewayMetadata createGatewayMetadata(String id, String name, String defaultFlowId, int excludeScopeWeight) {
-		return new ExclusiveGatewayMetadata(id, name, defaultFlowId, excludeScopeWeight);
+	protected ExclusiveGatewayMetadata createGatewayMetadata(String id, String name, String defaultFlowId, int unextendScopeWeight, Element element) {
+		return new ExclusiveGatewayMetadata(id, name, defaultFlowId, unextendScopeWeight);
 	}
 	
 	@Override

@@ -4,7 +4,7 @@ import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.Type;
-import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
+import com.douglei.bpm.process.metadata.flow.FlowMetadata;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.bpm.process.parser.tmp.data.FlowTemporaryData;
@@ -27,6 +27,7 @@ public class FlowParser implements Parser<FlowTemporaryData, FlowMetadata> {
 		if(VerifyTypeMatchUtil.isInteger(orderValue))
 			order = Integer.parseInt(orderValue);
 		
+		// TODO 具体的条件写法还有待调整
 		String conditionExpr = null;
 		Element conditionExprElement = element.element("conditionExpr");
 		if(conditionExprElement != null) {

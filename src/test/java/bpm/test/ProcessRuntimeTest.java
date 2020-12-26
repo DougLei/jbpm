@@ -30,7 +30,7 @@ public class ProcessRuntimeTest {
 		parameter.addVariable("day", 15);
 		parameter.addVariable("user", Scope.LOCAL, new User("douglei 4 user"));
 		parameter.setUserId("金石磊");
-		parameter.addAssignedUserId("douglei");
+		parameter.addAssignUserId("douglei");
 		
 		
 		ExecutionResult result = engine.getRuntimeModule().getProcessInstanceService().start(parameter);

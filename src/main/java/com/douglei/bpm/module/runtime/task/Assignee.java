@@ -13,7 +13,7 @@ public class Assignee {
 	protected String userId;
 	protected String parentUserId;
 	protected String remark;
-	protected AssigneeMode mode;
+	protected AssignMode mode;
 	protected HandleState handleState;
 	protected Date claimTime;
 	
@@ -26,7 +26,7 @@ public class Assignee {
 		this.taskinstId = taskinstId;
 		this.groupId = groupId;
 		this.userId = userId;
-		this.mode = AssigneeMode.ASSIGN;
+		this.mode = AssignMode.ASSIGNED;
 		this.handleState = HandleState.UNCLAIM;
 	}
 
@@ -66,17 +66,17 @@ public class Assignee {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	public AssigneeMode getModeInstance() {
+	public AssignMode getModeInstance() {
 		return mode;
 	}
-	public void setModeInstance(AssigneeMode mode) {
+	public void setModeInstance(AssignMode mode) {
 		this.mode = mode;
 	}
 	public String getMode() {
 		return mode.name();
 	}
 	public void setMode(String mode) {
-		this.mode = AssigneeMode.valueOf(mode) ;
+		this.mode = AssignMode.valueOf(mode) ;
 	}
 	public HandleState getHandleStateInstance() {
 		return handleState;

@@ -1,8 +1,8 @@
-package com.douglei.bpm.process.metadata.node;
+package com.douglei.bpm.process.metadata;
 
 import java.util.List;
 
-import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
+import com.douglei.bpm.process.metadata.flow.FlowMetadata;
 
 /**
  * 

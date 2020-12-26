@@ -4,7 +4,7 @@ import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.Type;
-import com.douglei.bpm.process.metadata.node.event.StartEventMetadata;
+import com.douglei.bpm.process.metadata.event.StartEventMetadata;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.bpm.process.parser.tmp.data.TaskTemporaryData;

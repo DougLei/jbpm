@@ -5,7 +5,7 @@ import com.douglei.bpm.module.history.task.HistoryTask;
 import com.douglei.bpm.module.runtime.instance.ProcessInstance;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
-import com.douglei.bpm.process.metadata.node.event.StartEventMetadata;
+import com.douglei.bpm.process.metadata.event.StartEventMetadata;
 import com.douglei.orm.context.SessionContext;
 
 /**

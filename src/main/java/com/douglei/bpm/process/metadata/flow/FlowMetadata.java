@@ -1,8 +1,8 @@
-package com.douglei.bpm.process.metadata.node.flow;
+package com.douglei.bpm.process.metadata.flow;
 
 import com.douglei.bpm.process.Type;
-import com.douglei.bpm.process.metadata.node.ProcessNodeMetadata;
-import com.douglei.bpm.process.metadata.node.TaskMetadata;
+import com.douglei.bpm.process.metadata.ProcessNodeMetadata;
+import com.douglei.bpm.process.metadata.TaskMetadata;
 
 /**
  * 

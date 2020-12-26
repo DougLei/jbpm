@@ -8,9 +8,12 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.process.handler.event.end.EndEventHandler;
 import com.douglei.bpm.process.handler.event.start.StartEventHandler;
+import com.douglei.bpm.process.handler.gateway.ExclusiveGatewayHandler;
+import com.douglei.bpm.process.handler.gateway.InclusiveGatewayHandler;
+import com.douglei.bpm.process.handler.gateway.ParallelGatewayHandler;
 import com.douglei.bpm.process.handler.task.user.UserTaskHandler;
-import com.douglei.bpm.process.metadata.node.TaskMetadata;
-import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
+import com.douglei.bpm.process.metadata.TaskMetadata;
+import com.douglei.bpm.process.metadata.flow.FlowMetadata;
 import com.douglei.tools.instances.ognl.OgnlHandler;
 import com.douglei.tools.utils.StringUtil;
 
@@ -43,6 +46,15 @@ public class TaskHandlerUtil {
 				break;
 			
 			// 网关类型
+			case EXCLUSIVE_GATEWAY:
+				taskHandler = new ExclusiveGatewayHandler();
+				break;
+			case PARALLEL_GATEWAY:
+				taskHandler = new ParallelGatewayHandler();
+				break;
+			case INCLUSIVE_GATEWAY:
+				taskHandler = new InclusiveGatewayHandler();
+				break;
 			default:
 				throw new TaskHandleException("目前还未实现["+taskMetadata.getType().getName()+"]类型的任务办理器");
 		}
@@ -81,7 +93,7 @@ public class TaskHandlerUtil {
 	public void dispatch(TaskMetadata taskMetadata, HandleParameter parameter) throws TaskDispatchException{
 		for(FlowMetadata flow : taskMetadata.getFlows()) {
 			if(flowMatching(flow, parameter.getVariableEntities().getVariableMap())) {
-				startup(flow.getTargetTask(), parameter);
+				dispatch(flow, parameter);
 				return;
 			}
 		}
@@ -89,7 +101,7 @@ public class TaskHandlerUtil {
 		FlowMetadata defaultFlow = taskMetadata.getDefaultFlow();
 		if(defaultFlow == null)
 			throw new TaskDispatchException("执行["+taskMetadata.getName()+"]任务时, 未能匹配到满足条件的Flow");
-		startup(defaultFlow.getTargetTask(), parameter);
+		dispatch(defaultFlow, parameter);
 	}
 	
 	/**
@@ -107,5 +119,14 @@ public class TaskHandlerUtil {
 		if(variableMap == null) // TODO 有待调整, 具体看后续条件表达式的写法定
 			return false;
 		return OgnlHandler.getSingleton().getBooleanValue(conditionExpr, variableMap);
+	}
+	
+	/**
+	 * flow调度, 属于直接调度
+	 * @param flowMetadata
+	 * @param parameter
+	 */
+	public void dispatch(FlowMetadata flowMetadata, HandleParameter parameter) {
+		startup(flowMetadata.getTargetTask(), parameter);
 	}
 }

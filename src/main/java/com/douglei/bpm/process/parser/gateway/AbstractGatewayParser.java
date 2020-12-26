@@ -3,7 +3,7 @@ package com.douglei.bpm.process.parser.gateway;
 import org.dom4j.Element;
 
 import com.douglei.bpm.module.runtime.variable.Scope;
-import com.douglei.bpm.process.metadata.node.gateway.AbstractGatewayMetadata;
+import com.douglei.bpm.process.metadata.gateway.AbstractGatewayMetadata;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.bpm.process.parser.tmp.data.TaskTemporaryData;

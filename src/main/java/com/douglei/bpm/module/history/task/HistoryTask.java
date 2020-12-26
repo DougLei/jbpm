@@ -3,7 +3,7 @@ package com.douglei.bpm.module.history.task;
 import java.util.Date;
 
 import com.douglei.bpm.module.runtime.task.Task;
-import com.douglei.bpm.process.metadata.node.TaskMetadata;
+import com.douglei.bpm.process.metadata.TaskMetadata;
 
 /**
  * 

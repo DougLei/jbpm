@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.metadata.node.gateway;
+package com.douglei.bpm.process.metadata.gateway;
 
 import com.douglei.bpm.process.Type;
 

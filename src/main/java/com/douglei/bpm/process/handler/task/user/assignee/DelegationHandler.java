@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.douglei.bpm.module.runtime.task.Assignee;
-import com.douglei.bpm.module.runtime.task.AssigneeMode;
+import com.douglei.bpm.module.runtime.task.AssignMode;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.orm.context.SessionContext;
 
@@ -75,7 +75,7 @@ class DelegationHandler {
 		if(parentAssigneeUserId != null) {
 			assignee.setParentUserId(parentAssigneeUserId);
 			assignee.setRemark(remark);
-			assignee.setModeInstance(AssigneeMode.DELEGATE);
+			assignee.setModeInstance(AssignMode.DELEGATED);
 		}
 		assigneeList.add(assignee);
 		

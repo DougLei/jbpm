@@ -1,7 +1,7 @@
-package com.douglei.bpm.process.metadata.node.event;
+package com.douglei.bpm.process.metadata.event;
 
 import com.douglei.bpm.process.Type;
-import com.douglei.bpm.process.metadata.node.SingleFlowTaskMetadata;
+import com.douglei.bpm.process.metadata.SingleFlowTaskMetadata;
 
 /**
  * 

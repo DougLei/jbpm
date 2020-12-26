@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.metadata.node;
+package com.douglei.bpm.process.metadata;
 
 import java.io.Serializable;
 

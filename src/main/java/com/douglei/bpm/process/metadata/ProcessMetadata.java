@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.douglei.bpm.process.metadata.node.TaskMetadata;
-import com.douglei.bpm.process.metadata.node.event.StartEventMetadata;
+import com.douglei.bpm.process.metadata.event.StartEventMetadata;
 import com.douglei.tools.utils.StringUtil;
 
 /**

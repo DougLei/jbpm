@@ -9,7 +9,7 @@ import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.task.user.assignee.AssignedUserHandler;
-import com.douglei.bpm.process.metadata.node.task.user.UserTaskMetadata;
+import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.orm.context.SessionContext;
 
 /**

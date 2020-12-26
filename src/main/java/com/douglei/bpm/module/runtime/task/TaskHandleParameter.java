@@ -16,7 +16,7 @@ public class TaskHandleParameter {
 	private String userId; // 办理人id
 	private String suggest; // 办理人意见
 	private Attitude attitude; // 办理人态度
-	private List<String> assignedUserIds; // 下一环节的办理人id集合
+	private List<String> assignUserIds; // 下一环节的办理人id集合
 	private VariableEntities variableEntities = new VariableEntities(); // 流程变量
 	
 	/**
@@ -61,14 +61,14 @@ public class TaskHandleParameter {
 
 	/**
 	 * 添加下一环节的办理人id
-	 * @param assignedUserId
+	 * @param assignUserId
 	 * @return
 	 */
-	public TaskHandleParameter addAssignedUserId(String assignedUserId) {
-		if(assignedUserIds == null)
-			assignedUserIds = new ArrayList<String>();
-		if(assignedUserIds.isEmpty() || !assignedUserIds.contains(assignedUserId))
-			assignedUserIds.add(assignedUserId);
+	public TaskHandleParameter addAssignUserId(String assignUserId) {
+		if(assignUserIds == null)
+			assignUserIds = new ArrayList<String>();
+		if(assignUserIds.isEmpty() || !assignUserIds.contains(assignUserId))
+			assignUserIds.add(assignUserId);
 		return this;
 	}
 	
@@ -152,8 +152,8 @@ public class TaskHandleParameter {
 	 * 获取下一环节的办理人id集合
 	 * @return
 	 */
-	public List<String> getAssignedUserIds() {
-		return assignedUserIds;
+	public List<String> getAssignUserIds() {
+		return assignUserIds;
 	}
 	/**
 	 * 获取VariableEntities实例

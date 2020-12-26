@@ -1,11 +1,11 @@
-package com.douglei.bpm.process.metadata.node.event;
+package com.douglei.bpm.process.metadata.event;
 
 import java.util.List;
 
 import com.douglei.bpm.ProcessEngineException;
 import com.douglei.bpm.process.Type;
-import com.douglei.bpm.process.metadata.node.TaskMetadata;
-import com.douglei.bpm.process.metadata.node.flow.FlowMetadata;
+import com.douglei.bpm.process.metadata.TaskMetadata;
+import com.douglei.bpm.process.metadata.flow.FlowMetadata;
 
 /**
  * 

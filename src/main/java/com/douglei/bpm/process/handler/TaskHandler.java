@@ -6,7 +6,7 @@ import com.douglei.bpm.bean.BeanInstances;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.task.HistoryTask;
 import com.douglei.bpm.process.handler.task.user.assignee.HistoryAssignedUserHandler;
-import com.douglei.bpm.process.metadata.node.TaskMetadata;
+import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.orm.context.SessionContext;
 
 /**

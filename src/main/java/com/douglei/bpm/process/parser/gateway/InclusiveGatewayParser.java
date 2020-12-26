@@ -2,7 +2,7 @@ package com.douglei.bpm.process.parser.gateway;
 
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.Type;
-import com.douglei.bpm.process.metadata.node.gateway.InclusiveGatewayMetadata;
+import com.douglei.bpm.process.metadata.gateway.InclusiveGatewayMetadata;
 import com.douglei.bpm.process.parser.Parser;
 
 /**

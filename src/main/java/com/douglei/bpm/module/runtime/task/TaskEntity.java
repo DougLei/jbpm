@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import com.douglei.bpm.process.container.ProcessContainerProxy;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
-import com.douglei.bpm.process.metadata.node.TaskMetadata;
+import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.orm.context.SessionContext;
 
 /**

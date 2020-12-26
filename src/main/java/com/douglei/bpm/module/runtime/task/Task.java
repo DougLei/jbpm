@@ -3,7 +3,7 @@ package com.douglei.bpm.module.runtime.task;
 import java.util.Date;
 import java.util.UUID;
 
-import com.douglei.bpm.process.metadata.node.TaskMetadata;
+import com.douglei.bpm.process.metadata.TaskMetadata;
 
 /**
  * 

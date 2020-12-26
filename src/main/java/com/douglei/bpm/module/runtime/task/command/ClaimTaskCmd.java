@@ -8,7 +8,7 @@ import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.CommandExecuteException;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Assignee;
-import com.douglei.bpm.module.runtime.task.AssigneeMode;
+import com.douglei.bpm.module.runtime.task.AssignMode;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.TaskEntity;
 import com.douglei.orm.context.SessionContext;
@@ -46,7 +46,7 @@ public class ClaimTaskCmd implements Command{
 		
 		claimTaskParameter = new ClaimTaskParameter(assigneeList.size(), taskEntity.getTask().getTaskinstId());
 		for(int i=0;i<assigneeList.size();i++) {
-			if(assigneeList.get(i).getModeInstance() == AssigneeMode.ASSIST) 
+			if(assigneeList.get(i).getModeInstance() == AssignMode.ASSISTED) 
 				claimTaskParameter.addAssigneeId(assigneeList.remove(i--).getId());
 		}
 		directClaim();
@@ -72,7 +72,7 @@ public class ClaimTaskCmd implements Command{
 					"select id from bpm_ru_assignee where taskinst_id=? and group_id=? and mode <> ? and handle_state in (?,?)", 
 					Arrays.asList(taskEntity.getTask().getTaskinstId(), 
 							assigneeList.get(i).getGroupId(), 
-							AssigneeMode.ASSIST.name(), 
+							AssignMode.ASSISTED.name(), 
 							HandleState.CLAIMED.name(), 
 							HandleState.FINISHED.name())) != null)
 				assigneeList.remove(i--);
@@ -83,7 +83,7 @@ public class ClaimTaskCmd implements Command{
 		// 查询当前任务一共可以有多少人认领
 		List<Assignee> supportAssigneeList = SessionContext.getSqlSession().query(Assignee.class, 
 				"select handle_state from bpm_ru_assignee where taskinst_id=? and mode <> ? and handle_state <> ?", 
-				Arrays.asList(taskEntity.getTask().getTaskinstId(), AssigneeMode.ASSIST.name(), HandleState.INVALID.name()));
+				Arrays.asList(taskEntity.getTask().getTaskinstId(), AssignMode.ASSISTED.name(), HandleState.INVALID.name()));
 		if(supportAssigneeList.isEmpty())
 			throw new CommandExecuteException("认领异常, id为["+taskEntity.getTask().getId()+"]的任务, 没有查询到任何有效的指派信息");
 		

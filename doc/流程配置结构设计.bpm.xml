@@ -8,100 +8,197 @@
 			2.2. 自动任务, 可以自行推动流程流转, 例如开始/结束事件, 网关任务, 子流程任务, SQL脚本任务, 定时任务, 邮件任务等
 	-->
 	<!-- 
-		title: 可以配置表达式, 从流程变量中取值, 取值的表达式写法为: #{流程变量名}, 如果流程变量的值为对象, 可通过 #{xxx.xxx} 的形式进行属性值选择; 例如: #{user.name}的请假申请
+		工作流配置起点:
+		* code: 唯一编码值, 必须配置, 没有默认值
+		* version: 用户自定义版本, 必须配置, 没有默认值
+		* name: 流程名称, 可不配置, 默认值为code:version
+		* title: 实例标题(表达式), 可不配置, 默认值为name
+		** 例如: #{user.name}的请假申请, 其中 #{}表示会从流程变量中获取对应的数据, 如果取不到, 引擎会把#{user.name}直接作为标题的一部分; #{}中的书写方法, 符合ognl的表达式规范, 具体需要由用户控制
+		* pageID: 流程关联的页面唯一标识, 属于全局配置, 可不配置, 没有默认值; 体现在流转过程中, 在返回
 	 -->
-	<process code="编码, 唯一" version="用户自定义的版本" name="流程名称, 可以不配置, 如果不配置则使用code:version" title="标题表达式, 根据表达式生成实例的标题, 如果不配置, 则默认标题使用name" pageID="全局页面标识">
-		<!-- 开始事件, 一个流程中只能有一个开始 -->
-		<startEvent id="startEvent" name="" conditionExpr="启动条件表达式"></startEvent>
+	<process code="vocation" version="v2020" name="" title="" pageID="">
+		<!-- 
+			开始事件, 一个流程中只能有一个开始
+		-->
+		<startEvent id="startEvent" name="" conditionExpr="启动条件表达式">
+			<conditionExpr>
+				<![CDATA[ 判断表达式, 根据表达式决定是否可以启动流程; 可不配置, 默认结果为true ]]>
+			</conditionExpr>
+			
+			<!-- 监听器, 按照配置的顺序依次执行 -->
+			<listeners>
+				<listener value="完整的类路径" /><!-- 按照配置的顺序依次执行, 可配置多组 -->
+			</listeners>
+		</startEvent>
 		
-		<!-- 结束事件, 一个流程中可以有多个结束 -->
-		<endEvent id="endEvent1" name=""></endEvent>
+		<!-- 
+			结束事件, 一个流程中可以有多个结束
+		 -->
+		<endEvent id="endEvent1" name="">
+			<listeners></listeners><!-- 参考startEvent中的listeners配置 -->
+		</endEvent>
 		
-		<!-- 用户任务 -->
-		<!-- defaultFlow: 默认Flow的id, 可不配置; 当配置了多条线时, 如果线的条件都不满足, 引擎会根据配置的defaultFlow进行流转, 如果没有配置, 引擎会抛出异常 -->
-		<userTask id="userTask1" name="任务名称" defaultFlow="" pageID="属于任务的页面标识, 优先级高于全局页面标识" timeLimit="办理时限的表达式, 设置当前用户任务需要在多长时间内办理, 不配置则没有时限约束, 这里的表达式还要体现出工作日/自然日">
+		<!-- 
+			用户任务:
+			* id: 全局唯一标识, 是整个配置文件中的唯一标识
+			* name: 任务名称, 可不配置, 默认为id
+			* defaultFlow: 默认Flow的id, 可不配置; 当配置了多条线时, 如果线的条件都不满足, 引擎会根据配置的defaultFlow进行流出, 如果没有配置, 引擎会抛出异常
+			* pageID: 任务关联的页面唯一标识, 优先级高于全局页面标识, 可不配置, 默认会继承process中的pageID
+			* timeLimit: 办理时限(表达式), 设置当前用户任务需要在多长时间内办理, 可不配置, 不配置则没有时限约束
+			** d: 天类型
+			** h: 小时类型, 值范围1~23
+			** m: 分钟类型, 值范围1~59
+			*** n/w/s: 类型后缀, n表示自然日, w表示不算周六周天的工作日, s表示根据节假日和周六周天计算出的工作日(智能工作日), 只能三选一, 不配置时默认为n, 不区分大小写;  引擎在处理时只会取第一个字符, 如果后面还有任何配置则都会忽略; 如果根据sw无法计算, 会自动降级为w模式
+			** 以上类型可按照顺序组合使用, 例如: 1d1hn, 表示1天1小时(自然日); 如果配置的值出现不合法或超出范围, 引擎会默认没有时限
+			** 以上类型的配置值必须大于0且是整数, 否则会被当做不合法值
+		 -->
+		<userTask id="userTask1" name="任务名称" defaultFlow="" pageID="" timeLimit="这里有个工作日工作时间的问题, 目前不做这块, 暂时先不考虑了">
 			<!-- 当前任务候选人相关配置 -->
 			<candidate>
-				<!-- 候选人指派策略(从上一环节进入当前环节时指派候选人的策略) -->
-				<assignPolicy mode="single/many; 指派候选人模式(只能选择一个候选人, 可以选择多个候选人)">
-					<!-- 指派候选人的表达式, 可配置多组; mode为表达式的模式, value为实际的表达式 -->
-					<expr mode="" value="可指派候选人的表达式" weight="0; 权重, 主要针对多人办理的情况, 可不配置, 默认值为0; 配置的是当前表达式筛选出的候选人的权重值" />
+				<!-- 
+					候选人指派策略:
+					* mode: 指派模式, 是互斥的, 只能选择一种; 优先级从高到低排序为: fixed>variable>assigned; 配置值不区分大小写, 没有默认值
+					** fixed: 表示配置的固定办理人, 进入当前环节时无需指派, 即时指派了也不会起作用, 还是会使用固定办理人
+					** variable: 表示是从流程变量中获取办理人
+					** assigned: 表示是从上一环节进入当前环节时指派办理人
+					
+					* assignNum: 可指派的人数(表达式), 针对mode为assigned生效
+					** 纯数字: 表示可指派的人数数量, 数字小于0会被引擎置为1
+					** 数字+%: 表示可指派的人数百分比, 最少1人; 最后还可以追加配置: +/-, 表示%处理后的小数是向上进一位(+)还是向下退一位(-); 例如: 10%+; 不配置的情况下, 如果小数小于0.5, 向下取整, 如果小数大于等于0.5, 向上取整
+					** 如果遇到不合法的配置, 则引擎会使用默认值
+					** 默认值为1
+				 -->
+				<assignPolicy mode="fixed/variable/assigned" assignNum="1">
+					<expression name="表达式名称" value="表达式需要的值" extendValue="扩展信息, 提供给二次开发使用" /><!-- 指派用户的表达式, 可配置多组 -->
 				</assignPolicy>
 				
-				<!-- 候选人办理策略(在当前环节办理人的办理策略) -->
-				<handlePolicy mode="single/many; 办理模式(单人办理, 多人办理)" strict="是否需要强制表态, 默认值为false">
-					<!-- 多人办理时的策略 -->
-					<many>
-						<!-- 串行办理, 如果不配置该项, 默认就是并行办理  -->
-						<sequence sort="办理候选人的排序策略, 例如是按照认领时间排序, 自然排序, 或是权限排序等, 默认是认领时间排序, 即谁先认领, 谁就先办理" />
-						<!-- 判断是否办理完成 -->
-						<complete expr="判断是否办理是否完成的表达式, 可不配置, 默认需要所有候选人都办理完"></complete>
-						<!-- 判断办理结果是否通过 -->
-						<result expr="判断办理结果是否通过的表达式, 可不配置, 默认办理完成就算通过; 如果表达式结果为false, 表示办理结果不通过" falseTarget="userTask1, 不通过时需要退回到的环节, 可不配置, 默认退回到上一个环节"></result>
-						<!-- 流转策略 -->
-						<circulation tryAuto="是否尝试自动流转, 默认为true; false标识需要由用户决定流转方向, 如果尝试自动流转失败, 还是会切换到由用户决定流转方向" 
-							handlerExpr="手动办理人的表达式; 可不配置, 默认由最后一个办理人进行手动操作"></circulation>
-					</many>
+				<!-- 
+					候选人办理策略(在当前环节办理人的办理策略):
+					* suggest: 表示是否需要强制输入意见, 默认值为false
+					* attitude: 表示是否需要强制表态, 默认值为false
+				-->
+				<handlePolicy suggest="false" attitude="false">
+					<!-- 
+						多人办理时的策略; 如果不配置则即为单人办理模式; 如果配置有误, 则在解析时会抛出异常
+						* handleNum: 可办理的人数(表达式), 参考assignPolicy中的assignNum
+						** 默认值为100%
+						* handleEnd: 办理是否可以结束的策略名称, 可不配置, 默认实际办理人数满足设置的办理人数即可结束办理, 由最后一个办理人决定流程的流转
+					 -->
+					<multiple handleNum="100%" handleEnd="">
+						<!-- 
+							串行办理, 如果不配置该项, 就是并行办理
+							* sort: 串行办理时的办理顺序策略名称, 可不配置, 默认按照认领时间办理  
+						-->
+						<serial sort="" />
+					</multiple>
 				</handlePolicy>
 			</candidate>
 			
-			<!-- 在当前任务时, 可以执行的操作 -->
-			<option type="saveForm" name="保存表单" order="0, 排序值, 默认为0"></option><!-- 对引擎来说, 就是更新流程变量 -->
-			<option type="toStartingLink" name="退回起始环节" order="0, 排序值, 默认为0"></option>
-			<option type="toPreviousLink" name="退回上一环节" order="0, 排序值, 默认为0"></option>
-			<option type="toDesignatedLink" name="退回指定环节" order="0, 排序值, 默认为0" target="userTask1"></option><!-- 该option可配置多个 -->
-			<option type="sendCopy" name="抄送" order="0, 排序值, 默认为0">
+			<!-- 
+				在当前任务时, 可以执行的操作, 可配置多组
+				* type: 操作的类型名, 必须配置, 区分大小写
+				* name: 操作描述, 可不配置, 默认值为type的值
+				* order: 操作排序, 可不配置, 默认值为0
+			 -->
+			 <!-- 这几个操作是当前办理时, 可进行的操作 -->
+			<option type="sendCopy" name="抄送" order="">
+				<candidate></candidate><!-- 必须配置 -->
+			</option>
+			<option type="delegate" name="委托" order="">
 				<candidate></candidate><!-- 可不配置, 默认是当前环节指派的候选人 -->
 			</option>
-			<option type="transfer" name="转办" order="0, 排序值, 默认为0">
-				<candidate></candidate><!-- 可不配置, 默认是当前环节指派的候选人 -->
+			<option type="assist" name="协办" order="">
+				<candidate></candidate><!-- 必须配置 -->
 			</option>
-			<option type="assist" name="协办" order="0, 排序值, 默认为0">
-				<candidate></candidate><!-- 可不配置, 默认是当前环节指派的候选人 -->
+			<!-- 
+				流程跳转, 通过设置name可以实现退回起始节点, 退回上一任务等功能
+				* target: 要跳转的目标任务id
+			 -->
+			<option type="skip" name="流程跳转" order="" target="">
+				<candidate></candidate><!-- 必须配置 -->
 			</option>
-			<option type="extension" name="延长办理" order="0, 排序值, 默认为0" times="可申请延长办理的次数, 默认值为1" maxDays="一次最多几天, 默认值为1" dayType="延长天数是工作日还是自然日, 默认值为工作日" ></option>
-			<option type="tracking" name="流程跟踪" order="0, 排序值, 默认为0"></option>
-			<option type="urging" name="催办" order="0, 排序值, 默认为0" moment="可催办的时机表达式, 例如在逾期后催办, 在提交的一天后催办等, 尽量也体现出工作日和自然日, 默认是在逾期后出现催办按钮"></option><!-- 可配置在何时出现催办按钮 -->
-			<option type="withdraw" name="撤回" order="0, 排序值, 默认为0" times="0"></option><!-- 当用户提交后, 如果发现提交的有问题, 还可以自主选择撤回, 重新编辑后重新提交; times设置可以撤回的次数, 默认值为0, 配置的值在小于1时, 表示不限制次数 -->
-			<!-- 流程挂起, 终止, 激活, 跳转, 重置等功能, 均放到流程实例管理界面, 由流程管理员操作 -->
-						
-			<!-- 监听器, 按照配置的顺序依次执行 -->
-			<listener value="" />
+			<option type="tracking" name="流程跟踪" order="" />
+			
+			<!-- 这两个操作是办理提交后, 可进行的操作 -->
+			<!-- 
+				催办
+				* moment: 催办时机的策略名称, 例如在逾期后催办, 在提交的一天后催办等; 可不配置, 默认是在逾期后可进行催办
+			 -->
+			<option type="urging" name="催办" order="" moment="" />
+			<!-- 
+				撤回, 当用户提交后, 如果发现提交的有问题, 还可以自主选择撤回, 重新编辑后重新提交
+				* moment: 撤回时机的策略名称, 例如未有人认领时可撤回, 在提交的一小时内可撤回等; 可不配置, 默认是在未有人认领时可撤回
+				* times: 可以撤回的次数, 默认值为0, 配置的值在小于1时, 表示不限制次数; 如果任务被人认领, 则不能撤回
+			 -->
+			<option type="withdraw" name="撤回" order="" moment="" times="0" />
+			
+			<listeners></listeners><!-- 参考startEvent中的listeners配置 -->
+			<!-- 流程挂起, 终止, 激活, 重置等功能, 均放到流程实例管理界面, 由流程管理员操作 -->
 		</userTask>
 		
-		<!-- 子流程任务, 暂不实现 -->
+		<!-- 
+			排他网关, 拥有多条流出的flow, 会按照flow的order依次判断, 选择第一个判断结果为true的流出 
+			* id: 参考startEvent中的id配置
+			* name: 参考startEvent中的name配置
+			* defaultFlow: 参考startEvent中的defaultFlow配置
+		-->
+		<exclusiveGateway id="exclusiveGateway1" name="" defaultFlow="">
+			<!-- 
+				变量继承配置, 从上一个任务流转过来时, 引擎会带着上一个任务的所有流程变量, 需要配置网关中可使用哪些范围的流程变量; 可不配置, 默认只使用global范围的流程变量; 如果配置了, 则使用指定范围的流程变量
+				* global: 全局范围, 基于整个流程实例; 值为true, 表示继承, 反之不继承; 可不配置, 默认值为true
+				* local: 本地范围, 基于任务实例; 值为true, 表示继承, 反之不继承; 可不配置, 默认值为false
+				* transient: 瞬时范围, 基于任务实例, 优先级高于local范围; 值为true, 表示继承, 反之不继承; 可不配置, 默认值为false
+			 -->
+			<variableExtend global="true" local="false" transient="false"/>
+			<listeners></listeners><!-- 参考startEvent中的listeners配置 -->
+		</exclusiveGateway>
+		
+		<!-- 
+			并行网关, 拥有多条流出的flow, 会同时从每个flow中流出形成分支, 引擎不会关注每个flow中配置的条件, 所以逻辑上从并行网关出去的flow, 不应该配置条件
+			* 所有配置参考exclusiveGateway的配置
+		 -->
+		<parallelGateway id="parallelGateway1" name="" defaultFlow="">
+			<variableExtend global="true" local="false" transient="false"/>
+			<listeners></listeners>
+		</parallelGateway>
+		
+		<!-- 
+			包容网关, 拥有多条流出的flow, 会判断每条flow的条件, 从条件值为true的flow流出, 可能会形成分支
+			* 所有配置参考exclusiveGateway的配置
+		 -->
+		<inclusiveGateway id="inclusiveGateway1" name="" defaultFlow="">
+			<variableExtend global="true" local="false" transient="false"/>
+			<listeners></listeners>
+		</inclusiveGateway>
+		
+		<!-- 
+			顺序流, 可配置条件; 如果一个任务有多条流出flow, 则使用排他模式
+			* id: 全局唯一标识, 是整个配置文件中的唯一标识
+			* name: 流名称, 可不配置, 默认为id
+			* order: 流排序, 可不配置, 默认值为0
+			* source: 上一个任务的id
+			* target: 下一个任务的id
+		 -->
+		<flow id="flow1" name="" order="0, 排序值, 默认为0" source="startEvent1" target="userTask1">
+			<conditionExpr>
+				<![CDATA[ 判断表达式, 根据表达式决定是否可以从该flow流出; 可不配置, 默认结果为true ]]>
+			</conditionExpr>
+			<listeners></listeners><!-- 参考startEvent中的listeners配置 -->
+		</flow>
+		
+		
+		
+		<!-- 暂不实现 -->
+		<!-- 子流程任务 -->
 		<processTask id="processTask1" name="">
 			<process></process>
 		</processTask>
-		<!-- SQL脚本任务, 暂不实现 -->
+		<!-- SQL脚本任务 -->
 		<sqlTask id="sqlTask1" name=""></sqlTask>
-		<!-- 定时任务, 暂不实现 -->
+		<!-- 定时任务 -->
 		<timerTask id="timerTask1" name="" cronExpr=""></timerTask>
-		<!-- 邮件任务, 暂不实现 -->
+		<!-- 邮件任务 -->
 		<emailTask id="emailTask1" name=""></emailTask>
-		
-		<!-- 排他网关-->
-		<exclusiveGateway id="exclusiveGateway1" name="" defaultFlow="">
-			<!-- (即时的)变量继承配置, 在继承上一个任务的流程变量后, 可使用哪些范围的流程变量; 可不配置, 默认只使用global范围的流程变量; 如果配置了, 则使用指定范围的流程变量 -->
-			<!-- 属性值为true时, 表示继承; 否则表示不继承; 配置值不区分大小写; 如果未配置某个属性, 则默认值为false -->
-			<variableExtend global="true" local="false" transient="false"></variableExtend>
-		</exclusiveGateway>
-		<!-- 并行网关 -->
-		<parallelGateway id="parallelGateway1" name="" defaultFlow="">
-			<scope value=""></scope>
-		</parallelGateway>
-		<!-- 包容网关 -->
-		<inclusiveGateway id="inclusiveGateway1" name="" defaultFlow="">
-			<scope value=""></scope>
-		</inclusiveGateway>
-		
-		<!-- 连线, 可配置条件; 如果一个任务引出多条flow, 则是排他模式 -->
-		<flow id="flow1" name="" order="0, 排序值, 默认为0" source="startEvent1" target="userTask1">
-			<conditionExpr>
-				<![CDATA[ 配置比较表达式, 根据表达式决定是否可以走该flow; 可不配置, 默认比较结果为true ]]>
-			</conditionExpr>
-			<listener value="完整的类路径" /><!-- 监听器, 按照配置的顺序依次执行,  可配置多组 -->
-		</flow>
 	</process>
 	
 	<!-- 配置流程图的结构, 主要就是记录画布的长宽，以及各个节点的坐标，长宽等 -->

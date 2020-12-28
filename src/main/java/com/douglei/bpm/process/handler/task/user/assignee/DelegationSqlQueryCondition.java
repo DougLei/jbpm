@@ -9,11 +9,11 @@ import com.douglei.bpm.process.handler.User;
  * 指派人委托查询条件
  * @author DougLei
  */
-public class DelegationQueryCondition {
+public class DelegationSqlQueryCondition {
 	private long currentTime;
 	private List<String> userIds;
 	
-	DelegationQueryCondition(long currentTime, List<User> assignedUsers) {
+	DelegationSqlQueryCondition(long currentTime, List<User> assignedUsers) {
 		this.currentTime = currentTime;
 		this.userIds = new ArrayList<String>(assignedUsers.size());
 		assignedUsers.forEach(assignedUser -> this.userIds.add(assignedUser.getUserId()));

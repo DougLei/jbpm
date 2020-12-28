@@ -23,7 +23,7 @@ class DelegationHandler {
 	private Map<String, Delegation> map; // 指派和委托的映射map, <指派的用户id, 委托的用户id>
 	private DelegationHandler children;
 
-	public DelegationHandler(List<DelegationInfo> list, DelegationQueryCondition queryCondition, String processCode, String processVersion) {
+	public DelegationHandler(List<DelegationInfo> list, DelegationSqlQueryCondition queryCondition, String processCode, String processVersion) {
 		if(list.isEmpty())
 			return;
 		

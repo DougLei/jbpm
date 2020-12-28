@@ -19,7 +19,7 @@ public class AssignedUserHandler4Startup {
 	public AssignedUserHandler4Startup(String code, String version, List<User> assignedUsers) {
 		this.assignedUsers = assignedUsers;
 		
-		DelegationQueryCondition queryCondition = new DelegationQueryCondition(new Date().getTime(), assignedUsers);
+		DelegationSqlQueryCondition queryCondition = new DelegationSqlQueryCondition(new Date().getTime(), assignedUsers);
 		this.delegationHandler = new DelegationHandler(
 				SessionContext.getSQLSession().query(DelegationInfo.class, "Assignee", "queryDelegations", queryCondition), 
 				queryCondition,

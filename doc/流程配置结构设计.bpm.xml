@@ -154,21 +154,19 @@
 		</exclusiveGateway>
 		
 		<!-- 
-			并行网关, 拥有多条流出的flow, 会同时从每个flow中流出形成分支, 引擎不会关注每个flow中配置的条件, 所以逻辑上从并行网关出去的flow, 不应该配置条件
-			* enabledInclusiveMode: 启用包容模式, 将并行网关转为包容网关, 可不配置, 默认值为false
-			* 其他配置参考exclusiveGateway的配置
+			并行网关, 拥有多条流出的flow, 会同时从每个flow中流出形成分支, 引擎不会关注每个flow中配置的条件, 即时配置了也会忽略
+			* 配置参考exclusiveGateway的配置
 		 -->
-		<parallelGateway id="parallelGateway1" name="" defaultFlow="" enabledInclusiveMode="false">
+		<parallelGateway id="parallelGateway1" name="" defaultFlow="">
 			<variableExtend global="true" local="false" transient="false"/>
 			<listeners></listeners>
 		</parallelGateway>
 		
 		<!-- 
 			包容网关, 拥有多条流出的flow, 会判断每条flow的条件, 从条件值为true的flow流出, 可能会形成分支
-			* enabledParallelMode: 启用并行模式, 将包容网关转为并行网关, 可不配置, 默认值为false
-			* 其他配置参考exclusiveGateway的配置
+			* 配置参考exclusiveGateway的配置
 		 -->
-		<inclusiveGateway id="inclusiveGateway1" name="" defaultFlow="" enabledParallelMode="false">
+		<inclusiveGateway id="inclusiveGateway1" name="" defaultFlow="">
 			<variableExtend global="true" local="false" transient="false"/>
 			<listeners></listeners>
 		</inclusiveGateway>

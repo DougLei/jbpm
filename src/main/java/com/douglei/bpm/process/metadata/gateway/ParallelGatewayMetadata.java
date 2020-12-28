@@ -13,11 +13,6 @@ public class ParallelGatewayMetadata extends AbstractGatewayMetadata {
 	}
 	
 	@Override
-	public boolean supportFlowConditionExpr() {
-		return false;
-	}
-	
-	@Override
 	public Type getType() {
 		return Type.PARALLEL_GATEWAY;
 	}

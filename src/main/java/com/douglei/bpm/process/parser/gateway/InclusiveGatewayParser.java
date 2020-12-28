@@ -4,9 +4,7 @@ import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.Type;
-import com.douglei.bpm.process.metadata.gateway.AbstractGatewayMetadata;
 import com.douglei.bpm.process.metadata.gateway.InclusiveGatewayMetadata;
-import com.douglei.bpm.process.metadata.gateway.ParallelGatewayMetadata;
 import com.douglei.bpm.process.parser.Parser;
 
 /**
@@ -17,9 +15,7 @@ import com.douglei.bpm.process.parser.Parser;
 public class InclusiveGatewayParser extends AbstractGatewayParser {
 
 	@Override
-	protected AbstractGatewayMetadata createGatewayMetadata(String id, String name, String defaultFlowId, int unextendScopeWeight, Element element) {
-		if(Boolean.parseBoolean(element.attributeValue("enabledParallelMode")))
-			return new ParallelGatewayMetadata(id, name, defaultFlowId, unextendScopeWeight);
+	protected InclusiveGatewayMetadata createGatewayMetadata(String id, String name, String defaultFlowId, int unextendScopeWeight, Element element) {
 		return new InclusiveGatewayMetadata(id, name, defaultFlowId, unextendScopeWeight);
 	}
 	

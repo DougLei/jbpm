@@ -29,30 +29,31 @@ public class ProcessDelegationService {
 	 * 
 	 * */
 	
+	/**
+	 * 添加委托
+	 * @param delegation
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult insert(Delegation delegation) {
+		// TODO 添加委托
+		
+		
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * 修改委托
+	 * @param delegation
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult update(Delegation delegation) {
+		// TODO 修改委托
+		
+		
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
 	
 	
 	/**
@@ -131,25 +132,6 @@ public class ProcessDelegationService {
 		List<Object> paramList = Arrays.asList(delegationId);
 		if(SessionContext.getSqlSession().executeUpdate("delete bpm_re_delegation where id=?", paramList) == 1)
 			SessionContext.getSqlSession().executeUpdate("delete bpm_re_delegation_detail where delegation_id=?", paramList);
-		return ExecutionResult.getDefaultSuccessInstance();
-	}
-	
-	/**
-	 * 删除委托明细
-	 * @param delegationDetailIds
-	 * @return
-	 */
-	public ExecutionResult deleteDetail(int... delegationDetailIds) {
-		SessionContext.getSQLSession().executeUpdate("ProcessDelegation", "deleteDelegationDetails", delegationDetailIds);
-		return ExecutionResult.getDefaultSuccessInstance();
-	}
-	/**
-	 * 删除委托明细
-	 * @param delegationDetailIds
-	 * @return
-	 */
-	public ExecutionResult deleteDetail(List<Integer> delegationDetailIds) {
-		SessionContext.getSQLSession().executeUpdate("ProcessDelegation", "deleteDelegationDetails", delegationDetailIds);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 }

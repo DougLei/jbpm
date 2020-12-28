@@ -38,12 +38,12 @@ public class SuggestService {
 	
 	/**
 	 * 删除意见
-	 * @param id
+	 * @param suggestId
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult delete(int id) {
-		SessionContext.getSqlSession().executeUpdate("delete bpm_re_suggest where id=?", Arrays.asList(id));
+	public ExecutionResult delete(int suggestId) {
+		SessionContext.getSqlSession().executeUpdate("delete bpm_re_suggest where id=?", Arrays.asList(suggestId));
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	

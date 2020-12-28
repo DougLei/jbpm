@@ -18,11 +18,6 @@ public class EndEventMetadata extends TaskMetadata {
 	}
 	
 	@Override
-	public boolean supportMultiFlow() {
-		return false;
-	}
-	
-	@Override
 	public void addFlow(FlowMetadata flow) {
 		throw new ProcessEngineException("EndEvent不能使用Flow");
 	}
@@ -34,11 +29,6 @@ public class EndEventMetadata extends TaskMetadata {
 	
 	@Override
 	public FlowMetadata getDefaultFlow() {
-		throw new ProcessEngineException("EndEvent不能使用Flow");
-	}
-	
-	@Override
-	public boolean supportFlowConditionExpr() {
 		throw new ProcessEngineException("EndEvent不能使用Flow");
 	}
 	

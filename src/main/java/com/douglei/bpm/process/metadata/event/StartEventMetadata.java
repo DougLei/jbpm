@@ -1,17 +1,17 @@
 package com.douglei.bpm.process.metadata.event;
 
 import com.douglei.bpm.process.Type;
-import com.douglei.bpm.process.metadata.SingleFlowTaskMetadata;
+import com.douglei.bpm.process.metadata.MultiFlowTaskMetadata;
 
 /**
  * 
  * @author DougLei
  */
-public class StartEventMetadata extends SingleFlowTaskMetadata {
+public class StartEventMetadata extends MultiFlowTaskMetadata {
 	private String conditionExpr; // 启动条件表达式
 	
-	public StartEventMetadata(String id, String name, String conditionExpr) {
-		super(id, name);
+	public StartEventMetadata(String id, String name, String defaultFlowId, String conditionExpr) {
+		super(id, name, defaultFlowId);
 		this.conditionExpr = conditionExpr;
 	}
 	

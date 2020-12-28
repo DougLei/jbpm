@@ -15,12 +15,6 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 	}
 	
 	/**
-	 * 当前任务是否支持多Flow
-	 * @return
-	 */
-	public abstract boolean supportMultiFlow();
-	
-	/**
 	 * 添加Flow
 	 * @param flow
 	 */
@@ -37,12 +31,6 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 	 * @return
 	 */
 	public abstract FlowMetadata getDefaultFlow();
-	
-	/**
-	 * 当前任务是否支持Flow(拥有)条件表达式
-	 * @return
-	 */
-	public abstract boolean supportFlowConditionExpr();
 	
 	/**
 	 * 获取pageID, 可为null

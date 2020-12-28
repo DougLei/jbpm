@@ -19,7 +19,11 @@ public class StartEventParser implements Parser<TaskTemporaryData, StartEventMet
 	@Override
 	public StartEventMetadata parse(TaskTemporaryData temporaryData) throws ProcessParseException {
 		Element element = temporaryData.getElement();
-		return new StartEventMetadata(temporaryData.getId(), element.attributeValue("name"), element.attributeValue("conditionExpr"));
+		return new StartEventMetadata(
+				temporaryData.getId(), 
+				element.attributeValue("name"), 
+				element.attributeValue("defaultFlow"), 
+				element.attributeValue("conditionExpr"));
 	}
 
 	@Override

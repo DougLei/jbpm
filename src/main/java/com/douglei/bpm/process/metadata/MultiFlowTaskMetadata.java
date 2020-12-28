@@ -52,14 +52,4 @@ public abstract class MultiFlowTaskMetadata extends TaskMetadata{
 	public final List<FlowMetadata> getFlows() {
 		return flows;
 	}
-
-	@Override
-	public final boolean supportMultiFlow() {
-		return true;
-	}
-	
-	@Override
-	public boolean supportFlowConditionExpr() {
-		return true;
-	}
 }

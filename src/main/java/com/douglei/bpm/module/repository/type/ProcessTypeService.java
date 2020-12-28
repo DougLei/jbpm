@@ -57,7 +57,7 @@ public class ProcessTypeService {
 		int count = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_("select count(id) from bpm_re_procdef where type_id = ?", param)[0].toString());
 		if(count > 0 && !strict)
 			return new ExecutionResult("该流程类型关联了["+count+"]条流程, 无法删除");
-
+		
 		SessionContext.getSqlSession().executeUpdate("delete bpm_re_proctype where id=?", param);
 		if(count > 0) 
 			SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set type_id=0 where type_id=?", param);

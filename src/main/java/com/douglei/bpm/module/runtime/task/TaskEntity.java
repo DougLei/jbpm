@@ -5,6 +5,7 @@ import java.util.Arrays;
 import com.douglei.bpm.process.container.ProcessContainerProxy;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.metadata.TaskMetadata;
+import com.douglei.bpm.process.metadata.entity.TaskMetadataEntity;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -13,7 +14,7 @@ import com.douglei.orm.context.SessionContext;
  */
 public class TaskEntity {
 	private ProcessMetadata processMetadata;
-	private TaskMetadata taskMetadata;
+	private TaskMetadataEntity taskMetadata;
 	private Task task;
 	
 	TaskEntity(int taskId, ProcessContainerProxy container) {

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.LinkedList;
 
 import com.douglei.bpm.module.runtime.task.Task;
+import com.douglei.bpm.process.metadata.ProcessMetadata;
 
 /**
  * 办理参数抽象类
@@ -11,7 +12,8 @@ import com.douglei.bpm.module.runtime.task.Task;
  */
 public abstract class AbstractHandleParameter implements HandleParameter {
 	private Date currentDate = new Date(); // 当前时间
-	protected ProcessEntity processEntity; // 流程实体
+	protected String processInstanceId; // 流程实例id
+	protected ProcessMetadata processMetadata; // 流程元数据实例
 	protected LinkedList<Task> tasks; // 办理的任务集合
 	protected UserEntity userEntity; // 办理的用户实体
 	protected VariableEntities variableEntities; // 办理中的流程变量
@@ -21,8 +23,12 @@ public abstract class AbstractHandleParameter implements HandleParameter {
 		return currentDate;
 	}
 	@Override
-	public final ProcessEntity getProcessEntity() {
-		return processEntity;
+	public final String getProcessInstanceId() {
+		return processInstanceId;
+	}
+	@Override
+	public final ProcessMetadata getProcessMetadata() {
+		return processMetadata;
 	}
 	@Override
 	public void addTask(Task task) {

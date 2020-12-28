@@ -39,11 +39,11 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 	
 	// 创建流程实例
 	private ProcessInstance createProcessInstance() {
-		ProcessMetadata processMetadata = handleParameter.getProcessEntity().getProcessMetadata();
+		ProcessMetadata processMetadata = handleParameter.getProcessMetadata();
 		
 		ProcessInstance instance = new ProcessInstance();
 		instance.setProcdefId(processMetadata.getId());
-		instance.setProcinstId(handleParameter.getProcessEntity().getProcinstId());
+		instance.setProcinstId(handleParameter.getProcessInstanceId());
 		instance.setTitle(new TitleParser(processMetadata.getTitle(), handleParameter.getVariableEntities().getVariableMap()).getTitle());
 		instance.setBusinessId(handleParameter.getBusinessId());
 		instance.setPageId(processMetadata.getPageID());

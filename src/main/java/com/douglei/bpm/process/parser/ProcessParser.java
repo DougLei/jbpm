@@ -111,7 +111,7 @@ public class ProcessParser implements CustomAutowired{
 			throw new ProcessParseException("流程中必须配置起始事件");
 		process.setStartEvent(startEventMetadata);
 		
-		linkTaskAndFlow(startEventMetadata, flowTemporaryDatas, taskMap, process);
+		addTaskAndFlow(startEventMetadata, flowTemporaryDatas, taskMap, process);
 		
 		if(!flowTemporaryDatas.isEmpty())
 			flowTemporaryDatas.clear();
@@ -135,13 +135,13 @@ public class ProcessParser implements CustomAutowired{
 	}
 
 	/**
-	 *  将任务和流进行连接
+	 *  添加任务和流
 	 * @param sourceTask 
 	 * @param flowTemporaryDatas
 	 * @param taskMap
 	 * @param process
 	 */
-	private void linkTaskAndFlow(TaskMetadata sourceTask, List<FlowTemporaryData> flowTemporaryDatas, Map<String, Object> taskMap, ProcessMetadata process) {
+	private void addTaskAndFlow(TaskMetadata sourceTask, List<FlowTemporaryData> flowTemporaryDatas, Map<String, Object> taskMap, ProcessMetadata process) {
 		boolean taskExistsFlow = false;
 		if(!flowTemporaryDatas.isEmpty()) {
 			for (int i = 0; i < flowTemporaryDatas.size(); i++) {
@@ -165,7 +165,7 @@ public class ProcessParser implements CustomAutowired{
 					if(targetTask != taskObj) { // 证明targetTask是第一次解析
 						process.addTask(targetTask);
 						if(!(targetTask instanceof EndEventMetadata)) {
-							linkTaskAndFlow(targetTask, flowTemporaryDatas, taskMap, process);
+							addTaskAndFlow(targetTask, flowTemporaryDatas, taskMap, process);
 							i = -1;
 						}
 					}
@@ -174,6 +174,6 @@ public class ProcessParser implements CustomAutowired{
 		}
 		
 		if(!taskExistsFlow)
-			throw new ProcessParseException("流程中id=[" + sourceTask.getId() + "]的任务, 不是结束事件, 必须配置相应的连线");
+			throw new ProcessParseException("流程中id=[" + sourceTask.getId() + "]的任务, 不是结束事件, 必须配置相应的Flow");
 	}
 }

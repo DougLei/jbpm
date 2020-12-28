@@ -2,11 +2,12 @@ package com.douglei.bpm.process.metadata;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.douglei.bpm.process.metadata.entity.StartEventMetadataEntity;
+import com.douglei.bpm.process.metadata.entity.TaskMetadataEntity;
 import com.douglei.bpm.process.metadata.event.StartEventMetadata;
 import com.douglei.bpm.process.metadata.flow.FlowMetadata;
 import com.douglei.tools.utils.StringUtil;
@@ -63,45 +64,26 @@ public class ProcessMetadata implements Serializable {
 	public String getPageID() {
 		return pageID;
 	}
-	public StartEventMetadata getStartEvent() {
-		return startEvent;
+	
+	/**
+	 * 获取StartEvent元数据
+	 * @return
+	 */
+	public StartEventMetadataEntity getStartEvent() {
+		return new StartEventMetadataEntity(startEvent, flows);
 	}
-	public TaskMetadata getTask(String taskId, boolean inFlows, boolean outFlows) {
+	/**
+	 * 获取任务元数据实体实例
+	 * @param taskId 任务id
+	 * @param inputFlows 是否获取输入flow集合
+	 * @param outputFlows 是否获取输出flow集合
+	 * @param defaultFlow 是否获取默认flow
+	 * @return
+	 */
+	public TaskMetadataEntity getTask(String taskId, boolean inputFlows, boolean outputFlows, boolean defaultFlow) {
 		TaskMetadata task = taskMap.get(taskId);
 		if(task == null)
 			throw new NullPointerException("不存在id为["+taskId+"]的任务");
-		return task;
-	}
-	public List<FlowMetadata> getInFlows(String taskId){
-		if(!taskMap.containsKey(taskId))
-			throw new NullPointerException("不存在id为["+taskId+"]的任务");
-		
-		List<FlowMetadata> inFlows = null;
-		for (FlowMetadata flow : flows) {
-			if(flow.getTarget().equals(taskId)) {
-				if(inFlows == null)
-					inFlows = new ArrayList<FlowMetadata>(4);
-				inFlows.add(flow);
-			}
-		}
-		if(inFlows == null)
-			return Collections.emptyList();
-		return inFlows;
-	}
-	public List<FlowMetadata> getOutFlows(String taskId){
-		if(!taskMap.containsKey(taskId))
-			throw new NullPointerException("不存在id为["+taskId+"]的任务");
-		
-		List<FlowMetadata> outFlows = null;
-		for (FlowMetadata flow : flows) {
-			if(flow.getSource().equals(taskId)) {
-				if(outFlows == null)
-					outFlows = new ArrayList<FlowMetadata>(4);
-				outFlows.add(flow);
-			}
-		}
-		if(outFlows == null)
-			return Collections.emptyList();
-		return outFlows;
+		return new TaskMetadataEntity(task, flows, inputFlows, outputFlows, task.getDefaultFlowId()==null?false:defaultFlow);
 	}
 }

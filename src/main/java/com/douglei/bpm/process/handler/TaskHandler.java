@@ -32,8 +32,8 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	 */
 	protected final Task createTask(boolean isSave) {
 		Task task = new Task(
-				handleParameter.getProcessEntity().getProcessMetadata().getId(), 
-				handleParameter.getProcessEntity().getProcinstId(),
+				handleParameter.getProcessMetadata().getId(), 
+				handleParameter.getProcessInstanceId(),
 				handleParameter.getTask().getParentTaskinstId(),
 				taskMetadata);
 		if(isSave)
@@ -54,7 +54,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 		SessionContext.getTableSession().save(historyTask);	
 		
 		// 变量调度
-		beanInstances.getVariableScheduler().followTaskDispatch(handleParameter.getProcessEntity().getProcinstId(), handleParameter.getTask().getTaskinstId());
+		beanInstances.getVariableScheduler().followTaskDispatch(handleParameter.getProcessInstanceId(), handleParameter.getTask().getTaskinstId());
 	}
 	
 	/**

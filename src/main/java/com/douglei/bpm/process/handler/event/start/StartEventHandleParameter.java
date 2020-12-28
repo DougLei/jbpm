@@ -5,7 +5,6 @@ import java.util.UUID;
 import com.douglei.bpm.bean.BeanInstances;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
-import com.douglei.bpm.process.handler.ProcessEntity;
 import com.douglei.bpm.process.handler.UserEntity;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 
@@ -17,7 +16,8 @@ public class StartEventHandleParameter extends GeneralHandleParameter {
 	private StartParameter parameter;
 	
 	public StartEventHandleParameter(BeanInstances beanInstances, ProcessMetadata processMetadata, StartParameter parameter) {
-		super.processEntity = new ProcessEntity(UUID.randomUUID().toString(), processMetadata);
+		super.processInstanceId = UUID.randomUUID().toString();
+		super.processMetadata = processMetadata;
 		super.userEntity = new UserEntity(beanInstances.getUserFactory().create(parameter.getUserId()), beanInstances.getUserFactory().create(parameter.getAssignUserIds()));
 		super.variableEntities = parameter.getVariableEntities();
 		this.parameter = parameter;

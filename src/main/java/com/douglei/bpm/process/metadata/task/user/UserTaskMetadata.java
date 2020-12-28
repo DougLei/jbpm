@@ -3,7 +3,7 @@ package com.douglei.bpm.process.metadata.task.user;
 import java.util.List;
 
 import com.douglei.bpm.process.Type;
-import com.douglei.bpm.process.metadata.MultiFlowTaskMetadata;
+import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.bpm.process.metadata.listener.Listener;
 import com.douglei.bpm.process.metadata.task.user.candidate.Candidate;
 import com.douglei.bpm.process.metadata.task.user.option.Option;
@@ -12,7 +12,7 @@ import com.douglei.bpm.process.metadata.task.user.option.Option;
  * 
  * @author DougLei
  */
-public class UserTaskMetadata extends MultiFlowTaskMetadata {
+public class UserTaskMetadata extends TaskMetadata {
 	private String pageID;
 	private TimeLimitExpression timeLimitExpression;
 	private Candidate candidate;

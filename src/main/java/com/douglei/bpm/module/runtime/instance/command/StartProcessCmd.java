@@ -8,6 +8,7 @@ import com.douglei.bpm.module.repository.definition.State;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.process.handler.event.start.StartEventHandleParameter;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
+import com.douglei.bpm.process.metadata.entity.StartEventMetadataEntity;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -41,7 +42,8 @@ public class StartProcessCmd implements Command {
 			return new ExecutionResult("启动失败, ["+processDefinition.getName()+"]流程还未部署");
 		
 		ProcessMetadata processMetadata = beanInstances.getProcessContainer().getProcess(processDefinition.getId());
+		StartEventMetadataEntity entity = processMetadata.getStartEvent();
 		return beanInstances.getTaskHandlerUtil()
-				.startup(processMetadata.getStartEvent(), new StartEventHandleParameter(beanInstances, processMetadata, parameter));
+				.startup(entity.getTaskMetadata(), new StartEventHandleParameter(beanInstances, processMetadata, parameter));
 	}
 }

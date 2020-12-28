@@ -152,9 +152,7 @@ public class ProcessParser implements CustomAutowired{
 					Object taskObj = taskMap.get(flowTemporaryData.getTarget());
 					if(taskObj == null)
 						throw new ProcessParseException("流程中不存在id=["+flowTemporaryData.getTarget()+"]的任务");
-					
-					FlowMetadata outFlow = flowParser.parse(flowTemporaryData);
-					sourceTask.addFlow(outFlow);
+					process.addFlow(flowParser.parse(flowTemporaryData));
 					
 					TaskMetadata targetTask = null;
 					if(taskObj instanceof Element) {
@@ -164,8 +162,6 @@ public class ProcessParser implements CustomAutowired{
 					}else {
 						targetTask = (TaskMetadata) taskObj;
 					}
-					
-					outFlow.setTargetTask(targetTask);
 					if(targetTask != taskObj) { // 证明targetTask是第一次解析
 						process.addTask(targetTask);
 						if(!(targetTask instanceof EndEventMetadata)) {

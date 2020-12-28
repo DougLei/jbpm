@@ -35,8 +35,13 @@ public class FlowParser implements Parser<FlowTemporaryData, FlowMetadata> {
 			if(StringUtil.notEmpty(tmp))
 				conditionExpr = tmp.substring(2, tmp.length()-1);
 		}
-		
-		return new FlowMetadata(temporaryData.getId(), element.attributeValue("name"), order, conditionExpr);
+		return new FlowMetadata(
+				temporaryData.getId(), 
+				element.attributeValue("name"), 
+				temporaryData.getSource(), 
+				temporaryData.getTarget(), 
+				order, 
+				conditionExpr);
 	}
 
 	@Override

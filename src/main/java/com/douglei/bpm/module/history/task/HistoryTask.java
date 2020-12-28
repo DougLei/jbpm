@@ -13,14 +13,15 @@ public class HistoryTask extends Task{
 	private Date endTime;
 
 	public HistoryTask() {}
-	public HistoryTask(int procdefId, String procinstId, TaskMetadata taskMetadata) {
-		super(procdefId, procinstId, taskMetadata);
+	public HistoryTask(int procdefId, String procinstId, String parentTaskinstId, TaskMetadata taskMetadata) {
+		super(procdefId, procinstId, parentTaskinstId, taskMetadata);
 		this.endTime = super.startTime;
 	}
 	public HistoryTask(Task task) {
 		super.procdefId = task.getProcdefId();
 		super.procinstId = task.getProcinstId();
 		super.taskinstId = task.getTaskinstId();
+		super.parentTaskinstId = task.getParentTaskinstId();
 		super.key = task.getKey();
 		super.name = task.getName();
 		super.type = task.getType();
@@ -28,7 +29,6 @@ public class HistoryTask extends Task{
 		super.expiryTime = task.getExpiryTime();
 		super.businessId = task.getBusinessId();
 		super.pageId = task.getPageId();
-		super.groupId = task.getGroupId();
 		this.endTime = new Date();
 	}
 	

@@ -1,7 +1,6 @@
 package com.douglei.bpm.process.metadata;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import com.douglei.bpm.process.metadata.flow.FlowMetadata;
@@ -23,19 +22,8 @@ public abstract class MultiFlowTaskMetadata extends TaskMetadata{
 	public final void addFlow(FlowMetadata flow) {
 		flows.add(flow);
 		if(flows.size() > 1) 
-			flows.sort(flowComparator);
+			flows.sort(FlowSortComparator.getInstance());
 	}
-	private static Comparator<FlowMetadata> flowComparator = new Comparator<FlowMetadata>() { // 流排序的比较器
-		@Override
-		public int compare(FlowMetadata f1, FlowMetadata f2) {
-			if(f1.getOrder() == f2.getOrder()) {
-				return 0;
-			}else if(f1.getOrder() < f2.getOrder()) {
-				return -1;
-			}
-			return 1;
-		}
-	};
 
 	@Override
 	public final FlowMetadata getDefaultFlow() {

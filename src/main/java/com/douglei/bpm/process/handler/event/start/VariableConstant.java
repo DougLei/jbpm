@@ -13,7 +13,7 @@ public class VariableConstant {
 	 */
 	public static final String PREFIX = "#{";
 	/**
-	 * 变量前缀 4 正则表达式使用, 因为{是正则表达式关键字, 所以需要转义
+	 * 变量前缀 for 正则表达式使用, 因为{是正则表达式关键字, 所以需要转义
 	 */
 	public static final String PREFIX_4_REGEX = "#\\{";
 	/**

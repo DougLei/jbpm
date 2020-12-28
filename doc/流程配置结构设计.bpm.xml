@@ -144,10 +144,10 @@
 		-->
 		<exclusiveGateway id="exclusiveGateway1" name="" defaultFlow="">
 			<!-- 
-				变量继承配置, 从上一个任务流转过来时, 引擎会带着上一个任务的所有流程变量, 需要配置网关中可使用哪些范围的流程变量; 可不配置, 默认只使用global范围的流程变量; 如果配置了, 则使用指定范围的流程变量
-				* global: 全局范围, 基于整个流程实例; 值为true, 表示继承, 反之不继承; 可不配置, 默认值为true
-				* local: 本地范围, 基于任务实例; 值为true, 表示继承, 反之不继承; 可不配置, 默认值为false
-				* transient: 瞬时范围, 基于任务实例, 优先级高于local范围; 值为true, 表示继承, 反之不继承; 可不配置, 默认值为false
+				变量继承配置, 从上一个任务流转过来时, 引擎会带着上一个任务的所有流程变量, 需要配置网关中可使用哪些范围的流程变量; 可不配置, 默认只可使用global范围的变量; 如果配置了, 则使用指定范围的流程变量
+				* global: 全局范围, 基于整个流程实例; 值为true, 表示继承, 反之不继承; 可不配置, 默认值为true; 不区分大小写
+				* local: 本地范围, 同上, (不同点)默认值为false
+				* transient: 瞬时范围, 同上, (不同点)默认值为false
 			 -->
 			<variableExtend global="true" local="false" transient="false"/>
 			<listeners></listeners><!-- 参考startEvent中的listeners配置 -->

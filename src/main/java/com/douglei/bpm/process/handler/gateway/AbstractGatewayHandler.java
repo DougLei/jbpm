@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.handler.gateway;
 
-import com.douglei.bpm.process.handler.GeneralHandleParameter;
+import com.douglei.bpm.process.handler.HandleParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.metadata.gateway.AbstractGatewayMetadata;
 
@@ -8,9 +8,11 @@ import com.douglei.bpm.process.metadata.gateway.AbstractGatewayMetadata;
  * 
  * @author DougLei
  */
-abstract class AbstractGatewayHandler extends TaskHandler<AbstractGatewayMetadata, GeneralHandleParameter>{
+abstract class AbstractGatewayHandler extends TaskHandler<AbstractGatewayMetadata, HandleParameter>{
 	
-	// 移除不继承的流程变量
+	/**
+	 * 移除不继承的流程变量
+	 */
 	protected final void removeVariables() {
 		// 5, 6, 8, 9  global
 		// 3, 4, 8, 9  local
@@ -40,6 +42,9 @@ abstract class AbstractGatewayHandler extends TaskHandler<AbstractGatewayMetadat
 				handleParameter.getVariableEntities().removeAllGlobalVariable();
 				handleParameter.getVariableEntities().removeAllLocalVariable();
 				handleParameter.getVariableEntities().removeAllTransientVariable();
+				break;
+			default:
+				break;
 		}
 	}
 }

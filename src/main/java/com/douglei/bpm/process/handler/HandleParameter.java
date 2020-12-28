@@ -23,10 +23,16 @@ public interface HandleParameter {
 	ProcessEntity getProcessEntity() ;
 	
 	/**
-	 * 获取办理的任务实例
+	 * 添加办理的任务实例
+	 * @param task
+	 */
+	void addTask(Task task);
+	
+	/**
+	 * 获取(最新)办理的任务实例
 	 * @return
 	 */
-	Task getTaskInstance();
+	Task getTask();
 	
 	/**
 	 * 获取办理的用户实体

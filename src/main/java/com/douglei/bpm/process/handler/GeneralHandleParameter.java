@@ -18,12 +18,12 @@ public class GeneralHandleParameter extends AbstractHandleParameter{
 	protected GeneralHandleParameter() {
 	}
 	public GeneralHandleParameter(TaskEntity taskEntity, User handledUser, String suggest, Attitude attitude, List<User> assignedUsers) {
-		super.task = taskEntity.getTask();
-		super.processEntity = new ProcessEntity(task.getProcinstId(), taskEntity.getProcessMetadata());
+		addTask(taskEntity.getTask());
+		super.processEntity = new ProcessEntity(taskEntity.getTask().getProcinstId(), taskEntity.getProcessMetadata());
 		super.userEntity = new UserEntity(handledUser, suggest, attitude, assignedUsers);
 		super.variableEntities = new VariableEntities(SessionContext.getTableSession().query(
 				Variable.class, 
 				"select * from bpm_ru_variable where procinst_id=? and (taskinst_id=? or scope =?)", 
-				Arrays.asList(task.getProcinstId(), task.getTaskinstId(), Scope.GLOBAL.name())));
+				Arrays.asList(taskEntity.getTask().getProcinstId(), taskEntity.getTask().getTaskinstId(), Scope.GLOBAL.name())));
 	}
 }

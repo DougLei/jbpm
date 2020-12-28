@@ -28,8 +28,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 		if(handleParameter.getUserEntity().getAssignedUsers().isEmpty())
 			throw new TaskHandleException("id为["+taskMetadata.getId()+"], name为["+taskMetadata.getName()+"]的任务没有指派具体的办理人员");
 		
-		Task task = new Task(handleParameter.getProcessEntity().getProcessMetadata().getId(), handleParameter.getProcessEntity().getProcinstId(), taskMetadata);
-		SessionContext.getTableSession().save(task);
+		Task task = createTask(true);
 		
 		new AssignedUserHandler4Startup(handleParameter.getProcessEntity().getProcessMetadata().getCode(), 
 				handleParameter.getProcessEntity().getProcessMetadata().getVersion(), 
@@ -49,7 +48,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 	// 指派信息调度
 	private void assigneeDispatch() {
 		List<HistoryAssignee> assigneeList = SessionContext.getSqlSession().query(HistoryAssignee.class, "select * from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
-				Arrays.asList(handleParameter.getTaskInstance().getTaskinstId(),
+				Arrays.asList(handleParameter.getTask().getTaskinstId(),
 						handleParameter.getUserEntity().getHandledUser().getUserId(),
 						HandleState.CLAIMED.name()));
 		new AssignedUserHandler4Handling(handleParameter, assigneeList).assigneeDispatch();

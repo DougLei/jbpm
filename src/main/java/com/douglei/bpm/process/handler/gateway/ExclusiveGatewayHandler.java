@@ -19,7 +19,11 @@ public class ExclusiveGatewayHandler extends AbstractGatewayHandler{
 	@Override
 	public ExecutionResult handle() {
 		// 创建流程任务(因为是网关, 所以直接创建历史任务即可)
-		HistoryTask historyTask = new HistoryTask(handleParameter.getProcessEntity().getProcessMetadata().getId(), handleParameter.getProcessEntity().getProcinstId(), taskMetadata);
+		HistoryTask historyTask = new HistoryTask(
+				handleParameter.getProcessEntity().getProcessMetadata().getId(), 
+				handleParameter.getProcessEntity().getProcinstId(), 
+				handleParameter.getTask().getParentTaskinstId(),
+				taskMetadata);
 		SessionContext.getTableSession().save(historyTask);
 		
 		beanInstances.getTaskHandlerUtil().dispatch(taskMetadata, handleParameter);

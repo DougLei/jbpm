@@ -14,6 +14,7 @@ public class Task {
 	protected int procdefId;
 	protected String procinstId;
 	protected String taskinstId;
+	protected String parentTaskinstId;
 	protected String key;
 	protected String name;
 	protected String type;
@@ -21,13 +22,13 @@ public class Task {
 	protected Date expiryTime;
 	protected String businessId;
 	protected String pageId;
-	protected String groupId;
 	
 	public Task() {}
-	public Task(int procdefId, String procinstId, TaskMetadata taskMetadata) {
+	public Task(int procdefId, String procinstId, String parentTaskinstId, TaskMetadata taskMetadata) {
 		this.procdefId = procdefId;
 		this.procinstId = procinstId;
 		this.taskinstId = UUID.randomUUID().toString();
+		this.parentTaskinstId = parentTaskinstId;
 		this.key = taskMetadata.getId();
 		this.name = taskMetadata.getName();
 		this.type = taskMetadata.getType().getName();
@@ -58,6 +59,12 @@ public class Task {
 	}
 	public void setTaskinstId(String taskinstId) {
 		this.taskinstId = taskinstId;
+	}
+	public String getParentTaskinstId() {
+		return parentTaskinstId;
+	}
+	public void setParentTaskinstId(String parentTaskinstId) {
+		this.parentTaskinstId = parentTaskinstId;
 	}
 	public String getKey() {
 		return key;
@@ -100,11 +107,5 @@ public class Task {
 	}
 	public void setPageId(String pageId) {
 		this.pageId = pageId;
-	}
-	public String getGroupId() {
-		return groupId;
-	}
-	public void setGroupId(String groupId) {
-		this.groupId = groupId;
 	}
 }

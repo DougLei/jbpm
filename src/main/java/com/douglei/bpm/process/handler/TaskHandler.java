@@ -5,6 +5,7 @@ import java.util.Arrays;
 import com.douglei.bpm.bean.BeanInstances;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.task.HistoryTask;
+import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.orm.context.SessionContext;
 
@@ -25,19 +26,35 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	}
 	
 	/**
+	 * 创建任务
+	 * @param isSave 是否直接保存到任务运行表
+	 * @return
+	 */
+	protected final Task createTask(boolean isSave) {
+		Task task = new Task(
+				handleParameter.getProcessEntity().getProcessMetadata().getId(), 
+				handleParameter.getProcessEntity().getProcinstId(),
+				handleParameter.getTask().getParentTaskinstId(),
+				taskMetadata);
+		if(isSave)
+			SessionContext.getTableSession().save(task);
+		return task;
+	}
+	
+	/**
 	 * 完成任务
 	 * @return 
 	 */
 	protected final void completeTask() {
 		// 从运行任务表中删除任务
-		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_task where id = ?", Arrays.asList(handleParameter.getTaskInstance().getId()));	
+		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_task where id = ?", Arrays.asList(handleParameter.getTask().getId()));	
 
 		// 将任务存到历史表	
-		HistoryTask historyTask = new HistoryTask(handleParameter.getTaskInstance());	
+		HistoryTask historyTask = new HistoryTask(handleParameter.getTask());	
 		SessionContext.getTableSession().save(historyTask);	
 		
 		// 变量调度
-		beanInstances.getVariableScheduler().followTaskDispatch(handleParameter.getProcessEntity().getProcinstId(), handleParameter.getTaskInstance().getTaskinstId());
+		beanInstances.getVariableScheduler().followTaskDispatch(handleParameter.getProcessEntity().getProcinstId(), handleParameter.getTask().getTaskinstId());
 	}
 	
 	/**

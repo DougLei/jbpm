@@ -1,14 +1,17 @@
 package com.douglei.bpm.process.handler.task.user;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.history.task.HistoryAssignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.TaskHandler;
-import com.douglei.bpm.process.handler.task.user.assignee.AssignedUserHandler;
+import com.douglei.bpm.process.handler.task.user.assignee.AssignedUserHandler4Handling;
+import com.douglei.bpm.process.handler.task.user.assignee.AssignedUserHandler4Startup;
 import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.orm.context.SessionContext;
 
@@ -28,30 +31,27 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 		Task task = new Task(handleParameter.getProcessEntity().getProcessMetadata().getId(), handleParameter.getProcessEntity().getProcinstId(), taskMetadata);
 		SessionContext.getTableSession().save(task);
 		
-		SessionContext.getTableSession().save(
-				new AssignedUserHandler(handleParameter.getProcessEntity().getProcessMetadata().getCode(), 
-						handleParameter.getProcessEntity().getProcessMetadata().getVersion(), 
-						handleParameter.getUserEntity().getAssignedUsers())
-				.getAssigneeList(task.getTaskinstId()));
+		new AssignedUserHandler4Startup(handleParameter.getProcessEntity().getProcessMetadata().getCode(), 
+				handleParameter.getProcessEntity().getProcessMetadata().getVersion(), 
+				handleParameter.getUserEntity().getAssignedUsers()).saveAssigneeList(task.getTaskinstId());
 		return new ExecutionResult(task);
 	}
 
 	@Override
 	public ExecutionResult handle() {
-		// 处理当前办理任务的用户信息: 将办理状态改为完成
-		SessionContext.getSqlSession().executeUpdate(
-				"update bpm_ru_assignee set handle_state=?, attitude=?, suggest=?, finish_time=? where taskinst_id=? and user_id=? and handle_state=?", 
-				Arrays.asList(HandleState.FINISHED.name(),
-						handleParameter.getUserEntity().getAttitude(), 
-						handleParameter.getUserEntity().getSuggest(),
-						handleParameter.getCurrentDate(), 
-						handleParameter.getTaskInstance().getTaskinstId(), 
-						handleParameter.getUserEntity().getHandledUser().getUserId(),
-						HandleState.CLAIMED.name()));
-		
+		assigneeDispatch();
 		completeTask();
 		
 		beanInstances.getTaskHandlerUtil().dispatch(taskMetadata, handleParameter);
 		return ExecutionResult.getDefaultSuccessInstance();
+	}
+
+	// 指派信息调度
+	private void assigneeDispatch() {
+		List<HistoryAssignee> assigneeList = SessionContext.getSqlSession().query(HistoryAssignee.class, "select * from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
+				Arrays.asList(handleParameter.getTaskInstance().getTaskinstId(),
+						handleParameter.getUserEntity().getHandledUser().getUserId(),
+						HandleState.CLAIMED.name()));
+		new AssignedUserHandler4Handling(handleParameter, assigneeList).assigneeDispatch();
 	}
 }

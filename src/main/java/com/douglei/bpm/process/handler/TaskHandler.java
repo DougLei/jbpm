@@ -5,7 +5,6 @@ import java.util.Arrays;
 import com.douglei.bpm.bean.BeanInstances;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.task.HistoryTask;
-import com.douglei.bpm.process.handler.task.user.assignee.HistoryAssignedUserHandler;
 import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.orm.context.SessionContext;
 
@@ -36,12 +35,6 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 		// 将任务存到历史表	
 		HistoryTask historyTask = new HistoryTask(handleParameter.getTaskInstance());	
 		SessionContext.getTableSession().save(historyTask);	
-		
-		// 处理指派表信息
-		if(taskMetadata.supportUserHandling()) {
-			SessionContext.getTableSession().save(new HistoryAssignedUserHandler(handleParameter.getTaskInstance().getTaskinstId()).getHistoryAssigneeList());
-			SessionContext.getSqlSession().executeUpdate("delete bpm_ru_assignee where taskinst_id=?", Arrays.asList(handleParameter.getTaskInstance().getTaskinstId()));
-		}
 		
 		// 变量调度
 		beanInstances.getVariableScheduler().followTaskDispatch(handleParameter.getProcessEntity().getProcinstId(), handleParameter.getTaskInstance().getTaskinstId());

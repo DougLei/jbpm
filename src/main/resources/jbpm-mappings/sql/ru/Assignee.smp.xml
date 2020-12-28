@@ -12,14 +12,6 @@
 					</foreach>
 		</content>
 		
-		<!-- 根据parentUserIds查询对应上一层的指派信息集合 -->
-		<content name="queryAssigneeListByParentUserIds" type="select">
-			select * from bpm_ru_assignee where taskinst_id= #{taskinstId} and 
-				<foreach collection="parentUserIds" alias="parentUserId" open="user_id in (" separator="," close=")">
-					#{parentUserId}
-				</foreach>
-		</content>
-		
 		<!-- 认领任务 -->
 		<content name="claimTask" type="update">
 			update bpm_ru_assignee set handle_state='CLAIMED', claim_time=#{claimTime, dataType=datetime} where 
@@ -33,7 +25,7 @@
 			update bpm_ru_assignee set handle_state='INVALID' where taskinst_id=#{taskinstId} and handle_state &lt;&gt; 'INVALID' and 
 			<foreach collection="groupIds" alias="groupId" open="group_id in (" separator="," close=")">
 				#{groupId, dataType=number}
-			</foreach>
+			</foreach> 
 		</content>
 		
 		<!-- 取消认领任务 -->
@@ -44,5 +36,33 @@
 			</foreach>
 		</content>
 		
+		
+		<!-- 根据groupId和parentUserId查询对应上一层的指派信息集合 -->
+		<content name="queryParentAssigneeList" type="select">
+			select * from bpm_ru_assignee where taskinst_id= #{taskinstId} and 
+				<foreach collection="groupIds" alias="groupId" open="group_id in (" separator="," close=") ">
+					#{groupId, dataType=number}
+				</foreach>
+				and 
+				<foreach collection="assigneeList" alias="assignee" open="user_id in (" separator="," close=")">
+					#{assignee.parentUserId}
+				</foreach>
+		</content>
+		
+		<!-- 删除指派信息 -->
+		<content name="deleteAssigneeByGroupIds" type="delete">
+			delete bpm_ru_assignee where taskinst_id= #{taskinstId} and 
+			<foreach collection="groupIds" alias="groupId" open="group_id in (" separator="," close=")">
+				#{groupId, dataType=number}
+			</foreach>
+		</content>
+		
+		<!-- 删除指派信息 -->
+		<content name="deleteAssigneeByIds" type="delete">
+			delete bpm_ru_assignee where 
+			<foreach collection="assigneeList" alias="assignee" open="id in (" separator="," close=")">
+				#{assignee.id, dataType=number}
+			</foreach>
+		</content>
 	</sql>
 </mapping-configuration>

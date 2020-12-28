@@ -8,9 +8,9 @@ import org.junit.Test;
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.history.task.Attitude;
 import com.douglei.bpm.module.runtime.instance.ProcessInstance;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
-import com.douglei.bpm.module.runtime.task.Attitude;
 import com.douglei.bpm.module.runtime.task.TaskHandleParameter;
 import com.douglei.bpm.module.runtime.variable.Scope;
 

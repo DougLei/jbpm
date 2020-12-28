@@ -9,14 +9,14 @@ import com.douglei.bpm.process.handler.User;
 import com.douglei.orm.context.SessionContext;
 
 /**
- * 指派的用户处理器
+ * 任务启动时, 指派的用户处理器
  * @author DougLei
  */
-public class AssignedUserHandler {
+public class AssignedUserHandler4Startup {
 	private List<User> assignedUsers;
 	private DelegationHandler delegationHandler;
 	
-	public AssignedUserHandler(String code, String version, List<User> assignedUsers) {
+	public AssignedUserHandler4Startup(String code, String version, List<User> assignedUsers) {
 		this.assignedUsers = assignedUsers;
 		
 		DelegationQueryCondition queryCondition = new DelegationQueryCondition(new Date().getTime(), assignedUsers);
@@ -28,15 +28,15 @@ public class AssignedUserHandler {
 	}
 	
 	/**
-	 * 获取任务的指派信息集合
+	 * 保存任务的指派信息集合
 	 * @param taskinstId
-	 * @return
 	 */
-	public List<Assignee> getAssigneeList(String taskinstId) {
+	public void saveAssigneeList(String taskinstId) {
 		List<Assignee> assigneeList = new ArrayList<Assignee>(assignedUsers.size() + 5); // +5是备用的长度
-		int groupId = 0;
+		int groupId = 1;
 		for (User assignedUser : assignedUsers) 
 			delegationHandler.addAssignee(taskinstId, groupId++, null, assignedUser.getUserId(), null, assigneeList);
-		return assigneeList;
+		
+		SessionContext.getTableSession().save(assigneeList);
 	}
 }

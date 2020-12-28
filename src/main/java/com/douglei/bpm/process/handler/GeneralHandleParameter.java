@@ -3,7 +3,7 @@ package com.douglei.bpm.process.handler;
 import java.util.Arrays;
 import java.util.List;
 
-import com.douglei.bpm.module.runtime.task.Attitude;
+import com.douglei.bpm.module.history.task.Attitude;
 import com.douglei.bpm.module.runtime.task.TaskEntity;
 import com.douglei.bpm.module.runtime.variable.Scope;
 import com.douglei.bpm.module.runtime.variable.Variable;

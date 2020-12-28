@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.task;
+package com.douglei.bpm.module.history.task;
 
 /**
  * 态度

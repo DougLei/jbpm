@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.douglei.bpm.module.history.task.Attitude;
 import com.douglei.bpm.module.runtime.variable.Scope;
 import com.douglei.bpm.process.handler.VariableEntities;
 

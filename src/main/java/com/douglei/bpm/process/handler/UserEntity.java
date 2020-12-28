@@ -2,7 +2,7 @@ package com.douglei.bpm.process.handler;
 
 import java.util.List;
 
-import com.douglei.bpm.module.runtime.task.Attitude;
+import com.douglei.bpm.module.history.task.Attitude;
 
 /**
  * 

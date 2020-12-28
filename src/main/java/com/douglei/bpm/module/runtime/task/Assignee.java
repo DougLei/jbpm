@@ -9,7 +9,7 @@ import java.util.Date;
 public class Assignee {
 	protected int id;
 	protected String taskinstId;
-	protected Integer groupId;
+	protected int groupId;
 	protected String userId;
 	protected String parentUserId;
 	protected String remark;
@@ -17,12 +17,8 @@ public class Assignee {
 	protected HandleState handleState;
 	protected Date claimTime;
 	
-	protected Attitude attitude;
-	protected String suggest;
-	protected Date finishTime;
-	
 	public Assignee() {}
-	public Assignee(String taskinstId, String userId, Integer groupId) {
+	public Assignee(String taskinstId, String userId, int groupId) {
 		this.taskinstId = taskinstId;
 		this.groupId = groupId;
 		this.userId = userId;
@@ -42,10 +38,10 @@ public class Assignee {
 	public void setTaskinstId(String taskinstId) {
 		this.taskinstId = taskinstId;
 	}
-	public Integer getGroupId() {
+	public int getGroupId() {
 		return groupId;
 	}
-	public void setGroupId(Integer groupId) {
+	public void setGroupId(int groupId) {
 		this.groupId = groupId;
 	}
 	public String getUserId() {
@@ -95,33 +91,5 @@ public class Assignee {
 	}
 	public void setClaimTime(Date claimTime) {
 		this.claimTime = claimTime;
-	}
-	public Attitude getAttitudeInstance() {
-		return attitude;
-	}
-	public void setAttitudeInstance(Attitude attitude) {
-		this.attitude = attitude;
-	}
-	public String getAttitude() {
-		if(attitude == null)
-			return null;
-		return attitude.name();
-	}
-	public void setAttitude(String attitude) {
-		if(attitude == null)
-			return;
-		this.attitude = Attitude.valueOf(attitude);
-	}
-	public String getSuggest() {
-		return suggest;
-	}
-	public void setSuggest(String suggest) {
-		this.suggest = suggest;
-	}
-	public Date getFinishTime() {
-		return finishTime;
-	}
-	public void setFinishTime(Date finishTime) {
-		this.finishTime = finishTime;
 	}
 }

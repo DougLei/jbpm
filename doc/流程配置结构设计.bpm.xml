@@ -20,7 +20,7 @@
 		<!-- 
 			开始事件, 一个流程中只能有一个开始
 		-->
-		<startEvent id="startEvent" name="" conditionExpr="启动条件表达式">
+		<startEvent id="startEvent" name="">
 			<conditionExpr>
 				<![CDATA[ 判断表达式, 根据表达式决定是否可以启动流程; 可不配置, 默认结果为true ]]>
 			</conditionExpr>
@@ -42,7 +42,6 @@
 			用户任务:
 			* id: 全局唯一标识, 是整个配置文件中的唯一标识
 			* name: 任务名称, 可不配置, 默认为id
-			* defaultFlow: 默认Flow的id, 可不配置; 当配置了多条线时, 如果线的条件都不满足, 引擎会根据配置的defaultFlow进行流出, 如果没有配置, 引擎会抛出异常
 			* pageID: 任务关联的页面唯一标识, 优先级高于全局页面标识, 可不配置, 默认会继承process中的pageID
 			* timeLimit: 办理时限(表达式), 设置当前用户任务需要在多长时间内办理, 可不配置, 不配置则没有时限约束
 			** d: 天类型
@@ -52,7 +51,7 @@
 			** 以上类型可按照顺序组合使用, 例如: 1d1hn, 表示1天1小时(自然日); 如果配置的值出现不合法或超出范围, 引擎会默认没有时限
 			** 以上类型的配置值必须大于0且是整数, 否则会被当做不合法值
 		 -->
-		<userTask id="userTask1" name="任务名称" defaultFlow="" pageID="" timeLimit="这里有个工作日工作时间的问题, 目前不做这块, 暂时先不考虑了">
+		<userTask id="userTask1" name="任务名称" pageID="" timeLimit="这里有个工作日工作时间的问题, 目前不做这块, 暂时先不考虑了">
 			<!-- 当前任务候选人相关配置 -->
 			<candidate>
 				<!-- 

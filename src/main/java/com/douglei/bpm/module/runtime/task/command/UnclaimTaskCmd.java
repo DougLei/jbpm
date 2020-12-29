@@ -24,7 +24,7 @@ public class UnclaimTaskCmd implements Command {
 
 	@Override
 	public ExecutionResult execute(BeanInstances beanInstances) {
-		if(!taskEntity.supportUserHandling())
+		if(!taskEntity.requiredUserHandle())
 			return new ExecutionResult("取消认领失败, ["+taskEntity.getName()+"]任务不支持用户处理");
 		
 		// 查询指定userId, 判断其是否满足取消认领条件

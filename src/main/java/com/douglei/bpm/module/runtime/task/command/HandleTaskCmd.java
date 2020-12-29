@@ -27,7 +27,7 @@ public class HandleTaskCmd implements Command {
 
 	@Override
 	public ExecutionResult execute(BeanInstances beanInstances) {
-		if(taskEntity.supportUserHandling()) {
+		if(taskEntity.requiredUserHandle()) {
 			if(StringUtil.isEmpty(parameter.getUserId()))
 				return new ExecutionResult("办理失败, 办理["+taskEntity.getName()+"]任务, 需要提供具体的userId");
 			
@@ -55,7 +55,7 @@ public class HandleTaskCmd implements Command {
 			if(unClaimNum == assigneeList.size())
 				return new ExecutionResult("办理失败, 指定的userId未认领["+taskEntity.getName()+"]任务");
 		}
-		return beanInstances.getTaskHandlerUtil().handle(taskEntity.getTaskMetadata(), new GeneralHandleParameter(
+		return beanInstances.getTaskHandlerUtil().handle(taskEntity.getTaskMetadataEntity(), new GeneralHandleParameter(
 				taskEntity,
 				beanInstances.getUserFactory().create(parameter.getUserId()), 
 				parameter.getSuggest(), 

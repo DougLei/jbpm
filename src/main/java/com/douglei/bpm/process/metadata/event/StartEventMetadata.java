@@ -10,8 +10,8 @@ import com.douglei.bpm.process.metadata.TaskMetadata;
 public class StartEventMetadata extends TaskMetadata {
 	private String conditionExpr; // 启动条件表达式
 	
-	public StartEventMetadata(String id, String name, String defaultFlowId, String conditionExpr) {
-		super(id, name, defaultFlowId);
+	public StartEventMetadata(String id, String name, String conditionExpr) {
+		super(id, name);
 		this.conditionExpr = conditionExpr;
 	}
 	

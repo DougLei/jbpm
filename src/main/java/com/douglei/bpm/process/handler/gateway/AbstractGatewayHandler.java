@@ -17,7 +17,7 @@ abstract class AbstractGatewayHandler extends TaskHandler<AbstractGatewayMetadat
 		// 5, 6, 8, 9  global
 		// 3, 4, 8, 9  local
 		// 1, 4, 6, 9  transient
-		switch(taskMetadata.getUnextendScopeWeight()) {
+		switch(taskMetadataEntity.getTaskMetadata().getUnextendScopeWeight()) {
 			case 1:
 				handleParameter.getVariableEntities().removeAllTransientVariable();
 				break;

@@ -27,13 +27,13 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		ProcessInstance processInstance = createProcessInstance();
 		
 		// 创建流程任务(因为是开始事件, 所以直接创建历史任务即可)
-		HistoryTask historyTask = new HistoryTask(processInstance.getProcdefId(), processInstance.getProcinstId(), null, taskMetadata);
+		HistoryTask historyTask = new HistoryTask(processInstance.getProcdefId(), processInstance.getProcinstId(), null, taskMetadataEntity.getTaskMetadata());
 		SessionContext.getTableSession().save(historyTask);
 		
 		// 进行参数调度
 		beanInstances.getVariableScheduler().startDispatch(historyTask, handleParameter.getVariableEntities());
 		// 进行任务调度
-		beanInstances.getTaskHandlerUtil().dispatch(taskMetadata, handleParameter);
+		beanInstances.getTaskHandlerUtil().dispatch(taskMetadataEntity, handleParameter);
 		return new ExecutionResult(processInstance);
 	}
 	

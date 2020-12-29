@@ -11,64 +11,43 @@ import com.douglei.bpm.process.metadata.flow.FlowMetadata;
  */
 public class TaskMetadataEntity<M extends TaskMetadata> {
 	private M taskMetadata;
-	private FlowMetadataList outputFlows;
-	private FlowMetadata defaultOutputFlow;
-	private FlowMetadataList inputFlows;
+	private List<FlowMetadata> flows;
 
 	TaskMetadataEntity(M taskMetadata, List<FlowMetadata> flows) {
 		this.taskMetadata = taskMetadata;
-		
-		for (FlowMetadata flow : flows) {
-			if(taskMetadata.requiredOutputFlows() && flow.getSource().equals(taskMetadata.getId())) {
-				if(this.outputFlows == null)
-					this.outputFlows = new FlowMetadataList();
-				this.outputFlows.addFlow(flow);
-			}
-			if(taskMetadata.getDefaultOutputFlowId() != null && flow.getId().equals(taskMetadata.getDefaultOutputFlowId())) {
-				this.defaultOutputFlow = flow;
-			}
-			if(taskMetadata.requiredInputFlows() && flow.getTarget().equals(taskMetadata.getId())) {
-				if(this.inputFlows == null)
-					this.inputFlows = new FlowMetadataList();
-				this.inputFlows.addFlow(flow);
-			}
-		}
+		this.flows = flows;
 	}
 	
 	public M getTaskMetadata() {
 		return taskMetadata;
 	}
+	public List<FlowMetadata> getInputFlows() {
+		List<FlowMetadata> inputFlows = new ArrayList<FlowMetadata>(4);
+		flows.forEach(flow -> {
+			if(flow.getTarget().equals(taskMetadata.getId()))
+				inputFlows.add(flow);
+		});
+		return inputFlows;
+	}
 	public List<FlowMetadata> getOutputFlows() {
-		if(outputFlows == null)
-			return null;
-		return outputFlows.getFlows();
+		List<FlowMetadata> outputFlows = new ArrayList<FlowMetadata>(4);
+		flows.forEach(flow -> {
+			if(flow.getSource().equals(taskMetadata.getId()))
+				outputFlows.add(flow);
+		});
+		if(outputFlows.size() > 1)
+			outputFlows.sort(flowSortComparator);
+		return outputFlows;
 	}
 	public FlowMetadata getDefaultOutputFlow() {
-		return defaultOutputFlow;
-	}
-	public List<FlowMetadata> getInputFlows() {
-		if(inputFlows == null)
+		if(taskMetadata.getDefaultOutputFlowId() == null)
 			return null;
-		return inputFlows.getFlows();
-	}
-	
-	// 流集合实例
-	private class FlowMetadataList {
-		private boolean sorted;
-		private List<FlowMetadata> flows;
 		
-		public void addFlow(FlowMetadata flow) {
-			if(flows == null)
-				flows = new ArrayList<FlowMetadata>(4);
-			flows.add(flow);
+		for (FlowMetadata flow : flows) {
+			if(flow.getId().equals(taskMetadata.getDefaultOutputFlowId())) 
+				return flow;
 		}
-		public List<FlowMetadata> getFlows() {
-			if(!sorted && flows.size() > 1) {
-				flows.sort(flowSortComparator);
-				sorted = true;
-			}
-			return flows;
-		}
+		return null;
 	}
 	
 	// flow的排序比较器

@@ -19,7 +19,7 @@ public class UserTaskMetadata extends TaskMetadata {
 	private List<Option> options;
 	private List<Listener> listeners;
 	
-	public UserTaskMetadata(String id, String name, String defaultFlowId, String pageID, String timeLimit) {
+	public UserTaskMetadata(String id, String name, String pageID, String timeLimit) {
 		super(id, name);
 		this.pageID = pageID;
 	}
@@ -46,10 +46,6 @@ public class UserTaskMetadata extends TaskMetadata {
 	}
 	@Override
 	public boolean requiredUserHandle() {
-		return true;
-	}
-	@Override
-	public boolean requiredOutputFlows() {
 		return true;
 	}
 	@Override

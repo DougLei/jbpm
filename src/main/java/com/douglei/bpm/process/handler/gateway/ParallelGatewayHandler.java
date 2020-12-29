@@ -20,7 +20,7 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 		Task task = createTask(false);
 		if(task.getParentTaskinstId() == null) { // fork
 			handleParameter.addTask(task);
-			for(FlowMetadata flow : taskMetadata.getFlows()) 
+			for(FlowMetadata flow : taskMetadataEntity.getOutputFlows()) 
 				beanInstances.getTaskHandlerUtil().dispatch(flow, handleParameter);
 			SessionContext.getTableSession().save(task);
 		}else {

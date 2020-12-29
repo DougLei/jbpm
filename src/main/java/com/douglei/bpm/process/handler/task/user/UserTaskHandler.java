@@ -26,12 +26,12 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 	@Override
 	public ExecutionResult startup() {
 		if(handleParameter.getUserEntity().getAssignedUsers().isEmpty())
-			throw new TaskHandleException("id为["+taskMetadata.getId()+"], name为["+taskMetadata.getName()+"]的任务没有指派具体的办理人员");
+			throw new TaskHandleException("id为["+taskMetadataEntity.getTaskMetadata().getId()+"], name为["+taskMetadataEntity.getTaskMetadata().getName()+"]的任务没有指派具体的办理人员");
 		
 		Task task = createTask(true);
 		
-		new AssignedUserHandler4Startup(handleParameter.getProcessEntity().getProcessMetadata().getCode(), 
-				handleParameter.getProcessEntity().getProcessMetadata().getVersion(), 
+		new AssignedUserHandler4Startup(handleParameter.getProcessMetadata().getCode(), 
+				handleParameter.getProcessMetadata().getVersion(), 
 				handleParameter.getUserEntity().getAssignedUsers()).saveAssigneeList(task.getTaskinstId());
 		return new ExecutionResult(task);
 	}
@@ -41,7 +41,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 		assigneeDispatch();
 		completeTask();
 		
-		beanInstances.getTaskHandlerUtil().dispatch(taskMetadata, handleParameter);
+		beanInstances.getTaskHandlerUtil().dispatch(taskMetadataEntity, handleParameter);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 

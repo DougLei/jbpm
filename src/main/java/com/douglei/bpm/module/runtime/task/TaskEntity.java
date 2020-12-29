@@ -14,7 +14,7 @@ import com.douglei.orm.context.SessionContext;
  */
 public class TaskEntity {
 	private ProcessMetadata processMetadata;
-	private TaskMetadataEntity taskMetadata;
+	private TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity;
 	private Task task;
 	
 	TaskEntity(int taskId, ProcessContainerProxy container) {
@@ -22,7 +22,7 @@ public class TaskEntity {
 		if(task == null)
 			throw new NullPointerException("不存在id为["+taskId+"]的任务");
 		processMetadata = container.getProcess(task.getProcdefId());
-		taskMetadata = processMetadata.getTask(task.getKey());
+		taskMetadataEntity = processMetadata.getTaskMetadataEntity(task.getKey());
 	}
 	
 	TaskEntity(String taskinstId, ProcessContainerProxy container) {
@@ -30,20 +30,20 @@ public class TaskEntity {
 		if(task == null)
 			throw new NullPointerException("不存在taskinst_id为["+taskinstId+"]的任务");
 		processMetadata = container.getProcess(task.getProcdefId());
-		taskMetadata = processMetadata.getTask(task.getKey());
+		taskMetadataEntity = processMetadata.getTaskMetadataEntity(task.getKey());
 	}
 
 	public ProcessMetadata getProcessMetadata() {
 		return processMetadata;
 	}
-	public TaskMetadata getTaskMetadata() {
-		return taskMetadata;
+	public TaskMetadataEntity<? extends TaskMetadata> getTaskMetadataEntity() {
+		return taskMetadataEntity;
 	}
 	public String getName() {
-		return taskMetadata.getName();
+		return taskMetadataEntity.getTaskMetadata().getName();
 	}
-	public boolean supportUserHandling() {
-		return taskMetadata.supportUserHandling();
+	public boolean requiredUserHandle() {
+		return taskMetadataEntity.getTaskMetadata().requiredUserHandle();
 	}
 	public Task getTask() {
 		return task;

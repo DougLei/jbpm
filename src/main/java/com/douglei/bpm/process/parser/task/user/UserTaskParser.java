@@ -26,7 +26,6 @@ public class UserTaskParser extends GeneralParser implements Parser<TaskTemporar
 		UserTaskMetadata metadata = new UserTaskMetadata(
 				temporaryData.getId(), 
 				element.attributeValue("name"), 
-				element.attributeValue("defaultFlow"), 
 				element.attributeValue("pageID"),
 				element.attributeValue("timeLimit"));
 		

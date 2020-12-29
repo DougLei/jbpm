@@ -27,21 +27,21 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 	public ExecutionResult handle() {
 		// 创建流程任务(因为是结束事件, 所以直接创建历史任务结束即可)
 		HistoryTask historyTask = new HistoryTask(
-				handleParameter.getProcessEntity().getProcessMetadata().getId(), 
-				handleParameter.getProcessEntity().getProcinstId(),
+				handleParameter.getProcessMetadata().getId(), 
+				handleParameter.getProcessInstanceId(),
 				handleParameter.getTask().getParentTaskinstId(),
-				taskMetadata);
+				taskMetadataEntity.getTaskMetadata());
 		SessionContext.getTableSession().save(historyTask);
 		
 		if(historyTask.getParentTaskinstId() == null) { // TODO 这里还要判断, 如果parentTaskInstid不为空, 那是不是最后一个不为空的数据, 是的话, 流程也就结束了
 			// 将实例保存到历史
-			List<Object> procinstId = Arrays.asList(handleParameter.getProcessEntity().getProcinstId());
+			List<Object> procinstId = Arrays.asList(handleParameter.getProcessInstanceId());
 			ProcessInstance processInstance = SessionContext.getTableSession().uniqueQuery(ProcessInstance.class, "select * from bpm_ru_procinst where procinst_id=?", procinstId);
 			SessionContext.getSqlSession().executeUpdate("delete bpm_ru_procinst where procinst_id=?", procinstId);
 			SessionContext.getTableSession().save(new HistoryProcessInstance(processInstance, null));
 			
 			// 结束变量调度
-			beanInstances.getVariableScheduler().endDispatch(handleParameter.getProcessEntity().getProcinstId());
+			beanInstances.getVariableScheduler().endDispatch(handleParameter.getProcessInstanceId());
 		}
 		return ExecutionResult.getDefaultSuccessInstance();
 	}

@@ -7,6 +7,7 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.task.HistoryTask;
 import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.metadata.TaskMetadata;
+import com.douglei.bpm.process.metadata.TaskMetadataEntity;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -15,13 +16,13 @@ import com.douglei.orm.context.SessionContext;
  */
 public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandleParameter> {
 	protected BeanInstances beanInstances; 
-	protected TM taskMetadata; // 任务元数据实例
+	protected TaskMetadataEntity<TM> taskMetadataEntity; // 任务元数据实例
 	protected HP handleParameter; // 办理参数
 	
 	// 设置参数
-	final void setParameters(BeanInstances beanInstances, TM taskMetadata, HP handleParameter) {
+	final void setParameters(BeanInstances beanInstances, TaskMetadataEntity<TM> taskMetadataEntity, HP handleParameter) {
 		this.beanInstances = beanInstances;
-		this.taskMetadata = taskMetadata;
+		this.taskMetadataEntity = taskMetadataEntity;
 		this.handleParameter = handleParameter;
 	}
 	
@@ -35,7 +36,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 				handleParameter.getProcessMetadata().getId(), 
 				handleParameter.getProcessInstanceId(),
 				handleParameter.getTask().getParentTaskinstId(),
-				taskMetadata);
+				taskMetadataEntity.getTaskMetadata());
 		if(isSave)
 			SessionContext.getTableSession().save(task);
 		return task;

@@ -13,6 +13,7 @@ import com.douglei.bpm.process.handler.gateway.InclusiveGatewayHandler;
 import com.douglei.bpm.process.handler.gateway.ParallelGatewayHandler;
 import com.douglei.bpm.process.handler.task.user.UserTaskHandler;
 import com.douglei.bpm.process.metadata.TaskMetadata;
+import com.douglei.bpm.process.metadata.TaskMetadataEntity;
 import com.douglei.bpm.process.metadata.flow.FlowMetadata;
 import com.douglei.tools.instances.ognl.OgnlHandler;
 import com.douglei.tools.utils.StringUtil;
@@ -29,9 +30,9 @@ public class TaskHandlerUtil {
 	private BeanInstances beanInstances;
 	
 	// 创建任务办理器实例
-	private TaskHandler createTaskHandleInstance(TaskMetadata taskMetadata, HandleParameter handleParameter) {
+	private TaskHandler createTaskHandleInstance(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, HandleParameter handleParameter) {
 		TaskHandler taskHandler = null;
-		switch(taskMetadata.getType()) {
+		switch(taskMetadataEntity.getTaskMetadata().getType()) {
 			// 事件类型
 			case START_EVENT:
 				taskHandler = new StartEventHandler();
@@ -56,51 +57,51 @@ public class TaskHandlerUtil {
 				taskHandler = new InclusiveGatewayHandler();
 				break;
 			default:
-				throw new TaskHandleException("目前还未实现["+taskMetadata.getType().getName()+"]类型的任务办理器");
+				throw new TaskHandleException("目前还未实现["+taskMetadataEntity.getTaskMetadata().getType().getName()+"]类型的任务办理器");
 		}
-		taskHandler.setParameters(beanInstances, taskMetadata, handleParameter);
+		taskHandler.setParameters(beanInstances, taskMetadataEntity, handleParameter);
 		return taskHandler;
 	}
 	
 	/**
 	 * 启动任务
-	 * @param taskMetadata
+	 * @param taskMetadataEntity
 	 * @param parameter
 	 * @return
 	 */
-	public ExecutionResult startup(TaskMetadata taskMetadata, HandleParameter parameter) {
-		return createTaskHandleInstance(taskMetadata, parameter).startup();
+	public ExecutionResult startup(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, HandleParameter parameter) {
+		return createTaskHandleInstance(taskMetadataEntity, parameter).startup();
 	}
 	
 	/**
 	 * 办理任务
-	 * @param taskMetadata
+	 * @param taskMetadataEntity
 	 * @param parameter
 	 * @return
 	 */
-	public ExecutionResult handle(TaskMetadata taskMetadata, HandleParameter parameter) {
-		return createTaskHandleInstance(taskMetadata, parameter).handle();
+	public ExecutionResult handle(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, HandleParameter parameter) {
+		return createTaskHandleInstance(taskMetadataEntity, parameter).handle();
 	}
 	
 	/**
 	 * 任务调度
 	 * <p>
 	 *  对task中的flows进行调度, 选择第一条匹配的flow执行
-	 * @param taskMetadata
+	 * @param taskMetadataEntity
 	 * @param parameter
 	 * @throws TaskDispatchException
 	 */
-	public void dispatch(TaskMetadata taskMetadata, HandleParameter parameter) throws TaskDispatchException{
-		for(FlowMetadata flow : taskMetadata.getFlows()) {
+	public void dispatch(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, HandleParameter parameter) throws TaskDispatchException{
+		for(FlowMetadata flow : taskMetadataEntity.getOutputFlows()) {
 			if(flowMatching(flow, parameter.getVariableEntities().getVariableMap())) {
 				dispatch(flow, parameter);
 				return;
 			}
 		}
 		
-		FlowMetadata defaultFlow = taskMetadata.getDefaultFlow();
+		FlowMetadata defaultFlow = taskMetadataEntity.getDefaultOutputFlow();
 		if(defaultFlow == null)
-			throw new TaskDispatchException("执行["+taskMetadata.getName()+"]任务时, 未能匹配到满足条件的Flow");
+			throw new TaskDispatchException("执行["+taskMetadataEntity.getTaskMetadata().getName()+"]任务时, 未能匹配到满足条件的Flow");
 		dispatch(defaultFlow, parameter);
 	}
 	
@@ -127,6 +128,6 @@ public class TaskHandlerUtil {
 	 * @param parameter
 	 */
 	public void dispatch(FlowMetadata flowMetadata, HandleParameter parameter) {
-		startup(flowMetadata.getTargetTask(), parameter);
+		startup(parameter.getProcessMetadata().getTaskMetadataEntity(flowMetadata.getTarget()), parameter);
 	}
 }

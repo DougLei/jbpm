@@ -31,4 +31,18 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 	public boolean requiredUserHandle() {
 		return false;
 	}
+	/**
+	 * 任务是否需要其关联的输入流集合, 默认值为false
+	 * @return
+	 */
+	public boolean requiredInputFlows() {
+		return false;
+	}
+	/**
+	 * 任务是否需要其关联的输出流集合, 默认值为false
+	 * @return
+	 */
+	public boolean requiredOutputFlows() {
+		return false;
+	}
 }

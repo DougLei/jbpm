@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.douglei.bpm.process.metadata.entity.StartEventMetadataEntity;
-import com.douglei.bpm.process.metadata.entity.TaskMetadataEntity;
 import com.douglei.bpm.process.metadata.event.StartEventMetadata;
 import com.douglei.bpm.process.metadata.flow.FlowMetadata;
 import com.douglei.tools.utils.StringUtil;
@@ -66,24 +64,21 @@ public class ProcessMetadata implements Serializable {
 	}
 	
 	/**
-	 * 获取StartEvent元数据
+	 * 获取StartEvent元数据实体实例
 	 * @return
 	 */
-	public StartEventMetadataEntity getStartEvent() {
-		return new StartEventMetadataEntity(startEvent, flows);
+	public TaskMetadataEntity<StartEventMetadata> getStartEventMetadataEntity() {
+		return new TaskMetadataEntity<StartEventMetadata>(startEvent, flows);
 	}
 	/**
 	 * 获取任务元数据实体实例
 	 * @param taskId 任务id
-	 * @param inputFlows 是否获取输入flow集合
-	 * @param outputFlows 是否获取输出flow集合
-	 * @param defaultFlow 是否获取默认flow
 	 * @return
 	 */
-	public TaskMetadataEntity getTask(String taskId, boolean inputFlows, boolean outputFlows, boolean defaultFlow) {
+	public TaskMetadataEntity<TaskMetadata> getTaskMetadataEntity(String taskId) {
 		TaskMetadata task = taskMap.get(taskId);
 		if(task == null)
 			throw new NullPointerException("不存在id为["+taskId+"]的任务");
-		return new TaskMetadataEntity(task, flows, inputFlows, outputFlows, task.getDefaultFlowId()==null?false:defaultFlow);
+		return new TaskMetadataEntity<TaskMetadata>(task, flows);
 	}
 }

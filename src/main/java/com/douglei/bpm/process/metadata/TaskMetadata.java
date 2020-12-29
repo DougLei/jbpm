@@ -5,37 +5,51 @@ package com.douglei.bpm.process.metadata;
  * @author DougLei
  */
 public abstract class TaskMetadata extends ProcessNodeMetadata{
-	private String defaultFlowId;
-	
 	protected TaskMetadata(String id, String name) {
-		this(id, name, null);
-	}
-	protected TaskMetadata(String id, String name, String defaultFlowId) {
 		super(id, name);
-		this.defaultFlowId = defaultFlowId;
 	}
 	
 	/**
-	 * 获取默认flow的id, 可为null
-	 * @return
-	 */
-	public final String getDefaultFlowId() {
-		return defaultFlowId;
-	}
-	
-	/**
-	 * 获取pageID, 可为null
+	 * 获取任务关联的pageID, 默认值为null
 	 * @return
 	 */
 	public String getPageID() {
 		return null;
 	}
-	
 	/**
-	 * 当前任务是否支持用户处理
+	 * 获取任务默认输出流的id, 默认值为null
 	 * @return
 	 */
-	public boolean supportUserHandling() {
+	public String getDefaultOutputFlowId() {
+		return null;
+	}
+	
+	/**
+	 * 任务是否需要用户办理, 默认值为false
+	 * @return
+	 */
+	public boolean requiredUserHandle() {
+		return false;
+	}
+	/**
+	 * 任务是否需要其关联的输入流集合, 默认值为false
+	 * @return
+	 */
+	public boolean requiredInputFlows() {
+		return false;
+	}
+	/**
+	 * 任务是否需要其关联的输出流集合, 默认值为false
+	 * @return
+	 */
+	public boolean requiredOutputFlows() {
+		return false;
+	}
+	/**
+	 * 任务是否需要默认的输出流, 默认值为false
+	 * @return
+	 */
+	public boolean requiredDefaultOutputFlow() {
 		return false;
 	}
 }

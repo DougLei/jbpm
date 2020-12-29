@@ -1,42 +1,40 @@
-package com.douglei.bpm.process.metadata.entity;
+package com.douglei.bpm.process.metadata;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.bpm.process.metadata.flow.FlowMetadata;
 
 /**
  * 
  */
-public class TaskMetadataEntity {
-	private TaskMetadata taskMetadata;
+public class TaskMetadataEntity<M extends TaskMetadata> {
+	private M taskMetadata;
 	private List<FlowMetadata> inputFlows;
 	private List<FlowMetadata> outputFlows;
 	private FlowMetadata defaultFlow;
 
-	public TaskMetadataEntity(TaskMetadata taskMetadata, List<FlowMetadata> flows, boolean inputFlows, boolean outputFlows, boolean defaultFlow) {
+	TaskMetadataEntity(M taskMetadata, List<FlowMetadata> flows) {
 		this.taskMetadata = taskMetadata;
 		
 		for (FlowMetadata flow : flows) {
-			if(inputFlows && flow.getTarget().equals(taskMetadata.getId())) {
+			if(taskMetadata.requiredInputFlows() && flow.getTarget().equals(taskMetadata.getId())) {
 				if(this.inputFlows == null)
 					this.inputFlows = new ArrayList<FlowMetadata>(4);
 				this.inputFlows.add(flow);
 			}
-			if(outputFlows && flow.getSource().equals(taskMetadata.getId())) {
+			if(taskMetadata.requiredOutputFlows() && flow.getSource().equals(taskMetadata.getId())) {
 				if(this.outputFlows == null)
 					this.outputFlows = new ArrayList<FlowMetadata>(4);
 				this.outputFlows.add(flow);
 			}
-			if(defaultFlow && this.defaultFlow == null) {
-				if(flow.getId().equals(taskMetadata.getDefaultFlowId()))
-					this.defaultFlow = flow;
+			if(taskMetadata.requiredDefaultOutputFlow() && taskMetadata.getDefaultOutputFlowId() != null && this.defaultFlow==null && flow.getId().equals(taskMetadata.getDefaultOutputFlowId())) {
+				this.defaultFlow = flow;
 			}
 		}
 	}
 	
-	public TaskMetadata getTaskMetadata() {
+	public M getTaskMetadata() {
 		return taskMetadata;
 	}
 	public List<FlowMetadata> getInputFlows() {

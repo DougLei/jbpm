@@ -20,7 +20,7 @@ public class UserTaskMetadata extends TaskMetadata {
 	private List<Listener> listeners;
 	
 	public UserTaskMetadata(String id, String name, String defaultFlowId, String pageID, String timeLimit) {
-		super(id, name, defaultFlowId);
+		super(id, name);
 		this.pageID = pageID;
 	}
 	public void setCandidate(Candidate candidate) {
@@ -44,12 +44,14 @@ public class UserTaskMetadata extends TaskMetadata {
 	public String getPageID() {
 		return pageID;
 	}
-	
 	@Override
-	public boolean supportUserHandling() {
+	public boolean requiredUserHandle() {
 		return true;
 	}
-	
+	@Override
+	public boolean requiredOutputFlows() {
+		return true;
+	}
 	@Override
 	public Type getType() {
 		return Type.USER_TASK;

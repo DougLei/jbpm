@@ -20,7 +20,6 @@ import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.bpm.process.metadata.event.EndEventMetadata;
 import com.douglei.bpm.process.metadata.event.StartEventMetadata;
-import com.douglei.bpm.process.metadata.flow.FlowMetadata;
 import com.douglei.bpm.process.parser.event.StartEventParser;
 import com.douglei.bpm.process.parser.flow.FlowParser;
 import com.douglei.bpm.process.parser.tmp.data.FlowTemporaryData;

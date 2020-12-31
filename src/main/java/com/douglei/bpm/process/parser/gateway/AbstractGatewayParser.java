@@ -20,7 +20,7 @@ public abstract class AbstractGatewayParser implements Parser<TaskTemporaryData,
 		return createGatewayMetadata(
 				temporaryData.getId(), 
 				element.attributeValue("name"), 
-				element.attributeValue("defaultFlow"), 
+				element.attributeValue("defaultOutputFlow"), 
 				parseVariableExtend(element.element("variableExtend")),
 				element);
 	}

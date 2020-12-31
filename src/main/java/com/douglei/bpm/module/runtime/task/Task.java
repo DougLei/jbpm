@@ -87,6 +87,9 @@ public class Task {
 	public void setType(String type) {
 		this.type = type;
 	}
+	public boolean isVirtual() {
+		return isVirtual == 1;
+	}
 	public int getIsVirtual() {
 		return isVirtual;
 	}

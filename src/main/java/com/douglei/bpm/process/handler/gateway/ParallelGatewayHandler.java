@@ -50,9 +50,12 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 			}
 			
 			Task parallelGatewayTask = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where taskinst_id=?", Arrays.asList(parentTaskinstId));
-			if(tasks.isEmpty())  // 所有相同parentTaskinstId的任务都已经完成
+			if(tasks.isEmpty()) { // 所有相同parentTaskinstId的任务都已经完成
 				completeTask(parallelGatewayTask);
-			this.parentTaskinstId = parallelGatewayTask.getParentTaskinstId();
+				this.parentTaskinstId = parallelGatewayTask.getParentTaskinstId();
+			}else {  
+				this.parentTaskinstId = parallelGatewayTask.getTaskinstId();
+			}
 			return true;
 		}
 	}
@@ -64,7 +67,6 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 		if(outputFlows.size() == 1) {
 			// 没有fork的必要, 所以直接创建历史任务即可
 			createHistoryTask(parentTaskinstId);
-
 			beanInstances.getTaskHandlerUtil().dispatch(outputFlows.get(0), handleParameter);
 		}else {
 			createTask(parentTaskinstId);

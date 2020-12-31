@@ -35,7 +35,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	 * @return
 	 */
 	protected final Task createTask() {
-		return createTask(handleParameter.getPreviousTask().getParentTaskinstId());
+		return createTask(handleParameter.getPreviousTask().getParentTaskinstId()); // TODO 上一个任务是否会产生分支
 	}
 	/**
 	 * 创建任务
@@ -46,7 +46,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 		Task task = new Task(
 				handleParameter.getProcessMetadata().getId(), 
 				handleParameter.getProcessInstanceId(),
-				handleParameter.getPreviousTask().getParentTaskinstId(),
+				parentTaskinstId,
 				currentTaskMetadataEntity.getTaskMetadata());
 		
 		SessionContext.getTableSession().save(task);

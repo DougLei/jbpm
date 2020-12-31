@@ -99,10 +99,10 @@ public class TaskHandlerUtil {
 			}
 		}
 		
-		FlowMetadata defaultFlow = taskMetadataEntity.getDefaultOutputFlow();
-		if(defaultFlow == null)
+		FlowMetadata defaultOutputFlow = taskMetadataEntity.getDefaultOutputFlow();
+		if(defaultOutputFlow == null)
 			throw new TaskDispatchException("执行["+taskMetadataEntity.getTaskMetadata().getName()+"]任务时, 未能匹配到满足条件的Flow");
-		dispatch(defaultFlow, parameter);
+		dispatch(defaultOutputFlow, parameter);
 	}
 	
 	/**

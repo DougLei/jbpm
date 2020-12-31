@@ -10,7 +10,7 @@ public class InclusiveGatewayHandler extends AbstractGatewayHandler{
 
 	@Override
 	public ExecutionResult startup() {
-
+		removeVariables();
 		
 		
 		

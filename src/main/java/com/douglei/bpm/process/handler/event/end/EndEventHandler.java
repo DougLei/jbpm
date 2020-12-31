@@ -30,7 +30,7 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 	@Override
 	public ExecutionResult handle() {
 		// 创建流程任务(因为是结束事件, 所以直接创建历史任务结束即可)
-		createHistoryTask();
+		createHistoryTask(); // TODO 应该不在这里结束, EndEvent应该具有聚合功能
 		if(isFinished()) 
 			finishProcessInstance();
 		return ExecutionResult.getDefaultSuccessInstance();

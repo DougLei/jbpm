@@ -15,8 +15,8 @@ import com.douglei.bpm.process.parser.Parser;
 public class ExclusiveGatewayParser extends AbstractGatewayParser {
 
 	@Override
-	protected ExclusiveGatewayMetadata createGatewayMetadata(String id, String name, String defaultFlowId, int unextendScopeWeight, Element element) {
-		return new ExclusiveGatewayMetadata(id, name, defaultFlowId, unextendScopeWeight);
+	protected ExclusiveGatewayMetadata createGatewayMetadata(String id, String name, String defaultOutputFlowId, int unextendScopeWeight, Element element) {
+		return new ExclusiveGatewayMetadata(id, name, defaultOutputFlowId, unextendScopeWeight);
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package com.douglei.bpm.module.runtime.task;
 import java.util.Date;
 import java.util.UUID;
 
+import com.douglei.bpm.bean.annotation.Property;
 import com.douglei.bpm.process.metadata.TaskMetadata;
 
 /**
@@ -11,17 +12,18 @@ import com.douglei.bpm.process.metadata.TaskMetadata;
  */
 public class Task {
 	protected int id;
-	protected int procdefId;
-	protected String procinstId;
-	protected String taskinstId;
-	protected String parentTaskinstId;
-	protected String key;
-	protected String name;
-	protected String type;
-	protected Date startTime;
-	protected Date expiryTime;
-	protected String businessId;
-	protected String pageId;
+	@Property protected int procdefId;
+	@Property protected String procinstId;
+	@Property protected String taskinstId;
+	@Property protected String parentTaskinstId;
+	@Property protected String key;
+	@Property protected String name;
+	@Property protected String type;
+	@Property protected int isVirtual;
+	@Property protected Date startTime;
+	@Property protected Date expiryTime;
+	@Property protected String businessId;
+	@Property protected String pageId;
 	
 	public Task() {}
 	public Task(int procdefId, String procinstId, String parentTaskinstId, TaskMetadata taskMetadata) {
@@ -32,6 +34,7 @@ public class Task {
 		this.key = taskMetadata.getId();
 		this.name = taskMetadata.getName();
 		this.type = taskMetadata.getType().getName();
+		this.isVirtual = taskMetadata.isVirtual()?1:0;
 		this.startTime = new Date();
 		this.pageId = taskMetadata.getPageID();
 	}
@@ -83,6 +86,12 @@ public class Task {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public int getIsVirtual() {
+		return isVirtual;
+	}
+	public void setIsVirtual(int isVirtual) {
+		this.isVirtual = isVirtual;
 	}
 	public Date getStartTime() {
 		return startTime;

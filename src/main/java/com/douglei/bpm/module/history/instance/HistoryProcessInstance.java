@@ -2,6 +2,7 @@ package com.douglei.bpm.module.history.instance;
 
 import java.util.Date;
 
+import com.douglei.bpm.bean.PropertyValueReplicator;
 import com.douglei.bpm.module.runtime.instance.ProcessInstance;
 
 /**
@@ -13,18 +14,10 @@ public class HistoryProcessInstance extends ProcessInstance{
 	private String remark;
 	
 	public HistoryProcessInstance(ProcessInstance processInstance, String remark) {
-		super.procdefId = processInstance.getProcdefId();
-		super.procinstId = processInstance.getProcinstId();
-		super.title = processInstance.getTitle();
-		super.businessId = processInstance.getBusinessId();
-		super.pageId = processInstance.getPageId();
-		super.startUserId = processInstance.getStartUserId();
-		super.startTime = processInstance.getStartTime();
-		super.tenantId = processInstance.getTenantId();
+		PropertyValueReplicator.copy(processInstance, this);
 		this.endTime = new Date();
 		this.remark = remark;
 	}
-	
 	
 	public Date getEndTime() {
 		return endTime;

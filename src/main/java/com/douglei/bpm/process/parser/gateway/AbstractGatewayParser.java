@@ -47,5 +47,5 @@ public abstract class AbstractGatewayParser implements Parser<TaskTemporaryData,
 	}
 	
 	// 创建网关元数据实例
-	protected abstract AbstractGatewayMetadata createGatewayMetadata(String id, String name, String defaultFlowId, int unextendScopeWeight, Element element);
+	protected abstract AbstractGatewayMetadata createGatewayMetadata(String id, String name, String defaultOutputFlowId, int unextendScopeWeight, Element element);
 }

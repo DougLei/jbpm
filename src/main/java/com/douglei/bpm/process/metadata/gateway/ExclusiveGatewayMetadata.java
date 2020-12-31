@@ -7,11 +7,17 @@ import com.douglei.bpm.process.Type;
  * @author DougLei
  */
 public class ExclusiveGatewayMetadata extends AbstractGatewayMetadata {
-
-	public ExclusiveGatewayMetadata(String id, String name, String defaultFlowId, int unextendScopeWeight) {
-		super(id, name, defaultFlowId, unextendScopeWeight);
+	private String defaultOutputFlowId; 
+	
+	public ExclusiveGatewayMetadata(String id, String name, String defaultOutputFlowId, int unextendScopeWeight) {
+		super(id, name, unextendScopeWeight);
+		this.defaultOutputFlowId = defaultOutputFlowId;
 	}
 	
+	@Override
+	public final String getDefaultOutputFlowId() {
+		return defaultOutputFlowId;
+	}
 	@Override
 	public Type getType() {
 		return Type.EXCLUSIVE_GATEWAY;

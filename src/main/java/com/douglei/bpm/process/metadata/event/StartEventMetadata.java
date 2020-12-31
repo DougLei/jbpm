@@ -20,6 +20,10 @@ public class StartEventMetadata extends TaskMetadata {
 	}
 
 	@Override
+	public boolean isVirtual() {
+		return true;
+	}
+	@Override
 	public Type getType() {
 		return Type.START_EVENT;
 	}

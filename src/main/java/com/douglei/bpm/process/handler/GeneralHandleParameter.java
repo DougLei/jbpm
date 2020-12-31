@@ -18,9 +18,9 @@ public class GeneralHandleParameter extends AbstractHandleParameter{
 	protected GeneralHandleParameter() {
 	}
 	public GeneralHandleParameter(TaskEntity taskEntity, User handledUser, String suggest, Attitude attitude, List<User> assignedUsers) {
-		addTask(taskEntity.getTask());
 		super.processInstanceId = taskEntity.getTask().getProcinstId();
 		super.processMetadata = taskEntity.getProcessMetadata();
+		addTask(taskEntity.getTask());
 		super.userEntity = new UserEntity(handledUser, suggest, attitude, assignedUsers);
 		super.variableEntities = new VariableEntities(SessionContext.getTableSession().query(
 				Variable.class, 

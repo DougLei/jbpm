@@ -6,7 +6,7 @@ import java.io.Serializable;
  * 
  * @author DougLei
  */
-class ObjectValue implements Serializable{
+public class ObjectValue implements Serializable{
 	private Object value;
 
 	public ObjectValue(Object value) {

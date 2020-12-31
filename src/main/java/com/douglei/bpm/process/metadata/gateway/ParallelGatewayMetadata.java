@@ -8,8 +8,8 @@ import com.douglei.bpm.process.Type;
  */
 public class ParallelGatewayMetadata extends AbstractGatewayMetadata {
 
-	public ParallelGatewayMetadata(String id, String name, String defaultFlowId, int unextendScopeWeight) {
-		super(id, name, defaultFlowId, unextendScopeWeight);
+	public ParallelGatewayMetadata(String id, String name, int unextendScopeWeight) {
+		super(id, name, unextendScopeWeight);
 	}
 	
 	@Override

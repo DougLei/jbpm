@@ -30,16 +30,22 @@ public interface HandleParameter {
 	ProcessMetadata getProcessMetadata();
 	
 	/**
-	 * 添加(最新)办理的任务实例
+	 * 添加一个新办理的任务实例, 作为当前任务
 	 * @param task
 	 */
 	void addTask(Task task);
-	
 	/**
-	 * 获取(最新)办理的任务实例
+	 * 获取上一个办理的任务实例
+	 * <p>
+	 * 当只有一个任务实例时, getPreviousTask() == getCurrentTask()
 	 * @return
 	 */
-	Task getTask();
+	Task getPreviousTask();
+	/**
+	 * 获取当前办理的任务实例
+	 * @return
+	 */
+	Task getCurrentTask();
 	
 	/**
 	 * 获取办理的用户实体

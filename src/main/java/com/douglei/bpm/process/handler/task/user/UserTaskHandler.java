@@ -26,9 +26,9 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 	@Override
 	public ExecutionResult startup() {
 		if(handleParameter.getUserEntity().getAssignedUsers().isEmpty())
-			throw new TaskHandleException("id为["+taskMetadataEntity.getTaskMetadata().getId()+"], name为["+taskMetadataEntity.getTaskMetadata().getName()+"]的任务没有指派具体的办理人员");
+			throw new TaskHandleException("id为["+currentTaskMetadataEntity.getTaskMetadata().getId()+"], name为["+currentTaskMetadataEntity.getTaskMetadata().getName()+"]的任务没有指派具体的办理人员");
 		
-		Task task = createTask(true);
+		Task task = createTask();
 		
 		new AssignedUserHandler4Startup(handleParameter.getProcessMetadata().getCode(), 
 				handleParameter.getProcessMetadata().getVersion(), 
@@ -39,18 +39,31 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 	@Override
 	public ExecutionResult handle() {
 		assigneeDispatch();
-		completeTask();
 		
-		beanInstances.getTaskHandlerUtil().dispatch(taskMetadataEntity, handleParameter);
+		if(isFinished()) 
+			finishUserTask();
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
-
+	
 	// 指派信息调度
 	private void assigneeDispatch() {
 		List<HistoryAssignee> assigneeList = SessionContext.getSqlSession().query(HistoryAssignee.class, "select * from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
-				Arrays.asList(handleParameter.getTask().getTaskinstId(),
+				Arrays.asList(handleParameter.getCurrentTask().getTaskinstId(),
 						handleParameter.getUserEntity().getHandledUser().getUserId(),
 						HandleState.CLAIMED.name()));
 		new AssignedUserHandler4Handling(handleParameter, assigneeList).assigneeDispatch();
+	}
+
+	// 判断任务是否结束
+	private boolean isFinished() {
+		// TODO 多人办理时的完成策略
+		return true;
+	}
+
+	// 结束用户任务
+	private void finishUserTask() {
+		completeTask(handleParameter.getCurrentTask());
+		followTaskCompleted(handleParameter.getCurrentTask());
+		beanInstances.getTaskHandlerUtil().dispatch(currentTaskMetadataEntity, handleParameter);
 	}
 }

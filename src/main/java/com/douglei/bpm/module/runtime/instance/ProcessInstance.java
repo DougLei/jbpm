@@ -2,21 +2,23 @@ package com.douglei.bpm.module.runtime.instance;
 
 import java.util.Date;
 
+import com.douglei.bpm.bean.annotation.Property;
+
 /**
  * 
  * @author DougLei
  */
 public class ProcessInstance {
 	protected int id;
-	protected int procdefId;
-	protected String procinstId;
-	protected String title;
-	protected String businessId;
-	protected String pageId;
+	@Property protected int procdefId;
+	@Property protected String procinstId;
+	@Property protected String title;
+	@Property protected String businessId;
+	@Property protected String pageId;
 	private int state;
-	protected String startUserId;
-	protected Date startTime;
-	protected String tenantId;
+	@Property protected String startUserId;
+	@Property protected Date startTime;
+	@Property protected String tenantId;
 	
 	public int getId() {
 		return id;

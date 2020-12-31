@@ -1,6 +1,7 @@
 package com.douglei.bpm.process.handler.gateway;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Task;
@@ -12,61 +13,64 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 public class ParallelGatewayHandler extends AbstractGatewayHandler{
-
+	private static final Object key = new Object();
+	private String parentTaskinstId;
+	
 	@Override
 	public ExecutionResult startup() {
 		removeVariables();
 		
-		Task task = createTask(false);
-		if(task.getParentTaskinstId() == null) { // fork
-			handleParameter.addTask(task);
-			for(FlowMetadata flow : taskMetadataEntity.getOutputFlows()) 
-				beanInstances.getTaskHandlerUtil().dispatch(flow, handleParameter);
-			SessionContext.getTableSession().save(task);
-		}else {
-			int count = Integer.parseInt(
-					SessionContext.getSqlSession().uniqueQuery_(
-							"select count(1) from bpm_ru_task where procinst_id=? and parent_taskinst_id=?", 
-							Arrays.asList(task.getProcinstId(), task.getParentTaskinstId()))[0].toString());
-			if(count == 0) { // 可以fork
-				
-			}else { // 等待合并
-				
-			}
-		}
-		
-		// 保存任务
-		// 看看有没有并的, 并完了没有
-		// 并完了就去启动多个子任务
-		
-		
-		/*
-		 * 先并再分
-		 * 如果没得并了, 那就是分
-		 * 
-		 */
-		
-		/*
-		 * 分支逻辑:
-		 * 1. 保存并行网关任务
-		 * 2. 启动flow流出的子任务, 存在parentTaskinstId 
-		 * 3. 结束
-		 */
-		
-		/*
-		 * 合并逻辑:
-		 * 1. 保存并行网关任务,
-		 * 2. 判断是否能结束, 即根据parentTaskinstId查询, 还有多少任务没有完成
-		 * 3. 如果查询结果是都完成, 则结束, 进入下一个任务
-		 *  
-		 */
-		
+		if(joinHandle()) 
+			handle();
 		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	
+	// 进行join操作
+	private boolean joinHandle() {
+		String parentTaskinstId = handleParameter.getPreviousTask().getParentTaskinstId();
+		if(parentTaskinstId == null)
+			return true;
+		
+		synchronized (key) {
+			List<Task> tasks = SessionContext.getTableSession().query(
+					Task.class, 
+					"select key_ from bpm_ru_task where parent_taskinst_id=?", 
+					Arrays.asList(parentTaskinstId)); // 查询指定taskinstId的并行网关, 目前还未完成的(并行)任务
+			if(!tasks.isEmpty()) {
+				List<FlowMetadata> inputFlows = currentTaskMetadataEntity.getInputFlows();
+				if(inputFlows.size() > 1) {
+					for (Task task : tasks) {
+						for (FlowMetadata flow : inputFlows) {
+							if(task.getKey().equals(flow.getSource())) {
+								return false;
+							}
+						}
+					}
+				}
+			}
+			
+			Task parallelGatewayTask = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where taskinst_id=?", Arrays.asList(parentTaskinstId));
+			if(tasks.isEmpty())  // 所有相同parentTaskinstId的任务都已经完成
+				completeTask(parallelGatewayTask);
+			this.parentTaskinstId = parallelGatewayTask.getParentTaskinstId();
+			return true;
+		}
 	}
 	
 	@Override
 	public ExecutionResult handle() {
-		completeTask();
+		// 进行fork操作
+		List<FlowMetadata> outputFlows = currentTaskMetadataEntity.getOutputFlows();
+		if(outputFlows.size() == 1) {
+			// 没有fork的必要, 所以直接创建历史任务即可
+			createHistoryTask(parentTaskinstId);
+
+			beanInstances.getTaskHandlerUtil().dispatch(outputFlows.get(0), handleParameter);
+		}else {
+			createTask(parentTaskinstId);
+			for (FlowMetadata flow : outputFlows) 
+				beanInstances.getTaskHandlerUtil().dispatch(flow, handleParameter);
+		}
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 }

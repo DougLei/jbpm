@@ -25,7 +25,7 @@ public abstract class AbstractGatewayParser implements Parser<TaskTemporaryData,
 				element);
 	}
 
-	// 解析变量继承配置, 返回不继承的流程变量范围权值和
+	// 解析流程变量继承配置, 返回不继承的流程变量范围权值和
 	private int parseVariableExtend(Element element) {
 		if(element == null)
 			return 4;

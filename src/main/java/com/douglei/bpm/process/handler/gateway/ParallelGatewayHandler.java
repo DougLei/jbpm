@@ -1,15 +1,12 @@
 package com.douglei.bpm.process.handler.gateway;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.handler.TaskDispatchException;
 import com.douglei.bpm.process.handler.TaskEntity;
 import com.douglei.bpm.process.metadata.flow.FlowMetadata;
-import com.douglei.orm.context.SessionContext;
 
 /**
  * 
@@ -41,37 +38,22 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 	private boolean joinHandle() {
 		String parentTaskinstId = handleParameter.getTaskEntityHandler().getPreviousTaskEntity().getTask().getParentTaskinstId();
 		if(parentTaskinstId == null) {
-			if(handleParameter.getTaskEntityHandler().getPreviousTaskEntity().isCreateBranch()) // 上一个任务会创建分支, 例如两个并行网关连在一起
+			if(handleParameter.getTaskEntityHandler().getPreviousTaskEntity().isCreateBranch()) // 如果上一个任务会创建分支, 则这里要记录上一个任务的实例id, 作为当前任务的父任务, 例如两个并行网关连在一起
 				this.parentTaskinstId = handleParameter.getTaskEntityHandler().getPreviousTaskEntity().getTask().getTaskinstId();
 			return true;
 		}
 		
 		synchronized (key) {
-			List<Task> tasks = SessionContext.getTableSession().query(
-					Task.class, 
-					"select key_ from bpm_ru_task where parent_taskinst_id=?", 
-					Arrays.asList(parentTaskinstId)); // 查询指定taskinstId的并行网关, 目前还未完成的(并行)任务
-			if(!tasks.isEmpty()) {
-				List<FlowMetadata> inputFlows = currentTaskMetadataEntity.getInputFlows();
-				if(inputFlows.size() > 1) {
-					for (Task task : tasks) {
-						for (FlowMetadata flow : inputFlows) {
-							if(task.getKey().equals(flow.getSource())) {
-								return false;
-							}
-						}
-					}
-				}
-			}
+			ParallelTaskHandleSituation situation = new ParallelTaskHandleSituation(parentTaskinstId);
+			if(situation.invalid())
+				return false;
 			
-			// TODO parallelGatewayTask可能为null
-			Task parallelGatewayTask = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where taskinst_id=?", Arrays.asList(parentTaskinstId));
-			if(tasks.isEmpty()) { // 所有相同parentTaskinstId的任务都已经完成
-				completeTask(parallelGatewayTask);
-				this.parentTaskinstId = parallelGatewayTask.getParentTaskinstId();
-			}else {  
-				this.parentTaskinstId = parallelGatewayTask.getTaskinstId(); 
-			}
+			if(situation.isAllCompleted()) 
+				completeTask(situation.getParentParallelGatewayTask());
+			
+			
+			
+			
 			return true;
 		}
 	}

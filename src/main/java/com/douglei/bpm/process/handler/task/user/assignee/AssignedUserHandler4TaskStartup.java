@@ -12,11 +12,11 @@ import com.douglei.orm.context.SessionContext;
  * 任务启动时, 指派的用户处理器
  * @author DougLei
  */
-public class AssignedUserHandler4Startup {
+public class AssignedUserHandler4TaskStartup {
 	private List<User> assignedUsers;
 	private DelegationHandler delegationHandler;
 	
-	public AssignedUserHandler4Startup(String code, String version, List<User> assignedUsers) {
+	public AssignedUserHandler4TaskStartup(String code, String version, List<User> assignedUsers) {
 		this.assignedUsers = assignedUsers;
 		
 		DelegationSqlQueryCondition queryCondition = new DelegationSqlQueryCondition(new Date().getTime(), assignedUsers);

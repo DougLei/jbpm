@@ -10,13 +10,6 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 	}
 	
 	/**
-	 * 是否是虚拟任务, 默认值为false
-	 * @return
-	 */
-	public boolean isVirtual() {
-		return false;
-	}
-	/**
 	 * 获取任务关联的pageID, 默认值为null
 	 * @return
 	 */

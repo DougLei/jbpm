@@ -17,9 +17,4 @@ public abstract class AbstractGatewayMetadata extends TaskMetadata {
 	public final int getUnextendScopeWeight() {
 		return unextendScopeWeight;
 	}
-	
-	@Override
-	public final boolean isVirtual() {
-		return true;
-	}
 }

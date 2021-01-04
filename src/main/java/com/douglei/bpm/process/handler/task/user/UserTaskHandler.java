@@ -10,8 +10,8 @@ import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.TaskHandler;
-import com.douglei.bpm.process.handler.task.user.assignee.AssignedUserHandler4Handling;
-import com.douglei.bpm.process.handler.task.user.assignee.AssignedUserHandler4Startup;
+import com.douglei.bpm.process.handler.task.user.assignee.AssignedUserHandler4TaskHandle;
+import com.douglei.bpm.process.handler.task.user.assignee.AssignedUserHandler4TaskStartup;
 import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.orm.context.SessionContext;
 
@@ -30,7 +30,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 		
 		Task task = createTask(false);
 		
-		new AssignedUserHandler4Startup(handleParameter.getProcessMetadata().getCode(), 
+		new AssignedUserHandler4TaskStartup(handleParameter.getProcessMetadata().getCode(), 
 				handleParameter.getProcessMetadata().getVersion(), 
 				handleParameter.getUserEntity().getAssignedUsers()).saveAssigneeList(task.getTaskinstId());
 		return new ExecutionResult(task);
@@ -51,7 +51,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 				Arrays.asList(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId(),
 						handleParameter.getUserEntity().getHandledUser().getUserId(),
 						HandleState.CLAIMED.name()));
-		new AssignedUserHandler4Handling(handleParameter, assigneeList).assigneeDispatch();
+		new AssignedUserHandler4TaskHandle(handleParameter, assigneeList).assigneeDispatch();
 	}
 
 	// 判断任务是否结束

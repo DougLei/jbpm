@@ -19,7 +19,6 @@ public class Task {
 	@Property protected String key;
 	@Property protected String name;
 	@Property protected String type;
-	@Property protected int isVirtual;
 	@Property protected Date startTime;
 	@Property protected Date expiryTime;
 	@Property protected String businessId;
@@ -34,7 +33,6 @@ public class Task {
 		this.key = taskMetadata.getId();
 		this.name = taskMetadata.getName();
 		this.type = taskMetadata.getType().getName();
-		this.isVirtual = taskMetadata.isVirtual()?1:0;
 		this.startTime = new Date();
 		this.pageId = taskMetadata.getPageID();
 	}
@@ -86,15 +84,6 @@ public class Task {
 	}
 	public void setType(String type) {
 		this.type = type;
-	}
-	public boolean isVirtual() {
-		return isVirtual == 1;
-	}
-	public int getIsVirtual() {
-		return isVirtual;
-	}
-	public void setIsVirtual(int isVirtual) {
-		this.isVirtual = isVirtual;
 	}
 	public Date getStartTime() {
 		return startTime;

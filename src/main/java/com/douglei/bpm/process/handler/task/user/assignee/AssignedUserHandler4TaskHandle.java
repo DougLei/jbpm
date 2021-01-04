@@ -13,12 +13,12 @@ import com.douglei.orm.context.SessionContext;
  * 办理任务时, 指派的用户处理器
  * @author DougLei
  */
-public class AssignedUserHandler4Handling {
+public class AssignedUserHandler4TaskHandle {
 	private List<HistoryAssignee> independentAssigneeList; // 独立的指派信息集合, 从构造函数的参数assigneeList中提取出来; 指parentUserId=null, 或者mode=ASSISTED的指派信息实例
 	private List<HistoryAssignee> assigneeList; // 指派信息集合
 	private AssigneeSqlCondition assigneeSqlCondition; // 指派信息的sql条件
 	
-	public AssignedUserHandler4Handling(HandleParameter handleParameter, List<HistoryAssignee> assigneeList) {
+	public AssignedUserHandler4TaskHandle(HandleParameter handleParameter, List<HistoryAssignee> assigneeList) {
 		// 设置独立的指派信息集合
 		HistoryAssignee historyAssignee = null;
 		for(int i=0;i < assigneeList.size();i++) {

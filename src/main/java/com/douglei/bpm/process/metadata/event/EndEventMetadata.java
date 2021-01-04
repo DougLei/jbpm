@@ -14,10 +14,6 @@ public class EndEventMetadata extends TaskMetadata {
 	}
 	
 	@Override
-	public boolean isVirtual() {
-		return true;
-	}
-	@Override
 	public Type getType() {
 		return Type.END_EVENT;
 	}

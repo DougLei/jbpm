@@ -2,7 +2,6 @@ package com.douglei.bpm.process.handler;
 
 import java.util.Date;
 
-import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 
 /**
@@ -31,21 +30,21 @@ public interface HandleParameter {
 	
 	/**
 	 * 添加一个新办理的任务实例, 作为当前任务
-	 * @param task
+	 * @param taskEntity
 	 */
-	void addTask(Task task);
+	void addTaskEntity(TaskEntity taskEntity);
 	/**
 	 * 获取上一个办理的任务实例
 	 * <p>
-	 * 当只有一个任务实例时, getPreviousTask() == getCurrentTask()
+	 * 当只有一个任务实例时, getPreviousTaskEntity() == getCurrentTaskEntity()
 	 * @return
 	 */
-	Task getPreviousTask();
+	TaskEntity getPreviousTaskEntity();
 	/**
 	 * 获取当前办理的任务实例
 	 * @return
 	 */
-	Task getCurrentTask();
+	TaskEntity getCurrentTaskEntity();
 	
 	/**
 	 * 获取办理的用户实体

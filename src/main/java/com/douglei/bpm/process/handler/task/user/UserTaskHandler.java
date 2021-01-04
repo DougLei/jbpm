@@ -48,7 +48,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 	// 指派信息调度
 	private void assigneeDispatch() {
 		List<HistoryAssignee> assigneeList = SessionContext.getSqlSession().query(HistoryAssignee.class, "select * from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
-				Arrays.asList(handleParameter.getCurrentTask().getTaskinstId(),
+				Arrays.asList(handleParameter.getCurrentTaskEntity().getTask().getTaskinstId(),
 						handleParameter.getUserEntity().getHandledUser().getUserId(),
 						HandleState.CLAIMED.name()));
 		new AssignedUserHandler4Handling(handleParameter, assigneeList).assigneeDispatch();
@@ -62,8 +62,8 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 
 	// 结束用户任务
 	private void finishUserTask() {
-		completeTask(handleParameter.getCurrentTask());
-		followTaskCompleted(handleParameter.getCurrentTask());
+		completeTask(handleParameter.getCurrentTaskEntity().getTask());
+		followTaskCompleted(handleParameter.getCurrentTaskEntity().getTask());
 		beanInstances.getTaskHandlerUtil().dispatch(currentTaskMetadataEntity, handleParameter);
 	}
 }

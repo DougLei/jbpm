@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 
 /**
@@ -15,7 +14,7 @@ public abstract class AbstractHandleParameter implements HandleParameter {
 	private Date currentDate = new Date(); // 当前时间
 	protected String processInstanceId; // 流程实例id
 	protected ProcessMetadata processMetadata; // 流程元数据实例
-	protected List<Task> tasks; // 办理的任务集合
+	protected List<TaskEntity> taskEntities; // 办理的任务集合
 	protected UserEntity userEntity; // 办理的用户实体
 	protected VariableEntities variableEntities; // 办理中的流程变量
 	
@@ -32,22 +31,22 @@ public abstract class AbstractHandleParameter implements HandleParameter {
 		return processMetadata;
 	}
 	@Override
-	public void addTask(Task task) {
-		if(tasks == null)
-			tasks = new ArrayList<Task>(5);
-		tasks.add(task);
+	public void addTaskEntity(TaskEntity taskEntity) {
+		if(taskEntities == null)
+			taskEntities = new ArrayList<TaskEntity>(5);
+		taskEntities.add(taskEntity);
 	}
 	@Override
-	public Task getPreviousTask() {
-		if(tasks.size() == 1)
-			return tasks.get(0);
-		return tasks.get(tasks.size()-2);
+	public TaskEntity getPreviousTaskEntity() {
+		if(taskEntities.size() == 1)
+			return taskEntities.get(0);
+		return taskEntities.get(taskEntities.size()-2);
 	}
 	@Override
-	public Task getCurrentTask() {
-		if(tasks == null)
+	public TaskEntity getCurrentTaskEntity() {
+		if(taskEntities == null)
 			return null;
-		return tasks.get(tasks.size()-1);
+		return taskEntities.get(taskEntities.size()-1);
 	}
 	@Override
 	public final UserEntity getUserEntity() {

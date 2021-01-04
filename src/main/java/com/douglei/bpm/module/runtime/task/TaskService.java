@@ -31,8 +31,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult claim(int taskId, String userId){
-		TaskEntity taskEntity = new TaskEntity(taskId, processContainer);
-		return commandExecutor.execute(new ClaimTaskCmd(taskEntity, userId));
+		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
+		return commandExecutor.execute(new ClaimTaskCmd(taskInstance, userId));
 	}
 	/**
 	 * 认领指定id的任务
@@ -42,8 +42,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult claim(String taskinstId, String userId){
-		TaskEntity taskEntity = new TaskEntity(taskinstId, processContainer);
-		return commandExecutor.execute(new ClaimTaskCmd(taskEntity, userId));
+		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
+		return commandExecutor.execute(new ClaimTaskCmd(taskInstance, userId));
 	}
 	
 	/**
@@ -54,8 +54,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult unclaim(int taskId, String userId){
-		TaskEntity taskEntity = new TaskEntity(taskId, processContainer);
-		return commandExecutor.execute(new UnclaimTaskCmd(taskEntity, userId));
+		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
+		return commandExecutor.execute(new UnclaimTaskCmd(taskInstance, userId));
 	}
 	/**
 	 * 取消认领指定id的任务
@@ -65,8 +65,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult unclaim(String taskinstId, String userId){
-		TaskEntity taskEntity = new TaskEntity(taskinstId, processContainer);
-		return commandExecutor.execute(new UnclaimTaskCmd(taskEntity, userId));
+		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
+		return commandExecutor.execute(new UnclaimTaskCmd(taskInstance, userId));
 	}
 	
 	/**
@@ -77,8 +77,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult handle(int taskId, TaskHandleParameter parameter) {
-		TaskEntity taskEntity = new TaskEntity(taskId, processContainer);
-		return commandExecutor.execute(new HandleTaskCmd(taskEntity, parameter));
+		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
+		return commandExecutor.execute(new HandleTaskCmd(taskInstance, parameter));
 	}
 	/**
 	 * 办理指定id的任务
@@ -88,7 +88,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult handle(String taskinstId, TaskHandleParameter parameter) {
-		TaskEntity taskEntity = new TaskEntity(taskinstId, processContainer);
-		return commandExecutor.execute(new HandleTaskCmd(taskEntity, parameter));
+		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
+		return commandExecutor.execute(new HandleTaskCmd(taskInstance, parameter));
 	}
 }

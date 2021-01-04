@@ -27,7 +27,7 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 	
 	// 进行join操作
 	private boolean joinHandle() {
-		String parentTaskinstId = handleParameter.getPreviousTask().getParentTaskinstId();
+		String parentTaskinstId = handleParameter.getPreviousTaskEntity().getTask().getParentTaskinstId();
 		if(parentTaskinstId == null)
 			return true;
 		

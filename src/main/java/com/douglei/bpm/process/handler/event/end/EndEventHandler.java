@@ -38,7 +38,7 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 	
 	// 判断流程是否结束
 	private boolean isFinished() {
-		if(handleParameter.getPreviousTask().getParentTaskinstId() == null)
+		if(handleParameter.getPreviousTaskEntity().getTask().getParentTaskinstId() == null)
 			return true;
 		
 		int taskCount = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(

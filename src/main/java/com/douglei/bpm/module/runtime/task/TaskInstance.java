@@ -12,12 +12,12 @@ import com.douglei.orm.context.SessionContext;
  * 
  * @author DougLei
  */
-public class TaskEntity {
+public class TaskInstance {
 	private ProcessMetadata processMetadata;
 	private TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity;
 	private Task task;
 	
-	TaskEntity(int taskId, ProcessContainerProxy container) {
+	TaskInstance(int taskId, ProcessContainerProxy container) {
 		task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where id=?", Arrays.asList(taskId));
 		if(task == null)
 			throw new NullPointerException("不存在id为["+taskId+"]的任务");
@@ -25,7 +25,7 @@ public class TaskEntity {
 		taskMetadataEntity = processMetadata.getTaskMetadataEntity(task.getKey());
 	}
 	
-	TaskEntity(String taskinstId, ProcessContainerProxy container) {
+	TaskInstance(String taskinstId, ProcessContainerProxy container) {
 		task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where taskinst_id=?", Arrays.asList(taskinstId));
 		if(task == null)
 			throw new NullPointerException("不存在taskinst_id为["+taskinstId+"]的任务");

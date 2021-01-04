@@ -35,7 +35,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	 * @return
 	 */
 	protected final Task createTask() {
-		return createTask(handleParameter.getPreviousTask().getParentTaskinstId()); // TODO 上一个任务是否会产生分支
+		return createTask(handleParameter.getPreviousTaskEntity().getTask().getParentTaskinstId()); // TODO 上一个任务是否会产生分支
 	}
 	/**
 	 * 创建任务
@@ -50,7 +50,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 				currentTaskMetadataEntity.getTaskMetadata());
 		
 		SessionContext.getTableSession().save(task);
-		handleParameter.addTask(task);
+		handleParameter.addTaskEntity(new TaskEntity(task));
 		return task;
 	}
 	
@@ -59,7 +59,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	 * @return
 	 */
 	protected final Task createHistoryTask() {
-		return createHistoryTask(handleParameter.getPreviousTask().getParentTaskinstId());
+		return createHistoryTask(handleParameter.getPreviousTaskEntity().getTask().getParentTaskinstId());
 	}
 	/**
 	 * 创建历史任务
@@ -74,7 +74,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 				currentTaskMetadataEntity.getTaskMetadata());
 		SessionContext.getTableSession().save(historyTask);
 		
-		handleParameter.addTask(historyTask);
+		handleParameter.addTaskEntity(new TaskEntity(historyTask));
 		return historyTask;
 	}
 	

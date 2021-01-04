@@ -1,27 +1,13 @@
 package com.douglei.bpm.process.handler.gateway;
 
-import com.douglei.bpm.module.ExecutionResult;
-
 /**
  * 
  * @author DougLei
  */
-public class InclusiveGatewayHandler extends AbstractGatewayHandler{
+public class InclusiveGatewayHandler extends ParallelGatewayHandler{
 
 	@Override
-	public ExecutionResult startup() {
-		removeVariables();
-		
-		
-		
-		return ExecutionResult.getDefaultSuccessInstance();
-	}
-	
-	@Override
-	public ExecutionResult handle() {
-		
-		
-		
-		return ExecutionResult.getDefaultSuccessInstance();
+	protected boolean ignoreFlowCondition() {
+		return false;
 	}
 }

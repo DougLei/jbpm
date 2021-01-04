@@ -40,7 +40,7 @@ public class AssignedUserHandler4Handling {
 			return;
 		
 		// 追加parent指派信息集合
-		this.assigneeSqlCondition = new AssigneeSqlCondition(handleParameter.getCurrentTaskEntity().getTask().getTaskinstId(), assigneeList);
+		this.assigneeSqlCondition = new AssigneeSqlCondition(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId(), assigneeList);
 		appendParentAssigneeList(assigneeList);
 		this.assigneeList = assigneeList;
 	}

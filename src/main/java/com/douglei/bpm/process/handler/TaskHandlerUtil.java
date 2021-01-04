@@ -101,7 +101,7 @@ public class TaskHandlerUtil {
 		
 		FlowMetadata defaultOutputFlow = taskMetadataEntity.getDefaultOutputFlow();
 		if(defaultOutputFlow == null)
-			throw new TaskDispatchException("执行["+taskMetadataEntity.getTaskMetadata().getName()+"]任务时, 未能匹配到满足条件的Flow");
+			throw new TaskDispatchException("执行"+taskMetadataEntity.getTaskMetadata()+"任务时, 未能匹配到满足条件的Flow");
 		dispatch(defaultOutputFlow, parameter);
 	}
 	
@@ -128,6 +128,7 @@ public class TaskHandlerUtil {
 	 * @param parameter
 	 */
 	public void dispatch(FlowMetadata flowMetadata, HandleParameter parameter) {
+		parameter.getTaskEntityHandler().dispatch();
 		startup(parameter.getProcessMetadata().getTaskMetadataEntity(flowMetadata.getTarget()), parameter);
 	}
 }

@@ -30,4 +30,9 @@ public abstract class ProcessNodeMetadata implements Serializable {
 	 * @return
 	 */
 	public abstract Type getType();
+
+	@Override
+	public String toString() {
+		return "[id=" + id + ", name=" + name + ", type=" + getType() + "]";
+	}
 }

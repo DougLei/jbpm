@@ -36,11 +36,11 @@ public abstract class AbstractGatewayParser implements Parser<TaskTemporaryData,
 			unextendScopeWeight += Scope.GLOBAL.getWeight();
 		
 		value = element.attributeValue("local");
-		if(value == null || !"true".equalsIgnoreCase(value))
+		if(value != null || !"true".equalsIgnoreCase(value))
 			unextendScopeWeight += Scope.LOCAL.getWeight();
 		
 		value = element.attributeValue("transient");
-		if(value == null || !"true".equalsIgnoreCase(value))
+		if(value != null || !"true".equalsIgnoreCase(value))
 			unextendScopeWeight += Scope.TRANSIENT.getWeight();
 		
 		return unextendScopeWeight;

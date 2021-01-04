@@ -32,17 +32,21 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	
 	/**
 	 * 创建任务
+	 * @param createBranch 当前任务是否会创建分支
 	 * @return
 	 */
-	protected final Task createTask() {
-		return createTask(handleParameter.getPreviousTaskEntity().getTask().getParentTaskinstId()); // TODO 上一个任务是否会产生分支
+	protected final Task createTask(boolean createBranch) {
+		if(handleParameter.getTaskEntityHandler().getPreviousTaskEntity().isCreateBranch())
+			return createTask(createBranch, handleParameter.getTaskEntityHandler().getPreviousTaskEntity().getTask().getTaskinstId());
+		return createTask(createBranch, handleParameter.getTaskEntityHandler().getPreviousTaskEntity().getTask().getParentTaskinstId());
 	}
 	/**
 	 * 创建任务
+	 * @param createBranch 当前任务是否会创建分支
 	 * @param parentTaskinstId
 	 * @return
 	 */
-	protected final Task createTask(String parentTaskinstId) {
+	protected final Task createTask(boolean createBranch, String parentTaskinstId) {
 		Task task = new Task(
 				handleParameter.getProcessMetadata().getId(), 
 				handleParameter.getProcessInstanceId(),
@@ -50,7 +54,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 				currentTaskMetadataEntity.getTaskMetadata());
 		
 		SessionContext.getTableSession().save(task);
-		handleParameter.addTaskEntity(new TaskEntity(task));
+		handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(task, createBranch));
 		return task;
 	}
 	
@@ -59,7 +63,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	 * @return
 	 */
 	protected final Task createHistoryTask() {
-		return createHistoryTask(handleParameter.getPreviousTaskEntity().getTask().getParentTaskinstId());
+		return createHistoryTask(handleParameter.getTaskEntityHandler().getPreviousTaskEntity().getTask().getParentTaskinstId());
 	}
 	/**
 	 * 创建历史任务
@@ -74,7 +78,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 				currentTaskMetadataEntity.getTaskMetadata());
 		SessionContext.getTableSession().save(historyTask);
 		
-		handleParameter.addTaskEntity(new TaskEntity(historyTask));
+		handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(historyTask));
 		return historyTask;
 	}
 	
@@ -92,10 +96,10 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	}
 	
 	/**
-	 * 跟随任务完成
+	 * 跟随任务完成流程变量
 	 * @param task
 	 */
-	protected final void followTaskCompleted(Task task) {
+	protected final void followTaskCompleted4Variable(Task task) {
 		VariableEntities variableEntities = new VariableEntities(SessionContext.getTableSession()
 				.query(Variable.class, 
 						"select * from bpm_ru_variable where procinst_id=? and taskinst_id=?", Arrays.asList(task.getProcinstId(), task.getTaskinstId())));

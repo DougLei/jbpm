@@ -1,8 +1,6 @@
 package com.douglei.bpm.process.handler;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 
@@ -14,7 +12,7 @@ public abstract class AbstractHandleParameter implements HandleParameter {
 	private Date currentDate = new Date(); // 当前时间
 	protected String processInstanceId; // 流程实例id
 	protected ProcessMetadata processMetadata; // 流程元数据实例
-	protected List<TaskEntity> taskEntities; // 办理的任务集合
+	protected TaskEntityHandler taskEntityHandler = new TaskEntityHandler(); // 任务实体处理器
 	protected UserEntity userEntity; // 办理的用户实体
 	protected VariableEntities variableEntities; // 办理中的流程变量
 	
@@ -31,22 +29,8 @@ public abstract class AbstractHandleParameter implements HandleParameter {
 		return processMetadata;
 	}
 	@Override
-	public void addTaskEntity(TaskEntity taskEntity) {
-		if(taskEntities == null)
-			taskEntities = new ArrayList<TaskEntity>(5);
-		taskEntities.add(taskEntity);
-	}
-	@Override
-	public TaskEntity getPreviousTaskEntity() {
-		if(taskEntities.size() == 1)
-			return taskEntities.get(0);
-		return taskEntities.get(taskEntities.size()-2);
-	}
-	@Override
-	public TaskEntity getCurrentTaskEntity() {
-		if(taskEntities == null)
-			return null;
-		return taskEntities.get(taskEntities.size()-1);
+	public final TaskEntityHandler getTaskEntityHandler() {
+		return taskEntityHandler;
 	}
 	@Override
 	public final UserEntity getUserEntity() {

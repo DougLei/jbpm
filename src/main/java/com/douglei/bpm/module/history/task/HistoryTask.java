@@ -2,7 +2,7 @@ package com.douglei.bpm.module.history.task;
 
 import java.util.Date;
 
-import com.douglei.bpm.bean.PropertyValueReplicator;
+import com.douglei.bpm.bean.PropertyValueCopier;
 import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.metadata.TaskMetadata;
 
@@ -19,7 +19,7 @@ public class HistoryTask extends Task{
 		this.endTime = super.startTime;
 	}
 	public HistoryTask(Task task) {
-		PropertyValueReplicator.copy(task, this);
+		PropertyValueCopier.copy(task, this);
 		this.endTime = new Date();
 	}
 	

@@ -8,6 +8,7 @@
 			<column name="PROCINST_ID" property="procinstId" dataType="char" length="36" nullable="false"/>
 			<column name="TASKINST_ID" property="taskinstId" dataType="char" length="36" nullable="false"/>
 			<column name="PARENT_TASKINST_ID" property="parentTaskinstId" dataType="char" length="36" />
+			<column name="CHILDREN_NUM" property="childrenNum" dataType="number" length="3" />
 			<column name="KEY_" property="key" dataType="string" length="50" nullable="false"/>
 			<column name="NAME" property="name" dataType="nstring" length="100" nullable="false"/>
 			<column name="TYPE" property="type" dataType="string" length="20" nullable="false"/>

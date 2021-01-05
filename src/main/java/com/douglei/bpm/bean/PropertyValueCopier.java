@@ -8,7 +8,7 @@ import com.douglei.bpm.bean.annotation.Property;
  * 属性值复制器
  * @author DougLei
  */
-public class PropertyValueReplicator {
+public class PropertyValueCopier {
 	
 	/**
 	 * 

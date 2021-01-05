@@ -6,6 +6,7 @@
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
 			<column name="PROCDEF_ID" property="procdefId" dataType="number" length="10" nullable="false"/>
 			<column name="PROCINST_ID" property="procinstId" dataType="char" length="36" nullable="false"/>
+			<column name="PARENT_PROCINST_ID" property="parentProcinstId" dataType="char" length="36" />
 			<column name="TITLE" property="title" dataType="nstring" length="200" nullable="false"/>
 			<column name="BUSINESS_ID" property="businessId" dataType="string" length="100"/>
 			<column name="PAGE_ID" property="pageId" dataType="string" length="500"/>

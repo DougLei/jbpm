@@ -12,6 +12,7 @@ public class ProcessInstance {
 	protected int id;
 	@Property protected int procdefId;
 	@Property protected String procinstId;
+	@Property protected String parentProcinstId;
 	@Property protected String title;
 	@Property protected String businessId;
 	@Property protected String pageId;
@@ -37,6 +38,12 @@ public class ProcessInstance {
 	}
 	public void setProcinstId(String procinstId) {
 		this.procinstId = procinstId;
+	}
+	public String getParentProcinstId() {
+		return parentProcinstId;
+	}
+	public void setParentProcinstId(String parentProcinstId) {
+		this.parentProcinstId = parentProcinstId;
 	}
 	public String getTitle() {
 		return title;

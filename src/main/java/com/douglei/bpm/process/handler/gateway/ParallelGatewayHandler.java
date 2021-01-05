@@ -4,10 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.handler.TaskDispatchException;
 import com.douglei.bpm.process.handler.TaskEntity;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.metadata.flow.FlowMetadata;
+import com.douglei.orm.context.SessionContext;
 
 /**
  * 
@@ -27,7 +29,7 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 	public ExecutionResult startup() {
 		removeVariables();
 		
-		ParallelTaskHandler parallelTaskHandler = new ParallelTaskHandler(handleParameter.getTaskEntityHandler().getPreviousTaskEntity(), currentTaskMetadataEntity);
+		ParallelTaskHandler parallelTaskHandler = new ParallelTaskHandler(currentTaskMetadataEntity, handleParameter.getTaskEntityHandler().getPreviousTaskEntity());
 		if(parallelTaskHandler.join())  
 			fork(parallelTaskHandler.getCurrentTaskParentTaskinstId());
 		return ExecutionResult.getDefaultSuccessInstance();
@@ -42,7 +44,7 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 			createHistoryTask(parentTaskinstId);
 			dispatch(outputFlows.get(0));
 		}else {
-			createTask(true, parentTaskinstId);
+			Task currentTask = createTask(true, parentTaskinstId, false);
 			
 			LinkedList<TaskEntity> historyTaskEntities = handleParameter.getTaskEntityHandler().getHistoryTaskEntities(); // 历史办理的任务实体实例集合
 			int mark = historyTaskEntities.size(); // 进行初始位置标记
@@ -53,18 +55,20 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 						handleParameter.getTaskEntityHandler().setCurrentTaskEntity(historyTaskEntities.removeLast());
 				}
 			}
+			currentTask.setChildrenNum(childrenNum);
+			SessionContext.getTableSession().save(currentTask);
 		}
-		if(num == 0)
+		if(childrenNum == 0)
 			throw new TaskDispatchException("执行"+currentTaskMetadataEntity.getTaskMetadata()+"任务时, 未能匹配到任何满足条件的Flow");
 	}
 	
-	// 流出flow的计数器
-	private int num; 
+	// 子任务数量
+	private int childrenNum; 
 	// 进行调度, 返回是否调度成功
 	private boolean dispatch(FlowMetadata flow) {
 		if(ignoreFlowCondition() || beanInstances.getTaskHandlerUtil().flowMatching(flow, handleParameter.getVariableEntities().getVariableMap())) {
 			beanInstances.getTaskHandlerUtil().dispatch(flow, handleParameter);
-			num++;
+			childrenNum++;
 			return true;
 		}
 		return false;

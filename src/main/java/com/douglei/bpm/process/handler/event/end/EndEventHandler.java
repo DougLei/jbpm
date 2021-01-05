@@ -27,23 +27,24 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 	
 	@Override
 	public ExecutionResult startup() {
-		ParallelTaskHandler parallelTaskHandler = new ParallelTaskHandler(handleParameter.getTaskEntityHandler().getPreviousTaskEntity(), currentTaskMetadataEntity);
+		ParallelTaskHandler parallelTaskHandler = new ParallelTaskHandler(currentTaskMetadataEntity, handleParameter.getTaskEntityHandler().getPreviousTaskEntity());
 		if(parallelTaskHandler.join()) { 
 			createHistoryTask(parallelTaskHandler.getCurrentTaskParentTaskinstId());
 			
-			if(isFinished()) 
+			if(isAllFinished()) 
 				finishProcessInstance();
 		}
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	
-	// 判断流程是否结束
-	private boolean isFinished() {
-		if(handleParameter.getTaskEntityHandler().getPreviousTaskEntity().getTask().getParentTaskinstId() == null)
+	// 判断流程所有任务是否都结束
+	private boolean isAllFinished() {
+		if(handleParameter.getTaskEntityHandler().getPreviousTaskEntity().getTask().getParentTaskinstId() == null
+				&& !handleParameter.getTaskEntityHandler().getPreviousTaskEntity().isCreateBranch())
 			return true;
 		
 		int taskCount = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(
-				"select count(id) from bpm_ru_task where is_virtual=0 and procinst_id=?", 
+				"select count(1) from bpm_ru_task where procinst_id=?", 
 				Arrays.asList(handleParameter.getProcessInstanceId()))[0].toString());
 		return taskCount == 0;
 	}

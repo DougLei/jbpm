@@ -16,6 +16,7 @@ public class Task {
 	@Property protected String procinstId;
 	@Property protected String taskinstId;
 	@Property protected String parentTaskinstId;
+	@Property protected Integer childrenNum;
 	@Property protected String key;
 	@Property protected String name;
 	@Property protected String type;
@@ -66,6 +67,12 @@ public class Task {
 	}
 	public void setParentTaskinstId(String parentTaskinstId) {
 		this.parentTaskinstId = parentTaskinstId;
+	}
+	public Integer getChildrenNum() {
+		return childrenNum;
+	}
+	public void setChildrenNum(Integer childrenNum) {
+		this.childrenNum = childrenNum;
 	}
 	public String getKey() {
 		return key;

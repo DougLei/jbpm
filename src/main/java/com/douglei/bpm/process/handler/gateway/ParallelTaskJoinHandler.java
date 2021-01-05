@@ -12,16 +12,15 @@ import com.douglei.bpm.process.metadata.flow.FlowMetadata;
 import com.douglei.orm.context.SessionContext;
 
 /**
- * 并行任务处理器
+ * 并行任务合并处理器
  * @author DougLei
  */
-public class ParallelTaskHandler extends GeneralTaskHandler{
+public class ParallelTaskJoinHandler extends GeneralTaskHandler{
 	private TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity; // 当前处理的任务元数据实体实例
 	private TaskEntity previousTaskEntity; // 上一个办理的任务实体实例
-	
 	private String currentTaskParentTaskinstId; // 当前任务需关联的父任务实例id值
 	
-	public ParallelTaskHandler(TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity, TaskEntity previousTaskEntity) {
+	public ParallelTaskJoinHandler(TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity, TaskEntity previousTaskEntity) {
 		this.currentTaskMetadataEntity = currentTaskMetadataEntity;
 		this.previousTaskEntity = previousTaskEntity;
 	}
@@ -37,7 +36,6 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 				this.currentTaskParentTaskinstId = previousTaskEntity.getTask().getTaskinstId();
 			return true;
 		}
-		
 		return join(Arrays.asList(parentTaskinstId), false);
 	}
 	

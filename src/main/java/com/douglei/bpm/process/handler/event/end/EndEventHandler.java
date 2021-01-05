@@ -15,7 +15,7 @@ import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.VariableEntities;
 import com.douglei.bpm.process.handler.gateway.ParallelGatewayHandler;
-import com.douglei.bpm.process.handler.gateway.ParallelTaskHandler;
+import com.douglei.bpm.process.handler.gateway.ParallelTaskJoinHandler;
 import com.douglei.bpm.process.metadata.event.EndEventMetadata;
 import com.douglei.orm.context.SessionContext;
 
@@ -27,9 +27,9 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 	
 	@Override
 	public ExecutionResult startup() {
-		ParallelTaskHandler parallelTaskHandler = new ParallelTaskHandler(currentTaskMetadataEntity, handleParameter.getTaskEntityHandler().getPreviousTaskEntity());
-		if(parallelTaskHandler.join()) { 
-			createHistoryTask(parallelTaskHandler.getCurrentTaskParentTaskinstId());
+		ParallelTaskJoinHandler joinHandler = new ParallelTaskJoinHandler(currentTaskMetadataEntity, handleParameter.getTaskEntityHandler().getPreviousTaskEntity());
+		if(joinHandler.join()) { 
+			createHistoryTask(joinHandler.getCurrentTaskParentTaskinstId());
 			
 			if(isAllFinished()) 
 				finishProcessInstance();

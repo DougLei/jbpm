@@ -27,14 +27,14 @@ class DelegationHandler {
 		if(list.isEmpty())
 			return;
 		
-		// 将查询结果组装成 <指派人id, (多个)具体的委托类实例> 结构
+		// 将查询结果组装成 <发起委托的人id, (多个)具体的委托类实例> 结构
 		Map<String, MultiDelegation> delegationInfoMap = new HashMap<String, MultiDelegation>();
 		MultiDelegation temp;
 		for(DelegationInfo delegationInfo : list) {
-			temp = delegationInfoMap.get(delegationInfo.getClientId());
+			temp = delegationInfoMap.get(delegationInfo.getUserId());
 			if(temp == null) {
 				temp = new MultiDelegation();
-				delegationInfoMap.put(delegationInfo.getClientId(), temp);
+				delegationInfoMap.put(delegationInfo.getUserId(), temp);
 			}
 			temp.addDelegation(delegationInfo);
 		}
@@ -100,10 +100,10 @@ class MultiDelegation {
 
 	// 添加具体的委托
 	public void addDelegation(DelegationInfo delegationInfo) {
-		Delegation delegation = delegationMap.get(delegationInfo.getAssigneeId());
+		Delegation delegation = delegationMap.get(delegationInfo.getAssignedUserId());
 		if(delegation == null) {
-			delegation = new Delegation(delegationInfo.getAssigneeId(), delegationInfo.getReason());
-			delegationMap.put(delegationInfo.getAssigneeId(), delegation);
+			delegation = new Delegation(delegationInfo.getAssignedUserId(), delegationInfo.getReason());
+			delegationMap.put(delegationInfo.getAssignedUserId(), delegation);
 		}
 		delegation.addDetail(delegationInfo.getProcdefCode(), delegationInfo.getProcdefVersion());
 	}

@@ -5,23 +5,23 @@ package com.douglei.bpm.process.handler.task.user.assignee;
  * @author DougLei
  */
 public class DelegationInfo {
-	private String clientId;
-	private String assigneeId;
+	private String userId; // 发起委托的用户id
+	private String assignedUserId; // 被委托的用户id
 	private String reason;
 	private String procdefCode;
 	private String procdefVersion;
 	
-	public String getClientId() {
-		return clientId;
+	public String getUserId() {
+		return userId;
 	}
-	public void setClientId(String clientId) {
-		this.clientId = clientId;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
-	public String getAssigneeId() {
-		return assigneeId;
+	public String getAssignedUserId() {
+		return assignedUserId;
 	}
-	public void setAssigneeId(String assigneeId) {
-		this.assigneeId = assigneeId;
+	public void setAssignedUserId(String assignedUserId) {
+		this.assignedUserId = assignedUserId;
 	}
 	public String getReason() {
 		return reason;

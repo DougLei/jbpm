@@ -1,5 +1,8 @@
 package com.douglei.bpm;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
@@ -29,6 +32,17 @@ public abstract class ProcessEngine {
 	protected ProcessEngine(String id) {
 		this.id = id;
 	}
+	
+	
+	public void test(Object obj) {}
+	public void test(List<? extends Object> objs) {}
+	public void in() {
+		List<String> s = new ArrayList<String>();
+		test(s);
+		
+		
+	}
+	
 	
 	public final String getId() {
 		return id;

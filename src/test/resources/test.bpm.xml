@@ -8,19 +8,31 @@
 		
 		<!-- 用户任务 -->
 		<userTask id="userTask1" name="员工发起申请"></userTask>
-		<userTask id="userTask2" name="经理审批"></userTask>
-		<userTask id="userTask3" name="老板审批"></userTask>
+		<userTask id="userTask2" name="自审批"></userTask>
+		<userTask id="userTask3" name="经理审批"></userTask>
+		<userTask id="userTask4" name="总经理审批"></userTask>
+		
+		<!-- 并行网关 -->
+		<parallelGateway id="parallelGateway1" name="开始同时办理">
+		</parallelGateway>
+		<!-- 并行网关 -->
+		<parallelGateway id="parallelGateway2" name="结束同时办理">
+		</parallelGateway>
 		
 		<!-- 连线, 可配置条件 -->
 		<flow id="flow1" source="startEvent" target="userTask1" />
-		<flow id="flow2" source="userTask1" target="userTask2">
-			<conditionExpr><![CDATA[ #{day <= 3} ]]></conditionExpr>
+		<flow id="flow2" source="userTask1" target="parallelGateway1">
 		</flow>
-		<flow id="flow4" source="userTask1" target="userTask3">
-			<conditionExpr><![CDATA[ #{day > 3} ]]></conditionExpr>
+		<flow id="flow3" source="parallelGateway1" target="userTask2">
 		</flow>
-		<flow id="flow3" source="userTask2" target="userTask3" />
-		<flow id="flow5" source="userTask3" target="endEvent" />
+		<flow id="flow4" source="parallelGateway1" target="userTask3" />
+		
+		<flow id="flow5" source="userTask2" target="parallelGateway2" />
+		<flow id="flow6" source="userTask3" target="parallelGateway2" />
+		
+		<flow id="flow7" source="parallelGateway2" target="userTask4" />
+		<flow id="flow8" source="userTask4" target="endEvent" />
+		
 	</process>
 	
 	<!-- 配置流程图的结构, 主要就是记录画布的长宽，以及各个节点的坐标，长宽等 -->

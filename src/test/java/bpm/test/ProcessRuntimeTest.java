@@ -42,8 +42,8 @@ public class ProcessRuntimeTest {
 	
 	@Test
 	public void claim() {
-		int taskId = 2;
-		String userId = "chengrong";
+		int taskId = 6;
+		String userId = "张三";
 		ExecutionResult result = engine.getRuntimeModule().getTaskService().claim(taskId, userId);
 		if(result.isSuccess())
 			System.out.println("成功认领id为["+taskId+"]的任务");
@@ -53,10 +53,11 @@ public class ProcessRuntimeTest {
 	
 	@Test
 	public void handle() {
-		int taskId = 2;
-		String userId = "chengrong";
+		int taskId = 6;
+		String userId = "张三";
 		
 		TaskHandleParameter parameter = new TaskHandleParameter();
+		parameter.addAssignUserId("张三");
 		parameter.setUserId(userId).setSuggest("同意了").setAttitude(Attitude.AGREE);
 		
 		ExecutionResult result = engine.getRuntimeModule().getTaskService().handle(taskId, parameter);

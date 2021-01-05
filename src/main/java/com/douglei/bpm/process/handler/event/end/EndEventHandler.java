@@ -11,8 +11,11 @@ import com.douglei.bpm.module.runtime.instance.ProcessInstance;
 import com.douglei.bpm.module.runtime.variable.Variable;
 import com.douglei.bpm.process.handler.HandleParameter;
 import com.douglei.bpm.process.handler.TaskDispatchException;
+import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.VariableEntities;
+import com.douglei.bpm.process.handler.gateway.ParallelGatewayHandler;
+import com.douglei.bpm.process.handler.gateway.ParallelTaskHandler;
 import com.douglei.bpm.process.metadata.event.EndEventMetadata;
 import com.douglei.orm.context.SessionContext;
 
@@ -21,18 +24,16 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParameter> {
-
+	
 	@Override
 	public ExecutionResult startup() {
-		return handle();
-	}
-
-	@Override
-	public ExecutionResult handle() {
-		// 创建流程任务(因为是结束事件, 所以直接创建历史任务结束即可)
-		createHistoryTask(); // TODO 应该不在这里结束, EndEvent应该具有聚合功能
-		if(isFinished()) 
-			finishProcessInstance();
+		ParallelTaskHandler parallelTaskHandler = new ParallelTaskHandler(handleParameter.getTaskEntityHandler().getPreviousTaskEntity(), currentTaskMetadataEntity);
+		if(parallelTaskHandler.join()) { 
+			createHistoryTask(parallelTaskHandler.getCurrentTaskParentTaskinstId());
+			
+			if(isFinished()) 
+				finishProcessInstance();
+		}
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	
@@ -79,5 +80,10 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 		
 		if(variableEntities.existsLocalVariable())
 			throw new TaskDispatchException("结束流程时, 还存在local范围的变量");
+	}
+	
+	@Override
+	public ExecutionResult handle() {
+		throw new TaskHandleException(ParallelGatewayHandler.class.getName() + " 不支持handle()方法");
 	}
 }

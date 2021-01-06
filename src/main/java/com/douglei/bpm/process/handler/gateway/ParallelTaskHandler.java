@@ -28,14 +28,17 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 
 	/**
 	 * 进行join操作
-	 * @return 
+	 * @return 进行join的任务实例(joinTask); 返回null表示join未完成
 	 */
-	public ParallelTaskJoinResult join() {
+	public Task join() {
 		String parentTaskinstId = previousTaskEntity.getTask().getParentTaskinstId();
 		if(parentTaskinstId == null) {
+			Task joinTask = new Task(previousTaskEntity.getTask().getProcdefId(), previousTaskEntity.getTask().getProcinstId(), null, currentTaskMetadataEntity.getTaskMetadata());
+			joinTask.setJoinBranchNum(1);
+			
 			if(previousTaskEntity.isCreateBranch()) // 如果上一个任务会创建分支, 则这里要记录上一个任务的实例id, 作为当前任务的父任务, 例如两个并行网关连在一起
-				
-			return true;
+				joinTask.setParentTaskinstId(previousTaskEntity.getTask().getTaskinstId());
+			return joinTask;
 		}
 		return join(Arrays.asList(parentTaskinstId), false);
 	}
@@ -46,27 +49,66 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 	 * @param isRecursive 是否递归, 如果是递归, 则在处理当前任务前进行终止
 	 * @return 
 	 */
-	private synchronized ParallelTaskJoinResult join(List<Object> parentTaskinstId, boolean isRecursive) {
+	private synchronized Task join(List<Object> parentTaskinstId, boolean isRecursive) {
 		Task parentTask = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where taskinst_id=?", parentTaskinstId);
 		if(parentTask == null) // 已经被处理, 当前任务忽视即可
-			return false;
+			return null;
 		
-		List<Task> tasks = SessionContext.getTableSession().query(Task.class, "select key_ from bpm_ru_task where parent_taskinst_id=?", parentTaskinstId);
-		if(tasks.isEmpty()) { // 所有分支任务均完成
+		ParallelTaskHolder parallelTaskHolder = new ParallelTaskHolder(parentTaskinstId, !isRecursive);
+		if(parallelTaskHolder.tasks.isEmpty()) { // 所有分支任务均完成
 			completeTask(parentTask);
 			if(parentTask.getParentTaskinstId() != null) 
 				join(Arrays.asList(parentTask.getParentTaskinstId()), true);
 		}
 		if(isRecursive)
-			return false; // 终止递归
+			return null; // 终止递归
 		
-		if(tasks.size() > 0 && canReachGateway(tasks))  // 判断当前还在运行的任务, 是否有可以到达当前网关的, 如果有, 则证明还未合并完成
-			return false; 
+		// 判断并行任务集合, 是否有可以到达当前网关的, 如果有, 则证明还未合并完成
+		if(parallelTaskHolder.tasks.size() > 0 && currentTaskMetadataEntity.getInputFlows().size() > 1 && canReachGateway(parallelTaskHolder.tasks)) {
+			if(parallelTaskHolder.joinTask.getId() == 0) { // 第一次join, 进行保存
+				SessionContext.getTableSession().save(parallelTaskHolder.joinTask);
+			}else {
+				SessionContext.getSqlSession().executeUpdate(
+						"update bpm_ru_task set join_branch_num=? where id=?", 
+						Arrays.asList(parallelTaskHolder.joinTask.getJoinBranchNum(), parallelTaskHolder.joinTask.getId()));
+			}
+			return null; 
+		}
 		
+		if(parallelTaskHolder.joinTask.getJoinBranchNum() == parentTask.getForkBranchNum())
+			parallelTaskHolder.joinTask.setParentTaskinstId(parentTask.getParentTaskinstId());
+		return parallelTaskHolder.joinTask;
+	}
+	
+	/**
+	 * 存储并行任务相关信息的类
+	 * @author DougLei
+	 */
+	class ParallelTaskHolder {
+		private List<Task> tasks; // 并行任务集合
+		private Task joinTask; // 进行join的任务实例
 		
-		// TODO 又是怎样获取
-		
-		return true;
+		ParallelTaskHolder(List<Object> parentTaskinstId, boolean setJoinTask) {
+			this.tasks = SessionContext.getTableSession().query(Task.class, "select * from bpm_ru_task where parent_taskinst_id=?", parentTaskinstId);
+			if(setJoinTask) {
+				// 设置进行join的任务实例, 如果不存在就创建出来
+				for (int i = 0; i < tasks.size(); i++) {
+					if(tasks.get(i).getKey().equals(currentTaskMetadataEntity.getTaskMetadata().getId())) {
+						joinTask = tasks.remove(i);
+						joinTask.setJoinBranchNum(joinTask.getJoinBranchNum()+1);
+						break;
+					}
+				}
+				if(joinTask == null) {
+					joinTask = new Task(
+							previousTaskEntity.getTask().getProcdefId(), 
+							previousTaskEntity.getTask().getProcinstId(), 
+							previousTaskEntity.getTask().getParentTaskinstId(), 
+							currentTaskMetadataEntity.getTaskMetadata());
+					joinTask.setJoinBranchNum(1);
+				}
+			}
+		}
 	}
 	
 	// 判断tasks中, 是否有可以到达当前网关的

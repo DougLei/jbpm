@@ -8,6 +8,7 @@ import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.handler.TaskDispatchException;
 import com.douglei.bpm.process.handler.TaskEntity;
 import com.douglei.bpm.process.metadata.flow.FlowMetadata;
+import com.douglei.orm.context.SessionContext;
 
 /**
  * 
@@ -72,7 +73,7 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 		}
 		
 		gatewayTask.setForkBranchNum(outputFlows.size());
-		completeTask(gatewayTask);
+		SessionContext.getTableSession().save(gatewayTask);
 		handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(gatewayTask, true));
 		
 		LinkedList<TaskEntity> historyTaskEntities = handleParameter.getTaskEntityHandler().getHistoryTaskEntities(); // 历史办理的任务实体实例集合

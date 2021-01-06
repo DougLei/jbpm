@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpm-configuration>
+	<process code="ParallelGatewayTest" version="v20210106" name="并行网关测试" title="#{name}的并行网关测试">
+		<startEvent id="startEvent" name="开始"></startEvent>
+		
+		<flow id="flow1" source="startEvent" target="userTask1" />
+		<userTask id="userTask1" name="发起的用户任务"></userTask>
+		
+		<flow id="flow2" source="userTask1" target="inclusiveGateway1" />
+		<inclusiveGateway id="inclusiveGateway1" name="包容网关(发起)" />
+		
+		
+		<flow id="flow3" source="inclusiveGateway1" target="userTask2" />
+		<userTask id="userTask2" name="上面第一个用户任务"></userTask>
+		<flow id="flow4" source="userTask2" target="userTask3" />
+		<userTask id="userTask3" name="上面第二个用户任务"></userTask>
+		<flow id="flow5" source="userTask3" target="parallelGateway1" />
+		
+		<flow id="flow6" source="inclusiveGateway1" target="userTask4" />
+		<userTask id="userTask4" name="中间第一个用户任务"></userTask>
+		<flow id="flow7" source="userTask4" target="parallelGateway1" />
+		
+		<parallelGateway id="parallelGateway1" name="并行网关join" />
+		<flow id="flow8" source="parallelGateway1" target="userTask5" />
+		<userTask id="userTask5" name="并行网关join后的用户任务"></userTask>
+		
+		<flow id="flow9" source="userTask5" target="endEvent1" />
+		<endEvent id="endEvent1" name="并行网关join后的结束"></endEvent>
+		
+		
+		<!-- 
+			<flow id="flow10" source="inclusiveGateway1" target="userTask6" />
+			<userTask id="userTask6" name="下面第一个用户任务"></userTask>
+			<flow id="flow11" source="userTask6" target="userTask7" />
+			<userTask id="userTask7" name="下面第二个用户任务"></userTask>
+			<flow id="flow12" source="userTask7" target="endEvent2" />
+			
+			<endEvent id="endEvent2" name="下面任务的结束"></endEvent>
+		 -->
+		
+	</process>
+	
+	<!-- 配置流程图的结构, 主要就是记录画布的长宽，以及各个节点的坐标，长宽等 -->
+	<process-img>
+	</process-img>
+</bpm-configuration>

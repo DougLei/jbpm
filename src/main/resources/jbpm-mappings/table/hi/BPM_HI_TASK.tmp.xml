@@ -17,7 +17,6 @@
 			<column name="EXPIRY_TIME" property="expiryTime" dataType="datetime" />
 			<column name="BUSINESS_ID" property="businessId" dataType="string" length="100"/>
 			<column name="PAGE_ID" property="pageId" dataType="string" length="500"/>
-			<column name="STATE" property="state" dataType="string" length="10" nullable="false"/>
 			<column name="END_TIME" property="endTime" dataType="datetime" nullable="false" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>

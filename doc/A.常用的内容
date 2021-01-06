@@ -4,13 +4,13 @@ select * from BPM_RE_PROCDEF
 
 select * from BPM_RU_PROCINST
 select * from BPM_RU_TASK
-select * from BPM_RU_VARIABLE
 select * from BPM_RU_ASSIGNEE
+select * from BPM_RU_VARIABLE
 
 select * from BPM_HI_PROCINST
 select * from BPM_HI_TASK
-select * from BPM_HI_VARIABLE
 select * from BPM_HI_ASSIGNEE
+select * from BPM_HI_VARIABLE
 
 
 /*

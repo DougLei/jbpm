@@ -10,7 +10,7 @@ import com.douglei.bpm.process.metadata.TaskMetadata;
 public class EndEventMetadata extends TaskMetadata {
 
 	public EndEventMetadata(String id, String name) {
-		super(id, name);
+		super(id, name, null);
 	}
 	
 	@Override

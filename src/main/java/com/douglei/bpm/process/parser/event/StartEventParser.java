@@ -22,6 +22,7 @@ public class StartEventParser implements Parser<TaskTemporaryData, StartEventMet
 		return new StartEventMetadata(
 				temporaryData.getId(), 
 				element.attributeValue("name"), 
+				element.attributeValue("defaultOutputFlow"), 
 				element.attributeValue("conditionExpr"));
 	}
 

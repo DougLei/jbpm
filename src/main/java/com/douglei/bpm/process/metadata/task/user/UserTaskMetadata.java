@@ -19,8 +19,8 @@ public class UserTaskMetadata extends TaskMetadata {
 	private List<Option> options;
 	private List<Listener> listeners;
 	
-	public UserTaskMetadata(String id, String name, String pageID, String timeLimit) {
-		super(id, name);
+	public UserTaskMetadata(String id, String name, String defaultOutputFlowId, String pageID, String timeLimit) {
+		super(id, name, defaultOutputFlowId);
 		this.pageID = pageID;
 	}
 	public void setCandidate(Candidate candidate) {

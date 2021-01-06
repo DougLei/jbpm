@@ -20,6 +20,7 @@ public abstract class AbstractGatewayParser implements Parser<TaskTemporaryData,
 		return createGatewayMetadata(
 				temporaryData.getId(), 
 				element.attributeValue("name"), 
+				element.attributeValue("defaultOutputFlow"),  
 				parseVariableExtend(element.element("variableExtend")),
 				element);
 	}
@@ -46,5 +47,5 @@ public abstract class AbstractGatewayParser implements Parser<TaskTemporaryData,
 	}
 	
 	// 创建网关元数据实例
-	protected abstract AbstractGatewayMetadata createGatewayMetadata(String id, String name, int unextendScopeWeight, Element element);
+	protected abstract AbstractGatewayMetadata createGatewayMetadata(String id, String name, String defaultOutputFlowId, int unextendScopeWeight, Element element);
 }

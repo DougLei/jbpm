@@ -34,6 +34,7 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		
 		// 创建流程任务(因为是开始事件, 所以直接创建历史任务即可)
 		HistoryTask historyTask = createHistoryTask(null);
+		SessionContext.getTableSession().save(historyTask);
 		
 		// 保存流程变量
 		saveVariables(historyTask);

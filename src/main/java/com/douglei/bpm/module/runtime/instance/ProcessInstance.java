@@ -16,10 +16,10 @@ public class ProcessInstance {
 	@Property protected String title;
 	@Property protected String businessId;
 	@Property protected String pageId;
-	private int state;
 	@Property protected String startUserId;
 	@Property protected Date startTime;
 	@Property protected String tenantId;
+	protected ProcessInstanceState state;
 	
 	public int getId() {
 		return id;
@@ -63,12 +63,6 @@ public class ProcessInstance {
 	public void setPageId(String pageId) {
 		this.pageId = pageId;
 	}
-	public int getState() {
-		return state;
-	}
-	public void setState(int state) {
-		this.state = state;
-	}
 	public String getStartUserId() {
 		return startUserId;
 	}
@@ -86,5 +80,17 @@ public class ProcessInstance {
 	}
 	public void setTenantId(String tenantId) {
 		this.tenantId = tenantId;
+	}
+	public ProcessInstanceState getStateInstance() {
+		return state;
+	}
+	public void setStateInstance(ProcessInstanceState state) {
+		this.state = state;
+	}
+	public String getState() {
+		return state.name();
+	}
+	public void setState(String state) {
+		this.state = ProcessInstanceState.valueOf(state);
 	}
 }

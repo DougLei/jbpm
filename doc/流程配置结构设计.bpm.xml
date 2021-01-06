@@ -6,6 +6,11 @@
 		2. 任务, 包含两种类型:
 			2.1. 手动任务, 需要用户手动处理, 来推动流程流转, 主要是用户任务
 			2.2. 自动任务, 可以自行推动流程流转, 例如开始/结束事件, 网关任务, 子流程任务, SQL脚本任务, 定时任务, 邮件任务等
+			
+			
+		其他说明:
+		1. parallelGateway和inclusiveGateway在join时, 只能join一个父任务, 如果配置尝试join多个父任务的分支, 可能会出现重复的网关数据
+		2. endEvent具有join功能, 且逻辑同parallelGateway和inclusiveGatewa相同
 	-->
 	<!-- 
 		工作流配置起点:
@@ -19,8 +24,9 @@
 	<process code="vocation" version="v2020" name="" title="" pageID="">
 		<!-- 
 			开始事件, 一个流程中只能有一个开始
+			* defaultOutputFlow: 默认流出的Flow Id, 可不配置; 当配置了多条线时, 如果线的条件都不满足, 引擎会根据配置的defaultOutputFlow进行流出, 如果没有配置, 引擎会抛出异常
 		-->
-		<startEvent id="startEvent" name="">
+		<startEvent id="startEvent" name="" defaultOutputFlow="">
 			<conditionExpr>
 				<![CDATA[ 判断表达式, 根据表达式决定是否可以启动流程; 可不配置, 默认结果为true ]]>
 			</conditionExpr>
@@ -42,6 +48,7 @@
 			用户任务:
 			* id: 全局唯一标识, 是整个配置文件中的唯一标识
 			* name: 任务名称, 可不配置, 默认为id
+			* defaultOutputFlow: 参考startEvent的defaultOutputFlow配置
 			* pageID: 任务关联的页面唯一标识, 优先级高于全局页面标识, 可不配置, 默认会继承process中的pageID
 			* timeLimit: 办理时限(表达式), 设置当前用户任务需要在多长时间内办理, 可不配置, 不配置则没有时限约束
 			** d: 天类型
@@ -51,7 +58,7 @@
 			** 以上类型可按照顺序组合使用, 例如: 1d1hn, 表示1天1小时(自然日); 如果配置的值出现不合法或超出范围, 引擎会默认没有时限
 			** 以上类型的配置值必须大于0且是整数, 否则会被当做不合法值
 		 -->
-		<userTask id="userTask1" name="任务名称" pageID="" timeLimit="这里有个工作日工作时间的问题, 目前不做这块, 暂时先不考虑了">
+		<userTask id="userTask1" name="任务名称" defaultOutputFlow="" pageID="" timeLimit="这里有个工作日工作时间的问题, 目前不做这块, 暂时先不考虑了">
 			<!-- 当前任务候选人相关配置 -->
 			<candidate>
 				<!-- 
@@ -139,7 +146,7 @@
 			排他网关, 拥有多条流出的flow, 会按照flow的order依次判断, 选择第一个判断结果为true的流出 
 			* id: 参考startEvent中的id配置
 			* name: 参考startEvent中的name配置
-			* defaultOutputFlow: 默认流出的Flow Id, 可不配置; 当配置了多条线时, 如果线的条件都不满足, 引擎会根据配置的defaultOutputFlow进行流出, 如果没有配置, 引擎会抛出异常
+			* defaultOutputFlow: 参考startEvent的defaultOutputFlow配置
 		-->
 		<exclusiveGateway id="exclusiveGateway1" name="" defaultOutputFlow="">
 			<!-- 
@@ -156,7 +163,7 @@
 			并行网关, 拥有多条流出的flow, 会同时从每个flow中流出形成分支, 引擎不会关注每个flow中配置的条件, 即时配置了也会忽略
 			* 配置参考exclusiveGateway的配置
 		 -->
-		<parallelGateway id="parallelGateway1" name="">
+		<parallelGateway id="parallelGateway1" name="" defaultOutputFlow="">
 			<variableExtend global="true" local="true" transient="true"/>
 			<listeners></listeners>
 		</parallelGateway>
@@ -165,7 +172,7 @@
 			包容网关, 拥有多条流出的flow, 会判断每条flow的条件, 从条件值为true的flow流出, 可能会形成分支
 			* 配置参考exclusiveGateway的配置
 		 -->
-		<inclusiveGateway id="inclusiveGateway1" name="">
+		<inclusiveGateway id="inclusiveGateway1" name="" defaultOutputFlow="">
 			<variableExtend global="true" local="true" transient="true"/>
 			<listeners></listeners>
 		</inclusiveGateway>

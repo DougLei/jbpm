@@ -7,44 +7,81 @@ import java.util.List;
 import com.douglei.bpm.process.metadata.flow.FlowMetadata;
 
 /**
- * 
+ * 任务元数据实体类
+ * @author DougLei
  */
 public class TaskMetadataEntity<M extends TaskMetadata> {
+	private ProcessMetadata processMetadata;
 	private M taskMetadata;
 	private List<FlowMetadata> flows;
-
-	TaskMetadataEntity(M taskMetadata, List<FlowMetadata> flows) {
+	
+	private List<FlowMetadata> inputFlows;
+	private List<FlowMetadata> outputFlows;
+	
+	TaskMetadataEntity(ProcessMetadata processMetadata, M taskMetadata, List<FlowMetadata> flows) {
+		this.processMetadata = processMetadata;
 		this.taskMetadata = taskMetadata;
 		this.flows = flows;
 	}
 	
+	/**
+	 * 获取流程元数据实例
+	 * @return
+	 */
+	public ProcessMetadata getProcessMetadata() {
+		return processMetadata;
+	}
+	
+	/**
+	 * 获取任务元数据实例
+	 * @return
+	 */
 	public M getTaskMetadata() {
 		return taskMetadata;
 	}
+	
+	/**
+	 * 获取任务的输入流集合
+	 * @return
+	 */
 	public List<FlowMetadata> getInputFlows() {
-		List<FlowMetadata> inputFlows = new ArrayList<FlowMetadata>(4);
-		flows.forEach(flow -> {
-			if(flow.getTarget().equals(taskMetadata.getId()))
-				inputFlows.add(flow);
-		});
+		if(inputFlows == null) {
+			inputFlows = new ArrayList<FlowMetadata>(4);
+			flows.forEach(flow -> {
+				if(flow.getTarget().equals(taskMetadata.getId()))
+					inputFlows.add(flow);
+			});
+		}
 		return inputFlows;
 	}
+	
+	/**
+	 * 获取任务的输出流集合
+	 * @return
+	 */
 	public List<FlowMetadata> getOutputFlows() {
-		List<FlowMetadata> outputFlows = new ArrayList<FlowMetadata>(4);
-		flows.forEach(flow -> {
-			if(flow.getSource().equals(taskMetadata.getId()))
-				outputFlows.add(flow);
-		});
-		if(outputFlows.size() > 1)
-			outputFlows.sort(flowSortComparator);
+		if(outputFlows == null) {
+			outputFlows = new ArrayList<FlowMetadata>(4);
+			flows.forEach(flow -> {
+				if(flow.getSource().equals(taskMetadata.getId()))
+					outputFlows.add(flow);
+			});
+			if(outputFlows.size() > 1)
+				outputFlows.sort(flowSortComparator);
+		}
 		return outputFlows;
 	}
+	
+	/**
+	 * 获取任务默认输出流
+	 * @return
+	 */
 	public FlowMetadata getDefaultOutputFlow() {
 		if(taskMetadata.getDefaultOutputFlowId() == null)
 			return null;
 		
-		for (FlowMetadata flow : flows) {
-			if(flow.getId().equals(taskMetadata.getDefaultOutputFlowId())) 
+		for (FlowMetadata flow : getOutputFlows()) {
+			if(flow.getId().equals(taskMetadata.getDefaultOutputFlowId()))
 				return flow;
 		}
 		return null;

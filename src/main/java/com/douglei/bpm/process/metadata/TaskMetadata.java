@@ -23,7 +23,6 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 	public String getDefaultOutputFlowId() {
 		return null;
 	}
-	
 	/**
 	 * 任务是否需要用户办理, 默认值为false
 	 * @return

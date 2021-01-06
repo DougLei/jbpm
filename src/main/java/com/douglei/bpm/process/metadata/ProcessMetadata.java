@@ -68,7 +68,7 @@ public class ProcessMetadata implements Serializable {
 	 * @return
 	 */
 	public TaskMetadataEntity<StartEventMetadata> getStartEventMetadataEntity() {
-		return new TaskMetadataEntity<StartEventMetadata>(startEvent, flows);
+		return new TaskMetadataEntity<StartEventMetadata>(this, startEvent, flows);
 	}
 	/**
 	 * 获取任务元数据实体实例
@@ -79,6 +79,6 @@ public class ProcessMetadata implements Serializable {
 		TaskMetadata task = taskMap.get(taskId);
 		if(task == null)
 			throw new NullPointerException("不存在id为["+taskId+"]的任务");
-		return new TaskMetadataEntity<TaskMetadata>(task, flows);
+		return new TaskMetadataEntity<TaskMetadata>(this, task, flows);
 	}
 }

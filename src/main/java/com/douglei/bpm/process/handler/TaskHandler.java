@@ -6,7 +6,6 @@ import com.douglei.bpm.module.history.task.HistoryTask;
 import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.bpm.process.metadata.TaskMetadataEntity;
-import com.douglei.orm.context.SessionContext;
 
 /**
  * 任务处理器
@@ -26,6 +25,8 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	
 	/**
 	 * 创建任务
+	 * <p>
+	 * 不对创建的任务进行保存, 需要调用方保存
 	 * @param createBranch 当前任务是否会创建分支
 	 * @return
 	 */
@@ -36,42 +37,38 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	}
 	/**
 	 * 创建任务
-	 * @param createBranch 当前任务是否会创建分支
+	 * <p>
+	 * 不对创建的任务进行保存, 需要调用方保存
+	 * @param createBranch 当前任务是否需要创建分支
 	 * @param parentTaskinstId 当前任务关联的父任务实例id
 	 * @return
 	 */
 	protected final Task createTask(boolean createBranch, String parentTaskinstId) {
-		return createTask(createBranch, parentTaskinstId, true);
-	}
-	/**
-	 * 创建任务
-	 * @param createBranch 当前任务是否会创建分支
-	 * @param parentTaskinstId 当前任务关联的父任务实例id
-	 * @param isSave 是否保存创建出的任务
-	 * @return
-	 */
-	protected final Task createTask(boolean createBranch, String parentTaskinstId, boolean isSave) {
 		Task task = new Task(
 				handleParameter.getProcessMetadata().getId(), 
 				handleParameter.getProcessInstanceId(),
 				parentTaskinstId,
 				currentTaskMetadataEntity.getTaskMetadata());
 		
-		if(isSave)
-			SessionContext.getTableSession().save(task);
 		handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(task, createBranch));
 		return task;
 	}
 	
 	/**
 	 * 创建历史任务
+	 * <p>
+	 * 不对创建的任务进行保存, 需要调用方保存
 	 * @return
 	 */
-	protected final Task createHistoryTask() {
+	protected final HistoryTask createHistoryTask() {
+		if(handleParameter.getTaskEntityHandler().getPreviousTaskEntity().isCreateBranch())
+			return createHistoryTask(handleParameter.getTaskEntityHandler().getPreviousTaskEntity().getTask().getTaskinstId());
 		return createHistoryTask(handleParameter.getTaskEntityHandler().getPreviousTaskEntity().getTask().getParentTaskinstId());
 	}
 	/**
 	 * 创建历史任务
+	 * <p>
+	 * 不对创建的任务进行保存, 需要调用方保存
 	 * @param parentTaskinstId 当前任务关联的父任务实例id
 	 * @return
 	 */
@@ -81,7 +78,6 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 				handleParameter.getProcessInstanceId(),
 				parentTaskinstId,
 				currentTaskMetadataEntity.getTaskMetadata());
-		SessionContext.getTableSession().save(historyTask);
 		
 		handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(historyTask));
 		return historyTask;

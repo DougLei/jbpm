@@ -15,7 +15,7 @@ import com.douglei.bpm.process.parser.Parser;
 public class ParallelGatewayParser extends AbstractGatewayParser {
 
 	@Override
-	protected ParallelGatewayMetadata createGatewayMetadata(String id, String name, String defaultOutputFlowId, int unextendScopeWeight, Element element) {
+	protected ParallelGatewayMetadata createGatewayMetadata(String id, String name, int unextendScopeWeight, Element element) {
 		return new ParallelGatewayMetadata(id, name, unextendScopeWeight);
 	}
 

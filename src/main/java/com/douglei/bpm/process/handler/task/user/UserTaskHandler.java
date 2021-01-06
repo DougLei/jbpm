@@ -29,6 +29,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 			throw new TaskHandleException("id为["+currentTaskMetadataEntity.getTaskMetadata().getId()+"], name为["+currentTaskMetadataEntity.getTaskMetadata().getName()+"]的任务没有指派具体的办理人员");
 		
 		Task task = createTask(false);
+		SessionContext.getTableSession().save(task);
 		
 		new AssignedUserHandler4TaskStartup(handleParameter.getProcessMetadata().getCode(), 
 				handleParameter.getProcessMetadata().getVersion(), 

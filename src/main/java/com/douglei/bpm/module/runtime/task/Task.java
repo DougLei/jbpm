@@ -16,7 +16,8 @@ public class Task {
 	@Property protected String procinstId;
 	@Property protected String taskinstId;
 	@Property protected String parentTaskinstId;
-	@Property protected Integer childrenNum;
+	@Property protected Integer joinBranchNum;
+	@Property protected Integer forkBranchNum;
 	@Property protected String key;
 	@Property protected String name;
 	@Property protected String type;
@@ -68,11 +69,17 @@ public class Task {
 	public void setParentTaskinstId(String parentTaskinstId) {
 		this.parentTaskinstId = parentTaskinstId;
 	}
-	public Integer getChildrenNum() {
-		return childrenNum;
+	public Integer getJoinBranchNum() {
+		return joinBranchNum;
 	}
-	public void setChildrenNum(Integer childrenNum) {
-		this.childrenNum = childrenNum;
+	public void setJoinBranchNum(Integer joinBranchNum) {
+		this.joinBranchNum = joinBranchNum;
+	}
+	public Integer getForkBranchNum() {
+		return forkBranchNum;
+	}
+	public void setForkBranchNum(Integer forkBranchNum) {
+		this.forkBranchNum = forkBranchNum;
 	}
 	public String getKey() {
 		return key;

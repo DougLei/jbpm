@@ -24,10 +24,11 @@ public abstract class GeneralTaskHandler {
 	 */
 	protected final void completeTask(Task task) {
 		// 从运行任务表中删除任务
-		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_task where id = ?", Arrays.asList(task.getId()));	
+		if(task.getId() > 0) // 此判断用于拦截, 同一次处理中, 运行任务到历史任务的转移
+			SessionContext.getSqlSession().executeUpdate("delete bpm_ru_task where id = ?", Arrays.asList(task.getId()));	
 
 		// 将任务存到历史表	
-		HistoryTask historyTask = new HistoryTask(task);	
+		HistoryTask historyTask = new HistoryTask(task);
 		SessionContext.getTableSession().save(historyTask);	
 	}
 	

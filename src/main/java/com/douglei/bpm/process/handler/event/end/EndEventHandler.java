@@ -8,14 +8,14 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.instance.HistoryProcessInstance;
 import com.douglei.bpm.module.history.variable.HistoryVariable;
 import com.douglei.bpm.module.runtime.instance.ProcessInstance;
+import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.module.runtime.variable.Variable;
 import com.douglei.bpm.process.handler.HandleParameter;
 import com.douglei.bpm.process.handler.TaskDispatchException;
-import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.VariableEntities;
-import com.douglei.bpm.process.handler.gateway.ParallelGatewayHandler;
-import com.douglei.bpm.process.handler.gateway.ParallelTaskJoinHandler;
+import com.douglei.bpm.process.handler.gateway.ParallelTaskHandler;
+import com.douglei.bpm.process.handler.gateway.ParallelTaskJoinResult;
 import com.douglei.bpm.process.metadata.event.EndEventMetadata;
 import com.douglei.orm.context.SessionContext;
 
@@ -27,14 +27,27 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 	
 	@Override
 	public ExecutionResult startup() {
-		ParallelTaskJoinHandler joinHandler = new ParallelTaskJoinHandler(currentTaskMetadataEntity, handleParameter.getTaskEntityHandler().getPreviousTaskEntity());
-		if(joinHandler.join()) { 
-			createHistoryTask(joinHandler.getCurrentTaskParentTaskinstId());
-			
-			if(isAllFinished()) 
-				finishProcessInstance();
-		}
+		ParallelTaskJoinResult result = new ParallelTaskHandler(currentTaskMetadataEntity, handleParameter.getTaskEntityHandler().getPreviousTaskEntity()).join();
+		if(result != null && result.isSuccess()) 
+			end(result.getJoinTask());
 		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	
+	@Override
+	public ExecutionResult handle() {
+		end(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask());
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	
+	/**
+	 * 进行end操作
+	 * @param endTask
+	 */
+	private void end(Task endTask) {
+		completeTask(endTask);
+		
+		if(isAllFinished()) 
+			finishProcessInstance();
 	}
 	
 	// 判断流程所有任务是否都结束
@@ -81,10 +94,5 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 		
 		if(variableEntities.existsLocalVariable())
 			throw new TaskDispatchException("结束流程时, 还存在local范围的变量");
-	}
-	
-	@Override
-	public ExecutionResult handle() {
-		throw new TaskHandleException(ParallelGatewayHandler.class.getName() + " 不支持handle()方法");
 	}
 }

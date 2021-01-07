@@ -8,10 +8,10 @@ import com.douglei.bpm.module.history.task.HistoryAssignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
-import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.task.user.assignee.AssignedUserHandler4TaskHandle;
 import com.douglei.bpm.process.handler.task.user.assignee.AssignedUserHandler4TaskStartup;
+import com.douglei.bpm.process.handler.task.user.assignee.AssignedUserValidator;
 import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.orm.context.SessionContext;
 
@@ -21,18 +21,18 @@ import com.douglei.orm.context.SessionContext;
  */
 public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandleParameter> {
 
-	// TODO 这里增加一个处理指派人的方法
-	
 	@Override
 	public ExecutionResult startup() {
-		if(handleParameter.getUserEntity().getAssignedUsers().isEmpty())
-			throw new TaskHandleException("id为["+currentTaskMetadataEntity.getTaskMetadata().getId()+"], name为["+currentTaskMetadataEntity.getTaskMetadata().getName()+"]的任务没有指派具体的办理人员");
+		// 验证指派的用户
+		new AssignedUserValidator(currentTaskMetadataEntity.getTaskMetadata(), handleParameter).validate();
 		
+		// 启动当前用户任务
 		Task task = createTask(false);
 		if(currentTaskMetadataEntity.getTaskMetadata().getTimeLimit() != null)
 			task.setExpiryTime(new TimeLimitParser(task.getStartTime(), currentTaskMetadataEntity.getTaskMetadata().getTimeLimit()).getExpiryTime());
 		SessionContext.getTableSession().save(task);
 		
+		// 记录指派的用户
 		new AssignedUserHandler4TaskStartup(handleParameter.getProcessMetadata().getCode(), 
 				handleParameter.getProcessMetadata().getVersion(), 
 				handleParameter.getUserEntity().getAssignedUsers()).saveAssigneeList(task.getTaskinstId());

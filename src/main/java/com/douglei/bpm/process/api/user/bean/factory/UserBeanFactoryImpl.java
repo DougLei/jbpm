@@ -19,7 +19,7 @@ public class UserBeanFactoryImpl implements UserBeanFactory{
 	@Override
 	public List<UserBean> create(String... userIds) {
 		if(userIds == null || userIds.length == 0)
-			return new ArrayList<UserBean>();
+			return null;
 		
 		List<UserBean> users = new ArrayList<UserBean>(userIds.length);
 		for (String userId : userIds) 
@@ -30,7 +30,7 @@ public class UserBeanFactoryImpl implements UserBeanFactory{
 	@Override
 	public List<UserBean> create(List<String> userIds){
 		if(userIds == null || userIds.isEmpty())
-			return new ArrayList<UserBean>();
+			return null;
 		
 		List<UserBean> users = new ArrayList<UserBean>(userIds.size());
 		userIds.forEach(userId -> users.add(new UserBean(userId)));

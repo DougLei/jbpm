@@ -1,6 +1,5 @@
 package com.douglei.bpm.process.metadata.task.user.candidate;
 
-import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignMode;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
 
 /**
@@ -17,6 +16,6 @@ public class DefaultAssignPolicy extends AssignPolicy{
 	}
 	
 	private DefaultAssignPolicy() {
-		super(AssignMode.ASSIGNED, null);
+		super(true, null);
 	}
 }

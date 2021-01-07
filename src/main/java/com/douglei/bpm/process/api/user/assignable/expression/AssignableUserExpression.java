@@ -32,6 +32,17 @@ public interface AssignableUserExpression {
 	}
 	
 	/**
+	 * 验证value值是否合法; 默认值为true
+	 * <p>
+	 * 当 isValueRequired() 返回true时, 引擎会调用该方法去验证value值是否合法
+	 * @param expressionValue
+	 * @return
+	 */
+	default boolean validateValue(String expressionValue) {
+		return true;
+	}
+	
+	/**
 	 * 当前表达式在获取具体指派的用户集合时, 需要的参数; 默认值为: EXPRESSION_VALUE, EXPRESSION_EXTEND_VALUE
 	 * <p>
 	 * 引擎会将需要的参数封装到 {@link Parameter} 实例中, 并传入 getAssignUserList(Parameter) 方法

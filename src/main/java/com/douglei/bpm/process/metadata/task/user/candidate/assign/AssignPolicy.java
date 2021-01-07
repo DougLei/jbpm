@@ -9,12 +9,12 @@ import java.util.List;
  * @author DougLei
  */
 public class AssignPolicy implements Serializable{
-	private AssignMode mode; // 指派模式
+	private boolean isDynamic; // 是否动态指派
 	private AssignNumber assignNumber; // 可指派的人数的表达式
 	private List<AssignableUserExpressionEntity> assignableUserExpressionEntities; // 可指派的用户表达式实体集合
 	
-	public AssignPolicy(AssignMode mode, AssignNumber assignNumber) {
-		this.mode = mode;
+	public AssignPolicy(boolean isDynamic, AssignNumber assignNumber) {
+		this.isDynamic = isDynamic;
 		this.assignNumber = assignNumber;
 	}
 	
@@ -26,5 +26,27 @@ public class AssignPolicy implements Serializable{
 		if(assignableUserExpressionEntities == null)
 			assignableUserExpressionEntities = new ArrayList<AssignableUserExpressionEntity>();
 		assignableUserExpressionEntities.add(entity);
+	}
+
+	/**
+	 * 是否动态指派
+	 * @return
+	 */
+	public boolean isDynamic() {
+		return isDynamic;
+	}
+	/**
+	 * 获取可指派的人数的表达式
+	 * @return
+	 */
+	public AssignNumber getAssignNumber() {
+		return assignNumber;
+	}
+	/**
+	 * 获取可指派的用户表达式实体集合
+	 * @return
+	 */
+	public List<AssignableUserExpressionEntity> getAssignableUserExpressionEntities() {
+		return assignableUserExpressionEntities;
 	}
 }

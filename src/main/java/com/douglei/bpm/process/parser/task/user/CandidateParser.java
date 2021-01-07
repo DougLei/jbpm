@@ -13,7 +13,6 @@ import com.douglei.bpm.process.metadata.task.user.candidate.Candidate;
 import com.douglei.bpm.process.metadata.task.user.candidate.DefaultAssignPolicy;
 import com.douglei.bpm.process.metadata.task.user.candidate.DefaultCandidate;
 import com.douglei.bpm.process.metadata.task.user.candidate.DefaultHandlePolicy;
-import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignMode;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignableUserExpressionEntity;
 import com.douglei.bpm.process.metadata.task.user.candidate.handle.HandleNumber;
@@ -61,28 +60,15 @@ public class CandidateParser {
 		if(element == null)
 			return DefaultAssignPolicy.getSingleton();
 		
-		AssignMode mode = parseAssignMode(id, name, element.attributeValue("mode"));
+		// 解析是否是动态指派
+		String str = element.attributeValue("isDynamic");
+		boolean isDynamic = StringUtil.isEmpty(str) || !str.equalsIgnoreCase("false");
+		
 		AssignPolicy assignPolicy = new AssignPolicy(
-				mode, 
-				(mode==AssignMode.ASSIGNED)?
-						parseHandleNumber(element.attributeValue("assignNum"), "<userTask id="+id+" name="+name+"><candidate><assignPolicy>的assignNum属性值[%s]不合法"):null);
+				isDynamic, 
+				isDynamic?parseHandleNumber(element.attributeValue("assignNum"), "<userTask id="+id+" name="+name+"><candidate><assignPolicy>的assignNum属性值[%s]不合法"):null);
 		setAssignUserExpressionEntities(id, name, assignPolicy, element.elements("expression"));
 		return assignPolicy;
-	}
-	// 解析指派模式
-	private AssignMode parseAssignMode(String id, String name, String mode) throws ProcessParseException{
-		if(StringUtil.isEmpty(mode))
-			throw new ProcessParseException("<userTask id="+id+" name="+name+"><candidate><assignPolicy>的mode属性值不能为空");
-		
-		mode = mode.toUpperCase();
-		if(AssignMode.ASSIGNED.name().equals(mode))
-			return AssignMode.ASSIGNED;
-		if(AssignMode.FIXED.name().equals(mode))
-			return AssignMode.FIXED;
-		if(AssignMode.VARIABLE.name().equals(mode))
-			return AssignMode.VARIABLE;
-		
-		throw new ProcessParseException("<userTask id="+id+" name="+name+"><candidate><assignPolicy>的mode属性值["+mode+"]不合法");
 	}
 	// 设置可指派的用户表达式实体集合
 	private void setAssignUserExpressionEntities(String id, String name, AssignPolicy assignPolicy, List<Element> elements) {
@@ -108,6 +94,8 @@ public class CandidateParser {
 			expressionValue = element.attributeValue("value");
 			if(StringUtil.isEmpty(expressionValue))
 				throw new ProcessParseException("<userTask id="+id+" name="+name+"><candidate><assignPolicy><expression>的value属性值不能为空");
+			if(assignUserExpression.validateValue(expressionValue))
+				throw new ProcessParseException("<userTask id="+id+" name="+name+"><candidate><assignPolicy><expression>的value属性值["+expressionValue+"]不合法");
 		}
 		return new AssignableUserExpressionEntity(expressionName, expressionValue, element.attributeValue("extendValue"));
 	}

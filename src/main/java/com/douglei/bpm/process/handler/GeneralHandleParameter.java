@@ -16,8 +16,7 @@ import com.douglei.orm.context.SessionContext;
  */
 public class GeneralHandleParameter extends AbstractHandleParameter{
 	
-	protected GeneralHandleParameter() {
-	}
+	protected GeneralHandleParameter() {}
 	public GeneralHandleParameter(TaskInstance taskInstance, UserBean handledUser, String suggest, Attitude attitude, List<UserBean> assignedUsers) {
 		super.processInstanceId = taskInstance.getTask().getProcinstId();
 		super.processMetadata = taskInstance.getProcessMetadata();

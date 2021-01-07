@@ -12,6 +12,8 @@ import com.douglei.bpm.bean.BeanFactory;
 import com.douglei.bpm.process.api.container.ProcessContainer;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpression;
 import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
+import com.douglei.bpm.process.api.user.task.handle.policy.CanFinishPolicy;
+import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandleSequencePolicy;
 import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
 import com.douglei.orm.context.RegistrationResult;
@@ -125,11 +127,31 @@ public class ProcessEngineBuilder {
 	
 	/**
 	 * 添加可指派的用户表达式
-	 * @param assignableUserExpression
+	 * @param expression
 	 * @return
 	 */
-	public ProcessEngineBuilder addAssignableUserExpression(AssignableUserExpression assignableUserExpression) {
-		beanFactory.registerCustomBean(AssignableUserExpression.class, assignableUserExpression);
+	public ProcessEngineBuilder addAssignableUserExpression(AssignableUserExpression expression) {
+		beanFactory.registerCustomBean(AssignableUserExpression.class, expression);
+		return this;
+	}
+	
+	/**
+	 * 添加(判断)任务是否可以结束的策略
+	 * @param policy
+	 * @return
+	 */
+	public ProcessEngineBuilder addCanFinishPolicy(CanFinishPolicy policy) {
+		beanFactory.registerCustomBean(CanFinishPolicy.class, policy);
+		return this;
+	}
+	
+	/**
+	 * 添加串行办理任务时的办理顺序策略
+	 * @param policy
+	 * @return
+	 */
+	public ProcessEngineBuilder addSerialHandleSequencePolicy(SerialHandleSequencePolicy policy) {
+		beanFactory.registerCustomBean(SerialHandleSequencePolicy.class, policy);
 		return this;
 	}
 	

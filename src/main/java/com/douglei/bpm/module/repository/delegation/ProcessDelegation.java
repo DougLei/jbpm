@@ -10,8 +10,8 @@ public class ProcessDelegation {
 	private Integer id;
 	private String userId;
 	private String assignedUserId;
-	private Long startTime;
-	private Long endTime;
+	private long startTime;
+	private long endTime;
 	private String reason;
 	private Date acceptTime;
 	private int isEnabled;
@@ -35,16 +35,16 @@ public class ProcessDelegation {
 	public void setAssignedUserId(String assignedUserId) {
 		this.assignedUserId = assignedUserId;
 	}
-	public Long getStartTime() {
+	public long getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(Long startTime) {
+	public void setStartTime(long startTime) {
 		this.startTime = startTime;
 	}
-	public Long getEndTime() {
+	public long getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(Long endTime) {
+	public void setEndTime(long endTime) {
 		this.endTime = endTime;
 	}
 	public String getReason() {

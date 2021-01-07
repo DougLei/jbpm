@@ -14,13 +14,13 @@ public class HistoryTask extends Task{
 	private Date endTime;
 
 	public HistoryTask() {}
-	public HistoryTask(int procdefId, String procinstId, String parentTaskinstId, TaskMetadata taskMetadata) {
-		super(procdefId, procinstId, parentTaskinstId, taskMetadata);
-		this.endTime = super.startTime;
+	public HistoryTask(int procdefId, String procinstId, String parentTaskinstId, Date endTime, TaskMetadata taskMetadata) {
+		super(procdefId, procinstId, parentTaskinstId, endTime, taskMetadata);
+		this.endTime = endTime;
 	}
-	public HistoryTask(Task task) {
+	public HistoryTask(Task task, Date endTime) {
 		PropertyValueCopier.copy(task, this);
-		this.endTime = new Date();
+		this.endTime = endTime;
 	}
 	
 	public Date getEndTime() {

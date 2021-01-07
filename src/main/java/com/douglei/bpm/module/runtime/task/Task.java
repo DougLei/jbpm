@@ -27,7 +27,7 @@ public class Task {
 	@Property protected String pageId;
 	
 	public Task() {}
-	public Task(int procdefId, String procinstId, String parentTaskinstId, TaskMetadata taskMetadata) {
+	public Task(int procdefId, String procinstId, String parentTaskinstId, Date startTime, TaskMetadata taskMetadata) {
 		this.procdefId = procdefId;
 		this.procinstId = procinstId;
 		this.taskinstId = UUID.randomUUID().toString();
@@ -35,7 +35,7 @@ public class Task {
 		this.key = taskMetadata.getId();
 		this.name = taskMetadata.getName();
 		this.type = taskMetadata.getType().getName();
-		this.startTime = new Date();
+		this.startTime = startTime;
 		this.pageId = taskMetadata.getPageID();
 	}
 	

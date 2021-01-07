@@ -1,6 +1,6 @@
 package com.douglei.bpm.module;
 
-import com.douglei.bpm.bean.BeanInstances;
+import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 
@@ -12,7 +12,7 @@ import com.douglei.bpm.bean.annotation.Bean;
 public class CommandExecutor {
 	
 	@Autowired
-	private BeanInstances beanInstances;
+	private ProcessEngineBeans processEngineBeans;
 	
 	/**
 	 * 执行命令
@@ -20,6 +20,6 @@ public class CommandExecutor {
 	 * @return
 	 */
 	public ExecutionResult execute(Command command) {
-		return command.execute(beanInstances);
+		return command.execute(processEngineBeans);
 	}
 }

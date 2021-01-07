@@ -3,31 +3,32 @@ package com.douglei.bpm.process.handler;
 import java.util.List;
 
 import com.douglei.bpm.module.history.task.Attitude;
+import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 
 /**
  * 
  * @author DougLei
  */
 public class UserEntity {
-	private User handledUser; // 办理的用户实例
+	private UserBean currentHandleUser; // 当前办理的用户实例
 	private String suggest; // 办理用户的意见
 	private Attitude attitude; // 办理用户的态度
-	private List<User> assignedUsers; // 被指派的用户集合
+	private List<UserBean> assignedUsers; // 被指派的用户集合
 	
-	public UserEntity(User handledUser) {
+	public UserEntity(UserBean handledUser) {
 		this(handledUser, null, null, null);
 	}
-	public UserEntity(User handledUser, String suggest) {
+	public UserEntity(UserBean handledUser, String suggest) {
 		this(handledUser, suggest, null, null);
 	}
-	public UserEntity(User handledUser, List<User> assignedUsers) {
+	public UserEntity(UserBean handledUser, List<UserBean> assignedUsers) {
 		this(handledUser, null, null, assignedUsers);
 	}
-	public UserEntity(User handledUser, String suggest, Attitude attitude) {
+	public UserEntity(UserBean handledUser, String suggest, Attitude attitude) {
 		this(handledUser, suggest, attitude, null);
 	}
-	public UserEntity(User handledUser, String suggest, Attitude attitude, List<User> assignedUsers) {
-		this.handledUser = handledUser;
+	public UserEntity(UserBean currentHandleUser, String suggest, Attitude attitude, List<UserBean> assignedUsers) {
+		this.currentHandleUser = currentHandleUser;
 		this.suggest = suggest;
 		this.attitude = attitude;
 		this.assignedUsers = assignedUsers;
@@ -41,10 +42,10 @@ public class UserEntity {
 			return null;
 		return attitude.name();
 	}
-	public User getHandledUser() {
-		return handledUser;
+	public UserBean getCurrentHandleUser() {
+		return currentHandleUser;
 	}
-	public List<User> getAssignedUsers() {
+	public List<UserBean> getAssignedUsers() {
 		return assignedUsers;
 	}
 }

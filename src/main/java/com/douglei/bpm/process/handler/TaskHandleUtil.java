@@ -2,7 +2,7 @@ package com.douglei.bpm.process.handler;
 
 import java.util.Map;
 
-import com.douglei.bpm.bean.BeanInstances;
+import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
@@ -19,15 +19,15 @@ import com.douglei.tools.instances.ognl.OgnlHandler;
 import com.douglei.tools.utils.StringUtil;
 
 /**
- * 任务办理器工具
+ * 任务办理工具
  * @author DougLei
  */
 @Bean
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class TaskHandlerUtil {
+public class TaskHandleUtil {
 	
 	@Autowired
-	private BeanInstances beanInstances;
+	private ProcessEngineBeans processEngineBeans;
 	
 	// 创建任务办理器实例
 	private TaskHandler createTaskHandleInstance(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, HandleParameter handleParameter) {
@@ -59,7 +59,7 @@ public class TaskHandlerUtil {
 			default:
 				throw new TaskHandleException("目前还未实现["+taskMetadataEntity.getTaskMetadata().getType().getName()+"]类型的任务办理器");
 		}
-		taskHandler.setParameters(beanInstances, taskMetadataEntity, handleParameter);
+		taskHandler.setParameters(processEngineBeans, taskMetadataEntity, handleParameter);
 		return taskHandler;
 	}
 	

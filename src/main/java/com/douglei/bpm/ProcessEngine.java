@@ -7,7 +7,7 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
-import com.douglei.bpm.process.container.ProcessContainerProxy;
+import com.douglei.bpm.process.api.container.ProcessContainerProxy;
 import com.douglei.orm.mapping.handler.MappingHandlerException;
 
 /**

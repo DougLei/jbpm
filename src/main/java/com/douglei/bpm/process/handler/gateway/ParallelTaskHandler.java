@@ -1,6 +1,7 @@
 package com.douglei.bpm.process.handler.gateway;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,12 +19,14 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 public class ParallelTaskHandler extends GeneralTaskHandler{
-	private TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity; // 当前处理的任务元数据实体实例
+	private TaskMetadataEntity<? extends TaskMetadata> currentJoinTaskMetadataEntity; // 当前处理join的任务元数据实体实例
 	private TaskEntity previousTaskEntity; // 上一个办理的任务实体实例
+	private Date currentDate; // 当前操作时间
 	
-	public ParallelTaskHandler(TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity, TaskEntity previousTaskEntity) {
-		this.currentTaskMetadataEntity = currentTaskMetadataEntity;
+	public ParallelTaskHandler(TaskMetadataEntity<? extends TaskMetadata> currentJoinTaskMetadataEntity, TaskEntity previousTaskEntity, Date currentDate) {
+		this.currentJoinTaskMetadataEntity = currentJoinTaskMetadataEntity;
 		this.previousTaskEntity = previousTaskEntity;
+		this.currentDate = currentDate;
 	}
 
 	/**
@@ -33,7 +36,7 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 	public Task join() {
 		String parentTaskinstId = previousTaskEntity.getTask().getParentTaskinstId();
 		if(parentTaskinstId == null) {
-			Task joinTask = new Task(previousTaskEntity.getTask().getProcdefId(), previousTaskEntity.getTask().getProcinstId(), null, currentTaskMetadataEntity.getTaskMetadata());
+			Task joinTask = new Task(previousTaskEntity.getTask().getProcdefId(), previousTaskEntity.getTask().getProcinstId(), null, currentDate, currentJoinTaskMetadataEntity.getTaskMetadata());
 			joinTask.setJoinBranchNum(1);
 			
 			if(previousTaskEntity.isCreateBranch()) // 如果上一个任务会创建分支, 则这里要记录上一个任务的实例id, 作为当前任务的父任务, 例如两个并行网关连在一起
@@ -56,7 +59,7 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 		
 		ParallelTaskHolder parallelTaskHolder = new ParallelTaskHolder(parentTaskinstId, !isRecursive);
 		if(parallelTaskHolder.tasks.isEmpty()) { // 所有分支任务均完成
-			completeTask(parentTask);
+			completeTask(parentTask, currentDate);
 			if(parentTask.getParentTaskinstId() != null) 
 				join(Arrays.asList(parentTask.getParentTaskinstId()), true);
 		}
@@ -64,20 +67,21 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 			return null; // 终止递归
 		
 		// 判断并行任务集合, 是否有可以到达当前网关的, 如果有, 则证明还未合并完成
-		if(parallelTaskHolder.tasks.size() > 0 && currentTaskMetadataEntity.getInputFlows().size() > 1 && canReachGateway(parallelTaskHolder.tasks)) {
-			if(parallelTaskHolder.joinTask.getId() == 0) { // 第一次join, 进行保存
-				SessionContext.getTableSession().save(parallelTaskHolder.joinTask);
+		Task joinTask = parallelTaskHolder.joinTask;
+		if(parallelTaskHolder.tasks.size() > 0 && currentJoinTaskMetadataEntity.getInputFlows().size() > 1 && canReachGateway(parallelTaskHolder.tasks)) {
+			if(joinTask.getId() == 0) { // 第一次join, 进行保存
+				SessionContext.getTableSession().save(joinTask);
 			}else {
 				SessionContext.getSqlSession().executeUpdate(
 						"update bpm_ru_task set join_branch_num=? where id=?", 
-						Arrays.asList(parallelTaskHolder.joinTask.getJoinBranchNum(), parallelTaskHolder.joinTask.getId()));
+						Arrays.asList(joinTask.getJoinBranchNum(), joinTask.getId()));
 			}
 			return null; 
 		}
 		
-		if(parallelTaskHolder.joinTask.getJoinBranchNum() == parentTask.getForkBranchNum())
-			parallelTaskHolder.joinTask.setParentTaskinstId(parentTask.getParentTaskinstId());
-		return parallelTaskHolder.joinTask;
+		if(joinTask.getJoinBranchNum() == parentTask.getForkBranchNum())
+			joinTask.setParentTaskinstId(parentTask.getParentTaskinstId());
+		return joinTask;
 	}
 	
 	/**
@@ -93,7 +97,7 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 			if(setJoinTask) {
 				// 设置进行join的任务实例, 如果不存在就创建出来
 				for (int i = 0; i < tasks.size(); i++) {
-					if(tasks.get(i).getKey().equals(currentTaskMetadataEntity.getTaskMetadata().getId())) {
+					if(tasks.get(i).getKey().equals(currentJoinTaskMetadataEntity.getTaskMetadata().getId())) {
 						joinTask = tasks.remove(i);
 						joinTask.setJoinBranchNum(joinTask.getJoinBranchNum()+1);
 						break;
@@ -104,7 +108,8 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 							previousTaskEntity.getTask().getProcdefId(), 
 							previousTaskEntity.getTask().getProcinstId(), 
 							previousTaskEntity.getTask().getParentTaskinstId(), 
-							currentTaskMetadataEntity.getTaskMetadata());
+							currentDate,
+							currentJoinTaskMetadataEntity.getTaskMetadata());
 					joinTask.setJoinBranchNum(1);
 				}
 			}
@@ -115,7 +120,7 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 	private boolean canReachGateway(List<Task> tasks) {
 		Set<String> visitedTaskIds = new HashSet<String>();
 		for (Task task : tasks) {
-			if(canReachGateway(currentTaskMetadataEntity.getProcessMetadata().getTaskMetadataEntity(task.getKey()), visitedTaskIds))
+			if(canReachGateway(currentJoinTaskMetadataEntity.getProcessMetadata().getTaskMetadataEntity(task.getKey()), visitedTaskIds))
 				return true;
 		}
 		return false;
@@ -130,9 +135,9 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 			return false;
 		
 		for(FlowMetadata outputFlow : outFlows) {
-			if(outputFlow.getTarget().equals(currentTaskMetadataEntity.getTaskMetadata().getId()))
+			if(outputFlow.getTarget().equals(currentJoinTaskMetadataEntity.getTaskMetadata().getId()))
 				return true;
-			if(canReachGateway(currentTaskMetadataEntity.getProcessMetadata().getTaskMetadataEntity(outputFlow.getTarget()), visitedTaskIds))
+			if(canReachGateway(currentJoinTaskMetadataEntity.getProcessMetadata().getTaskMetadataEntity(outputFlow.getTarget()), visitedTaskIds))
 				return true;
 		}
 		return false;

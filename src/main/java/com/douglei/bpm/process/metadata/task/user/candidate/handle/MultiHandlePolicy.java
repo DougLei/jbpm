@@ -7,10 +7,16 @@ import java.io.Serializable;
  * @author DougLei
  */
 public class MultiHandlePolicy implements Serializable{
-	private HandleNumberExpression handleNumberExpression; // 可办理的人数的表达式
-	private String handleEnd; // 办理是否可以结束的策略名称
+	private HandleNumber handleNumber; // 可办理的人数的表达式
+	private boolean serialHandle; // 是否串行办理
+	private String serialHandleSequencePolicyName; // 串行办理时的办理顺序策略名称
+	private String canFinishPolicyName; // (判断)任务是否可以结束的策略名称
 	
-	// 串行/并行办理配置
-	private boolean serial; // 是否串行办理
-	private String sort; // 串行办理时的办理顺序策略名称
+	public MultiHandlePolicy(HandleNumber handleNumber, boolean serialHandle, String serialHandleSequencePolicyName, String canFinishPolicyName) {
+		this.handleNumber = handleNumber;
+		this.serialHandle = serialHandle;
+		this.serialHandleSequencePolicyName = serialHandleSequencePolicyName;
+		this.canFinishPolicyName = canFinishPolicyName;
+	}
+	
 }

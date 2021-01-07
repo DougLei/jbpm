@@ -7,7 +7,7 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.command.ClaimTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.HandleTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.UnclaimTaskCmd;
-import com.douglei.bpm.process.container.ProcessContainerProxy;
+import com.douglei.bpm.process.api.container.ProcessContainerProxy;
 import com.douglei.orm.context.transaction.component.Transaction;
 
 /**

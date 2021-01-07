@@ -2,6 +2,7 @@ package com.douglei.bpm.process.handler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import com.douglei.bpm.module.history.task.HistoryTask;
@@ -21,14 +22,15 @@ public abstract class GeneralTaskHandler {
 	/**
 	 * 完成任务
 	 * @param task
+	 * @param completeDate 完成任务的时间
 	 */
-	protected final void completeTask(Task task) {
+	protected final void completeTask(Task task, Date completeDate) {
 		// 从运行任务表中删除任务
 		if(task.getId() > 0) // 此判断用于拦截, 同一次处理中, 运行任务到历史任务的转移
 			SessionContext.getSqlSession().executeUpdate("delete bpm_ru_task where id = ?", Arrays.asList(task.getId()));	
 
 		// 将任务存到历史表	
-		HistoryTask historyTask = new HistoryTask(task);
+		HistoryTask historyTask = new HistoryTask(task, completeDate);
 		SessionContext.getTableSession().save(historyTask);	
 	}
 	

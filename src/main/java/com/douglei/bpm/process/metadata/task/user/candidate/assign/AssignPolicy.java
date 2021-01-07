@@ -1,6 +1,7 @@
 package com.douglei.bpm.process.metadata.task.user.candidate.assign;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,7 +10,21 @@ import java.util.List;
  */
 public class AssignPolicy implements Serializable{
 	private AssignMode mode; // 指派模式
-	private AssignNumberExpression assignNumberExpression; // 可指派的人数的表达式
-	private List<AssignUserExpression> assignUserExpressions; // 指派用户的表达式集合
+	private AssignNumber assignNumber; // 可指派的人数的表达式
+	private List<AssignableUserExpressionEntity> assignableUserExpressionEntities; // 可指派的用户表达式实体集合
 	
+	public AssignPolicy(AssignMode mode, AssignNumber assignNumber) {
+		this.mode = mode;
+		this.assignNumber = assignNumber;
+	}
+	
+	/**
+	 * 添加可指派的用户表达式实体实例
+	 * @param entity
+	 */
+	public void addAssignableUserExpressionEntity(AssignableUserExpressionEntity entity) {
+		if(assignableUserExpressionEntities == null)
+			assignableUserExpressionEntities = new ArrayList<AssignableUserExpressionEntity>();
+		assignableUserExpressionEntities.add(entity);
+	}
 }

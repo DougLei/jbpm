@@ -2,7 +2,7 @@ package com.douglei.bpm.module.runtime.task;
 
 import java.util.Arrays;
 
-import com.douglei.bpm.process.container.ProcessContainerProxy;
+import com.douglei.bpm.process.api.container.ProcessContainerProxy;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.bpm.process.metadata.TaskMetadataEntity;

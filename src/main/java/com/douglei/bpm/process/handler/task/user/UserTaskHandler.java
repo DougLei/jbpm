@@ -29,6 +29,8 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 			throw new TaskHandleException("id为["+currentTaskMetadataEntity.getTaskMetadata().getId()+"], name为["+currentTaskMetadataEntity.getTaskMetadata().getName()+"]的任务没有指派具体的办理人员");
 		
 		Task task = createTask(false);
+		if(currentTaskMetadataEntity.getTaskMetadata().getTimeLimit() != null)
+			task.setExpiryTime(new TimeLimitParser(task.getStartTime(), currentTaskMetadataEntity.getTaskMetadata().getTimeLimit()).getExpiryTime());
 		SessionContext.getTableSession().save(task);
 		
 		new AssignedUserHandler4TaskStartup(handleParameter.getProcessMetadata().getCode(), 
@@ -50,7 +52,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 	private void assigneeDispatch() {
 		List<HistoryAssignee> assigneeList = SessionContext.getSqlSession().query(HistoryAssignee.class, "select * from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
 				Arrays.asList(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId(),
-						handleParameter.getUserEntity().getHandledUser().getUserId(),
+						handleParameter.getUserEntity().getCurrentHandleUser().getUserId(),
 						HandleState.CLAIMED.name()));
 		new AssignedUserHandler4TaskHandle(handleParameter, assigneeList).assigneeDispatch();
 	}
@@ -63,8 +65,8 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 
 	// 结束用户任务
 	private void finishUserTask() {
-		completeTask(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask());
+		completeTask(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask(), handleParameter.getCurrentDate());
 		followTaskCompleted4Variable(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask());
-		beanInstances.getTaskHandlerUtil().dispatch(currentTaskMetadataEntity, handleParameter);
+		processEngineBeans.getTaskHandleUtil().dispatch(currentTaskMetadataEntity, handleParameter);
 	}
 }

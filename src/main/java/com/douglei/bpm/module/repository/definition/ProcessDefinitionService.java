@@ -9,7 +9,7 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.instance.HistoryProcessInstanceService;
 import com.douglei.bpm.module.runtime.instance.ProcessInstanceHandlePolicy;
 import com.douglei.bpm.module.runtime.instance.ProcessInstanceService;
-import com.douglei.bpm.process.container.ProcessContainerProxy;
+import com.douglei.bpm.process.api.container.ProcessContainerProxy;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
 

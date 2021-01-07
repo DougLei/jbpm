@@ -9,8 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.douglei.bpm.bean.BeanFactory;
-import com.douglei.bpm.process.container.ProcessContainer;
-import com.douglei.bpm.process.handler.UserFactory;
+import com.douglei.bpm.process.api.container.ProcessContainer;
+import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpression;
+import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
 import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
 import com.douglei.orm.context.RegistrationResult;
@@ -113,12 +114,22 @@ public class ProcessEngineBuilder {
 	}
 	
 	/**
-	 * 设置用户信息工厂
+	 * 设置用户Bean工厂
 	 * @param factory
 	 * @return
 	 */
-	public ProcessEngineBuilder setUserFactory(UserFactory factory) {
-		beanFactory.registerCustomBean(UserFactory.class, factory);
+	public ProcessEngineBuilder setUserBeanFactory(UserBeanFactory factory) {
+		beanFactory.registerCustomBean(UserBeanFactory.class, factory);
+		return this;
+	}
+	
+	/**
+	 * 添加可指派的用户表达式
+	 * @param assignableUserExpression
+	 * @return
+	 */
+	public ProcessEngineBuilder addAssignableUserExpression(AssignableUserExpression assignableUserExpression) {
+		beanFactory.registerCustomBean(AssignableUserExpression.class, assignableUserExpression);
 		return this;
 	}
 	

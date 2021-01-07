@@ -3,7 +3,7 @@ package com.douglei.bpm.module.runtime.task.command;
 import java.util.Arrays;
 import java.util.List;
 
-import com.douglei.bpm.bean.BeanInstances;
+import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Assignee;
@@ -23,7 +23,7 @@ public class UnclaimTaskCmd implements Command {
 	}
 
 	@Override
-	public ExecutionResult execute(BeanInstances beanInstances) {
+	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		if(!taskInstance.requiredUserHandle())
 			return new ExecutionResult("取消认领失败, ["+taskInstance.getName()+"]任务不支持用户处理");
 		

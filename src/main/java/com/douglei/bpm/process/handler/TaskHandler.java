@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.handler;
 
-import com.douglei.bpm.bean.BeanInstances;
+import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.task.HistoryTask;
 import com.douglei.bpm.module.runtime.task.Task;
@@ -12,13 +12,13 @@ import com.douglei.bpm.process.metadata.TaskMetadataEntity;
  * @author DougLei
  */
 public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandleParameter> extends GeneralTaskHandler {
-	protected BeanInstances beanInstances; 
+	protected ProcessEngineBeans processEngineBeans; 
 	protected TaskMetadataEntity<TM> currentTaskMetadataEntity; // 当前任务元数据实体实例
 	protected HP handleParameter; // 办理参数
 	
 	// 设置参数
-	final void setParameters(BeanInstances beanInstances, TaskMetadataEntity<TM> currentTaskMetadataEntity, HP handleParameter) {
-		this.beanInstances = beanInstances;
+	final void setParameters(ProcessEngineBeans processEngineBeans, TaskMetadataEntity<TM> currentTaskMetadataEntity, HP handleParameter) {
+		this.processEngineBeans = processEngineBeans;
 		this.currentTaskMetadataEntity = currentTaskMetadataEntity;
 		this.handleParameter = handleParameter;
 	}
@@ -48,6 +48,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 				handleParameter.getProcessMetadata().getId(), 
 				handleParameter.getProcessInstanceId(),
 				parentTaskinstId,
+				handleParameter.getCurrentDate(),
 				currentTaskMetadataEntity.getTaskMetadata());
 		
 		handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(task, createBranch));
@@ -77,6 +78,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 				handleParameter.getProcessMetadata().getId(), 
 				handleParameter.getProcessInstanceId(),
 				parentTaskinstId,
+				handleParameter.getCurrentDate(),
 				currentTaskMetadataEntity.getTaskMetadata());
 		
 		handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(historyTask));

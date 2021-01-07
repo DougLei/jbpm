@@ -13,6 +13,13 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 	}
 	
 	/**
+	 * 获取任务默认输出流的id, 默认值为null
+	 * @return
+	 */
+	public final String getDefaultOutputFlowId() {
+		return defaultOutputFlowId;
+	}
+	/**
 	 * 获取任务关联的pageID, 默认值为null
 	 * @return
 	 */
@@ -20,11 +27,11 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 		return null;
 	}
 	/**
-	 * 获取任务默认输出流的id, 默认值为null
+	 * 获取任务的办理时限, 默认值为null
 	 * @return
 	 */
-	public final String getDefaultOutputFlowId() {
-		return defaultOutputFlowId;
+	public TimeLimit getTimeLimit() {
+		return null;
 	}
 	/**
 	 * 任务是否需要用户办理, 默认值为false

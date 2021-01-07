@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.douglei.bpm.module.repository.RepositoryModule;
-import com.douglei.bpm.process.container.impl.ApplicationProcessContainer;
+import com.douglei.bpm.process.api.container.ApplicationProcessContainer;
 
 /**
  * 需要被BeanFactory扫描的类

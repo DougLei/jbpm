@@ -1,12 +1,12 @@
-package com.douglei.bpm.process.handler;
+package com.douglei.bpm.process.api.user.bean.factory;
 
 /**
  * 
  * @author DougLei
  */
-public class User {
-	protected final String userId;
-	public User(String userId) {
+public class UserBean {
+	protected final String userId; // 用户id, 唯一标识
+	public UserBean(String userId) {
 		this.userId = userId;
 	}
 	public final String getUserId() {

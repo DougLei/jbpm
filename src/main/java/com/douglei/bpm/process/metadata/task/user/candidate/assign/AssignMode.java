@@ -7,6 +7,11 @@ package com.douglei.bpm.process.metadata.task.user.candidate.assign;
 public enum AssignMode {
 	
 	/**
+	 * 上一环节指派的办理人
+	 */
+	ASSIGNED,
+	
+	/**
 	 * 固定的办理人
 	 */
 	FIXED,
@@ -14,10 +19,5 @@ public enum AssignMode {
 	/**
 	 * 从流程变量获取的办理人
 	 */
-	VARIABLE,
-	
-	/**
-	 * 上一环节指派的办理人
-	 */
-	ASSIGNED;
+	VARIABLE;
 }

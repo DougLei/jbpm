@@ -1,6 +1,6 @@
 package com.douglei.bpm.module;
 
-import com.douglei.bpm.bean.BeanInstances;
+import com.douglei.bpm.ProcessEngineBeans;
 
 /**
  * 
@@ -10,8 +10,8 @@ public interface Command {
 
 	/**
 	 * 
-	 * @param beanInstances
+	 * @param processEngineBeans
 	 * @return
 	 */
-	ExecutionResult execute(BeanInstances beanInstances);
+	ExecutionResult execute(ProcessEngineBeans processEngineBeans);
 }

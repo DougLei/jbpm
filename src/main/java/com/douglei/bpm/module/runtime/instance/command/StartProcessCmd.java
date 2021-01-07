@@ -1,6 +1,6 @@
 package com.douglei.bpm.module.runtime.instance.command;
 
-import com.douglei.bpm.bean.BeanInstances;
+import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
@@ -21,7 +21,7 @@ public class StartProcessCmd implements Command {
 	}
 	
 	@Override
-	public ExecutionResult execute(BeanInstances beanInstances) {
+	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		ProcessDefinition processDefinition = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "query4Start", parameter);
 		switch (parameter.getMode()) {
 			case StartParameter.BY_PROCESS_DEFINITION_ID:
@@ -40,8 +40,8 @@ public class StartProcessCmd implements Command {
 		if(processDefinition.getStateInstance() != State.DEPLOY)
 			return new ExecutionResult("启动失败, ["+processDefinition.getName()+"]流程还未部署");
 		
-		ProcessMetadata processMetadata = beanInstances.getProcessContainer().getProcess(processDefinition.getId());
-		return beanInstances.getTaskHandlerUtil()
-				.startup(processMetadata.getStartEventMetadataEntity(), new StartEventHandleParameter(beanInstances, processMetadata, parameter));
+		ProcessMetadata processMetadata = processEngineBeans.getProcessContainer().getProcess(processDefinition.getId());
+		return processEngineBeans.getTaskHandleUtil()
+				.startup(processMetadata.getStartEventMetadataEntity(), new StartEventHandleParameter(processEngineBeans, processMetadata, parameter));
 	}
 }

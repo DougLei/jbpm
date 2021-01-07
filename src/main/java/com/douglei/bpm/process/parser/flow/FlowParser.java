@@ -5,6 +5,7 @@ import org.dom4j.Element;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.flow.FlowMetadata;
+import com.douglei.bpm.process.parser.GeneralParser;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.bpm.process.parser.tmp.data.FlowTemporaryData;
@@ -16,7 +17,7 @@ import com.douglei.tools.utils.datatype.VerifyTypeMatchUtil;
  * @author DougLei
  */
 @Bean(clazz=Parser.class)
-public class FlowParser implements Parser<FlowTemporaryData, FlowMetadata> {
+public class FlowParser extends GeneralParser implements Parser<FlowTemporaryData, FlowMetadata> {
 
 	@Override
 	public FlowMetadata parse(FlowTemporaryData temporaryData) throws ProcessParseException {
@@ -35,13 +36,16 @@ public class FlowParser implements Parser<FlowTemporaryData, FlowMetadata> {
 			if(StringUtil.notEmpty(tmp))
 				conditionExpr = tmp.substring(2, tmp.length()-1);
 		}
-		return new FlowMetadata(
+		FlowMetadata metadata = new FlowMetadata(
 				temporaryData.getId(), 
 				element.attributeValue("name"), 
 				temporaryData.getSource(), 
 				temporaryData.getTarget(), 
 				order, 
 				conditionExpr);
+		
+		addListener(metadata, element.element("listeners"));
+		return metadata;
 	}
 
 	@Override

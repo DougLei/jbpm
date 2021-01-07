@@ -7,6 +7,7 @@ import com.douglei.bpm.module.history.task.Attitude;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
 import com.douglei.bpm.module.runtime.variable.Scope;
 import com.douglei.bpm.module.runtime.variable.Variable;
+import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -17,7 +18,7 @@ public class GeneralHandleParameter extends AbstractHandleParameter{
 	
 	protected GeneralHandleParameter() {
 	}
-	public GeneralHandleParameter(TaskInstance taskInstance, User handledUser, String suggest, Attitude attitude, List<User> assignedUsers) {
+	public GeneralHandleParameter(TaskInstance taskInstance, UserBean handledUser, String suggest, Attitude attitude, List<UserBean> assignedUsers) {
 		super.processInstanceId = taskInstance.getTask().getProcinstId();
 		super.processMetadata = taskInstance.getProcessMetadata();
 		super.taskEntityHandler.setCurrentTaskEntity(new TaskEntity(taskInstance.getTask()));

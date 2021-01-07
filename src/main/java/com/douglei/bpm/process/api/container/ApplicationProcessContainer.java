@@ -1,9 +1,8 @@
-package com.douglei.bpm.process.container.impl;
+package com.douglei.bpm.process.api.container;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.douglei.bpm.process.container.ProcessContainer;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 
 /**

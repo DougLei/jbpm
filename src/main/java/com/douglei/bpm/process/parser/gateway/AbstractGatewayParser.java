@@ -4,6 +4,7 @@ import org.dom4j.Element;
 
 import com.douglei.bpm.module.runtime.variable.Scope;
 import com.douglei.bpm.process.metadata.gateway.AbstractGatewayMetadata;
+import com.douglei.bpm.process.parser.GeneralParser;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.bpm.process.parser.tmp.data.TaskTemporaryData;
@@ -12,17 +13,20 @@ import com.douglei.bpm.process.parser.tmp.data.TaskTemporaryData;
  * 
  * @author DougLei
  */
-public abstract class AbstractGatewayParser implements Parser<TaskTemporaryData, AbstractGatewayMetadata>{
+public abstract class AbstractGatewayParser extends GeneralParser implements Parser<TaskTemporaryData, AbstractGatewayMetadata>{
 
 	@Override
 	public AbstractGatewayMetadata parse(TaskTemporaryData temporaryData) throws ProcessParseException {
 		Element element = temporaryData.getElement();
-		return createGatewayMetadata(
+		AbstractGatewayMetadata metadata = createGatewayMetadata(
 				temporaryData.getId(), 
 				element.attributeValue("name"), 
 				element.attributeValue("defaultOutputFlow"),  
 				parseVariableExtend(element.element("variableExtend")),
 				element);
+		
+		addListener(metadata, element.element("listeners"));
+		return metadata;
 	}
 
 	// 解析流程变量继承配置, 返回不继承的流程变量范围权值和

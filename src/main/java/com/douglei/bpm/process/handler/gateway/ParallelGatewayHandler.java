@@ -28,7 +28,7 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 	public ExecutionResult startup() {
 		removeVariables();
 		
-		Task joinTask = new ParallelTaskHandler(currentTaskMetadataEntity, handleParameter.getTaskEntityHandler().getPreviousTaskEntity()).join();
+		Task joinTask = new ParallelTaskHandler(currentTaskMetadataEntity, handleParameter.getTaskEntityHandler().getPreviousTaskEntity(), handleParameter.getCurrentDate()).join();
 		if(joinTask != null) 
 			fork(joinTask);
 		return ExecutionResult.getDefaultSuccessInstance();
@@ -53,9 +53,9 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 				throw new TaskDispatchException("执行"+currentTaskMetadataEntity.getTaskMetadata()+"任务时, 未能匹配到满足条件的OutputFlow");
 			
 			gatewayTask.setForkBranchNum(1);
-			completeTask(gatewayTask);
+			completeTask(gatewayTask, handleParameter.getCurrentDate());
 			handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(gatewayTask, false));
-			beanInstances.getTaskHandlerUtil().dispatch(outputFlows.get(0), handleParameter);
+			processEngineBeans.getTaskHandleUtil().dispatch(outputFlows.get(0), handleParameter);
 			return;
 		}
 		
@@ -73,13 +73,17 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 		}
 		
 		gatewayTask.setForkBranchNum(outputFlows.size());
-		SessionContext.getTableSession().save(gatewayTask);
+		if(gatewayTask.getId() == 0) {
+			SessionContext.getTableSession().save(gatewayTask);
+		}else {
+			SessionContext.getTableSession().update(gatewayTask);
+		}
 		handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(gatewayTask, true));
 		
 		LinkedList<TaskEntity> historyTaskEntities = handleParameter.getTaskEntityHandler().getHistoryTaskEntities(); // 历史办理的任务实体实例集合
 		int mark = historyTaskEntities.size(); // 标记初始位置
 		for (FlowMetadata flow : outputFlows) {
-			beanInstances.getTaskHandlerUtil().dispatch(flow, handleParameter);
+			processEngineBeans.getTaskHandleUtil().dispatch(flow, handleParameter);
 			
 			while(historyTaskEntities.size() > mark) 
 				handleParameter.getTaskEntityHandler().setCurrentTaskEntity(historyTaskEntities.removeLast());
@@ -88,6 +92,6 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 	
 	// 进行flow匹配, 返回是否匹配成功, 即是否可以流入该flow
 	private boolean flowMatching(FlowMetadata flow) {
-		return ignoreFlowCondition() || beanInstances.getTaskHandlerUtil().flowMatching(flow, handleParameter.getVariableEntities().getVariableMap());
+		return ignoreFlowCondition() || processEngineBeans.getTaskHandleUtil().flowMatching(flow, handleParameter.getVariableEntities().getVariableMap());
 	}
 }

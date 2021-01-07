@@ -27,7 +27,7 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 	
 	@Override
 	public ExecutionResult startup() {
-		Task joinTask = new ParallelTaskHandler(currentTaskMetadataEntity, handleParameter.getTaskEntityHandler().getPreviousTaskEntity()).join();
+		Task joinTask = new ParallelTaskHandler(currentTaskMetadataEntity, handleParameter.getTaskEntityHandler().getPreviousTaskEntity(), handleParameter.getCurrentDate()).join();
 		if(joinTask != null) 
 			end(joinTask);
 		return ExecutionResult.getDefaultSuccessInstance();
@@ -44,7 +44,7 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 	 * @param endTask
 	 */
 	private void end(Task endTask) {
-		completeTask(endTask);
+		completeTask(endTask, handleParameter.getCurrentDate());
 		
 		if(isAllFinished()) 
 			finishProcessInstance();

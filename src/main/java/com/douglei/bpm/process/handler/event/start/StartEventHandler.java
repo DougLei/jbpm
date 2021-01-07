@@ -41,7 +41,7 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		saveVariables(historyTask);
 		
 		// 进行任务调度
-		beanInstances.getTaskHandlerUtil().dispatch(currentTaskMetadataEntity, handleParameter);
+		processEngineBeans.getTaskHandleUtil().dispatch(currentTaskMetadataEntity, handleParameter);
 		return new ExecutionResult(processInstance);
 	}
 	

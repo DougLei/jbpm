@@ -22,7 +22,7 @@ public class ExclusiveGatewayHandler extends AbstractGatewayHandler{
 		HistoryTask historyTask = createHistoryTask();
 		SessionContext.getTableSession().save(historyTask);
 		
-		beanInstances.getTaskHandlerUtil().dispatch(currentTaskMetadataEntity, handleParameter);
+		processEngineBeans.getTaskHandleUtil().dispatch(currentTaskMetadataEntity, handleParameter);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 }

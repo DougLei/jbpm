@@ -3,12 +3,12 @@ package com.douglei.bpm.module.runtime.task.command;
 import java.util.Arrays;
 import java.util.List;
 
-import com.douglei.bpm.bean.BeanInstances;
+import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Assignee;
-import com.douglei.bpm.module.runtime.task.TaskInstance;
 import com.douglei.bpm.module.runtime.task.TaskHandleParameter;
+import com.douglei.bpm.module.runtime.task.TaskInstance;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.tools.utils.StringUtil;
@@ -26,7 +26,7 @@ public class HandleTaskCmd implements Command {
 	}
 
 	@Override
-	public ExecutionResult execute(BeanInstances beanInstances) {
+	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		if(taskInstance.requiredUserHandle()) {
 			if(StringUtil.isEmpty(parameter.getUserId()))
 				return new ExecutionResult("办理失败, 办理["+taskInstance.getName()+"]任务, 需要提供具体的userId");
@@ -55,11 +55,11 @@ public class HandleTaskCmd implements Command {
 			if(unClaimNum == assigneeList.size())
 				return new ExecutionResult("办理失败, 指定的userId未认领["+taskInstance.getName()+"]任务");
 		}
-		return beanInstances.getTaskHandlerUtil().handle(taskInstance.getTaskMetadataEntity(), new GeneralHandleParameter(
+		return processEngineBeans.getTaskHandleUtil().handle(taskInstance.getTaskMetadataEntity(), new GeneralHandleParameter(
 				taskInstance,
-				beanInstances.getUserFactory().create(parameter.getUserId()), 
+				processEngineBeans.getUserBeanFactory().create(parameter.getUserId()), 
 				parameter.getSuggest(), 
 				parameter.getAttitude(), 
-				beanInstances.getUserFactory().create(parameter.getAssignUserIds())));
+				processEngineBeans.getUserBeanFactory().create(parameter.getAssignUserIds())));
 	}
 }

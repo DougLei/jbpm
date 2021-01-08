@@ -4,13 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.douglei.bpm.process.metadata.task.user.candidate.DefaultInstance;
+
 /**
  * 指派策略
  * @author DougLei
  */
 public class AssignPolicy implements Serializable{
 	private boolean isDynamic; // 是否动态指派
-	private AssignNumber assignNumber; // 可指派的人数的表达式
+	private AssignNumber assignNumber; // 最多可指派的人数的表达式
 	private List<AssignableUserExpressionEntity> assignableUserExpressionEntities; // 可指派的用户表达式实体集合
 	
 	public AssignPolicy(boolean isDynamic, AssignNumber assignNumber) {
@@ -36,10 +38,12 @@ public class AssignPolicy implements Serializable{
 		return isDynamic;
 	}
 	/**
-	 * 获取可指派的人数的表达式
+	 * 获取最多可指派的人数的表达式
 	 * @return
 	 */
 	public AssignNumber getAssignNumber() {
+		if(assignNumber == null)
+			return DefaultInstance.DEFAULT_ASSIGN_NUMBER;
 		return assignNumber;
 	}
 	/**

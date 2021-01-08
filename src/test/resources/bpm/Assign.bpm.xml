@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpm-configuration>
+	<process code="AssignTest" version="v20210108" name="指派信息测试" title="#{name}的指派信息测试">
+		
+		<startEvent id="startEvent" name="开始"></startEvent>
+		<flow id="flow1" source="startEvent" target="userTask1" />
+		
+		<userTask id="userTask1" name="发起的用户任务">
+			<candidate>
+				<assignPolicy>
+					<expression name="fixed" value="douglei,zhangsan"/>
+				</assignPolicy>
+			</candidate>
+		</userTask>
+		<flow id="flow2" source="userTask1" target="userTask2" />
+		
+		<userTask id="userTask2" name="第二个用户任务">
+			<candidate>
+				<assignPolicy isDynamic="false">
+					<expression name="fixed" value="wangwu,zhaoliu"/>
+				</assignPolicy>
+			</candidate>
+		</userTask>
+		<flow id="flow3" source="userTask2" target="endEvent1" />
+		
+		<endEvent id="endEvent1" name="结束"></endEvent>
+		
+	</process>
+	
+	<!-- 配置流程图的结构, 主要就是记录画布的长宽，以及各个节点的坐标，长宽等 -->
+	<process-img>
+	</process-img>
+</bpm-configuration>

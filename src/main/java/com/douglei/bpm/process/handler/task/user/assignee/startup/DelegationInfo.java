@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.handler.task.user.assignee;
+package com.douglei.bpm.process.handler.task.user.assignee.startup;
 
 /**
  * 委托信息

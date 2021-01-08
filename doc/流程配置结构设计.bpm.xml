@@ -59,26 +59,18 @@
 			** 以上类型的配置值必须是正整数, 否则会被当做不合法值; 如果配置的值出现不合法, 引擎会抛出异常
 		 -->
 		<userTask id="userTask1" name="任务名称" defaultOutputFlow="" pageID="" timeLimit="目前实现自然日即可, 更复杂的暂不考虑">
-			<!-- 
-				当前任务候选人相关配置; 可不配置, 使用各自的默认配置, 具体的默认配置结构看各自的说明:
-				* <candidate> 
-				* 	assignPolicy的默认配置结构
-				* 	handlePolicy的默认配置结构
-				* </candidate>
-			 -->
+			<!-- 当前任务候选人相关配置; 必须配置 -->
 			<candidate>
 				<!-- 
-					候选人指派策略:
+					候选人指派策略, 必须配置:
 					* isDynamic: 是否动态指派, 不区分大小写, 可不配置, 默认值为true; 如果配置值不合法, 则引擎会使用默认值
 					** true: 从上一个任务进入当前任务时, 需要由上一个任务的办理人指派当前任务可由哪些人办理, 指派的范围是所有<expression>中配置的人的并集
 					** false: 进入当前任务时, 引擎会自动选择所有<expression>中配置的人的并集, 做为当前任务的办理人; 如果上一环节有指派办理人, 则会被忽略
 					
 					* assignNum: 最多可指派的人数(表达式), 针对isDynamic=true生效; 可不配置, 默认值为1
 					** 纯数字: 表示可指派的人数数量, 数字必须为正整数
-					** 数字+%: 表示可指派的人数百分比, 计算后最少1人; 最后还可以追加配置: +/-, 表示%处理后的小数是向上取整(+)还是向下取整(-); 例如: 10%+; 可不追加配置, 在不追加配置的情况下, 如果小数小于0.5, 向下取整, 如果小数大于等于0.5, 向上取整
+					** 数字+%: 表示可指派的人数百分比, 计算后最少1人; 最后还可以追加配置: +/-, 表示%处理后的小数是向上取整(+)还是向下取整(-); 例如: 10%+; 可不追加配置, 默认值为向下取整(-)
 					** 如果遇到不合法的配置, 引擎会抛出异常
-					
-					* 可不配置, 默认配置结构为: <assignPolicy></assignPolicy>
 				 -->
 				<assignPolicy isDynamic="true/false" assignNum="1">
 					<!-- 
@@ -88,7 +80,7 @@
 						* extendValue: 扩展值, 该属性值可提供给扩展使用(二开)
 						
 						* 系统内置的表达式包括: (name <==> value; 没写value的表示不需要填写, 即使填写了也不生效)
-						** 
+						** fixed <==> 用户id, 多个用,分割, ,前后不要有空格, 例如: douglei,jinshilei; 不能是douglei, jinshilei
 					 -->
 					<expression name="" value="" extendValue="" />
 				</assignPolicy>
@@ -98,7 +90,7 @@
 					* suggest: 表示是否需要强制输入意见; 不区分大小写, 默认值为false; 如果配置值不合法, 则引擎会使用默认值
 					* attitude: 表示是否需要强制表态; 同上 
 					
-					* 可不配置, 默认配置结构为: <handlePolicy></handlePolicy>
+					* 可不配置, 默认配置结构为: <handlePolicy></handlePolicy>, 即单人办理模式, 不需要意见和态度
 				-->
 				<handlePolicy suggest="false" attitude="false">
 					<!-- 

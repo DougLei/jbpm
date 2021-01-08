@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.handler.task.user.assignee;
+package com.douglei.bpm.process.handler.task.user.assignee.handle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,12 +9,12 @@ import com.douglei.bpm.module.history.task.HistoryAssignee;
  * (存储和传递) 运行表中的指派信息sql条件
  * @author DougLei
  */
-public class AssigneeSqlCondition {
+public class SqlCondition {
 	private String taskinstId;
 	private List<Integer> groupIds;
 	private List<HistoryAssignee> assigneeList;
 	
-	AssigneeSqlCondition(String taskinstId, List<HistoryAssignee> assigneeList) {
+	SqlCondition(String taskinstId, List<HistoryAssignee> assigneeList) {
 		this.taskinstId = taskinstId;
 		this.groupIds = new ArrayList<Integer>(assigneeList.size());
 		for (HistoryAssignee historyAssignee : assigneeList) 

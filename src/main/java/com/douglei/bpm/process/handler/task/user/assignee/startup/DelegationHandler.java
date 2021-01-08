@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.handler.task.user.assignee;
+package com.douglei.bpm.process.handler.task.user.assignee.startup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ class DelegationHandler {
 	private Map<String, Delegation> map; // 指派和委托的映射map, <指派的用户id, 委托的用户id>
 	private DelegationHandler children;
 
-	public DelegationHandler(List<DelegationInfo> list, DelegationSqlQueryCondition queryCondition, String processCode, String processVersion) {
+	public DelegationHandler(List<DelegationInfo> list, SqlCondition condition, String processCode, String processVersion) {
 		if(list.isEmpty())
 			return;
 		
@@ -56,8 +56,8 @@ class DelegationHandler {
 		}
 		
 		if(this.map != null) { // 证明有委托, 递归去查询是否还有二次委托 
-			queryCondition.updateUserIds(assigneeUserIds);
-			this.children = new DelegationHandler(SessionContext.getSQLSession().query(DelegationInfo.class, "Assignee", "queryDelegations", queryCondition), queryCondition, processCode, processVersion);
+			condition.updateUserIds(assigneeUserIds);
+			this.children = new DelegationHandler(SessionContext.getSQLSession().query(DelegationInfo.class, "Assignee", "queryDelegations", condition), condition, processCode, processVersion);
 		}
 	}
 

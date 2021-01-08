@@ -10,9 +10,7 @@ import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpr
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpressionContainer;
 import com.douglei.bpm.process.api.user.task.handle.policy.TaskHandlePolicyContainer;
 import com.douglei.bpm.process.metadata.task.user.candidate.Candidate;
-import com.douglei.bpm.process.metadata.task.user.candidate.DefaultAssignPolicy;
-import com.douglei.bpm.process.metadata.task.user.candidate.DefaultCandidate;
-import com.douglei.bpm.process.metadata.task.user.candidate.DefaultHandlePolicy;
+import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignNumber;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignableUserExpressionEntity;
 import com.douglei.bpm.process.metadata.task.user.candidate.handle.HandleNumber;
@@ -45,7 +43,7 @@ public class CandidateParser {
 	 */
 	Candidate parse(String id, String name, Element element) throws ProcessParseException{
 		if(element == null) 
-			return DefaultCandidate.getSingleton();
+			throw new ProcessParseException("<userTask id="+id+" name="+name+">下必须配置<candidate>");
 		
 		AssignPolicy assignPolicy = parseAssignPolicy(id, name, element.element("assignPolicy"));
 		HandlePolicy handlePolicy = parseHandlePolicy(id, name, element.element("handlePolicy"));
@@ -58,15 +56,14 @@ public class CandidateParser {
 	@SuppressWarnings("unchecked")
 	private AssignPolicy parseAssignPolicy(String id, String name, Element element) {
 		if(element == null)
-			return DefaultAssignPolicy.getSingleton();
+			throw new ProcessParseException("<userTask id="+id+" name="+name+"><candidate>下必须配置<assignPolicy>");
 		
-		// 解析是否是动态指派
-		String str = element.attributeValue("isDynamic");
-		boolean isDynamic = StringUtil.isEmpty(str) || !str.equalsIgnoreCase("false");
+		AssignNumber assignNumber = null; 
+		boolean isDynamic = !"false".equalsIgnoreCase(element.attributeValue("isDynamic"));
+		if(isDynamic) 
+			assignNumber = parseHandleNumber(element.attributeValue("assignNum"), "<userTask id="+id+" name="+name+"><candidate><assignPolicy>的assignNum属性值[%s]不合法");
 		
-		AssignPolicy assignPolicy = new AssignPolicy(
-				isDynamic, 
-				isDynamic?parseHandleNumber(element.attributeValue("assignNum"), "<userTask id="+id+" name="+name+"><candidate><assignPolicy>的assignNum属性值[%s]不合法"):null);
+		AssignPolicy assignPolicy = new AssignPolicy(isDynamic, assignNumber);
 		setAssignUserExpressionEntities(id, name, assignPolicy, element.elements("expression"));
 		return assignPolicy;
 	}
@@ -94,7 +91,7 @@ public class CandidateParser {
 			expressionValue = element.attributeValue("value");
 			if(StringUtil.isEmpty(expressionValue))
 				throw new ProcessParseException("<userTask id="+id+" name="+name+"><candidate><assignPolicy><expression>的value属性值不能为空");
-			if(assignUserExpression.validateValue(expressionValue))
+			if(!assignUserExpression.validateValue(expressionValue))
 				throw new ProcessParseException("<userTask id="+id+" name="+name+"><candidate><assignPolicy><expression>的value属性值["+expressionValue+"]不合法");
 		}
 		return new AssignableUserExpressionEntity(expressionName, expressionValue, element.attributeValue("extendValue"));
@@ -105,7 +102,7 @@ public class CandidateParser {
 	// **************************************************
 	private HandlePolicy parseHandlePolicy(String id, String name, Element element) {
 		if(element == null)
-			return DefaultHandlePolicy.getSingleton();
+			return null;
 		return new HandlePolicy(
 				Boolean.parseBoolean(element.attributeValue("suggest")), 
 				Boolean.parseBoolean(element.attributeValue("attitude")), 
@@ -153,17 +150,17 @@ public class CandidateParser {
 					int number = Integer.parseInt(str);
 					if(number > 0) {
 						if(percentSignIndex == configNum.length()) // 证明没有%号 
-							return new HandleNumber(number, false, null);
+							return new HandleNumber(number, false, false);
 						
 						if(number <= 100 && (configNum.length()-percentSignIndex) < 3) { // 大于100%的属于不合法的值; 总长度-百分号下标, 最大不能超过2, 给+/-预留一位
 							if(configNum.length() == percentSignIndex+1) // 没有配置+/-, 所以总长度=百分号下标+1
-								return new HandleNumber(number, true, null); 
+								return new HandleNumber(number, true, false); 
 							
 							char c = configNum.charAt(percentSignIndex+1); // 否则证明配置了+/-, 百分号下标+1取对应的字符进行处理
 							if(c == '+')
-								return new HandleNumber(number, true, number==100?null:true);
+								return new HandleNumber(number, true, true);
 							if(c == '-')
-								return new HandleNumber(number, true, number==100?null:false); 
+								return new HandleNumber(number, true, false); 
 						}
 					}
 				}

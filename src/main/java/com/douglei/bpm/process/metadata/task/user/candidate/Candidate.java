@@ -22,6 +22,8 @@ public class Candidate implements Serializable{
 		return assignPolicy;
 	}
 	public HandlePolicy getHandlePolicy() {
+		if(handlePolicy == null)
+			return null; // TODO 
 		return handlePolicy;
 	}
 }

@@ -19,12 +19,12 @@ public class TaskHandlePolicyContainer implements CustomAutowired{
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setFields(Map<Class<?>, Object> beanContainer) {
-		((List<CanFinishPolicy>)beanContainer.get(CanFinishPolicy.class)).forEach(policy -> {
-			canFinishPolicyMap.put(policy.getName(), policy);
-		});
-		((List<SerialHandleSequencePolicy>)beanContainer.get(SerialHandleSequencePolicy.class)).forEach(policy -> {
-			serialHandleSequencePolicyMap.put(policy.getName(), policy);
-		});
+//		((List<CanFinishPolicy>)beanContainer.get(CanFinishPolicy.class)).forEach(policy -> {
+//			canFinishPolicyMap.put(policy.getName(), policy);
+//		});
+//		((List<SerialHandleSequencePolicy>)beanContainer.get(SerialHandleSequencePolicy.class)).forEach(policy -> {
+//			serialHandleSequencePolicyMap.put(policy.getName(), policy);
+//		});
 	}
 	
 	/**

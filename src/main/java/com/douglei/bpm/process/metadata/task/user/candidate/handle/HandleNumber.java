@@ -8,7 +8,12 @@ import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignNumber;
  */
 public class HandleNumber extends AssignNumber{
 
-	public HandleNumber(int number, boolean percent, Boolean ceiling) {
+	public HandleNumber(int number, boolean percent, boolean ceiling) {
 		super(number, percent, ceiling);
+	}
+	
+	@Override
+	public String toString() {
+		return "HandleNumber [number=" + number + ", percent=" + percent + ", ceiling=" + ceiling + "]";
 	}
 }

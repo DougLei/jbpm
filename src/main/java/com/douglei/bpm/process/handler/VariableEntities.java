@@ -27,7 +27,7 @@ public class VariableEntities {
 	}
 	
 	/**
-	 * 追加变量(集合)
+	 * 追加变量集合
 	 * @param variables
 	 */
 	public void appendVariables(List<Variable> variables) {

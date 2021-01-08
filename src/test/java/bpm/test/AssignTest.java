@@ -15,7 +15,7 @@ import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.module.runtime.task.TaskHandleParameter;
 import com.douglei.bpm.process.parser.ProcessParseException;
 
-public class ParallelGatewayTest {
+public class AssignTest {
 	private ProcessEngine engine;
 	
 	@Before
@@ -25,7 +25,7 @@ public class ParallelGatewayTest {
 	
 	@Test
 	public void insert() throws ProcessParseException {
-		ProcessDefinitionBuilder builder = new ProcessDefinitionBuilder(new ClasspathFile("bpm/ParallelGateway.bpm.xml"));
+		ProcessDefinitionBuilder builder = new ProcessDefinitionBuilder(new ClasspathFile("bpm/Assign.bpm.xml"));
 		ExecutionResult result = engine.getRepositoryModule().getDefinitionService().insert(builder);
 		if(result.isSuccess())
 			System.out.println("插入成功一条流程定义信息, 其id为: "+ ((ProcessDefinition)result.getObject()).getId());
@@ -60,10 +60,10 @@ public class ParallelGatewayTest {
 			System.out.println(result.getFailMessage());
 	}
 	
-	private int taskId = 7;
+	private int taskId = 2;
 	@Test
 	public void claim() {
-		String userId = "douglei";
+		String userId = "zhaoliu";
 		ExecutionResult result = engine.getRuntimeModule().getTaskService().claim(taskId, userId);
 		if(result.isSuccess())
 			System.out.println("成功认领id为["+taskId+"]的任务");
@@ -73,7 +73,7 @@ public class ParallelGatewayTest {
 	
 	@Test
 	public void handle() {
-		String userId = "douglei";
+		String userId = "zhaoliu";
 		
 		TaskHandleParameter parameter = new TaskHandleParameter();
 		parameter.addAssignUserId("douglei");

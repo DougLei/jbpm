@@ -14,6 +14,20 @@ public class UserBean {
 	}
 	
 	@Override
+	public int hashCode() {
+		return userId.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null)
+			return false;
+		if(this == obj)
+			return true;
+		return userId.equals(((UserBean) obj).userId);
+	}
+	
+	@Override
 	public String toString() {
 		return "User [userId=" + userId + "]";
 	}

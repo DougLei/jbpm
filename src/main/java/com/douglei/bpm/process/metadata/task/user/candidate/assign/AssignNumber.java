@@ -3,15 +3,15 @@ package com.douglei.bpm.process.metadata.task.user.candidate.assign;
 import java.io.Serializable;
 
 /**
- * 可指派的人数的表达式
+ * 最多可指派的人数的表达式
  * @author DougLei
  */
 public class AssignNumber implements Serializable{
-	private int number;
-	private boolean percent; // 是否是百分比
-	private Boolean ceiling; // 是否向上取整; false表示向下取整; null表示0.5<向下取整, >=0.5向上取整
+	protected int number;
+	protected boolean percent; // 是否是百分比
+	protected boolean ceiling; // 是否向上取整; false表示向下取整; 默认值为false
 	
-	public AssignNumber(int number, boolean percent, Boolean ceiling) {
+	public AssignNumber(int number, boolean percent, boolean ceiling) {
 		this.number = number;
 		this.percent = percent;
 		this.ceiling = ceiling;
@@ -23,7 +23,7 @@ public class AssignNumber implements Serializable{
 	public boolean isPercent() {
 		return percent;
 	}
-	public Boolean isCeiling() {
+	public boolean isCeiling() {
 		return ceiling;
 	}
 

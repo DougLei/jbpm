@@ -1,17 +1,11 @@
 package com.douglei.bpm.process.handler.task.user;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.history.task.HistoryAssignee;
-import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
-import com.douglei.bpm.process.handler.task.user.assignee.AssignedUserHandler4TaskHandle;
-import com.douglei.bpm.process.handler.task.user.assignee.AssignedUserHandler4TaskStartup;
-import com.douglei.bpm.process.handler.task.user.assignee.AssignedUserValidator;
+import com.douglei.bpm.process.handler.task.user.assignee.handle.AssigneeDispatcher;
+import com.douglei.bpm.process.handler.task.user.assignee.startup.AssigneeBuilder;
 import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.orm.context.SessionContext;
 
@@ -24,8 +18,12 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 	@Override
 	public ExecutionResult startup() {
 		// 验证指派的用户
-		new AssignedUserValidator(currentTaskMetadataEntity.getTaskMetadata(), handleParameter).validate();
-		
+		AssigneeBuilder assigneeBuilder = new AssigneeBuilder(
+				handleParameter.getProcessMetadata().getCode(), 
+				handleParameter.getProcessMetadata().getVersion(), 
+				handleParameter.getUserEntity().getAssignedUsers());
+		assigneeBuilder.pretreatment(currentTaskMetadataEntity.getTaskMetadata(), handleParameter, processEngineBeans);		
+				
 		// 启动当前用户任务
 		Task task = createTask(false);
 		if(currentTaskMetadataEntity.getTaskMetadata().getTimeLimit() != null)
@@ -33,40 +31,42 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 		SessionContext.getTableSession().save(task);
 		
 		// 记录指派的用户
-		new AssignedUserHandler4TaskStartup(handleParameter.getProcessMetadata().getCode(), 
-				handleParameter.getProcessMetadata().getVersion(), 
-				handleParameter.getUserEntity().getAssignedUsers()).saveAssigneeList(task.getTaskinstId());
+		assigneeBuilder.save(task.getTaskinstId());
+		
 		return new ExecutionResult(task);
 	}
 
 	@Override
 	public ExecutionResult handle() {
-		assigneeDispatch();
+		// 进行指派信息的调度
+		AssigneeDispatcher assigneeDispatcher = new AssigneeDispatcher(
+				handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId(),
+				handleParameter.getUserEntity().getCurrentHandleUser().getUserId(),
+				handleParameter.getUserEntity().getSuggest(), 
+				handleParameter.getUserEntity().getAttitude(), 
+				handleParameter.getCurrentDate());
+		assigneeDispatcher.dispatch();
 		
 		if(isFinished()) 
-			finishUserTask();
+			finishUserTask(assigneeDispatcher);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	
-	// 指派信息调度
-	private void assigneeDispatch() {
-		List<HistoryAssignee> assigneeList = SessionContext.getSqlSession().query(HistoryAssignee.class, "select * from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
-				Arrays.asList(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId(),
-						handleParameter.getUserEntity().getCurrentHandleUser().getUserId(),
-						HandleState.CLAIMED.name()));
-		new AssignedUserHandler4TaskHandle(handleParameter, assigneeList).assigneeDispatch();
-	}
-
 	// 判断任务是否结束
 	private boolean isFinished() {
 		// TODO 多人办理时的完成策略
+		
+		
+		
+		
 		return true;
 	}
 
 	// 结束用户任务
-	private void finishUserTask() {
+	private void finishUserTask(AssigneeDispatcher assigneeDispatcher) {
 		completeTask(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask(), handleParameter.getCurrentDate());
 		followTaskCompleted4Variable(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask());
+		assigneeDispatcher.dispatchAll();
 		processEngineBeans.getTaskHandleUtil().dispatch(currentTaskMetadataEntity, handleParameter);
 	}
 }

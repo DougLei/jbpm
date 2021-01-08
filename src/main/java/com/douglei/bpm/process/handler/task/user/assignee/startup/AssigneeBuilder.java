@@ -50,9 +50,9 @@ public class AssigneeBuilder {
 		AssignPolicy assignPolicy = metadata.getCandidate().getAssignPolicy();
 		if(assignPolicy.isDynamic()) {
 			if(assignedUsers.isEmpty())
-				throw new TaskHandleException("[id="+metadata.getId()+", name="+metadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask未指派办理人员");
+				throw new AssignedUserValidateException("[id="+metadata.getId()+", name="+metadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask未指派办理人员");
 			if(!assignPolicy.getAssignNumber().isPercent() && assignPolicy.getAssignNumber().getNumber() < assignedUsers.size())
-				throw new TaskHandleException("[id="+metadata.getId()+", name="+metadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask, 实际指派的人数["+assignedUsers.size()+"]大于配置的上限["+assignPolicy.getAssignNumber().getNumber()+"]");
+				throw new AssignedUserValidateException("[id="+metadata.getId()+", name="+metadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask, 实际指派的人数["+assignedUsers.size()+"]大于配置的上限["+assignPolicy.getAssignNumber().getNumber()+"]");
 		}
 		
 		// 获取具体可指派的用户集合
@@ -62,7 +62,7 @@ public class AssigneeBuilder {
 			assignableUsers.addAll(processEngineBeans.getAssignableUserExpressionContainer().get(entity.getName()).getAssignUserList(entity.getValue(), entity.getExtendValue(), parameter));
 		});
 		if(assignableUsers.isEmpty())
-			throw new TaskHandleException("[id="+metadata.getId()+", name="+metadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask, 不存在可指派的办理人员");
+			throw new AssignedUserValidateException("[id="+metadata.getId()+", name="+metadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask, 不存在可指派的办理人员");
 		
 		// 根据指派策略, 可指派的用户集合, 和实际指派的用户集合, 进行验证
 		if(assignPolicy.isDynamic()) {
@@ -71,7 +71,7 @@ public class AssigneeBuilder {
 			HashSet<UserBean> temp = new HashSet<UserBean>(assignableUsers);
 			for (UserBean assignedUser : assignedUsers) {
 				if(!temp.contains(assignedUser))
-					throw new TaskHandleException("[id="+metadata.getId()+", name="+metadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask, 不能指派配置范围外的 "+assignedUser+" 做为办理人员");
+					throw new AssignedUserValidateException("[id="+metadata.getId()+", name="+metadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask, 不能指派配置范围外的 "+assignedUser+" 做为办理人员");
 			}
 			
 			// 判断实际指派的人数, 是否超过最多可指派的人数百分比
@@ -86,7 +86,7 @@ public class AssigneeBuilder {
 					max = 1;
 				
 				if(max < assignedUsers.size())
-					throw new TaskHandleException("[id="+metadata.getId()+", name="+metadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask, 实际指派的人数["+assignedUsers.size()+"]大于配置的上限["+max+"][total="+assignableUsers.size()+", value="+assignPolicy.getAssignNumber().getNumber()+"%, ceiling="+assignPolicy.getAssignNumber().isCeiling()+"]");
+					throw new AssignedUserValidateException("[id="+metadata.getId()+", name="+metadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask, 实际指派的人数["+assignedUsers.size()+"]大于配置的上限["+max+"][total="+assignableUsers.size()+", value="+assignPolicy.getAssignNumber().getNumber()+"%, ceiling="+assignPolicy.getAssignNumber().isCeiling()+"]");
 			}
 		}else {
 			// 静态指派, 忽略动态指派的用户
@@ -96,7 +96,7 @@ public class AssigneeBuilder {
 		}
 		
 		if(assignedUsers.isEmpty())
-			throw new TaskHandleException("[id="+metadata.getId()+", name="+metadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask未指派办理人员");
+			throw new AssignedUserValidateException("[id="+metadata.getId()+", name="+metadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask未指派办理人员");
 	}
 	
 	/**
@@ -109,10 +109,10 @@ public class AssigneeBuilder {
 			assignedUsers = assignedUsers.parallelStream().distinct().collect(Collectors.toList());
 		
 		// 查询指派用户的委托数据, 将处理后的指派数据保存到运行表
-		SqlCondition queryCondition = new SqlCondition(assignedUsers);
+		SqlCondition condition = new SqlCondition(assignedUsers);
 		DelegationHandler delegationHandler = new DelegationHandler(
-				SessionContext.getSQLSession().query(DelegationInfo.class, "Assignee", "queryDelegations", queryCondition), 
-				queryCondition, code, version);
+				SessionContext.getSQLSession().query(DelegationInfo.class, "Assignee", "queryDelegations", condition), 
+				condition, code, version);
 		
 		List<Assignee> assigneeList = new ArrayList<Assignee>(assignedUsers.size() + 5); // +5是备用的长度
 		int groupId = 1;

@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.AssignMode;
 import com.douglei.bpm.module.runtime.task.HandleState;
+import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -23,7 +24,7 @@ class DelegationHandler {
 	private Map<String, Delegation> map; // 指派和委托的映射map, <指派的用户id, 委托的用户id>
 	private DelegationHandler children;
 
-	public DelegationHandler(List<DelegationInfo> list, SqlCondition condition, String processCode, String processVersion) {
+	public DelegationHandler(List<DelegationInfo> list, SqlCondition condition, String processCode, String processVersion) throws TaskHandleException{
 		if(list.isEmpty())
 			return;
 		

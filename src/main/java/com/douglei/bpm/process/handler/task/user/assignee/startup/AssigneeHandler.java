@@ -16,10 +16,10 @@ import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
 import com.douglei.orm.context.SessionContext;
 
 /**
- * 启动任务时, 指派信息构建器
+ * 启动任务时, 指派信息处理器
  * @author DougLei
  */
-public class AssigneeBuilder {
+public class AssigneeHandler {
 	private String code;
 	private String version;
 	private List<UserBean> assignedUsers; 
@@ -30,7 +30,7 @@ public class AssigneeBuilder {
 	 * @param version 任务所属流程定义的version
 	 * @param assignedUsers 上一环节实际指派的用户集合
 	 */
-	public AssigneeBuilder(String code, String version, List<UserBean> assignedUsers) {
+	public AssigneeHandler(String code, String version, List<UserBean> assignedUsers) {
 		this.code = code;
 		this.version = version;
 		this.assignedUsers = assignedUsers;

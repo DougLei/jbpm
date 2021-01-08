@@ -5,7 +5,7 @@ import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.task.user.assignee.handle.AssigneeDispatcher;
-import com.douglei.bpm.process.handler.task.user.assignee.startup.AssigneeBuilder;
+import com.douglei.bpm.process.handler.task.user.assignee.startup.AssigneeHandler;
 import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.orm.context.SessionContext;
 
@@ -18,11 +18,11 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 	@Override
 	public ExecutionResult startup() {
 		// 验证指派的用户
-		AssigneeBuilder assigneeBuilder = new AssigneeBuilder(
+		AssigneeHandler assigneeHandler = new AssigneeHandler(
 				handleParameter.getProcessMetadata().getCode(), 
 				handleParameter.getProcessMetadata().getVersion(), 
 				handleParameter.getUserEntity().getAssignedUsers());
-		assigneeBuilder.pretreatment(currentTaskMetadataEntity.getTaskMetadata(), handleParameter, processEngineBeans);		
+		assigneeHandler.pretreatment(currentTaskMetadataEntity.getTaskMetadata(), handleParameter, processEngineBeans);
 				
 		// 启动当前用户任务
 		Task task = createTask(false);
@@ -31,7 +31,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 		SessionContext.getTableSession().save(task);
 		
 		// 记录指派的用户
-		assigneeBuilder.save(task.getTaskinstId());
+		assigneeHandler.save(task.getTaskinstId());
 		
 		return new ExecutionResult(task);
 	}

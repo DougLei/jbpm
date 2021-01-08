@@ -58,7 +58,7 @@ public class ProcessParser implements CustomAutowired{
 	 */
 	public ProcessMetadata parse(int processDefinitionId, String content) {
 		try {
-			logger.debug("解析的流程配置内容为: {}", content);
+			logger.debug("解析的流程配置内容为:\n {}", content);
 			Document document = new SAXReader().read(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
 			Element processElement = document.getRootElement().element("process");
 			ProcessMetadata process = new ProcessMetadata(processDefinitionId, 

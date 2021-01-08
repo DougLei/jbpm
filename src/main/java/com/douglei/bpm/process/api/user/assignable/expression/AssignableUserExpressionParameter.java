@@ -16,10 +16,17 @@ public class AssignableUserExpressionParameter {
 	private Task currentTask;
 	private VariableEntities currentTaskVariables;
 	
-	
-	public AssignableUserExpressionParameter(UserTaskMetadata metadata, HandleParameter handleParameter,
-			ProcessEngineBeans processEngineBeans) {
+	/**
+	 * 
+	 * @param metadata
+	 * @param handleParameter
+	 * @param processEngineBeans
+	 */
+	public AssignableUserExpressionParameter(UserTaskMetadata metadata, HandleParameter handleParameter, ProcessEngineBeans processEngineBeans) {
 		// TODO Auto-generated constructor stub
+		
+		
+		
 	}
 
 	/**

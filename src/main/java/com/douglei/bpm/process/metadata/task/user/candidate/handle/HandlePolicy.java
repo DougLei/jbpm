@@ -18,4 +18,33 @@ public class HandlePolicy implements Serializable {
 		this.multiHandle = multiHandlePolicy!=null;
 		this.multiHandlePolicy = multiHandlePolicy;
 	}
+
+	/**
+	 * 是否需要强制输入意见
+	 * @return
+	 */
+	public boolean isSuggest() {
+		return suggest;
+	}
+	/**
+	 * 是否需要强制表态
+	 * @return
+	 */
+	public boolean isAttitude() {
+		return attitude;
+	}
+	/**
+	 * 是否多人办理
+	 * @return
+	 */
+	public boolean isMultiHandle() {
+		return multiHandle;
+	}
+	/**
+	 * 获取多人办理策略
+	 * @return
+	 */
+	public MultiHandlePolicy getMultiHandlePolicy() {
+		return multiHandlePolicy;
+	}
 }

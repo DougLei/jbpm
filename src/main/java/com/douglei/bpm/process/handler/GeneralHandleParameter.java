@@ -17,11 +17,11 @@ import com.douglei.orm.context.SessionContext;
 public class GeneralHandleParameter extends AbstractHandleParameter{
 	
 	protected GeneralHandleParameter() {}
-	public GeneralHandleParameter(TaskInstance taskInstance, UserBean handledUser, String suggest, Attitude attitude, List<UserBean> assignedUsers) {
+	public GeneralHandleParameter(TaskInstance taskInstance, UserBean currentHandleUser, String suggest, Attitude attitude, List<UserBean> assignedUsers) {
 		super.processInstanceId = taskInstance.getTask().getProcinstId();
 		super.processMetadata = taskInstance.getProcessMetadata();
 		super.taskEntityHandler.setCurrentTaskEntity(new TaskEntity(taskInstance.getTask()));
-		super.userEntity = new UserEntity(handledUser, suggest, attitude, assignedUsers);
+		super.userEntity = new UserEntity(currentHandleUser, suggest, attitude, assignedUsers);
 		super.variableEntities = new VariableEntities(SessionContext.getTableSession().query(
 				Variable.class, 
 				"select * from bpm_ru_variable where procinst_id=? and (taskinst_id=? or scope =?)", 

@@ -30,4 +30,25 @@ public class MultiHandlePolicy implements Serializable{
 			return DefaultInstance.DEFAULT_HANDLE_NUMBER;
 		return handleNumber;
 	}
+	/**
+	 * 是否串行办理
+	 * @return
+	 */
+	public boolean isSerialHandle() {
+		return serialHandle;
+	}
+	/**
+	 * 获取串行办理时的办理顺序策略名称
+	 * @return
+	 */
+	public String getSerialHandleSequencePolicyName() {
+		return serialHandleSequencePolicyName;
+	}
+	/**
+	 * 获取(判断)任务是否可以结束的策略名称
+	 * @return
+	 */
+	public String getCanFinishPolicyName() {
+		return canFinishPolicyName;
+	}
 }

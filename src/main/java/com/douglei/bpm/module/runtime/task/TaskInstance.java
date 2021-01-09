@@ -6,6 +6,8 @@ import com.douglei.bpm.process.api.container.ProcessContainerProxy;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.bpm.process.metadata.TaskMetadataEntity;
+import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
+import com.douglei.bpm.process.metadata.task.user.candidate.handle.HandlePolicy;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -44,6 +46,9 @@ public class TaskInstance {
 	}
 	public boolean requiredUserHandle() {
 		return taskMetadataEntity.getTaskMetadata().requiredUserHandle();
+	}
+	public HandlePolicy getHandlePolicy() {
+		return ((UserTaskMetadata) taskMetadataEntity.getTaskMetadata()).getCandidate().getHandlePolicy();
 	}
 	public Task getTask() {
 		return task;

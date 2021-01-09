@@ -5,6 +5,7 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.api.container.ProcessContainerProxy;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpressionContainer;
 import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
+import com.douglei.bpm.process.api.user.task.handle.policy.TaskHandlePolicyContainer;
 import com.douglei.bpm.process.handler.TaskHandleUtil;
 
 /**
@@ -26,6 +27,9 @@ public class ProcessEngineBeans {
 	@Autowired
 	private AssignableUserExpressionContainer assignableUserExpressionContainer; // 可指派的用户表达式容器
 	
+	@Autowired
+	private TaskHandlePolicyContainer taskHandlePolicyContainer; // 任务办理策略容器
+	
 	public ProcessContainerProxy getProcessContainer() {
 		return processContainer;
 	}
@@ -37,5 +41,8 @@ public class ProcessEngineBeans {
 	}
 	public AssignableUserExpressionContainer getAssignableUserExpressionContainer() {
 		return assignableUserExpressionContainer;
+	}
+	public TaskHandlePolicyContainer getTaskHandlePolicyContainer() {
+		return taskHandlePolicyContainer;
 	}
 }

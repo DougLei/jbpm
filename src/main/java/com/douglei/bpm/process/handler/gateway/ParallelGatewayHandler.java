@@ -36,7 +36,10 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 	
 	@Override
 	public ExecutionResult handle() {
-		fork(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask());
+		Task task = handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask();
+		task.setUserId(handleParameter.getUserEntity().getCurrentHandleUser().getUserId());
+		
+		fork(task);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	

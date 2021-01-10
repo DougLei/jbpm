@@ -31,12 +31,11 @@ public class HandleTaskCmd implements Command {
 
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
-		UserBean currentHandleUser = null;
+		if(StringUtil.isEmpty(parameter.getUserId()))
+			return new ExecutionResult("办理失败, 办理["+taskInstance.getName()+"]任务, 需要提供办理人id");
 		
+		UserBean currentHandleUser = processEngineBeans.getUserBeanFactory().create(parameter.getUserId());
 		if(taskInstance.requiredUserHandle()) {
-			if(StringUtil.isEmpty(parameter.getUserId()))
-				return new ExecutionResult("办理失败, 办理["+taskInstance.getName()+"]任务, 需要提供具体的userId");
-			
 			HandlePolicy handlePolicy = taskInstance.getHandlePolicy();
 			if(handlePolicy.isSuggest() && StringUtil.isEmpty(parameter.getSuggest()))
 				return new ExecutionResult("办理失败, 办理["+taskInstance.getName()+"]任务, 需要输入办理意见");
@@ -68,7 +67,6 @@ public class HandleTaskCmd implements Command {
 				return new ExecutionResult("办理失败, 指定的userId未认领["+taskInstance.getName()+"]任务");
 			
 			// 如果是串行办理时, 要判断是否轮到当前userId进行办理
-			currentHandleUser = processEngineBeans.getUserBeanFactory().create(parameter.getUserId());
 			if(handlePolicy.isMultiHandle() && handlePolicy.getMultiHandlePolicy().isSerialHandle()) {
 				SerialHandleSequencePolicy policy = processEngineBeans.getTaskHandlePolicyContainer().getSerialHandleSequencePolicy(handlePolicy.getMultiHandlePolicy().getSerialHandleSequencePolicyName());
 				policy.

@@ -35,7 +35,10 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 	
 	@Override
 	public ExecutionResult handle() {
-		end(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask());
+		Task task = handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask();
+		task.setUserId(handleParameter.getUserEntity().getCurrentHandleUser().getUserId());
+		
+		end(task);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	

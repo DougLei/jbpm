@@ -25,6 +25,7 @@ public class Task {
 	@Property protected Date expiryTime;
 	@Property protected String businessId;
 	@Property protected String pageId;
+	@Property protected String userId;
 	
 	public Task() {}
 	public Task(int procdefId, String procinstId, String parentTaskinstId, Date startTime, TaskMetadata taskMetadata) {
@@ -122,5 +123,11 @@ public class Task {
 	}
 	public void setPageId(String pageId) {
 		this.pageId = pageId;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 }

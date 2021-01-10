@@ -17,12 +17,24 @@ public class AssignNumber implements Serializable{
 		this.ceiling = ceiling;
 	}
 	
+	/**
+	 * 获取数值
+	 * @return
+	 */
 	public int getNumber() {
 		return number;
 	}
+	/**
+	 * 是否是百分比
+	 * @return
+	 */
 	public boolean isPercent() {
 		return percent;
 	}
+	/**
+	 *  是否向上取整
+	 * @return
+	 */
 	public boolean isCeiling() {
 		return ceiling;
 	}

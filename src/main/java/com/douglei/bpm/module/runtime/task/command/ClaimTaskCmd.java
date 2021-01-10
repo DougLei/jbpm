@@ -11,6 +11,8 @@ import com.douglei.bpm.module.runtime.task.AssignMode;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
+import com.douglei.bpm.process.metadata.task.user.candidate.handle.HandleNumber;
+import com.douglei.bpm.process.metadata.task.user.candidate.handle.MultiHandlePolicy;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -87,15 +89,13 @@ public class ClaimTaskCmd implements Command{
 		if(supportAssigneeList.isEmpty())
 			throw new CommandExecuteException("认领异常, id为["+taskInstance.getTask().getId()+"]的任务, 没有查询到任何有效的指派信息");
 		
-//		int totalCount = assigneeList.size(); // 记录的是可以认领的总人数
-		int claimCount = 0; // 已经认领的数量
+		int claimedCount = 0; // 已经认领的数量
 		for (Assignee sa : supportAssigneeList) {
 			if(sa.getHandleStateInstance().isClaimed())
-				claimCount++;
+				claimedCount++;
 		}
 		
-		// 验证认领人数是否已经达到上限
-		if(claimCount == 1) // TODO 目前只是实现了单人办理模式, 所以只要有人认领就无法重复认领, 后续在这里加上多人认领的验证 ; 后续判断时要注意, 如果一个人替多个人办理, 则这里判断数量时, 随机取部分认领即可
+		if(!canClaim(claimedCount, assigneeList.size()))
 			return new ExecutionResult("认领失败, ["+taskInstance.getName()+"]任务已被认领");
 		
 		// 进行认领
@@ -109,5 +109,30 @@ public class ClaimTaskCmd implements Command{
 			SessionContext.getSQLSession().executeUpdate("Assignee", "handleState2Invalid", claimTaskParameter);
 		directClaim();
 		return ExecutionResult.getDefaultSuccessInstance();
+	}
+
+	/**
+	 * 是否可以认领
+	 * @param claimedCount 已经认领的数量
+	 * @param totalClaimCount 总共可以认领的数量
+	 * @return
+	 */
+	private boolean canClaim(int claimedCount, int totalClaimCount) {
+		if(!taskInstance.getHandlePolicy().isMultiHandle()) 
+			return claimedCount == 0;
+			
+		HandleNumber handleNumber = taskInstance.getHandlePolicy().getMultiHandlePolicy().getHandleNumber();
+		if(!handleNumber.isPercent())
+			return claimedCount < handleNumber.getNumber();
+		
+		int max = totalClaimCount * handleNumber.getNumber();
+		if(max%100 > 0 && handleNumber.isCeiling()) {
+			max = max/100 + 1;
+		}else {
+			max = max/100;
+		}
+		if(max == 0)
+			max = 1;
+		return claimedCount < max;
 	}
 }

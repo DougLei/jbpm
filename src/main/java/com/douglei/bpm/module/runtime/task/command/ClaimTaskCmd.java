@@ -29,7 +29,7 @@ public class ClaimTaskCmd implements Command{
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		if(!taskInstance.requiredUserHandle())
-			return new ExecutionResult("认领失败, ["+taskInstance.getName()+"]任务不支持用户处理");
+			return new ExecutionResult("认领失败, ["+taskInstance.getName()+"]任务不支持用户认领");
 		
 		// 查询指定userId, 判断其是否满足认领条件
 		List<Assignee> assigneeList = SessionContext.getSqlSession()

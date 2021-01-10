@@ -32,9 +32,9 @@ public class HandleTaskCmd implements Command {
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		if(StringUtil.isEmpty(parameter.getUserId()))
-			return new ExecutionResult("办理失败, 办理["+taskInstance.getName()+"]任务, 需要提供办理人id");
-		
+			return new ExecutionResult("办理失败, 办理["+taskInstance.getName()+"]任务, 需要提供userId");
 		UserBean currentHandleUser = processEngineBeans.getUserBeanFactory().create(parameter.getUserId());
+		
 		if(taskInstance.requiredUserHandle()) {
 			HandlePolicy handlePolicy = taskInstance.getHandlePolicy();
 			if(handlePolicy.isSuggest() && StringUtil.isEmpty(parameter.getSuggest()))

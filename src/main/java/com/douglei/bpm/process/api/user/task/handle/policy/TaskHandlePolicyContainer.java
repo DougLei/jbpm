@@ -13,29 +13,29 @@ import com.douglei.bpm.bean.annotation.Bean;
  */
 @Bean
 public class TaskHandlePolicyContainer implements CustomAutowired{
-	private Map<String, CanFinishPolicy> canFinishPolicyMap = new HashMap<String, CanFinishPolicy>();
+	private Map<String, ClaimPolicy> claimPolicyMap = new HashMap<String, ClaimPolicy>();
 	private Map<String, SerialHandleSequencePolicy> serialHandleSequencePolicyMap = new HashMap<String, SerialHandleSequencePolicy>();
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setFields(Map<Class<?>, Object> beanContainer) {
-//		((List<CanFinishPolicy>)beanContainer.get(CanFinishPolicy.class)).forEach(policy -> {
-//			canFinishPolicyMap.put(policy.getName(), policy);
-//		});
-//		((List<SerialHandleSequencePolicy>)beanContainer.get(SerialHandleSequencePolicy.class)).forEach(policy -> {
-//			serialHandleSequencePolicyMap.put(policy.getName(), policy);
-//		});
+		((List<ClaimPolicy>)beanContainer.get(ClaimPolicy.class)).forEach(policy -> {
+			claimPolicyMap.put(policy.getName(), policy);
+		});
+		((List<SerialHandleSequencePolicy>)beanContainer.get(SerialHandleSequencePolicy.class)).forEach(policy -> {
+			serialHandleSequencePolicyMap.put(policy.getName(), policy);
+		});
 	}
 	
 	/**
 	 * 获取指定name的策略
 	 * <p>
-	 * (判断)任务是否可以结束的策略
+	 * 任务认领策略
 	 * @param name
 	 * @return
 	 */
-	public CanFinishPolicy getCanFinishPolicy(String name) {
-		return canFinishPolicyMap.get(name);
+	public ClaimPolicy getClaimPolicy(String name) {
+		return claimPolicyMap.get(name);
 	}
 	
 	/**

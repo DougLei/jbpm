@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.douglei.bpm.module.runtime.task.Assignee;
+
 /**
  * 
  * @author DougLei
@@ -39,5 +41,17 @@ public class ClaimTaskParameter {
 	}
 	public List<Integer> getGroupIds() {
 		return groupIds;
+	}
+	
+	
+	// -------------------------------------------------------------------------------------
+	// 查询同组内有没有人已经认领时用到的参数
+	// -------------------------------------------------------------------------------------
+	private List<Assignee> assigneeList;
+	public List<Assignee> getAssigneeList() {
+		return assigneeList;
+	}
+	public void setAssigneeList(List<Assignee> assigneeList) {
+		this.assigneeList = assigneeList;
 	}
 }

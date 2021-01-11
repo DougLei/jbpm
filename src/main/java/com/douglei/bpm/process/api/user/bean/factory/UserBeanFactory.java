@@ -3,6 +3,7 @@ package com.douglei.bpm.process.api.user.bean.factory;
 import java.util.List;
 
 import com.douglei.bpm.bean.annotation.DefaultInstance;
+import com.douglei.bpm.process.api.user.bean.factory.impl.UserBeanFactoryImpl;
 
 /**
  * 用户Bean工厂接口

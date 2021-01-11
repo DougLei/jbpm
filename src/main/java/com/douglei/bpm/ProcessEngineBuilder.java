@@ -12,7 +12,7 @@ import com.douglei.bpm.bean.BeanFactory;
 import com.douglei.bpm.process.api.container.ProcessContainer;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpression;
 import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
-import com.douglei.bpm.process.api.user.task.handle.policy.CanFinishPolicy;
+import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandleSequencePolicy;
 import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
@@ -136,17 +136,17 @@ public class ProcessEngineBuilder {
 	}
 	
 	/**
-	 * 添加(判断)任务是否可以结束的策略
+	 * 添加任务认领策略
 	 * @param policy
 	 * @return
 	 */
-	public ProcessEngineBuilder addCanFinishPolicy(CanFinishPolicy policy) {
-		beanFactory.registerCustomBean(CanFinishPolicy.class, policy);
+	public ProcessEngineBuilder addClaimPolicy(ClaimPolicy policy) {
+		beanFactory.registerCustomBean(ClaimPolicy.class, policy);
 		return this;
 	}
 	
 	/**
-	 * 添加串行办理任务时的办理顺序策略
+	 * 添加串行办理任务时, 办理顺序的策略
 	 * @param policy
 	 * @return
 	 */

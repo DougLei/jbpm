@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.douglei.bpm.ProcessEngineBeans;
+import com.douglei.bpm.ProcessEngineException;
 import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Assignee;
@@ -44,7 +45,7 @@ public class UnclaimTaskCmd implements Command {
 					assigneeList.remove(i--);
 					continue;
 				case FINISHED:
-					return new ExecutionResult("取消认领失败, 指定的userId已完成["+taskInstance.getName()+"]任务的办理");
+					throw new ProcessEngineException("BUG");
 			}
 		}
 		if(assigneeList.isEmpty())
@@ -52,6 +53,10 @@ public class UnclaimTaskCmd implements Command {
 		
 		// 取消认领
 		SessionContext.getSQLSession().executeUpdate("Assignee", "unclaimTask", assigneeList);
+		
+		// 处理task的isAllClaimed字段值, 改为没有全部认领
+		if(taskInstance.getTask().isAllClaimed())
+			SessionContext.getSqlSession().executeUpdate("update bpm_ru_task set is_all_claimed=0 where taskinst_id=?", Arrays.asList(taskInstance.getTask().getTaskinstId()));
 		return null;
 	}
 }

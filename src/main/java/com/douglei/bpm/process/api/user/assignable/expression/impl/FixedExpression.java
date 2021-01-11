@@ -25,7 +25,7 @@ public class FixedExpression implements AssignableUserExpression {
 	}
 
 	@Override
-	public List<UserBean> getAssignUserList(String value, String extendValue, AssignableUserExpressionParameter parameter) {
+	public List<UserBean> getAssignUserList(String value, AssignableUserExpressionParameter parameter) {
 		return userBeanFactory.create(value.split(","));
 	}
 }

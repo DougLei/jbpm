@@ -1,5 +1,7 @@
 package com.douglei.bpm.process.handler.task.user;
 
+import java.util.Arrays;
+
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
@@ -54,12 +56,14 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 	
 	// 判断任务是否结束
 	private boolean isFinished() {
-		// TODO 多人办理时的完成策略
+		if(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getIsAllClaimed() == 0)
+			return false;
 		
-		
-		
-		
-		return true;
+		// 查询当前任务, 已经认领的指派信息数量
+		int claimedAssigneeCount = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(
+				"select count(1) from bpm_ru_assignee where taskinst_id=? and mode <> 'ASSISTED' and handle_state='CLAIMED'", 
+				Arrays.asList(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId()))[0].toString());
+		return claimedAssigneeCount == 0;
 	}
 
 	// 结束用户任务

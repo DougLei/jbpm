@@ -39,7 +39,7 @@ public enum HandleState {
 	/**
 	 * 办理完成
 	 */
-	FINISHED{
+	FINISHED {
 		@Override
 		public boolean isClaimed() {
 			return true;

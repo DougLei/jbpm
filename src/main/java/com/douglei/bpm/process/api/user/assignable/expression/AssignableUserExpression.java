@@ -7,6 +7,15 @@ import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 
 /**
  * 可指派的用户表达式
+ * <p>
+ * 
+ * 如果需要访问数据库, 可直接调用以下方法:
+ * <pre>
+ * 	SessionContext.getSqlSession()
+ * 	SessionContext.getTableSession()
+ * 	SessionContext.getSQLSession()
+ * </pre>
+ * 
  * @author DougLei
  */
 @MultiInstance
@@ -44,9 +53,8 @@ public interface AssignableUserExpression {
 	/**
 	 * 获取具体指派的用户集合
 	 * @param value  配置的表达式值, 即流程xml配置文件中, userTask -> candidate -> assignPolicy -> expression里的value属性值
-	 * @param extendValue 配置的表达式扩展值, 即流程xml配置文件中, userTask -> candidate -> assignPolicy -> expression里的extendValue属性值
 	 * @param parameter 
 	 * @return 
 	 */
-	List<UserBean> getAssignUserList(String value, String extendValue, AssignableUserExpressionParameter parameter);
+	List<UserBean> getAssignUserList(String value, AssignableUserExpressionParameter parameter);
 }

@@ -23,7 +23,7 @@ public class Candidate implements Serializable{
 	}
 	public HandlePolicy getHandlePolicy() {
 		if(handlePolicy == null)
-			return null; // TODO 
+			return DefaultInstance.DEFAULT_HANDLE_POLICY;
 		return handlePolicy;
 	}
 }

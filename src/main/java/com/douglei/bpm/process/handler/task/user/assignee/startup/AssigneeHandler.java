@@ -22,7 +22,8 @@ import com.douglei.orm.context.SessionContext;
 public class AssigneeHandler {
 	private String code;
 	private String version;
-	private List<UserBean> assignedUsers; 
+	private boolean isFixedUser; // 是否是固定的办理人, 即是否是静态指派的办理人
+	private List<UserBean> assignedUsers;
 	
 	/**
 	 * 
@@ -59,7 +60,7 @@ public class AssigneeHandler {
 		List<UserBean> assignableUsers = new ArrayList<UserBean>();
 		AssignableUserExpressionParameter parameter = new AssignableUserExpressionParameter(metadata, handleParameter, processEngineBeans);
 		assignPolicy.getAssignableUserExpressionEntities().forEach(entity -> {
-			assignableUsers.addAll(processEngineBeans.getAssignableUserExpressionContainer().get(entity.getName()).getAssignUserList(entity.getValue(), entity.getExtendValue(), parameter));
+			assignableUsers.addAll(processEngineBeans.getAssignableUserExpressionContainer().get(entity.getName()).getAssignUserList(entity.getValue(), parameter));
 		});
 		if(assignableUsers.isEmpty())
 			throw new AssignedUserValidateException("[id="+metadata.getId()+", name="+metadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask, 不存在可指派的办理人员");
@@ -93,6 +94,7 @@ public class AssigneeHandler {
 			if(assignedUsers.size() > 0)
 				assignedUsers.clear();
 			assignedUsers.addAll(assignableUsers);
+			isFixedUser = true;
 		}
 		
 		if(assignedUsers.isEmpty())
@@ -117,7 +119,7 @@ public class AssigneeHandler {
 		List<Assignee> assigneeList = new ArrayList<Assignee>(assignedUsers.size() + 5); // +5是备用的长度
 		int groupId = 1;
 		for (UserBean assignedUser : assignedUsers) 
-			delegationHandler.addAssignee(taskinstId, groupId++, null, assignedUser.getUserId(), null, assigneeList);
+			delegationHandler.addAssignee(taskinstId, groupId++, null, assignedUser.getUserId(), null, isFixedUser, assigneeList);
 		
 		SessionContext.getTableSession().save(assigneeList);
 	}

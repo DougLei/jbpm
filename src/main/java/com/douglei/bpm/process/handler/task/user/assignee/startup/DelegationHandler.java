@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.AssignMode;
+import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.orm.context.SessionContext;
@@ -69,10 +69,13 @@ class DelegationHandler {
 	 * @param parentAssigneeUserId
 	 * @param assigneeUserId
 	 * @param remark 记录委托的原因
+	 * @param isFixedUser 是否是固定的办理人, 即是否是静态指派的办理人
 	 * @param assigneeList
 	 */
-	public void addAssignee(String taskinstId, int groupId, String parentAssigneeUserId, String assigneeUserId, String remark, List<Assignee> assigneeList) {
+	public void addAssignee(String taskinstId, int groupId, String parentAssigneeUserId, String assigneeUserId, String remark, boolean isFixedUser, List<Assignee> assigneeList) {
 		Assignee assignee = new Assignee(taskinstId, assigneeUserId, groupId);
+		if(isFixedUser)
+			assignee.setModeInstance(AssignMode.FIXED);
 		if(parentAssigneeUserId != null) {
 			assignee.setParentUserId(parentAssigneeUserId);
 			assignee.setRemark(remark);
@@ -87,7 +90,7 @@ class DelegationHandler {
 			return;
 		
 		assignee.setHandleStateInstance(HandleState.INVALID);
-		children.addAssignee(taskinstId, groupId, assigneeUserId, delegation.getUserId(), delegation.getRemark(), assigneeList);
+		children.addAssignee(taskinstId, groupId, assigneeUserId, delegation.getUserId(), delegation.getRemark(), false, assigneeList);
 	}
 }
 

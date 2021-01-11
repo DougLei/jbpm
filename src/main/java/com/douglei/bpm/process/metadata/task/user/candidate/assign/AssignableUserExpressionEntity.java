@@ -9,12 +9,10 @@ import java.io.Serializable;
 public class AssignableUserExpressionEntity implements Serializable {
 	private String name; // 表达式名称
 	private String value; // 具体的表达式值
-	private String extendValue; // 扩展值
 	
-	public AssignableUserExpressionEntity(String name, String value, String extendValue) {
+	public AssignableUserExpressionEntity(String name, String value) {
 		this.name = name;
 		this.value = value;
-		this.extendValue = extendValue;
 	}
 
 	public String getName() {
@@ -22,8 +20,5 @@ public class AssignableUserExpressionEntity implements Serializable {
 	}
 	public String getValue() {
 		return value;
-	}
-	public String getExtendValue() {
-		return extendValue;
 	}
 }

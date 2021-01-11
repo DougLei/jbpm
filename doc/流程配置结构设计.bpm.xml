@@ -76,13 +76,12 @@
 					<!-- 
 						可指派的用户表达式, 可配置多个
 						* name: 表达式名称, 区分大小写, 必填
-						* value: 表达式需要的值, 根据具体表达式决定, 是否必填
-						* extendValue: 扩展值, 该属性值可提供给扩展使用(二开)
+						* value: 表达式需要的值, 根据具体表达式决定, 是否必填, 以及值的格式
 						
 						* 系统内置的表达式包括: (name <==> value; 没写value的表示不需要填写, 即使填写了也不生效)
 						** fixed <==> 用户id, 多个用,分割, ,前后不要有空格, 例如: douglei,jinshilei; 不能是douglei, jinshilei
 					 -->
-					<expression name="" value="" extendValue="" />
+					<expression name="" value="" />
 				</assignPolicy>
 				
 				<!-- 
@@ -90,17 +89,22 @@
 					* suggest: 表示是否需要强制输入意见; 不区分大小写, 默认值为false; 如果配置值不合法, 则引擎会使用默认值
 					* attitude: 表示是否需要强制表态; 同上 
 					
-					* 可不配置, 默认配置结构为: <handlePolicy></handlePolicy>, 即单人办理模式, 不需要意见和态度
+					* 可不配置, 默认配置结构为: <handlePolicy></handlePolicy>, 即单人认领, 单人办理模式
 				-->
 				<handlePolicy suggest="false" attitude="false">
 					<!-- 
-						多人办理时的策略; 如果不配置则为单人办理模式; 
-						* handleNum: 可办理的人数(表达式), 参考assignPolicy中的assignNum; 默认值为100%
-						* serialHandle: 是否串行办理, 不区分大小写, 可不配置, 默认值为false; 如果配置值不合法, 则引擎会使用默认值
-						* serialHandleSequence: 串行办理时的办理顺序策略名称, 针对串行办理(serialHandle=true)时生效, 区分大小写; 可不配置, 默认按照认领时间办理; 如果配置值不合法, 引擎会抛出异常
-						* canFinish: (判断)任务是否可以结束的策略名称, 区分大小写; 可不配置, 默认实际办理人数满足设置的办理人数即可结束办理, 由最后一个办理人决定流程的流转; 如果配置值不合法, 引擎会抛出异常
+						认领策略, 只要能认领, 就能办理, 由最后一个办理人决定流程的流转; 可不配置, 默认只有一个人能认领; 如果配置值不合法, 引擎会抛出异常
+						* name: 认领策略名称, 区分大小写; 必填; 
+						* value: 认领策略需要的值, 根据具体的策略决定, 是否必填, 以及值的格式
 					 -->
-					<multiple handleNum="100%" serialHandle="true/false" serialHandleSequence="" canFinish="" />
+					<claim name="" value=""/>
+				
+					<!-- 
+						多人办理策略; 如果不配置则为单人办理模式; 配置了就是多人办理模式;
+						* serialHandle: 是否串行办理, 不区分大小写, 可不配置, 默认值为false; 如果配置值不合法, 则引擎会使用默认值
+						* serialHandleSequence: 串行办理的顺序策略名称, 针对串行办理(serialHandle=true)时生效, 区分大小写; 可不配置, 默认按照认领时间(正序)办理; 如果配置值不合法, 引擎会抛出异常
+					 -->
+					<multiple serialHandle="true/false" serialHandleSequence="" />
 				</handlePolicy>
 			</candidate>
 			

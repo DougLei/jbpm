@@ -1,7 +1,10 @@
-package com.douglei.bpm.process.api.user.bean.factory;
+package com.douglei.bpm.process.api.user.bean.factory.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.douglei.bpm.process.api.user.bean.factory.UserBean;
+import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
 
 /**
  * 

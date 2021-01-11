@@ -7,9 +7,9 @@ import java.io.Serializable;
  * @author DougLei
  */
 public class AssignNumber implements Serializable{
-	protected int number;
-	protected boolean percent; // 是否是百分比
-	protected boolean ceiling; // 是否向上取整; false表示向下取整; 默认值为false
+	private int number;
+	private boolean percent; // 是否是百分比
+	private boolean ceiling; // 是否向上取整; false表示向下取整; 默认值为false
 	
 	public AssignNumber(int number, boolean percent, boolean ceiling) {
 		this.number = number;

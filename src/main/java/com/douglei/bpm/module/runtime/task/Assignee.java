@@ -16,6 +16,7 @@ public class Assignee {
 	protected AssignMode mode;
 	protected HandleState handleState;
 	protected Date claimTime;
+	private long claimTime_;
 	
 	public Assignee() {}
 	public Assignee(String taskinstId, String userId, int groupId) {
@@ -91,5 +92,10 @@ public class Assignee {
 	}
 	public void setClaimTime(Date claimTime) {
 		this.claimTime = claimTime;
+	}
+	public long getClaimTime_() {
+		if(claimTime != null && claimTime_ == 0)
+			claimTime_ = claimTime.getTime();
+		return claimTime_;
 	}
 }

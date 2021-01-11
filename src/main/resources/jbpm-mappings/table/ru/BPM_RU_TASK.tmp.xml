@@ -18,6 +18,7 @@
 			<column name="BUSINESS_ID" property="businessId" dataType="string" length="100"/>
 			<column name="PAGE_ID" property="pageId" dataType="string" length="500"/>
 			<column name="USER_ID" property="userId" dataType="nstring" length="150" />
+			<column name="IS_ALL_CLAIMED" property="isAllClaimed" dataType="number" length="1" nullable="false"/>
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

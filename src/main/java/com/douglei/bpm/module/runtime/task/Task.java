@@ -26,7 +26,7 @@ public class Task {
 	@Property protected String businessId;
 	@Property protected String pageId;
 	@Property protected String userId;
-	private int isAllClaimed;
+	private Integer isAllClaimed;
 	
 	public Task() {}
 	public Task(int procdefId, String procinstId, String parentTaskinstId, Date startTime, TaskMetadata taskMetadata) {
@@ -136,12 +136,12 @@ public class Task {
 	 * @return
 	 */
 	public boolean isAllClaimed() {
-		return isAllClaimed == 1;
+		return isAllClaimed != null && isAllClaimed == 1;
 	}
-	public int getIsAllClaimed() {
+	public Integer getIsAllClaimed() {
 		return isAllClaimed;
 	}
-	public void setIsAllClaimed(int isAllClaimed) {
+	public void setIsAllClaimed(Integer isAllClaimed) {
 		this.isAllClaimed = isAllClaimed;
 	}
 }

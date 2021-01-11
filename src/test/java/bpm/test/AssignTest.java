@@ -61,9 +61,10 @@ public class AssignTest {
 	}
 	
 	private int taskId = 2;
+	private String userId = "wangwu";
+	
 	@Test
 	public void claim() {
-		String userId = "zhaoliu";
 		ExecutionResult result = engine.getRuntimeModule().getTaskService().claim(taskId, userId);
 		if(result.isSuccess())
 			System.out.println("成功认领id为["+taskId+"]的任务");
@@ -73,10 +74,8 @@ public class AssignTest {
 	
 	@Test
 	public void handle() {
-		String userId = "zhaoliu";
-		
 		TaskHandleParameter parameter = new TaskHandleParameter();
-		parameter.addAssignUserId("douglei");
+		parameter.addAssignUserId("test");
 		parameter.setUserId(userId).setSuggest("同意了").setAttitude(Attitude.AGREE);
 		
 		ExecutionResult result = engine.getRuntimeModule().getTaskService().handle(taskId, parameter);

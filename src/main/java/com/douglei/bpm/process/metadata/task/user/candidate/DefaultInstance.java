@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.metadata.task.user.candidate;
 
-import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandleSequencePolicy;
+import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignNumber;
 import com.douglei.bpm.process.metadata.task.user.candidate.handle.ClaimPolicyEntity;
 import com.douglei.bpm.process.metadata.task.user.candidate.handle.HandlePolicy;
@@ -19,7 +19,7 @@ public class DefaultInstance {
 	/**
 	 * 默认的认领策略实体
 	 */
-	public static final ClaimPolicyEntity DEFAULT_CLAIM_POLICY_ENTITY = new ClaimPolicyEntity(SerialHandleSequencePolicy.DEFAULT_POLICY_NAME, null);
+	public static final ClaimPolicyEntity DEFAULT_CLAIM_POLICY_ENTITY = new ClaimPolicyEntity(ClaimPolicy.DEFAULT_POLICY_NAME, null);
 	
 	/**
 	 * 默认的办理策略

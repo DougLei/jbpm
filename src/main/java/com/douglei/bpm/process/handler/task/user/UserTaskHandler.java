@@ -56,7 +56,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 	
 	// 判断任务是否结束
 	private boolean isFinished() {
-		if(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getIsAllClaimed() == 0)
+		if(!handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().isAllClaimed())
 			return false;
 		
 		// 查询当前任务, 已经认领的指派信息数量

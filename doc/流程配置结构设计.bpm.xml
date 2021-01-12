@@ -131,6 +131,9 @@
 			<option type="delegate" name="委托" order="">
 				<candidate></candidate><!-- 可不配置, 默认是当前环节指派的候选人 -->
 			</option>
+			<option type="transfer" name="转办" order="">
+				<candidate></candidate><!-- 可不配置, 默认是当前环节指派的候选人 -->
+			</option>
 			<option type="assist" name="协办" order="">
 				<candidate></candidate><!-- 必须配置 -->
 			</option>

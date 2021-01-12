@@ -6,9 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.douglei.bpm.ProcessEngineException;
 import com.douglei.bpm.module.runtime.variable.DataType;
 import com.douglei.bpm.module.runtime.variable.Scope;
 import com.douglei.bpm.module.runtime.variable.Variable;
+import com.douglei.tools.instances.ognl.OgnlHandler;
 import com.douglei.tools.utils.StringUtil;
 
 /**
@@ -316,5 +318,52 @@ public class VariableEntities {
 		List<String> names = new ArrayList<String>(transientVariableMap.size());
 		transientVariableMap.keySet().forEach(key -> names.add(key));
 		names.forEach(name -> removeTransientVariable(name));
+	}
+	
+	/**
+	 * 获取变量值
+	 * <p>
+	 * 变量名前可带范围前缀: [global.], [local.], [transient.]
+	 * @param variableName
+	 * @return
+	 */
+	public Object getValue(String variableName) {
+		VariableNameEntity variableNameEntity = extractVariableNameEntity(variableName);
+		
+		if(variableNameEntity.scope == null)
+			return OgnlHandler.getSingleton().getObjectValue(variableNameEntity.name, variableMap);
+		
+		if(variableNameEntity.scope == Scope.GLOBAL)
+			return OgnlHandler.getSingleton().getObjectValue(variableNameEntity.name, globalVariableMap);
+		
+		if(variableNameEntity.scope == Scope.LOCAL)
+			return OgnlHandler.getSingleton().getObjectValue(variableNameEntity.name, localVariableMap);
+		
+		if(variableNameEntity.scope == Scope.TRANSIENT)
+			return OgnlHandler.getSingleton().getObjectValue(variableNameEntity.name, transientVariableMap);
+		
+		throw new ProcessEngineException("BUG");
+	}
+	
+	// 提取变量名实体
+	private VariableNameEntity extractVariableNameEntity(String variableName) {
+		if(variableName.startsWith(Scope.GLOBAL.getPrefix()))
+			return new VariableNameEntity(Scope.GLOBAL, variableName);
+		
+		if(variableName.startsWith(Scope.LOCAL.getPrefix()))
+			return new VariableNameEntity(Scope.LOCAL, variableName);
+		
+		if(variableName.startsWith(Scope.TRANSIENT.getPrefix()))
+			return new VariableNameEntity(Scope.TRANSIENT, variableName);
+		
+		return new VariableNameEntity(null, variableName);
+	}
+	class VariableNameEntity {
+		private Scope scope;
+		private String name;
+		VariableNameEntity(Scope scope, String name) {
+			this.scope = scope;
+			this.name = scope==null?name:name.substring(scope.getPrefix().length());
+		}
 	}
 }

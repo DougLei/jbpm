@@ -22,11 +22,6 @@ import com.douglei.bpm.module.runtime.task.Assignee;
 public interface ClaimPolicy {
 
 	/**
-	 * 默认的认领策略名称
-	 */
-	public static final String DEFAULT_POLICY_NAME = "single";
-	
-	/**
 	 * 获取策略名称, 必须唯一; 默认值为类名全路径
 	 * @return
 	 */

@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.handler.event.start;
+package com.douglei.bpm.process.handler;
 
 import java.util.regex.Pattern;
 

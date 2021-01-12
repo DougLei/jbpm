@@ -41,6 +41,6 @@ public class AssignNumber implements Serializable{
 
 	@Override
 	public String toString() {
-		return "AssignNumber [number=" + number + ", percent=" + percent + ", ceiling=" + ceiling + "]";
+		return getClass().getSimpleName() + " [number=" + number + ", percent=" + percent + ", ceiling=" + ceiling + "]";
 	}
 }

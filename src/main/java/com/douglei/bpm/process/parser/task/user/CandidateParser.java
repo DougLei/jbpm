@@ -9,8 +9,8 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpression;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpressionContainer;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
-import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandleSequencePolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.TaskHandlePolicyContainer;
+import com.douglei.bpm.process.api.user.task.handle.policy.impl.SerialHandleByClaimTimeSequencePolicy;
 import com.douglei.bpm.process.metadata.task.user.candidate.Candidate;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignNumber;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
@@ -20,7 +20,6 @@ import com.douglei.bpm.process.metadata.task.user.candidate.handle.HandlePolicy;
 import com.douglei.bpm.process.metadata.task.user.candidate.handle.MultiHandlePolicyEntity;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.tools.utils.StringUtil;
-import com.douglei.tools.utils.datatype.VerifyTypeMatchUtil;
 
 /**
  * 
@@ -34,6 +33,9 @@ public class CandidateParser {
 	
 	@Autowired
 	private TaskHandlePolicyContainer taskHandlePolicyContainer;
+	
+	@Autowired
+	private AssignNumberParser assignNumberParser;
 	
 	/**
 	 * 解析候选人配置
@@ -71,40 +73,10 @@ public class CandidateParser {
 	}
 	// 解析指派人数表达式
 	private AssignNumber parseAssignNumber(String id, String name, String assignNum) throws ProcessParseException{
-		if(StringUtil.isEmpty(assignNum))
-			return null;
-		
-		if(assignNum.charAt(0) != '-') {
-			int percentSignIndex = 0; // 百分号的下标
-			while(percentSignIndex < assignNum.length()) {
-				if(assignNum.charAt(percentSignIndex) == '%') 
-					break;
-				percentSignIndex++;
-			}
-			
-			if(percentSignIndex > 0) {
-				String str = assignNum.substring(0, percentSignIndex);
-				if(VerifyTypeMatchUtil.isInteger(str)) {
-					int number = Integer.parseInt(str);
-					if(number > 0) {
-						if(percentSignIndex == assignNum.length()) // 证明没有%号 
-							return new AssignNumber(number, false, false);
-						
-						if(number <= 100 && (assignNum.length()-percentSignIndex) < 3) { // 大于100%的属于不合法的值; 总长度-百分号下标, 最大不能超过2, 给+/-预留一位
-							if(assignNum.length() == percentSignIndex+1) // 没有配置+/-, 所以总长度=百分号下标+1
-								return new AssignNumber(number, true, false); 
-							
-							char c = assignNum.charAt(percentSignIndex+1); // 否则证明配置了+/-, 百分号下标+1取对应的字符进行处理
-							if(c == '+')
-								return new AssignNumber(number, true, true);
-							if(c == '-')
-								return new AssignNumber(number, true, false); 
-						}
-					}
-				}
-			}
-		}
-		throw new ProcessParseException("<userTask id="+id+" name="+name+"><candidate><assignPolicy>的assignNum属性值["+assignNum+"]不合法");
+		AssignNumber assignNumber = assignNumberParser.parse(assignNum);
+		if(assignNumber == null)
+			throw new ProcessParseException("<userTask id="+id+" name="+name+"><candidate><assignPolicy>的assignNum属性值["+assignNum+"]不合法");
+		return assignNumber;
 	}
 	// 设置可指派的用户表达式实体集合
 	private void setAssignUserExpressionEntities(String id, String name, AssignPolicy assignPolicy, List<Element> elements) {
@@ -181,7 +153,7 @@ public class CandidateParser {
 			// 当是串行办理时, 获取串行办理任务时的办理顺序策略名称, 并对其进行验证
 			String serialHandleSequencePolicyName = element.attributeValue("serialHandleSequence");
 			if(StringUtil.isEmpty(serialHandleSequencePolicyName)) {
-				serialHandleSequencePolicyName = SerialHandleSequencePolicy.DEFAULT_POLICY_NAME;
+				serialHandleSequencePolicyName = SerialHandleByClaimTimeSequencePolicy.POLICY_NAME;
 			}else if(taskHandlePolicyContainer.getSerialHandleSequencePolicy(serialHandleSequencePolicyName) == null){
 				throw new ProcessParseException("<userTask id="+id+" name="+name+"><candidate><handlePolicy><multiple>的serialHandleSequence属性值["+serialHandleSequencePolicyName+"]不合法");
 			}

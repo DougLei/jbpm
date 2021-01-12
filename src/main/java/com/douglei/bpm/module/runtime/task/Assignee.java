@@ -11,7 +11,7 @@ public class Assignee {
 	protected String taskinstId;
 	protected int groupId;
 	protected String userId;
-	protected String parentUserId;
+	protected int chainId;
 	protected String remark;
 	protected AssignMode mode;
 	protected HandleState handleState;
@@ -51,11 +51,11 @@ public class Assignee {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getParentUserId() {
-		return parentUserId;
+	public int getChainId() {
+		return chainId;
 	}
-	public void setParentUserId(String parentUserId) {
-		this.parentUserId = parentUserId;
+	public void setChainId(int chainId) {
+		this.chainId = chainId;
 	}
 	public String getRemark() {
 		return remark;

@@ -1,5 +1,6 @@
 package com.douglei.bpm.process.api.user.assignable.expression.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.douglei.bpm.bean.annotation.Autowired;
@@ -10,7 +11,7 @@ import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
 
 /**
- * 指派固定的用户
+ * 使用流程变量指派用户
  * @author DougLei
  */
 @Bean(clazz=AssignableUserExpression.class)
@@ -25,26 +26,18 @@ public class VariableExpression implements AssignableUserExpression {
 	}
 
 	@Override
-	public boolean validateValue(String value) {
-		// TODO Auto-generated method stub
-		
-		
-		
-		
-		
-		
-		
-		return false;
-	}
-
-	@Override
 	public List<UserBean> getAssignUserList(String value, AssignableUserExpressionParameter parameter) {
-		// TODO Auto-generated method stub
+		List<String> list = new ArrayList<String>();
 		
+		Object userIds;
+		for (String variableName : value.split(",")) {
+			userIds = parameter.getCurrentTaskVariables().getValue(variableName.trim());
+			if(userIds != null) {
+				for(String userId : userIds.toString().split(",")) 
+					list.add(userId.trim());
+			}
+		}
 		
-		
-		
-		
-		return null;
+		return userBeanFactory.create(list);
 	}
 }

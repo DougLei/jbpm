@@ -1,5 +1,6 @@
 package com.douglei.bpm.process.api.user.assignable.expression.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.douglei.bpm.bean.annotation.Autowired;
@@ -26,6 +27,12 @@ public class FixedExpression implements AssignableUserExpression {
 
 	@Override
 	public List<UserBean> getAssignUserList(String value, AssignableUserExpressionParameter parameter) {
-		return userBeanFactory.create(value.split(","));
+		String[] userIds = value.split(",");
+		
+		List<String> list = new ArrayList<String>(userIds.length);
+		for (String userId : userIds) 
+			list.add(userId.trim());
+		
+		return userBeanFactory.create(list);
 	}
 }

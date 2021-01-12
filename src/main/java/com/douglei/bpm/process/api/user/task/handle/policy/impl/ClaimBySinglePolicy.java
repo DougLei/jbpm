@@ -8,36 +8,27 @@ import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimResult;
 
 /**
- * 指定(人数)百分比的认领策略
+ * 单人认领策略
  * @author DougLei
  */
 @Bean(clazz = ClaimPolicy.class)
-public class ClaimByPercentPolicy implements ClaimPolicy{
+public class ClaimBySinglePolicy implements ClaimPolicy{
+	public static final String POLICY_NAME = "bySingle";
 	
 	@Override
 	public String getName() {
-		return "byPercent";
+		return POLICY_NAME;
 	}
-	
+
 	@Override
-	public boolean validateValue(String value) {
-		// TODO Auto-generated method stub
-		
-		
-		
-		
-		
+	public boolean isValueRequired() {
 		return false;
 	}
 
 	@Override
 	public ClaimResult claimValidate(String value, String currentClaimUserId, List<Assignee> unclaimAssigneeList, List<Assignee> claimedAssigneeList, List<Assignee> finishedAssigneeList) {
-		// TODO Auto-generated method stub
-		
-		
-		
-		
-		
-		return null;
+		if(claimedAssigneeList == null)
+			return new ClaimResult(true, 0);
+		return ClaimResult.CAN_NOT_CLAIM;
 	}
 }

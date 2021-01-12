@@ -11,6 +11,11 @@
 		其他说明:
 		1. parallelGateway和inclusiveGateway在join时, 只能join一个父任务的分支任务, 如果配置尝试join多个父任务的分支任务, 会出现重复的网关数据
 		2. endEvent具有join功能, 且逻辑同parallelGateway和inclusiveGatewa相同
+		3. 变量的取值配置: 
+			1. 直接使用变量名, 引擎会使用最近范围内的变量值, 如果不存在则返回null; 
+			2. 在变量名前指定取值范围, 引擎会获取指定范围中的变量值, 如果不存在则返回null; 范围前缀: [global.], [local.], [transient.]分别表示全局, 局部, 瞬时三个范围, 区分大小写, 若配置不合法, 则引擎会将前缀作为变量名的一部分, 去获取最近范围内的变量值; 例如 global.name, 表示取全局范围内, 名为name的变量值
+			3. 范围由近到远的顺序为: transient -> local -> global
+			4. 流程配置中, 凡是使用变量名的地方, 均支持使用范围前缀获取变量值
 	-->
 	<!-- 
 		工作流配置起点:
@@ -78,8 +83,9 @@
 						* name: 表达式名称, 区分大小写, 必填
 						* value: 表达式需要的值, 根据具体表达式决定, 是否必填, 以及值的格式
 						
-						* 系统内置的表达式包括: (name <==> value; 没写value的表示不需要填写, 即使填写了也不生效)
-						** fixed <==> 用户id, 多个用,分割, ,前后不要有空格, 例如: douglei,jinshilei; 不能是douglei, jinshilei
+						* 系统内置的表达式包括: (name <==> value; 没写value的表示不需要填写, 即使填写了也不生效; 否则表示value必须配置)
+						** fixed <==> 用户id, 多个用,分割
+						** variable  <==> 变量名, 多个用,分割, 一个变量名, 对应的变量值, 可以存储多个userId, 用,分割
 					 -->
 					<expression name="" value="" />
 				</assignPolicy>
@@ -96,6 +102,10 @@
 						认领策略, 只要能认领, 就能办理, 由最后一个办理人决定流程的流转; 可不配置, 默认只有一个人能认领; 如果配置值不合法, 引擎会抛出异常
 						* name: 认领策略名称, 区分大小写; 必填; 
 						* value: 认领策略需要的值, 根据具体的策略决定, 是否必填, 以及值的格式
+						
+						* 系统内置的表达式包括: (name <==> value; 没写value的表示不需要填写, 即使填写了也不生效; 否则表示value必须配置)
+						** bySingle <==> , 单个用户办理, 即默认的策略
+						** byNumber <==> 12%+, 指定数量(百分比)的用户办理, value的写法格式, 参考userTask->candidate->assignPolicy中assignNum属性
 					 -->
 					<claim name="" value=""/>
 				

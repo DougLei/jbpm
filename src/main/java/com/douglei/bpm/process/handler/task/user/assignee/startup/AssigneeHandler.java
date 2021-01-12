@@ -13,6 +13,7 @@ import com.douglei.bpm.process.handler.HandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
+import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignableUserExpressionEntity;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -23,7 +24,8 @@ public class AssigneeHandler {
 	private String code;
 	private String version;
 	private boolean isFixedUser; // 是否是固定的办理人, 即是否是静态指派的办理人
-	private List<UserBean> assignedUsers;
+	private List<UserBean> assignedUsers; // 实际指派的人员集合
+	private List<UserBean> assignableUsers; // 可指派的人员集合
 	
 	/**
 	 * 
@@ -35,6 +37,13 @@ public class AssigneeHandler {
 		this.code = code;
 		this.version = version;
 		this.assignedUsers = assignedUsers;
+	}
+	
+	// 去重
+	private List<UserBean> distinct(List<UserBean> list) {
+		if(list.size() > 1)
+			return list.parallelStream().distinct().collect(Collectors.toList());
+		return list;
 	}
 	
 	/**
@@ -58,20 +67,26 @@ public class AssigneeHandler {
 		
 		// 获取具体可指派的用户集合
 		List<UserBean> assignableUsers = new ArrayList<UserBean>();
+		
 		AssignableUserExpressionParameter parameter = new AssignableUserExpressionParameter(metadata, handleParameter, processEngineBeans);
-		assignPolicy.getAssignableUserExpressionEntities().forEach(entity -> {
-			assignableUsers.addAll(processEngineBeans.getAssignableUserExpressionContainer().get(entity.getName()).getAssignUserList(entity.getValue(), parameter));
-		});
+		List<UserBean> tempList = null;
+		for(AssignableUserExpressionEntity entity : assignPolicy.getAssignableUserExpressionEntities()) {
+			tempList = processEngineBeans.getAssignableUserExpressionContainer().get(entity.getName()).getAssignUserList(entity.getValue(), parameter);
+			if(tempList != null)
+				assignableUsers.addAll(tempList);
+		}
+		
 		if(assignableUsers.isEmpty())
 			throw new AssignedUserValidateException("[id="+metadata.getId()+", name="+metadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask, 不存在可指派的办理人员");
+		assignableUsers = distinct(assignableUsers);
 		
 		// 根据指派策略, 可指派的用户集合, 和实际指派的用户集合, 进行验证
 		if(assignPolicy.isDynamic()) {
 			
 			// 判断实际指派的人, 是否都存在于可指派的用户集合中
-			HashSet<UserBean> temp = new HashSet<UserBean>(assignableUsers);
+			HashSet<UserBean> set = new HashSet<UserBean>(assignableUsers);
 			for (UserBean assignedUser : assignedUsers) {
-				if(!temp.contains(assignedUser))
+				if(!set.contains(assignedUser))
 					throw new AssignedUserValidateException("[id="+metadata.getId()+", name="+metadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask, 不能指派配置范围外的 "+assignedUser+" 做为办理人员");
 			}
 			
@@ -101,14 +116,16 @@ public class AssigneeHandler {
 			throw new AssignedUserValidateException("[id="+metadata.getId()+", name="+metadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask未指派办理人员");
 	}
 	
+	
+	 预处理和保存都应该验证下人数等
+	
 	/**
 	 * 保存指派信息
 	 * @param taskinstId 当前的任务实例id
 	 * @throws TaskHandleException
 	 */
 	public void save(String taskinstId) throws TaskHandleException{
-		if(assignedUsers.size() > 1) // 去重
-			assignedUsers = assignedUsers.parallelStream().distinct().collect(Collectors.toList());
+		assignedUsers = distinct(assignedUsers);
 		
 		// 查询指派用户的委托数据, 将处理后的指派数据保存到运行表
 		SqlCondition condition = new SqlCondition(assignedUsers);

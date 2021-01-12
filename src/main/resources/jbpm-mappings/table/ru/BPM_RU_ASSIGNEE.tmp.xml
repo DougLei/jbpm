@@ -10,7 +10,7 @@
 			<column name="FORK_CHAIN_ID" property="forkChainId" dataType="number" length="2" />
 			<column name="USER_ID" property="userId" dataType="nstring" length="150" nullable="false" />
 			<column name="REMARK" property="remark" dataType="nstring" length="300" />
-			<column name="MODE" property="mode" dataType="string" length="9" nullable="false" />
+			<column name="MODE" property="mode" dataType="string" length="11" nullable="false" />
 			<column name="HANDLE_STATE" property="handleState" dataType="string" length="8" nullable="false" />
 			<column name="CLAIM_TIME" property="claimTime" dataType="datetime" />
 		</columns>

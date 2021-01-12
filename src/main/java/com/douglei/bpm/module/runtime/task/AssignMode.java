@@ -22,6 +22,11 @@ public enum AssignMode {
 	DELEGATED,
 	
 	/**
+	 * 移交的办理人(转办)
+	 */
+	TRANSFERRED,
+	
+	/**
 	 * 申请协助的办理人
 	 */
 	ASSISTED;

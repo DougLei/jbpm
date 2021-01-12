@@ -10,13 +10,13 @@ import com.douglei.bpm.module.runtime.task.Assignee;
  * 
  * @author DougLei
  */
-public class ClaimTaskParameter {
+public class ClaimTaskSqlParameter {
 	private Date claimTime = new Date();
 	private List<Integer> assigneeIds;
 	private String taskinstId;
 	private List<Integer> groupIds;
 	
-	ClaimTaskParameter(int assigneeCount, String taskinstId){
+	ClaimTaskSqlParameter(int assigneeCount, String taskinstId){
 		this.assigneeIds = new ArrayList<Integer>(assigneeCount);
 		this.taskinstId = taskinstId;
 	}

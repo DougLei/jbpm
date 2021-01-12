@@ -5,9 +5,10 @@
 		<columns>
 			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
 			<column name="TASKINST_ID" property="taskinstId" dataType="char" length="36" nullable="false"/>
-			<column name="GROUP_ID" property="groupId" dataType="number" length="5" nullable="false"/>
+			<column name="GROUP_ID" property="groupId" dataType="number" length="4" nullable="false"/>
+			<column name="CHAIN_ID" property="chainId" dataType="number" length="3" nullable="false" />
+			<column name="FORK_CHAIN_ID" property="forkChainId" dataType="number" length="2" />
 			<column name="USER_ID" property="userId" dataType="nstring" length="150" nullable="false" />
-			<column name="CHAIN_ID" property="chainId" dataType="number" length="4" nullable="false" />
 			<column name="REMARK" property="remark" dataType="nstring" length="300" />
 			<column name="MODE" property="mode" dataType="string" length="9" nullable="false" />
 			<column name="HANDLE_STATE" property="handleState" dataType="string" length="8" nullable="false" />

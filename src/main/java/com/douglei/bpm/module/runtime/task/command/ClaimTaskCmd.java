@@ -25,7 +25,6 @@ import com.douglei.orm.context.SessionContext;
 public class ClaimTaskCmd implements Command{
 	private TaskInstance taskInstance;
 	private String currentClaimUserId; // 要认领的用户id
-	private ClaimTaskParameter claimTaskParameter;
 	public ClaimTaskCmd(TaskInstance taskInstance, String currentClaimUserId) {
 		this.taskInstance = taskInstance;
 		this.currentClaimUserId = currentClaimUserId;
@@ -41,7 +40,7 @@ public class ClaimTaskCmd implements Command{
 		// 查询指定userId, 判断其是否满足认领条件
 		List<Assignee> assigneeList = SessionContext.getSqlSession()
 				.query(Assignee.class, 
-						"select id, group_id, mode, handle_state from bpm_ru_assignee where taskinst_id=? and user_id=?", 
+						"select id, group_id, chain_id, mode, handle_state from bpm_ru_assignee where taskinst_id=? and user_id=?", 
 						Arrays.asList(taskInstance.getTask().getTaskinstId(), currentClaimUserId));
 		if(assigneeList.isEmpty())
 			return new ExecutionResult("认领失败, 指定的userId没有["+taskInstance.getName()+"]任务的办理权限");
@@ -51,32 +50,32 @@ public class ClaimTaskCmd implements Command{
 				return new ExecutionResult("认领失败, 指定的userId已认领["+taskInstance.getName()+"]任务");
 		}
 		
-		claimTaskParameter = new ClaimTaskParameter(assigneeList.size(), taskInstance.getTask().getTaskinstId());
+		ClaimTaskSqlParameter sqlParameter = new ClaimTaskSqlParameter(assigneeList.size(), taskInstance.getTask().getTaskinstId());
 		for(int i=0;i<assigneeList.size();i++) {
 			if(assigneeList.get(i).getModeInstance() == AssignMode.ASSISTED) 
-				claimTaskParameter.addAssigneeId(assigneeList.remove(i--).getId());
+				sqlParameter.addAssigneeId(assigneeList.remove(i--).getId());
 		}
-		directClaim();
+		directClaim(sqlParameter);
 		
 		if(!assigneeList.isEmpty())
-			return claim(assigneeList, processEngineBeans);
+			return claim(assigneeList, sqlParameter, processEngineBeans);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 
 	// 直接认领
-	private void directClaim() {
-		if(claimTaskParameter.getAssigneeIds().isEmpty())
+	private void directClaim(ClaimTaskSqlParameter sqlParameter) {
+		if(sqlParameter.getAssigneeIds().isEmpty())
 			return;
-		SessionContext.getSQLSession().executeUpdate("Assignee", "claimTask", claimTaskParameter);
-		claimTaskParameter.getAssigneeIds().clear();
+		SessionContext.getSQLSession().executeUpdate("Assignee", "claimTask", sqlParameter);
+		sqlParameter.getAssigneeIds().clear();
 	}
 	
 	// 任务认领
-	private synchronized ExecutionResult claim(List<Assignee> assigneeList, ProcessEngineBeans processEngineBeans) {
+	private synchronized ExecutionResult claim(List<Assignee> assigneeList, ClaimTaskSqlParameter sqlParameter, ProcessEngineBeans processEngineBeans) {
 		// 查询同组内有没有人已经认领
-		claimTaskParameter.setAssigneeList(assigneeList);
+		sqlParameter.setAssigneeList(assigneeList);
 		
-		List<Object[]> claimedGroupIdList = SessionContext.getSQLSession().query_("Assignee", "querySameGroupClaimed", claimTaskParameter);
+		List<Object[]> claimedGroupIdList = SessionContext.getSQLSession().query_("Assignee", "querySameGroupClaimed", sqlParameter);
 		if(claimedGroupIdList.size() > 0) {
 			if(claimedGroupIdList.size() == assigneeList.size())
 				return new ExecutionResult("认领失败, ["+taskInstance.getName()+"]任务已被认领");
@@ -99,14 +98,16 @@ public class ClaimTaskCmd implements Command{
 		
 		// 进行认领
 		for (Assignee assignee : assigneeList) {
-			if(assignee.getHandleStateInstance() == HandleState.INVALID) // 将同组中非INVALID的改为INVALID状态
-				claimTaskParameter.addGroupId(assignee.getGroupId());
-			claimTaskParameter.addAssigneeId(assignee.getId());
+			if(assignee.getHandleStateInstance() == HandleState.INVALID) // 将同组中非INVALID的改为INVALID状态, 并将chainId比自己大的都删除
+				sqlParameter.addGroupId(assignee.getGroupId());
+			sqlParameter.addAssigneeId(assignee.getId());
 		}
 		
-		if(claimTaskParameter.getGroupIds() != null)
-			SessionContext.getSQLSession().executeUpdate("Assignee", "handleState2Invalid", claimTaskParameter);
-		directClaim();
+		if(sqlParameter.getGroupIds() != null) {
+			SessionContext.getSQLSession().executeUpdate("Assignee", "handleState2Invalid", sqlParameter);
+			SessionContext.getSQLSession().executeUpdate("Assignee", "deleteGreaterThanChainId", sqlParameter);
+		}
+		directClaim(sqlParameter);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 

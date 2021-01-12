@@ -10,8 +10,9 @@ public class Assignee {
 	protected int id;
 	protected String taskinstId;
 	protected int groupId;
-	protected String userId;
 	protected int chainId;
+	protected Integer forkChainId;
+	protected String userId;
 	protected String remark;
 	protected AssignMode mode;
 	protected HandleState handleState;
@@ -45,17 +46,23 @@ public class Assignee {
 	public void setGroupId(int groupId) {
 		this.groupId = groupId;
 	}
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
 	public int getChainId() {
 		return chainId;
 	}
 	public void setChainId(int chainId) {
 		this.chainId = chainId;
+	}
+	public Integer getForkChainId() {
+		return forkChainId;
+	}
+	public void setForkChainId(Integer forkChainId) {
+		this.forkChainId = forkChainId;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	public String getRemark() {
 		return remark;

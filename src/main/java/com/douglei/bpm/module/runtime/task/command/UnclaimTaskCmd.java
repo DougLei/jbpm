@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.douglei.bpm.ProcessEngineBeans;
-import com.douglei.bpm.ProcessEngineException;
 import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Assignee;
+import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
 import com.douglei.orm.context.SessionContext;
 
@@ -31,25 +31,32 @@ public class UnclaimTaskCmd implements Command {
 		// 查询指定userId, 判断其是否满足取消认领条件
 		List<Assignee> assigneeList = SessionContext.getSqlSession()
 				.query(Assignee.class, 
-						"select id, handle_state from bpm_ru_assignee where taskinst_id=? and user_id=?", 
-						Arrays.asList(taskInstance.getTask().getTaskinstId(), userId));
+						"select id, handle_state from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state<>?", 
+						Arrays.asList(taskInstance.getTask().getTaskinstId(), userId, HandleState.INVALID.name()));
 		if(assigneeList.isEmpty())
 			return new ExecutionResult("取消认领失败, 指定的userId没有["+taskInstance.getName()+"]任务的办理权限");
 		
 		for(int i=0;i<assigneeList.size();i++) {
-			switch(assigneeList.get(i).getHandleStateInstance()) {
-				case CLAIMED:
-					continue;
-				case UNCLAIM:
-				case INVALID:
-					assigneeList.remove(i--);
-					continue;
-				case FINISHED:
-					throw new ProcessEngineException("BUG");
-			}
+			if(assigneeList.get(i).getHandleStateInstance().unClaim())
+				assigneeList.remove(i--);
 		}
 		if(assigneeList.isEmpty())
 			return new ExecutionResult("取消认领失败, 指定的userId未认领["+taskInstance.getName()+"]任务");
+		
+		
+		
+		
+		
+		// TODO 协办, 抄送的相关处理
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		// 取消认领
 		SessionContext.getSQLSession().executeUpdate("Assignee", "unclaimTask", assigneeList);

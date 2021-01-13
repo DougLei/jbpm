@@ -66,31 +66,31 @@ class DelegationHandler {
 	 * 添加指派信息
 	 * @param taskinstId
 	 * @param groupId
+	 * @param chainId
 	 * @param parentAssigneeUserId
 	 * @param assigneeUserId
 	 * @param remark 记录委托的原因
-	 * @param isFixedUser 是否是固定的办理人, 即是否是静态指派的办理人
+	 * @param isStaticAssign 是否是静态指派
 	 * @param assigneeList
 	 */
-	public void addAssignee(String taskinstId, int groupId, String parentAssigneeUserId, String assigneeUserId, String remark, boolean isFixedUser, List<Assignee> assigneeList) {
-		Assignee assignee = new Assignee(taskinstId, assigneeUserId, groupId);
-		if(isFixedUser)
-			assignee.setModeInstance(AssignMode.FIXED);
-		if(parentAssigneeUserId != null) {
-			assignee.setParentUserId(parentAssigneeUserId);
+	public void addAssignee(String taskinstId, int groupId, int chainId, String assigneeUserId, String remark, boolean isStaticAssign, List<Assignee> assigneeList) {
+		Assignee assignee = new Assignee(taskinstId, assigneeUserId, groupId, chainId);
+		if(isStaticAssign) {
+			assignee.setModeInstance(AssignMode.STATIC);
+		} else if(chainId > 0) {
 			assignee.setRemark(remark);
 			assignee.setModeInstance(AssignMode.DELEGATED);
 		}
 		assigneeList.add(assignee);
 		
-		if(map == null) // 没有委托
+		if(map == null) // 都没有委托
 			return;
 		Delegation delegation = map.get(assigneeUserId);
-		if(delegation == null) // 没有委托
+		if(delegation == null) // 当前assigneeUserId没有委托
 			return;
 		
-		assignee.setHandleStateInstance(HandleState.INVALID);
-		children.addAssignee(taskinstId, groupId, assigneeUserId, delegation.getUserId(), delegation.getRemark(), false, assigneeList);
+		assignee.setHandleStateInstance(HandleState.COMPETITIVE_UNCLAIM);
+		children.addAssignee(taskinstId, groupId, chainId+1, delegation.getUserId(), delegation.getRemark(), false, assigneeList);
 	}
 }
 

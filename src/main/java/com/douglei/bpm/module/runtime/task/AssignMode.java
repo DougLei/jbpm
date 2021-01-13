@@ -7,17 +7,17 @@ package com.douglei.bpm.module.runtime.task;
 public enum AssignMode {
 	
 	/**
-	 * 固定的办理人
+	 * 静态的办理人(静态指派)
 	 */
-	FIXED,
+	STATIC,
 	
 	/**
-	 * 上一环节指派的办理人
+	 * 指派的办理人(动态指派)
 	 */
 	ASSIGNED,
 	
 	/**
-	 * 委托的办理人
+	 * 委托的办理人(委托)
 	 */
 	DELEGATED,
 	
@@ -27,7 +27,7 @@ public enum AssignMode {
 	TRANSFERRED,
 	
 	/**
-	 * 申请协助的办理人
+	 * 申请协助的办理人(协办)
 	 */
 	ASSISTED;
 }

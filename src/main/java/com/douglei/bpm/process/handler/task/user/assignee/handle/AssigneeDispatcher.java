@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.douglei.bpm.module.history.task.Attitude;
 import com.douglei.bpm.module.history.task.HistoryAssignee;
 import com.douglei.bpm.module.runtime.task.AssignMode;
 import com.douglei.bpm.module.runtime.task.HandleState;
@@ -16,9 +17,8 @@ import com.douglei.orm.context.SessionContext;
  */
 public class AssigneeDispatcher {
 	private String taskinstId;
-	private List<HistoryAssignee> independentAssigneeList; // 独立的指派信息集合, 从构造函数的参数assigneeList中提取出来; 指parentUserId=null, 或者mode=ASSISTED的指派信息实例
+	private List<HistoryAssignee> independentAssigneeList; // 独立的指派信息集合, 从构造函数中, 名为assigneeList的变量提取出来; 指chainId=0, 或者mode=ASSISTED的指派信息实例
 	private List<HistoryAssignee> assigneeList; // 指派信息集合
-	private SqlCondition condition; // 指派信息的sql条件
 	
 	/**
 	 * 
@@ -28,7 +28,7 @@ public class AssigneeDispatcher {
 	 * @param attitude 当前办理的用户态度
 	 * @param currentDate 当前办理的时间
 	 */
-	public AssigneeDispatcher(String taskinstId, String handleUserId, String suggest, String attitude, Date currentDate) {
+	public AssigneeDispatcher(String taskinstId, String handleUserId, String suggest, Attitude attitude, Date currentDate) {
 		this.taskinstId = taskinstId;
 		
 		// 查询当前办理的用户, 在当前任务中认领的指派信息集合
@@ -41,12 +41,9 @@ public class AssigneeDispatcher {
 		HistoryAssignee historyAssignee = null;
 		for(int i=0;i < assigneeList.size();i++) {
 			historyAssignee = assigneeList.get(i);
-			historyAssignee.setSuggest(suggest);
-			historyAssignee.setAttitude(attitude);
-			historyAssignee.setFinishTime(currentDate);
-			historyAssignee.setHandleStateInstance(HandleState.FINISHED);
+			historyAssignee.finish(attitude, suggest, currentDate);
 			
-			if(historyAssignee.getParentUserId() == null || historyAssignee.getModeInstance() == AssignMode.ASSISTED) {
+			if(historyAssignee.isChainFirst() || historyAssignee.getModeInstance() == AssignMode.ASSISTED) {
 				if(independentAssigneeList == null)
 					independentAssigneeList = new ArrayList<HistoryAssignee>(assigneeList.size());
 				independentAssigneeList.add(historyAssignee);
@@ -58,30 +55,29 @@ public class AssigneeDispatcher {
 			return;
 		
 		// 追加parent指派信息集合
-		this.condition = new SqlCondition(taskinstId, assigneeList);
 		appendParentAssigneeList(assigneeList);
 		this.assigneeList = assigneeList;
 	}
 
 	// 追加parent指派信息集合
+	private static final String QUERY_PARENT_ASSIGNEE_LIST_SQL = "select * from bpm_ru_assignee where taskinst_id=? and group_id=? and chain_id<?";
 	private void appendParentAssigneeList(List<HistoryAssignee> assigneeList) {
-		List<HistoryAssignee> parentAssigneeList = SessionContext.getSQLSession().query(HistoryAssignee.class, "Assignee", "queryParentAssigneeList", condition);
-		if(parentAssigneeList.isEmpty()) 
-			return;
+		List<Object> sqlParameters = new ArrayList<Object>(3);
+		sqlParameters.add(taskinstId);
+		sqlParameters.add(null);
+		sqlParameters.add(null);
 		
-		assigneeList.addAll(parentAssigneeList); // 追加操作
-		
-		for(int i=0;i<parentAssigneeList.size();i++) {
-			if(parentAssigneeList.get(i).getParentUserId() == null)
-				parentAssigneeList.remove(i--);
+		List<HistoryAssignee> tempList = null;
+		for (HistoryAssignee assignee : assigneeList) {
+			sqlParameters.set(1, assignee.getGroupId());
+			sqlParameters.set(2, assignee.getChainId());
+			
+			tempList = SessionContext.getSqlSession().query(HistoryAssignee.class, QUERY_PARENT_ASSIGNEE_LIST_SQL, sqlParameters);
+			if(tempList.size() > 0)
+				assigneeList.addAll(tempList);
 		}
-		if(parentAssigneeList.isEmpty())
-			return;
-		
-		condition.updateAssigneeList(parentAssigneeList);
-		appendParentAssigneeList(assigneeList);
 	}
-
+	
 	/**
 	 * 调度当前办理用户的指派信息
 	 * <p>
@@ -96,7 +92,7 @@ public class AssigneeDispatcher {
 		
 		// 2. 获取历史指派信息集合, 从运行表删除, 并保存到历史表
 		if(assigneeList != null) {
-			SessionContext.getSQLSession().executeUpdate("Assignee", "deleteAssigneeByGroupIds", condition);
+			SessionContext.getSQLSession().executeUpdate("Assignee", "deleteAssigneeByGroupIds", assigneeList);
 			SessionContext.getTableSession().save(assigneeList);
 		}
 	}

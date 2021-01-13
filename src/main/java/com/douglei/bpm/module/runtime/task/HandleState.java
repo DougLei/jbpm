@@ -7,9 +7,14 @@ package com.douglei.bpm.module.runtime.task;
 public enum HandleState {
 	
 	/**
-	 * 未认领
+	 * 无效, 再也无法使用的状态
 	 */
-	UNCLAIM {
+	INVALID,
+	
+	/**
+	 * 可竞争的未认领
+	 */
+	COMPETITIVE_UNCLAIM {
 		@Override
 		public boolean unClaim() {
 			return true;
@@ -17,9 +22,9 @@ public enum HandleState {
 	},
 	
 	/**
-	 * 无效
+	 * 未认领
 	 */
-	INVALID {
+	UNCLAIM {
 		@Override
 		public boolean unClaim() {
 			return true;

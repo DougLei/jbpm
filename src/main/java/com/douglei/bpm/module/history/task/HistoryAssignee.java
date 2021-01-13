@@ -3,6 +3,7 @@ package com.douglei.bpm.module.history.task;
 import java.util.Date;
 
 import com.douglei.bpm.module.runtime.task.Assignee;
+import com.douglei.bpm.module.runtime.task.HandleState;
 
 /**
  * 
@@ -12,6 +13,19 @@ public class HistoryAssignee extends Assignee{
 	private Attitude attitude;
 	private String suggest;
 	private Date finishTime;
+	
+	/**
+	 * 完结指派信息
+	 * @param attitude
+	 * @param suggest
+	 * @param finishTime
+	 */
+	public void finish(Attitude attitude, String suggest, Date finishTime) {
+		this.attitude = attitude;
+		this.suggest = suggest;
+		this.finishTime = finishTime;
+		super.handleState = HandleState.FINISHED;
+	}
 	
 	public Attitude getAttitudeInstance() {
 		return attitude;

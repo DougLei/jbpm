@@ -53,10 +53,8 @@ public class UserEntity {
 	 * 获取当前办理用户的态度
 	 * @return
 	 */
-	public String getAttitude() {
-		if(attitude == null)
-			return null;
-		return attitude.name();
+	public Attitude getAttitude() {
+		return attitude;
 	}
 	/**
 	 * 获取指派的用户集合

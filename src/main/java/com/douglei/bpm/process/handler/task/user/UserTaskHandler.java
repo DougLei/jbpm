@@ -33,7 +33,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 		SessionContext.getTableSession().save(task);
 		
 		// 记录指派的用户
-		assigneeHandler.save(task.getTaskinstId());
+		assigneeHandler.save(task.getTaskinstId(), currentTaskMetadataEntity.getTaskMetadata());
 		
 		return new ExecutionResult(task);
 	}

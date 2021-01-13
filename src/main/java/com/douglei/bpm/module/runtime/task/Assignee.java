@@ -20,10 +20,11 @@ public class Assignee {
 	private long claimTime_;
 	
 	public Assignee() {}
-	public Assignee(String taskinstId, String userId, int groupId) {
+	public Assignee(String taskinstId, String userId, int groupId, int chainId) {
 		this.taskinstId = taskinstId;
-		this.groupId = groupId;
 		this.userId = userId;
+		this.groupId = groupId;
+		this.chainId = chainId;
 		this.mode = AssignMode.ASSIGNED;
 		this.handleState = HandleState.UNCLAIM;
 	}
@@ -45,6 +46,13 @@ public class Assignee {
 	}
 	public void setGroupId(int groupId) {
 		this.groupId = groupId;
+	}
+	/**
+	 * 是否是chain的第一个
+	 * @return
+	 */
+	public boolean isChainFirst() {
+		return chainId == 0;
 	}
 	public int getChainId() {
 		return chainId;

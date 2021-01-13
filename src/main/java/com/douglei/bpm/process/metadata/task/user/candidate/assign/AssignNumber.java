@@ -38,7 +38,7 @@ public class AssignNumber implements Serializable{
 	public boolean isCeiling() {
 		return ceiling;
 	}
-
+	
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + " [number=" + number + ", percent=" + percent + ", ceiling=" + ceiling + "]";

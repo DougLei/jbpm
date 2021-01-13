@@ -11,18 +11,18 @@ import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
 
 /**
- * 指派固定的用户
+ * 静态指派用户
  * @author DougLei
  */
 @Bean(clazz=AssignableUserExpression.class)
-public class FixedExpression implements AssignableUserExpression {
+public class StaticExpression implements AssignableUserExpression {
 
 	@Autowired
 	private UserBeanFactory userBeanFactory;
 	
 	@Override
 	public String getName() {
-		return "fixed";
+		return "static";
 	}
 
 	@Override

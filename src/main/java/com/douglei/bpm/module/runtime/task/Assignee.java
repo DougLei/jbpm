@@ -11,6 +11,7 @@ public class Assignee {
 	protected String taskinstId;
 	protected int groupId;
 	protected int chainId;
+	private Integer isChainLast;
 	protected Integer forkChainId;
 	protected String userId;
 	protected String remark;
@@ -60,6 +61,19 @@ public class Assignee {
 	public void setChainId(int chainId) {
 		this.chainId = chainId;
 	}
+	/**
+	 * 是否是chain的最后一个
+	 * @return
+	 */
+	public boolean isChainLast() {
+		return isChainLast !=null && isChainLast == 1;
+	}
+	public Integer getIsChainLast() {
+		return isChainLast;
+	}
+	public void setIsChainLast(Integer isChainLast) {
+		this.isChainLast = isChainLast;
+	}
 	public Integer getForkChainId() {
 		return forkChainId;
 	}
@@ -93,8 +107,9 @@ public class Assignee {
 	public HandleState getHandleStateInstance() {
 		return handleState;
 	}
-	public void setHandleStateInstance(HandleState handleState) {
+	public Assignee setHandleStateInstance(HandleState handleState) {
 		this.handleState = handleState;
+		return this;
 	}
 	public String getHandleState() {
 		return handleState.name();
@@ -105,8 +120,9 @@ public class Assignee {
 	public Date getClaimTime() {
 		return claimTime;
 	}
-	public void setClaimTime(Date claimTime) {
+	public Assignee setClaimTime(Date claimTime) {
 		this.claimTime = claimTime;
+		return this;
 	}
 	public long getClaimTime_() {
 		if(claimTime != null && claimTime_ == 0)

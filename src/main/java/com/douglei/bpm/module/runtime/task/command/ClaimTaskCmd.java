@@ -2,6 +2,7 @@ package com.douglei.bpm.module.runtime.task.command;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import com.douglei.bpm.ProcessEngineBeans;
@@ -25,9 +26,17 @@ import com.douglei.orm.context.SessionContext;
 public class ClaimTaskCmd implements Command{
 	private TaskInstance taskInstance;
 	private String currentClaimUserId; // 要认领的用户id
+	private Date claimTime;
 	public ClaimTaskCmd(TaskInstance taskInstance, String currentClaimUserId) {
 		this.taskInstance = taskInstance;
 		this.currentClaimUserId = currentClaimUserId;
+	}
+	
+	// 获取认领时间
+	private Date getClaimTime() {
+		if(claimTime == null)
+			claimTime = new Date();
+		return claimTime;
 	}
 	
 	@Override
@@ -40,8 +49,8 @@ public class ClaimTaskCmd implements Command{
 		// 查询指定userId, 判断其是否满足认领条件
 		List<Assignee> assigneeList = SessionContext.getSqlSession()
 				.query(Assignee.class, 
-						"select id, group_id, chain_id, mode, handle_state from bpm_ru_assignee where taskinst_id=? and user_id=?", 
-						Arrays.asList(taskInstance.getTask().getTaskinstId(), currentClaimUserId));
+						"select id, taskinst_id, group_id, chain_id, mode, handle_state from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state<>?", 
+						Arrays.asList(taskInstance.getTask().getTaskinstId(), currentClaimUserId, HandleState.INVALID.name()));
 		if(assigneeList.isEmpty())
 			return new ExecutionResult("认领失败, 指定的userId没有["+taskInstance.getName()+"]任务的办理权限");
 		
@@ -50,32 +59,40 @@ public class ClaimTaskCmd implements Command{
 				return new ExecutionResult("认领失败, 指定的userId已认领["+taskInstance.getName()+"]任务");
 		}
 		
-		ClaimTaskSqlParameter sqlParameter = new ClaimTaskSqlParameter(assigneeList.size(), taskInstance.getTask().getTaskinstId());
+		// 筛选出协办的指派信息, 并认领
+		List<Assignee> assistedAssigneeList = null;
 		for(int i=0;i<assigneeList.size();i++) {
-			if(assigneeList.get(i).getModeInstance() == AssignMode.ASSISTED) 
-				sqlParameter.addAssigneeId(assigneeList.remove(i--).getId());
+			if(assigneeList.get(i).getModeInstance() == AssignMode.ASSISTED) {
+				if(assistedAssigneeList == null)
+					assistedAssigneeList = new ArrayList<Assignee>(assigneeList.size());
+				assistedAssigneeList.add(assigneeList.remove(i--).setHandleStateInstance(HandleState.CLAIMED).setClaimTime(getClaimTime()));
+			}
 		}
-		directClaim(sqlParameter);
 		
-		if(!assigneeList.isEmpty())
-			return claim(assigneeList, sqlParameter, processEngineBeans);
-		return ExecutionResult.getDefaultSuccessInstance();
+		boolean assistedClaimResult = directClaim(assistedAssigneeList);
+		if(assigneeList.isEmpty())
+			return ExecutionResult.getDefaultSuccessInstance();
+		
+		// 进行主办的指派信息认领
+		ExecutionResult result = claim(assigneeList, processEngineBeans);
+		if(assistedClaimResult)
+			return ExecutionResult.getDefaultSuccessInstance();
+		return result;
 	}
 
-	// 直接认领
-	private void directClaim(ClaimTaskSqlParameter sqlParameter) {
-		if(sqlParameter.getAssigneeIds().isEmpty())
-			return;
-		SessionContext.getSQLSession().executeUpdate("Assignee", "claimTask", sqlParameter);
-		sqlParameter.getAssigneeIds().clear();
+	// 直接进行认领, 返回是否认领成功
+	private boolean directClaim(List<Assignee> assigneeList) {
+		if(assigneeList == null)
+			return false;
+		
+		SessionContext.getTableSession().update(assigneeList);
+		return true;
 	}
 	
 	// 任务认领
-	private synchronized ExecutionResult claim(List<Assignee> assigneeList, ClaimTaskSqlParameter sqlParameter, ProcessEngineBeans processEngineBeans) {
+	private synchronized ExecutionResult claim(List<Assignee> assigneeList, ProcessEngineBeans processEngineBeans) {
 		// 查询同组内有没有人已经认领
-		sqlParameter.setAssigneeList(assigneeList);
-		
-		List<Object[]> claimedGroupIdList = SessionContext.getSQLSession().query_("Assignee", "querySameGroupClaimed", sqlParameter);
+		List<Object[]> claimedGroupIdList = SessionContext.getSQLSession().query_("Assignee", "querySameGroupClaimed", assigneeList);
 		if(claimedGroupIdList.size() > 0) {
 			if(claimedGroupIdList.size() == assigneeList.size())
 				return new ExecutionResult("认领失败, ["+taskInstance.getName()+"]任务已被认领");
@@ -98,16 +115,14 @@ public class ClaimTaskCmd implements Command{
 		
 		// 进行认领
 		for (Assignee assignee : assigneeList) {
-			if(assignee.getHandleStateInstance() == HandleState.INVALID) // 将同组中非INVALID的改为INVALID状态, 并将chainId比自己大的都删除
-				sqlParameter.addGroupId(assignee.getGroupId());
-			sqlParameter.addAssigneeId(assignee.getId());
+			if(!assignee.isChainLast()) // 不是链的最后, 要将比自己大的都删除掉
+				SessionContext.getSqlSession().executeUpdate(
+						"delete bpm_ru_assignee where taskinst_id=? and group_id=? and chain_id >?", 
+						Arrays.asList(taskInstance.getTask().getTaskinstId(), assignee.getGroupId(), assignee.getChainId()));
+			assignee.setHandleStateInstance(HandleState.CLAIMED).setClaimTime(getClaimTime()).setIsChainLast(1);
 		}
 		
-		if(sqlParameter.getGroupIds() != null) {
-			SessionContext.getSQLSession().executeUpdate("Assignee", "handleState2Invalid", sqlParameter);
-			SessionContext.getSQLSession().executeUpdate("Assignee", "deleteGreaterThanChainId", sqlParameter);
-		}
-		directClaim(sqlParameter);
+		directClaim(assigneeList);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 
@@ -126,6 +141,8 @@ public class ClaimTaskCmd implements Command{
 		
 		for(int i=0;i<assigneeList.size();i++) {
 			switch(assigneeList.get(i).getHandleStateInstance()) {
+				case UNCLAIM:
+					break;
 				case CLAIMED:
 					if(claimedAssigneeList == null)
 						claimedAssigneeList = new ArrayList<Assignee>();
@@ -137,15 +154,14 @@ public class ClaimTaskCmd implements Command{
 					finishedAssigneeList.add(assigneeList.remove(i--));
 					break;
 				case INVALID:
+				case COMPETITIVE_UNCLAIM:
 					throw new ProcessEngineException("BUG");
-				case UNCLAIM:
-					break;
 			}
 		}
 		ClaimResult result = policy.claimValidate(claimPolicyEntity.getValue(), currentClaimUserId, assigneeList, claimedAssigneeList, finishedAssigneeList);
 		
 		// 处理task的isAllClaimed字段值, 改为全部认领
-		if(result.getLeftCount() == 0)
+		if(result.canClaim() && result.getLeftCount() == 0)
 			SessionContext.getSqlSession().executeUpdate("update bpm_ru_task set is_all_claimed=1 where taskinst_id=?", Arrays.asList(taskInstance.getTask().getTaskinstId()));
 		return result.canClaim();
 	}

@@ -83,11 +83,15 @@ class DelegationHandler {
 		}
 		assigneeList.add(assignee);
 		
-		if(map == null) // 都没有委托
+		if(map == null) { // 都没有委托
+			assignee.setIsChainLast(1);
 			return;
+		}
 		Delegation delegation = map.get(assigneeUserId);
-		if(delegation == null) // 当前assigneeUserId没有委托
+		if(delegation == null) { // 当前assigneeUserId没有委托
+			assignee.setIsChainLast(1);
 			return;
+		}
 		
 		assignee.setHandleStateInstance(HandleState.COMPETITIVE_UNCLAIM);
 		children.addAssignee(taskinstId, groupId, chainId+1, delegation.getUserId(), delegation.getRemark(), false, assigneeList);

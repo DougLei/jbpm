@@ -12,17 +12,9 @@
 					</foreach>
 		</content>
 		
-		<!-- 认领任务 -->
-		<content name="claimTask" type="update">
-			update bpm_ru_assignee set handle_state='CLAIMED', claim_time=#{claimTime, dataType=datetime} where 
-			<foreach collection="assigneeIds" alias="assigneeId" open="id in (" separator="," close=")">
-				#{assigneeId, dataType=number}
-			</foreach>
-		</content>
-		
 		<!-- 在认领任务时, 查询同组内有没有人已经认领 -->
 		<content name="querySameGroupClaimed" type="select">
-			select group_id from bpm_ru_assignee where taskinst_id=#{taskinstId} and mode &lt;&gt; 'ASSISTED' and handle_state = 'CLAIMED' and 
+			select group_id from bpm_ru_assignee where taskinst_id = #{[0].taskinstId} and mode &lt;&gt; 'ASSISTED' and handle_state = 'CLAIMED' and 
 			<foreach collection="assigneeList" alias="assignee" open="group_id in (" separator="," close=")">
 				#{assignee.groupId, dataType=number}
 			</foreach> 
@@ -30,17 +22,9 @@
 		
 		<!-- 在认领任务时, 查询任务指派信息的认领情况 -->
 		<content name="queryAssigneeClaimSituation" type="select">
-			select id, group_id, user_id, parent_user_id, handle_state from bpm_ru_assignee where taskinst_id=#{taskinstId} and mode &lt;&gt; 'ASSISTED' and handle_state in('UNCLAIM','CLAIMED')
+			select id, group_id, chain_id, user_id, handle_state from bpm_ru_assignee where taskinst_id=#{taskinstId} and mode &lt;&gt; 'ASSISTED' and handle_state in('UNCLAIM','CLAIMED')
 			union all
-			select id, group_id, user_id, parent_user_id, handle_state from bpm_hi_assignee where taskinst_id=#{taskinstId} and mode &lt;&gt; 'ASSISTED' and handle_state = 'FINISHED'
-		</content>
-		
-		<!-- 在认领任务时, 将同组的指派信息的handleState改为INVALID -->
-		<content name="handleState2Invalid" type="update">
-			update bpm_ru_assignee set handle_state='INVALID' where taskinst_id=#{taskinstId} and handle_state &lt;&gt; 'INVALID' and 
-			<foreach collection="groupIds" alias="groupId" open="group_id in (" separator="," close=")">
-				#{groupId, dataType=number}
-			</foreach> 
+			select id, group_id, chain_id, user_id, handle_state from bpm_hi_assignee where taskinst_id=#{taskinstId} and mode &lt;&gt; 'ASSISTED' and handle_state = 'FINISHED'
 		</content>
 		
 		<!-- 取消认领任务 -->

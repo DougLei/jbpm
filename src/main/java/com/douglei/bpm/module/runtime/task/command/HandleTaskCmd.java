@@ -48,23 +48,17 @@ public class HandleTaskCmd implements Command {
 			// 查询指定userId, 判断其是否有权限办理任务, 以及是否认领了任务
 			List<Assignee> assigneeList = SessionContext.getSqlSession()
 					.query(Assignee.class, 
-							"select id, handle_state from bpm_ru_assignee where taskinst_id=? and user_id=?", 
-							Arrays.asList(taskInstance.getTask().getTaskinstId(), parameter.getUserId()));
+							"select id, handle_state from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state<>?", 
+							Arrays.asList(taskInstance.getTask().getTaskinstId(), parameter.getUserId(), HandleState.INVALID.name()));
 			if(assigneeList.isEmpty())
 				return new ExecutionResult("办理失败, 指定的userId没有["+taskInstance.getName()+"]任务的办理权限");
 			
 			int unClaimNum = 0;
 			for (Assignee assignee : assigneeList) {
-				switch(assignee.getHandleStateInstance()) {
-					case CLAIMED:
-						break;
-					case UNCLAIM:
-					case INVALID:
-						unClaimNum++;
-						continue;
-					case FINISHED:
-						return new ExecutionResult("办理失败, 指定的userId已完成["+taskInstance.getName()+"]任务的办理");
-				}
+				if(assignee.getHandleStateInstance().isClaimed())
+					break;
+				else
+					unClaimNum++;
 			}
 			if(unClaimNum == assigneeList.size())
 				return new ExecutionResult("办理失败, 指定的userId未认领["+taskInstance.getName()+"]任务");

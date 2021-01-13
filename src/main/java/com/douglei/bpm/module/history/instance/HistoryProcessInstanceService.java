@@ -1,7 +1,10 @@
 package com.douglei.bpm.module.history.instance;
 
+import java.util.Arrays;
+
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.runtime.instance.ProcessInstanceHandlePolicy;
+import com.douglei.orm.context.SessionContext;
 
 /**
  * 历史实例服务
@@ -16,8 +19,8 @@ public class HistoryProcessInstanceService {
 	 * @return
 	 */
 	public boolean exists(int processDefinitionId) {
-		// TODO 
-		return false;
+		return Integer.parseInt(
+				SessionContext.getSqlSession().uniqueQuery_("select count(id) from bpm_hi_procinst where procdef_id=?", Arrays.asList(processDefinitionId))[0].toString()) > 0;
 	}
 	
 	/**

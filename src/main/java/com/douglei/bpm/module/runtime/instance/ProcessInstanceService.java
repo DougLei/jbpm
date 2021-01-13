@@ -1,10 +1,13 @@
 package com.douglei.bpm.module.runtime.instance;
 
+import java.util.Arrays;
+
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.CommandExecutor;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.instance.command.StartProcessCmd;
+import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
 
 /**
@@ -77,8 +80,8 @@ public class ProcessInstanceService {
 	 * @return
 	 */
 	public boolean exists(int processDefinitionId) {
-		// TODO 
-		return false;
+		return Integer.parseInt(
+				SessionContext.getSqlSession().uniqueQuery_("select count(id) from bpm_ru_procinst where procdef_id=?", Arrays.asList(processDefinitionId))[0].toString()) > 0;
 	}
 	
 	/**

@@ -125,7 +125,7 @@
 				* order: 操作排序, 可不配置, 默认值为0
 			 -->
 			 <!-- 这几个操作是当前办理时, 可进行的操作 -->
-			<option type="sendCopy" name="抄送" order="">
+			<option type="carbonCopy" name="抄送" order="">
 				<candidate></candidate><!-- 必须配置 -->
 			</option>
 			<option type="delegate" name="委托" order="">

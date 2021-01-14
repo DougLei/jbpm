@@ -12,13 +12,11 @@ public class Assignee {
 	protected int groupId;
 	protected int chainId;
 	private Integer isChainLast;
-	protected Integer forkChainId;
 	protected String userId;
 	protected String remark;
 	protected AssignMode mode;
 	protected HandleState handleState;
 	protected Date claimTime;
-	private long claimTime_;
 	
 	public Assignee() {}
 	public Assignee(String taskinstId, String userId, int groupId, int chainId) {
@@ -74,12 +72,6 @@ public class Assignee {
 	public void setIsChainLast(Integer isChainLast) {
 		this.isChainLast = isChainLast;
 	}
-	public Integer getForkChainId() {
-		return forkChainId;
-	}
-	public void setForkChainId(Integer forkChainId) {
-		this.forkChainId = forkChainId;
-	}
 	public String getUserId() {
 		return userId;
 	}
@@ -107,9 +99,8 @@ public class Assignee {
 	public HandleState getHandleStateInstance() {
 		return handleState;
 	}
-	public Assignee setHandleStateInstance(HandleState handleState) {
+	public void setHandleStateInstance(HandleState handleState) {
 		this.handleState = handleState;
-		return this;
 	}
 	public String getHandleState() {
 		return handleState.name();
@@ -120,13 +111,24 @@ public class Assignee {
 	public Date getClaimTime() {
 		return claimTime;
 	}
-	public Assignee setClaimTime(Date claimTime) {
+	public void setClaimTime(Date claimTime) {
 		this.claimTime = claimTime;
-		return this;
 	}
+	
+	private long claimTime_;
 	public long getClaimTime_() {
 		if(claimTime != null && claimTime_ == 0)
 			claimTime_ = claimTime.getTime();
 		return claimTime_;
+	}
+	
+	/**
+	 * 进行认领
+	 * @param claimTime
+	 */
+	public void claim(Date claimTime) {
+		this.handleState = HandleState.CLAIMED;
+		this.claimTime = claimTime;
+		this.isChainLast=1;
 	}
 }

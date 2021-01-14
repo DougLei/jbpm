@@ -3,6 +3,7 @@ package com.douglei.bpm.process.handler.task.user;
 import java.util.Arrays;
 
 import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
@@ -61,8 +62,8 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 		
 		// 查询当前任务, 已经认领的指派信息数量
 		int claimedAssigneeCount = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(
-				"select count(1) from bpm_ru_assignee where taskinst_id=? and mode <> 'ASSISTED' and handle_state='CLAIMED'", 
-				Arrays.asList(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId()))[0].toString());
+				"select count(id) from bpm_ru_assignee where taskinst_id=? and handle_state=?", 
+				Arrays.asList(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId(), HandleState.CLAIMED.name()))[0].toString());
 		return claimedAssigneeCount == 0;
 	}
 

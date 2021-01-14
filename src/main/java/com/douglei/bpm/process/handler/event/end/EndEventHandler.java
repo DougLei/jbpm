@@ -60,7 +60,7 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 			return true;
 		
 		int taskCount = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(
-				"select count(1) from bpm_ru_task where procinst_id=?", 
+				"select count(id) from bpm_ru_task where procinst_id=?", 
 				Arrays.asList(handleParameter.getProcessInstanceId()))[0].toString());
 		return taskCount == 0;
 	}

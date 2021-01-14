@@ -28,26 +28,15 @@ public class UnclaimTaskCmd implements Command {
 		if(!taskInstance.requiredUserHandle())
 			return new ExecutionResult("取消认领失败, ["+taskInstance.getName()+"]任务不支持用户取消认领");
 		
-		// 查询指定userId, 判断其是否满足取消认领条件
+		// 查询指定userId, 判断其是否可以取消认领
 		List<Assignee> assigneeList = SessionContext.getSqlSession()
 				.query(Assignee.class, 
-						"select id, handle_state from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state<>?", 
-						Arrays.asList(taskInstance.getTask().getTaskinstId(), userId, HandleState.INVALID.name()));
+						"select id from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
+						Arrays.asList(taskInstance.getTask().getTaskinstId(), userId, HandleState.CLAIMED.name()));
 		if(assigneeList.isEmpty())
-			return new ExecutionResult("取消认领失败, 指定的userId没有["+taskInstance.getName()+"]任务的办理权限");
+			return new ExecutionResult("取消认领失败, 指定的userId无法取消认领["+taskInstance.getName()+"]任务");
 		
-		for(int i=0;i<assigneeList.size();i++) {
-			if(assigneeList.get(i).getHandleStateInstance().unClaim())
-				assigneeList.remove(i--);
-		}
-		if(assigneeList.isEmpty())
-			return new ExecutionResult("取消认领失败, 指定的userId未认领["+taskInstance.getName()+"]任务");
-		
-		
-		
-		
-		
-		// TODO 协办, 抄送的相关处理
+		// TODO 抄送的相关处理
 		
 		
 		

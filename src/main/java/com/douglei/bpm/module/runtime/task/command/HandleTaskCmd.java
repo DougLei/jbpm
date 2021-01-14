@@ -6,7 +6,6 @@ import java.util.List;
 import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.runtime.task.AssignMode;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.TaskHandleParameter;
@@ -45,23 +44,12 @@ public class HandleTaskCmd implements Command {
 			if(handlePolicy.isAttitude() && parameter.getAttitude() == null)
 				return new ExecutionResult("办理失败, 办理["+taskInstance.getName()+"]任务, 需要进行表态");
 			
-			// 查询指定userId, 判断其是否有权限办理任务, 以及是否认领了任务
-			List<Assignee> assigneeList = SessionContext.getSqlSession()
-					.query(Assignee.class, 
-							"select id, handle_state from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state<>?", 
-							Arrays.asList(taskInstance.getTask().getTaskinstId(), parameter.getUserId(), HandleState.INVALID.name()));
-			if(assigneeList.isEmpty())
-				return new ExecutionResult("办理失败, 指定的userId没有["+taskInstance.getName()+"]任务的办理权限");
-			
-			int unClaimNum = 0;
-			for (Assignee assignee : assigneeList) {
-				if(assignee.getHandleStateInstance().isClaimed())
-					break;
-				else
-					unClaimNum++;
-			}
-			if(unClaimNum == assigneeList.size())
-				return new ExecutionResult("办理失败, 指定的userId未认领["+taskInstance.getName()+"]任务");
+			// 查询指定userId, 判断其是否可以办理任务
+			int count = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(
+					"select count(id) from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
+					Arrays.asList(taskInstance.getTask().getTaskinstId(), parameter.getUserId(), HandleState.CLAIMED.name()))[0].toString());
+			if(count == 0)
+				return new ExecutionResult("办理失败, 指定的userId无法办理["+taskInstance.getName()+"]任务");
 			
 			// 根据办理策略, 判断当前的userId能否办理
 			int waitForPersonNumber = canHandle(handlePolicy, currentHandleUser, processEngineBeans);
@@ -91,15 +79,14 @@ public class HandleTaskCmd implements Command {
 			// 查询当前任务, 所有认领状态的指派信息
 			List<Assignee> claimedAssigneeList = SessionContext.getSqlSession()
 					.query(Assignee.class, 
-							"select * from bpm_ru_assignee where taskinst_id=? and handle_state=? and mode <> ?", 
-							Arrays.asList(taskInstance.getTask().getTaskinstId(), HandleState.CLAIMED.name(), AssignMode.ASSISTED.name()));
+							"select * from bpm_ru_assignee where taskinst_id=? and handle_state=?", 
+							Arrays.asList(taskInstance.getTask().getTaskinstId(), HandleState.CLAIMED.name()));
 			
 			int count = 0; // 记录是否全部是当前用户的指派信息
 			for (Assignee assignee : claimedAssigneeList) {
-				if(assignee.getUserId().equals(currentHandleUser.getUserId()))
-					count++;
-				else
+				if(!assignee.getUserId().equals(currentHandleUser.getUserId()))
 					break;
+				count++;
 			}
 			
 			if(count == claimedAssigneeList.size())

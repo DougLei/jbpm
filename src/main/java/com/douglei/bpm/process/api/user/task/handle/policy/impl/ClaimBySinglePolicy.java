@@ -13,11 +13,10 @@ import com.douglei.bpm.process.api.user.task.handle.policy.ClaimResult;
  */
 @Bean(clazz = ClaimPolicy.class)
 public class ClaimBySinglePolicy implements ClaimPolicy{
-	public static final String POLICY_NAME = "bySingle";
 	
 	@Override
 	public String getName() {
-		return POLICY_NAME;
+		return "bySingle";
 	}
 
 	@Override

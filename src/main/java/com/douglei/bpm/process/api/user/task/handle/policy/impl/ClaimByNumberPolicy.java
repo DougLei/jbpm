@@ -16,13 +16,14 @@ import com.douglei.bpm.process.parser.task.user.AssignNumberParser;
  */
 @Bean(clazz = ClaimPolicy.class)
 public class ClaimByNumberPolicy implements ClaimPolicy{
+	public static final String POLICY_NAME = "byNumber";
 	
 	@Autowired
 	private AssignNumberParser assignNumberParser; // 语法格式同AssignNumber的格式一致, 所以这里直接进行复用
 	
 	@Override
 	public String getName() {
-		return "byNumber";
+		return POLICY_NAME;
 	}
 	
 	@Override

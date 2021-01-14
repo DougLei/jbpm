@@ -95,16 +95,16 @@
 					* suggest: 表示是否需要强制输入意见; 不区分大小写, 默认值为false; 如果配置值不合法, 则引擎会使用默认值
 					* attitude: 表示是否需要强制表态; 同上 
 					
-					* 可不配置, 默认配置结构为: <handlePolicy></handlePolicy>, 即单人认领, 单人办理模式
+					* 可不配置, 所有配置使用各自的默认值
 				-->
 				<handlePolicy suggest="false" attitude="false">
 					<!-- 
-						认领策略, 只要能认领, 就能办理, 由最后一个办理人决定流程的流转; 可不配置, 默认只有一个人能认领; 如果配置值不合法, 引擎会抛出异常
+						认领策略, 只要能认领, 就能办理, 由最后一个办理人决定流程的流转; 可不配置, 默认策略为: name=byNumber, value=100%
 						* name: 认领策略名称, 区分大小写; 必填; 
 						* value: 认领策略需要的值, 根据具体的策略决定, 是否必填, 以及值的格式
 						
 						* 系统内置的表达式包括: (name <==> value; 没写value的表示不需要填写, 即使填写了也不生效; 否则表示value必须配置)
-						** bySingle <==> , 单个用户办理, 即默认的策略
+						** bySingle <==> , 单个用户办理
 						** byNumber <==> 12%+, 指定数量(百分比)的用户办理, value的写法格式, 参考userTask->candidate->assignPolicy中assignNum属性
 					 -->
 					<claim name="" value=""/>
@@ -126,13 +126,33 @@
 			 -->
 			 <!-- 这几个操作是当前办理时, 可进行的操作 -->
 			<option type="carbonCopy" name="抄送" order="">
-				<candidate></candidate><!-- 必须配置 -->
+				<!-- 
+					必须配置; 没有<handlePolicy>配置项
+					* isDynamic: 可不配置, 默认值为false; 如果值为true, 表示在任务办理结束后, 引擎会自动抄送到表达式指定的所有人; 值为false, 表示需要用户在办理任务时, 手动进行抄送
+					* assignNum: 可指派抄送的人数, 针对isDynamic=false生效; 可不配置, 默认值为100%
+					* 其他配置参考userTask中的配置
+				 -->
+				<candidate>
+					<assignPolicy isDynamic="true/false" assignNum="1">
+						<expression name="" value="" />
+					</assignPolicy>
+				</candidate>
 			</option>
 			<option type="delegate" name="委托" order="">
-				<candidate></candidate><!-- 可不配置, 默认是当前环节指派的候选人 -->
+				<!-- 
+					可不配置, 默认使用当前任务配置的指派策略; 引擎规则限制只能选一个人; 没有<handlePolicy>配置项
+					* 只有以下可配置的内容,  <assignPolicy>中的属性这里如果配置了, 引擎会自动忽略
+					* 其他配置参考userTask中的配置说明
+				-->
+				<candidate>
+					<assignPolicy>
+						<expression name="" value="" />
+					</assignPolicy>
+				</candidate>
 			</option>
 			<option type="transfer" name="转办" order="">
-				<candidate></candidate><!-- 可不配置, 默认是当前环节指派的候选人 -->
+				<!-- 配置参考<option type="delegate">中的指派配置 -->
+				<candidate></candidate>
 			</option>
 			<!-- 
 				流程跳转, 通过设置name可以实现退回起始节点, 退回上一任务等功能

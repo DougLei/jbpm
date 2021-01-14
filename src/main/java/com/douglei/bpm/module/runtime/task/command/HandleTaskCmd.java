@@ -19,7 +19,7 @@ import com.douglei.orm.context.SessionContext;
 import com.douglei.tools.utils.StringUtil;
 
 /**
- * 
+ * 办理任务
  * @author DougLei
  */
 public class HandleTaskCmd implements Command {

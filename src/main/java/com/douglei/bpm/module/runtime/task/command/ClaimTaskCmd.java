@@ -19,7 +19,7 @@ import com.douglei.bpm.process.metadata.task.user.candidate.handle.ClaimPolicyEn
 import com.douglei.orm.context.SessionContext;
 
 /**
- * 
+ * 认领任务
  * @author DougLei
  */
 public class ClaimTaskCmd implements Command{

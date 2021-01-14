@@ -1,12 +1,12 @@
-package com.douglei.bpm.process.handler;
+package com.douglei.bpm.process.handler.event.start;
 
 import java.util.regex.Pattern;
 
 /**
- * 
+ * 标题变量的常量
  * @author DougLei
  */
-public class VariableConstant {
+class TitleVariableConstant {
 	
 	/**
 	 * 变量前缀

@@ -13,9 +13,7 @@
 		2. endEvent具有join功能, 且逻辑同parallelGateway和inclusiveGatewa相同
 		3. 变量的取值配置: 
 			1. 直接使用变量名, 引擎会使用最近范围内的变量值, 如果不存在则返回null; 
-			2. 在变量名前指定取值范围, 引擎会获取指定范围中的变量值, 如果不存在则返回null; 范围前缀: [global.], [local.], [transient.]分别表示全局, 局部, 瞬时三个范围, 区分大小写, 若配置不合法, 则引擎会将前缀作为变量名的一部分, 去获取最近范围内的变量值; 例如 global.name, 表示取全局范围内, 名为name的变量值
-			3. 范围由近到远的顺序为: transient -> local -> global
-			4. 流程配置中, 凡是使用变量名的地方, 均支持使用范围前缀获取变量值
+			2. 范围由近到远的顺序为: transient -> local -> global
 	-->
 	<!-- 
 		工作流配置起点:
@@ -32,9 +30,13 @@
 			* defaultOutputFlow: 默认流出的Flow Id, 可不配置; 当配置了多条线时, 如果线的条件都不满足, 引擎会根据配置的defaultOutputFlow进行流出, 如果没有配置, 引擎会抛出异常
 		-->
 		<startEvent id="startEvent" name="" defaultOutputFlow="">
-			<conditionExpr>
+			<conditionExpression>
+				<!-- 
+					示例: (role == '管理员' || role == 'sa') || role == 'administrator' 
+					示例中的role为流程变量名
+				-->
 				<![CDATA[ 判断表达式, 根据表达式决定是否可以启动流程; 可不配置, 默认结果为true ]]>
-			</conditionExpr>
+			</conditionExpression>
 			
 			<!-- 监听器, 按照配置的顺序依次执行, 可不配置, 默认为null -->
 			<listeners>
@@ -156,25 +158,29 @@
 			</option>
 			<!-- 
 				流程跳转, 通过设置name可以实现退回起始节点, 退回上一任务等功能
-				* target: 要跳转的目标任务id
 			 -->
-			<option type="skip" name="流程跳转" order="" target="">
-				<candidate></candidate><!-- 必须配置 -->
+			<option type="skip" name="流程跳转" order="">
+				<parameter target="" /><!-- 要跳转的目标任务id -->
+				<candidate></candidate><!-- 必须配置, 参考userTask中的配置 -->
 			</option>
 			<option type="tracking" name="流程跟踪" order="" />
 			
 			<!-- 这两个操作是办理提交后, 可进行的操作 -->
-			<!-- 
-				催办
-				* moment: 催办时机的策略名称, 例如在逾期后催办, 在提交的一天后催办等; 可不配置, 默认是在逾期后可进行催办
-			 -->
-			<option type="urging" name="催办" order="" moment="" />
+			<!-- 催办 -->
+			<option type="urging" name="催办" order="">
+				<parameter moment="" /><!-- 催办时机的策略名称, 例如在逾期后催办, 在提交的一天后催办等; 可不配置, 默认是在逾期后可进行催办 -->
+			</option>
 			<!-- 
 				撤回, 当用户提交后, 如果发现提交的有问题, 还可以自主选择撤回, 重新编辑后重新提交
-				* moment: 撤回时机的策略名称, 例如未有人认领时可撤回, 在提交的一小时内可撤回等; 可不配置, 默认是在未有人认领时可撤回
-				* times: 可以撤回的次数, 默认值为0, 配置的值在小于1时, 表示不限制次数; 如果任务被人认领, 则不能撤回
 			 -->
-			<option type="withdraw" name="撤回" order="" moment="" times="0" />
+			<option type="withdraw" name="撤回" order="" >
+				<!-- 
+					* moment: 撤回时机的策略名称, 例如未有人认领时可撤回, 在提交的一小时内可撤回等; 可不配置, 默认是在未有人认领时可撤回; 配置不合法时, 引擎会抛出异常
+					* times: 可以撤回的次数, 默认值为0, 配置的值在小于1时, 表示不限制次数; 如果任务被人认领, 则不能撤回; 配置不合法时, 引擎会抛出异常
+					* reason: 是否需要输入撤回原因, 默认值为false; 配置不合法时, 使用默认值
+				 -->
+				<parameter moment="" times="0" reason="true/false"/>
+			</option>
 			
 			<listeners></listeners><!-- 参考startEvent中的listeners配置 -->
 			<!-- 流程挂起, 终止, 激活, 重置等功能, 均放到流程实例管理界面, 由流程管理员操作 -->
@@ -224,9 +230,9 @@
 			* target: 下一个任务的id
 		 -->
 		<flow id="flow1" name="" order="0, 排序值, 默认为0" source="startEvent1" target="userTask1">
-			<conditionExpr>
+			<conditionExpression>
 				<![CDATA[ 判断表达式, 根据表达式决定是否可以从该flow流出; 可不配置, 默认结果为true ]]>
-			</conditionExpr>
+			</conditionExpression>
 			<listeners></listeners><!-- 参考startEvent中的listeners配置 -->
 		</flow>
 		
@@ -240,7 +246,7 @@
 		<!-- SQL脚本任务 -->
 		<sqlTask id="sqlTask1" name=""></sqlTask>
 		<!-- 定时任务 -->
-		<timerTask id="timerTask1" name="" cronExpr=""></timerTask>
+		<timerTask id="timerTask1" name="" cronExpression=""></timerTask>
 		<!-- 邮件任务 -->
 		<emailTask id="emailTask1" name=""></emailTask>
 	</process>

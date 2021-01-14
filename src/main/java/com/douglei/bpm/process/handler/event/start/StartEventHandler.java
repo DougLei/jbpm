@@ -2,6 +2,7 @@ package com.douglei.bpm.process.handler.event.start;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 
 import com.douglei.bpm.module.ExecutionResult;
@@ -11,11 +12,11 @@ import com.douglei.bpm.module.runtime.instance.ProcessInstance;
 import com.douglei.bpm.module.runtime.instance.ProcessInstanceState;
 import com.douglei.bpm.module.runtime.variable.Variable;
 import com.douglei.bpm.process.handler.TaskHandler;
-import com.douglei.bpm.process.handler.VariableConstant;
 import com.douglei.bpm.process.handler.VariableEntities;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.metadata.event.StartEventMetadata;
 import com.douglei.orm.context.SessionContext;
+import com.douglei.tools.instances.ognl.OgnlHandler;
 
 /**
  * 
@@ -25,8 +26,12 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 
 	@Override
 	public ExecutionResult startup() {
-//		if(OgnlHandler.getSingleton().getBooleanValue(startEvent.getConditionExpr(), parameter.getStartParameter().getProcessVariableMapHolder().getVariableMap()))
-//			return new ExecutionResult("启动失败, 不满足启动条件");
+		String startConditionExpression = currentTaskMetadataEntity.getTaskMetadata().getConditionExpression();
+		if(startConditionExpression != null) {
+			Map<String, Object> variableMap = handleParameter.getVariableEntities().getVariableMap();
+			if(variableMap == null || !OgnlHandler.getSingleton().getBooleanValue(startConditionExpression, variableMap))
+				return new ExecutionResult("启动失败, 当前参数不满足["+handleParameter.getProcessMetadata().getName()+"]流程的启动条件");
+		}
 		return handle();
 	}
 	
@@ -54,7 +59,7 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		ProcessInstance instance = new ProcessInstance();
 		instance.setProcdefId(processMetadata.getId());
 		instance.setProcinstId(handleParameter.getProcessInstanceId());
-		instance.setTitle(getTitle(processMetadata.getTitle(), handleParameter.getVariableEntities()));
+		instance.setTitle(getTitle(processMetadata.getTitle(), handleParameter.getVariableEntities().getVariableMap()));
 		instance.setBusinessId(handleParameter.getBusinessId());
 		instance.setPageId(processMetadata.getPageID());
 		instance.setStartUserId(handleParameter.getUserId());
@@ -67,14 +72,14 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 	}
 	
 	// 获取标题
-	private String getTitle(String title, VariableEntities variableEntities) {
-		if(title.indexOf(VariableConstant.PREFIX) == -1)
+	private String getTitle(String title, Map<String, Object> variableMap) {
+		if(variableMap == null || title.indexOf(TitleVariableConstant.PREFIX) == -1)
 			return title;
 		
 		List<String> variableNames = null; // 存储标题中的变量名
 		String tempVariableName = null;
-		Matcher prefixMatcher = VariableConstant.PREFIX_REGEX_PATTERN.matcher(title);
-		Matcher suffixMatcher = VariableConstant.SUFFIX_REGEX_PATTERN.matcher(title);
+		Matcher prefixMatcher = TitleVariableConstant.PREFIX_REGEX_PATTERN.matcher(title);
+		Matcher suffixMatcher = TitleVariableConstant.SUFFIX_REGEX_PATTERN.matcher(title);
 		while(prefixMatcher.find()) {
 			if(!suffixMatcher.find())
 				break;
@@ -91,9 +96,9 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		
 		Object value = null;
 		for (String variableName : variableNames) {
-			value = variableEntities.getValue(variableName);
+			value = OgnlHandler.getSingleton().getObjectValue(variableName, variableMap);;
 			if(value != null)
-				title = title.replaceAll(VariableConstant.PREFIX_4_REGEX + variableName + VariableConstant.SUFFIX, value.toString());
+				title = title.replaceAll(TitleVariableConstant.PREFIX_4_REGEX + variableName + TitleVariableConstant.SUFFIX, value.toString());
 		}
 		return title;
 	}

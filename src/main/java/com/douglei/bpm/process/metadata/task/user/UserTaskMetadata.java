@@ -7,7 +7,7 @@ import com.douglei.bpm.process.api.listener.Listener;
 import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.bpm.process.metadata.TimeLimit;
 import com.douglei.bpm.process.metadata.task.user.candidate.Candidate;
-import com.douglei.bpm.process.metadata.task.user.option.OptionEntity;
+import com.douglei.bpm.process.metadata.task.user.option.OptionMetadata;
 
 /**
  * 
@@ -17,7 +17,7 @@ public class UserTaskMetadata extends TaskMetadata {
 	private String pageID;
 	private TimeLimit timeLimit;
 	private Candidate candidate;
-	private List<OptionEntity> optionEntities;
+	private List<OptionMetadata> optionEntities;
 	private List<Listener> listeners;
 	
 	public UserTaskMetadata(String id, String name, String defaultOutputFlowId, String pageID, TimeLimit timeLimit, Candidate candidate) {
@@ -30,11 +30,11 @@ public class UserTaskMetadata extends TaskMetadata {
 	public Candidate getCandidate() {
 		return candidate;
 	}
-	public OptionEntity getOptionEntity(String optionType) {
+	public OptionMetadata getOptionEntity(String optionType) {
 		if(optionEntities == null)
 			return null;
 		
-		for (OptionEntity optionEntity : optionEntities) {
+		for (OptionMetadata optionEntity : optionEntities) {
 			if(optionEntity.getType().equals(optionType))
 				return optionEntity;
 		}

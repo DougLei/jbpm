@@ -9,7 +9,6 @@ import com.douglei.bpm.process.parser.GeneralParser;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.bpm.process.parser.tmp.data.FlowTemporaryData;
-import com.douglei.tools.utils.StringUtil;
 import com.douglei.tools.utils.datatype.VerifyTypeMatchUtil;
 
 /**
@@ -28,26 +27,18 @@ public class FlowParser extends GeneralParser implements Parser<FlowTemporaryDat
 		if(VerifyTypeMatchUtil.isInteger(orderValue))
 			order = Integer.parseInt(orderValue);
 		
-		// TODO 具体的条件写法还有待调整
-		String conditionExpr = null;
-		Element conditionExprElement = element.element("conditionExpr");
-		if(conditionExprElement != null) {
-			String tmp = conditionExprElement.getTextTrim();
-			if(StringUtil.notEmpty(tmp))
-				conditionExpr = tmp.substring(2, tmp.length()-1);
-		}
 		FlowMetadata metadata = new FlowMetadata(
 				temporaryData.getId(), 
 				element.attributeValue("name"), 
 				temporaryData.getSource(), 
 				temporaryData.getTarget(), 
 				order, 
-				conditionExpr);
+				parseConditionExpression(element.element("conditionExpression")));
 		
 		addListener(metadata, element.element("listeners"));
 		return metadata;
 	}
-
+	
 	@Override
 	public Type getType() {
 		return Type.FLOW;

@@ -16,7 +16,6 @@ import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.bpm.process.metadata.TaskMetadataEntity;
 import com.douglei.bpm.process.metadata.flow.FlowMetadata;
 import com.douglei.tools.instances.ognl.OgnlHandler;
-import com.douglei.tools.utils.StringUtil;
 
 /**
  * 任务办理工具
@@ -114,12 +113,12 @@ public class TaskHandleUtil {
 	 * @return 
 	 */
 	public boolean flowMatching(FlowMetadata flowMetadata, Map<String, Object> variableMap) {
-		String conditionExpr = flowMetadata.getConditionExpr();
-		if(StringUtil.isEmpty(conditionExpr))
+		String conditionExpression = flowMetadata.getConditionExpression();
+		if(conditionExpression == null)
 			return true;
-		if(variableMap == null) // TODO 有待调整, 具体看后续条件表达式的写法定
+		if(variableMap == null) 
 			return false;
-		return OgnlHandler.getSingleton().getBooleanValue(conditionExpr, variableMap);
+		return OgnlHandler.getSingleton().getBooleanValue(conditionExpression, variableMap);
 	}
 	
 	/**

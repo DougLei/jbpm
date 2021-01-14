@@ -11,14 +11,14 @@ public class FlowMetadata extends ProcessNodeMetadata{
 	private String source;
 	private String target;
 	private int order;
-	private String conditionExpr;
+	private String conditionExpression;
 	
-	public FlowMetadata(String id, String name, String source, String target, int order, String conditionExpr) {
+	public FlowMetadata(String id, String name, String source, String target, int order, String conditionExpression) {
 		super(id, name);
 		this.source = source;
 		this.target = target;
 		this.order = order;
-		this.conditionExpr = conditionExpr;
+		this.conditionExpression = conditionExpression;
 	}
 	
 	public String getSource() {
@@ -30,8 +30,8 @@ public class FlowMetadata extends ProcessNodeMetadata{
 	public int getOrder() {
 		return order;
 	}
-	public String getConditionExpr() {
-		return conditionExpr;
+	public String getConditionExpression() {
+		return conditionExpression;
 	}
 
 	@Override

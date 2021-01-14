@@ -24,7 +24,7 @@ public class StartEventParser extends GeneralParser implements Parser<TaskTempor
 				temporaryData.getId(), 
 				element.attributeValue("name"), 
 				element.attributeValue("defaultOutputFlow"), 
-				element.attributeValue("conditionExpr"));
+				parseConditionExpression(element.element("conditionExpression")));
 		
 		addListener(metadata, element.element("listeners"));
 		return metadata;

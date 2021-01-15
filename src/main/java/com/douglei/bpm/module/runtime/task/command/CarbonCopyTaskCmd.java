@@ -1,30 +1,31 @@
 package com.douglei.bpm.module.runtime.task.command;
 
+import java.util.List;
+
 import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
 
 /**
- * 委托任务
+ * 抄送
  * @author DougLei
  */
-public class DelegateTaskCmd implements Command {
+public class CarbonCopyTaskCmd implements Command {
 	private TaskInstance taskInstance;
-	private String userId; // 发起委托的人id
-	private String assignedUserId; // 接受委托的人id
+	private String userId; // 发起抄送的人id
+	private List<String> assignedUserIds; // 接受抄送的人id集合
 	
-	public DelegateTaskCmd(TaskInstance taskInstance, String userId, String assignedUserId) {
+	public CarbonCopyTaskCmd(TaskInstance taskInstance, String userId, List<String> assignedUserIds) {
 		this.taskInstance = taskInstance;
 		this.userId = userId;
-		this.assignedUserId = assignedUserId;
+		this.assignedUserIds = assignedUserIds;
 	}
 
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		
-		// 有没有认领任务
-		// 被委托的人在不在
+		
 		
 		
 		

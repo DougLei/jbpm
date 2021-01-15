@@ -11,5 +11,4 @@ public class TransferTaskCmd extends DelegateTaskCmd {
 	public TransferTaskCmd(TaskInstance taskInstance, String userId, String assignedUserId) {
 		super(taskInstance, userId, assignedUserId);
 	}
-
 }

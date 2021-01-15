@@ -1,9 +1,12 @@
 package com.douglei.bpm.module.runtime.task;
 
+import java.util.List;
+
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.CommandExecutor;
 import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.runtime.task.command.CarbonCopyTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.ClaimTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.DelegateTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.HandleTaskCmd;
@@ -147,6 +150,28 @@ public class TaskService {
 	}
 	
 	
-	// TODO 还未实现的方法
-	// 抄送
+	/**
+	 * 抄送指定id的任务
+	 * @param taskId
+	 * @param userId 发起抄送的人id
+	 * @param assignedUserIds 接受抄送的人id集合
+	 * @return 
+	 */
+	@Transaction
+	public ExecutionResult carbonCopy(int taskId, String userId, List<String> assignedUserIds) {
+		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
+		return commandExecutor.execute(new CarbonCopyTaskCmd(taskInstance, userId, assignedUserIds));
+	}
+	/**
+	 * 抄送指定id的任务
+	 * @param taskinstId
+	 * @param userId 发起抄送的人id
+	 * @param assignedUserIds 接受抄送的人id集合
+	 * @return 
+	 */
+	@Transaction
+	public ExecutionResult carbonCopy(String taskinstId, String userId, List<String> assignedUserIds) {
+		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
+		return commandExecutor.execute(new CarbonCopyTaskCmd(taskInstance, userId, assignedUserIds));
+	}
 }

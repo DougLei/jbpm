@@ -22,11 +22,10 @@ import com.douglei.tools.utils.StringUtil;
  * 办理任务
  * @author DougLei
  */
-public class HandleTaskCmd implements Command {
-	private TaskInstance taskInstance;
+public class HandleTaskCmd extends GeneralTaskCmd implements Command {
 	private TaskHandleParameter parameter;
 	public HandleTaskCmd(TaskInstance taskInstance, TaskHandleParameter parameter) {
-		this.taskInstance = taskInstance;
+		super(taskInstance);
 		this.parameter = parameter;
 	}
 
@@ -45,10 +44,7 @@ public class HandleTaskCmd implements Command {
 				return new ExecutionResult("办理失败, 办理["+taskInstance.getName()+"]任务, 需要进行表态");
 			
 			// 查询指定userId, 判断其是否可以办理任务
-			int count = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(
-					"select count(id) from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
-					Arrays.asList(taskInstance.getTask().getTaskinstId(), parameter.getUserId(), HandleState.CLAIMED.name()))[0].toString());
-			if(count == 0)
+			if(!isClaimed(parameter.getUserId()))
 				return new ExecutionResult("办理失败, 指定的userId无法办理["+taskInstance.getName()+"]任务");
 			
 			// 根据办理策略, 判断当前的userId能否办理

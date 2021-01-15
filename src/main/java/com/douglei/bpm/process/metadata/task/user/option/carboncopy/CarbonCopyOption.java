@@ -8,7 +8,7 @@ import com.douglei.bpm.process.metadata.task.user.option.Option;
  * @author DougLei
  */
 public class CarbonCopyOption extends Option {
-	protected Candidate candidate;
+	private Candidate candidate;
 	
 	public CarbonCopyOption(String type, String name, int order, Candidate candidate) {
 		super(type, name, order);

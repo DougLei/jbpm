@@ -12,11 +12,4 @@ public class DelegateOption extends CarbonCopyOption {
 	public DelegateOption(String type, String name, int order, Candidate candidate) {
 		super(type, name, order, candidate);
 	}
-	
-	@Override
-	public Candidate getCandidate() {
-		// TODO 可为null, null时取所属userTask中配置的候选人
-		
-		return candidate;
-	}
 }

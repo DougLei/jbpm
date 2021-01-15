@@ -39,6 +39,26 @@ public class AssignNumber implements Serializable{
 		return ceiling;
 	}
 	
+	/**
+	 * 计算上限
+	 * @param totalCount (可有的)总数量
+	 * @return
+	 */
+	public int calcUpperLimit(int totalCount) {
+		if(percent) {
+			int upperLimit = totalCount*number;
+			if(upperLimit%100>0 && ceiling) {
+				upperLimit = upperLimit/100+1;
+			}else {
+				upperLimit = upperLimit/100;
+			}
+			if(upperLimit == 0)
+				return 1;
+			return upperLimit;
+		}
+		return number;
+	}
+	
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + " [number=" + number + ", percent=" + percent + ", ceiling=" + ceiling + "]";

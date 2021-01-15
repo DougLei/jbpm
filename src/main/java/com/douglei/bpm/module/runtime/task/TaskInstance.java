@@ -39,6 +39,10 @@ public class TaskInstance {
 	public TaskMetadataEntity<? extends TaskMetadata> getTaskMetadataEntity() {
 		return taskMetadataEntity;
 	}
+	/**
+	 * 获取配置的任务name
+	 * @return
+	 */
 	public String getName() {
 		return taskMetadataEntity.getTaskMetadata().getName();
 	}

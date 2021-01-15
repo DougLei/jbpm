@@ -14,12 +14,12 @@ public class UserBean {
 	}
 	
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		return userId.hashCode();
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
+	public final boolean equals(Object obj) {
 		if(obj == null)
 			return false;
 		if(this == obj)

@@ -33,7 +33,7 @@ public class ClaimByNumberPolicy implements ClaimPolicy{
 
 	@Override
 	public ClaimResult claimValidate(String value, String currentClaimUserId, List<Assignee> unclaimAssigneeList, List<Assignee> claimedAssigneeList, List<Assignee> finishedAssigneeList) {
-		int claimUpperLimit = calc(assignNumberParser.parse(value), unclaimAssigneeList, claimedAssigneeList, finishedAssigneeList);
+		int claimUpperLimit = calcUpperLimit(assignNumberParser.parse(value), unclaimAssigneeList, claimedAssigneeList, finishedAssigneeList);
 		
 		// 获得已经认领的数量
 		int claimedCount = 0; 
@@ -58,7 +58,7 @@ public class ClaimByNumberPolicy implements ClaimPolicy{
 	}
 	
 	// 计算可认领的数量上限
-	private int calc(AssignNumber number, List<Assignee> unclaimAssigneeList, List<Assignee> claimedAssigneeList, List<Assignee> finishedAssigneeList) {
+	private int calcUpperLimit(AssignNumber number, List<Assignee> unclaimAssigneeList, List<Assignee> claimedAssigneeList, List<Assignee> finishedAssigneeList) {
 		if(!number.isPercent())
 			return number.getNumber();
 		
@@ -68,14 +68,6 @@ public class ClaimByNumberPolicy implements ClaimPolicy{
 		if(finishedAssigneeList != null)
 			total += finishedAssigneeList.size();
 		
-		int upperLimit = total*number.getNumber();
-		if(upperLimit%100 > 0 && number.isCeiling()) {
-			upperLimit = upperLimit/100 + 1;
-		}else {
-			upperLimit = upperLimit/100;
-		}
-		if(upperLimit == 0)
-			upperLimit = 1;
-		return upperLimit;
+		return number.calcUpperLimit(total);
 	}
 }

@@ -1,9 +1,6 @@
 package com.douglei.bpm.process.handler.task.user.assignee.startup;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 
 /**
  * 指派人委托查询条件
@@ -13,10 +10,9 @@ public class SqlCondition {
 	private long currentTime;
 	private List<String> userIds;
 	
-	SqlCondition(List<UserBean> assignedUsers) {
+	public SqlCondition(List<String> assignedUserIds) {
 		this.currentTime = System.currentTimeMillis();
-		this.userIds = new ArrayList<String>(assignedUsers.size());
-		assignedUsers.forEach(assignedUser -> this.userIds.add(assignedUser.getUserId()));
+		this.userIds = assignedUserIds;
 	}
 
 	public long getCurrentTime() {

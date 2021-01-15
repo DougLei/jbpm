@@ -18,7 +18,7 @@ public class TransferOptionHandler extends DelegateOptionHandler {
 	}
 
 	@Override
-	protected Option createOption(String name, int order, Candidate candidate) {
-		return new TransferOption(TYPE, name, order, candidate);
+	protected Option createOption(String name, int order, boolean reasonIsRequired, Candidate candidate) {
+		return new TransferOption(TYPE, name, order, reasonIsRequired, candidate);
 	}
 }

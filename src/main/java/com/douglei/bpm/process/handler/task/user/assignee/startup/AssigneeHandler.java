@@ -76,10 +76,10 @@ public class AssigneeHandler {
 	 */
 	public void save(String taskinstId, UserTaskMetadata currentUserTaskMetadata) throws TaskHandleException{
 		// 查询指派用户的委托数据, 将处理后的指派数据保存到运行表
-		SqlCondition condition = new SqlCondition(assignedUsers);
-		DelegationHandler delegationHandler = new DelegationHandler(
-				SessionContext.getSQLSession().query(DelegationInfo.class, "Assignee", "queryDelegations", condition), 
-				condition, code, version);
+		List<String> assignedUserIds = new ArrayList<String>(assignedUsers.size());
+		assignedUsers.forEach(user -> assignedUserIds.add(user.getUserId()));
+		
+		DelegationHandler delegationHandler = new DelegationHandler(code, version, new SqlCondition(assignedUserIds));
 		
 		boolean isStaticAssign = !currentUserTaskMetadata.getCandidate().getAssignPolicy().isDynamic(); // 是否静态指派
 		List<Assignee> assigneeList = new ArrayList<Assignee>(assignedUsers.size() + 5); // +5是备用的长度

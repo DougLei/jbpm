@@ -13,7 +13,7 @@ public class Assignee {
 	protected int chainId;
 	private Integer isChainLast;
 	protected String userId;
-	protected String remark;
+	protected String reason;
 	protected AssignMode mode;
 	protected HandleState handleState;
 	protected Date claimTime;
@@ -78,11 +78,11 @@ public class Assignee {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getRemark() {
-		return remark;
+	public String getReason() {
+		return reason;
 	}
-	public void setRemark(String remark) {
-		this.remark = remark;
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 	public AssignMode getModeInstance() {
 		return mode;
@@ -130,5 +130,14 @@ public class Assignee {
 		this.handleState = HandleState.CLAIMED;
 		this.claimTime = claimTime;
 		this.isChainLast=1;
+	}
+	/**
+	 * 进行委托
+	 * @param targetHandleState
+	 */
+	public void delegate(HandleState targetHandleState) {
+		this.handleState = targetHandleState;
+		this.claimTime = null;
+		this.isChainLast = null;
 	}
 }

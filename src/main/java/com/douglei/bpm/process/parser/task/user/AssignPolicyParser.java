@@ -89,7 +89,7 @@ public class AssignPolicyParser {
 			throw new ProcessParseException(String.format("<userTask id=%s name=%s>%s<assignPolicy><expression>的name属性值[%s]不合法", id, name, struct, expressionName));
 		
 		String expressionValue = null;
-		if(assignUserExpression.isValueRequired()) {
+		if(assignUserExpression.valueIsRequired()) {
 			expressionValue = element.attributeValue("value");
 			if(StringUtil.isEmpty(expressionValue))
 				throw new ProcessParseException(String.format("<userTask id=%s name=%s>%s<assignPolicy><expression>的value属性值不能为空", id, name, struct));

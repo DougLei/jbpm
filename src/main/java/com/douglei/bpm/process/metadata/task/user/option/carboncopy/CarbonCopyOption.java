@@ -1,6 +1,7 @@
 package com.douglei.bpm.process.metadata.task.user.option.carboncopy;
 
 import com.douglei.bpm.process.metadata.task.user.candidate.Candidate;
+import com.douglei.bpm.process.metadata.task.user.option.ActiveTime;
 import com.douglei.bpm.process.metadata.task.user.option.Option;
 
 /**
@@ -21,5 +22,10 @@ public class CarbonCopyOption extends Option {
 	 */
 	public Candidate getCandidate() {
 		return candidate;
+	}
+
+	@Override
+	public ActiveTime getActiveTime() {
+		return ActiveTime.TASK_HANDLING;
 	}
 }

@@ -47,4 +47,11 @@ public abstract class Option implements Serializable{
 	public int getOrder() {
 		return order;
 	}
+	/**
+	 * 获取option的活动时间段
+	 * <p>
+	 * 即当前的option在什么时间段内有效
+	 * @return
+	 */
+	public abstract ActiveTime getActiveTime();
 }

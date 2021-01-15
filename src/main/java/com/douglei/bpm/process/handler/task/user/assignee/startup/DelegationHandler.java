@@ -16,15 +16,12 @@ import com.douglei.orm.context.SessionContext;
  * 委托信息处理器
  * @author DougLei
  */
-class DelegationHandler {
-	// TODO 如果出现循环依赖, 要即时抛出异常, 否则系统会出现死循环！！！！！
-	
-	
-	
+public class DelegationHandler {
 	private Map<String, Delegation> map; // 指派和委托的映射map, <指派的用户id, 委托的用户id>
 	private DelegationHandler children;
 
-	public DelegationHandler(List<DelegationInfo> list, SqlCondition condition, String processCode, String processVersion) throws TaskHandleException{
+	public DelegationHandler(String processCode, String processVersion, SqlCondition condition) throws TaskHandleException{
+		List<DelegationInfo> list = SessionContext.getSQLSession().query(DelegationInfo.class, "Assignee", "queryDelegations", condition);
 		if(list.isEmpty())
 			return;
 		
@@ -58,7 +55,7 @@ class DelegationHandler {
 		
 		if(this.map != null) { // 证明有委托, 递归去查询是否还有二次委托 
 			condition.updateUserIds(assigneeUserIds);
-			this.children = new DelegationHandler(SessionContext.getSQLSession().query(DelegationInfo.class, "Assignee", "queryDelegations", condition), condition, processCode, processVersion);
+			this.children = new DelegationHandler(processCode, processVersion, condition);
 		}
 	}
 
@@ -67,18 +64,17 @@ class DelegationHandler {
 	 * @param taskinstId
 	 * @param groupId
 	 * @param chainId
-	 * @param parentAssigneeUserId
 	 * @param assigneeUserId
-	 * @param remark 记录委托的原因
+	 * @param reason 记录委托的原因
 	 * @param isStaticAssign 是否是静态指派
 	 * @param assigneeList
 	 */
-	public void addAssignee(String taskinstId, int groupId, int chainId, String assigneeUserId, String remark, boolean isStaticAssign, List<Assignee> assigneeList) {
+	public void addAssignee(String taskinstId, int groupId, int chainId, String assigneeUserId, String reason, boolean isStaticAssign, List<Assignee> assigneeList) {
 		Assignee assignee = new Assignee(taskinstId, assigneeUserId, groupId, chainId);
 		if(isStaticAssign) {
 			assignee.setModeInstance(AssignMode.STATIC);
 		} else if(chainId > 0) {
-			assignee.setRemark(remark);
+			assignee.setReason(reason);
 			assignee.setModeInstance(AssignMode.DELEGATED);
 		}
 		assigneeList.add(assignee);
@@ -94,7 +90,7 @@ class DelegationHandler {
 		}
 		
 		assignee.setHandleStateInstance(HandleState.COMPETITIVE_UNCLAIM);
-		children.addAssignee(taskinstId, groupId, chainId+1, delegation.getUserId(), delegation.getRemark(), false, assigneeList);
+		children.addAssignee(taskinstId, groupId, chainId+1, delegation.getUserId(), delegation.getReason(), false, assigneeList);
 	}
 }
 
@@ -119,9 +115,8 @@ class MultiDelegation {
 	// 是否要委托, 返回委托的用户id
 	public Delegation isDelegate(String processCode, String processVersion) {
 		for(Delegation delegation : delegationMap.values()) {
-			if(delegation.isDelegate(processCode, processVersion)) {
+			if(delegation.isDelegate(processCode, processVersion)) 
 				return delegation;
-			}
 		}
 		return null;
 	}
@@ -133,18 +128,18 @@ class MultiDelegation {
  */
 class Delegation {
 	private String userId; // 被委托的用户id
-	private String remark;
+	private String reason;
 	private List<DelegationProcess> details; // 具体委托的流程集合
 	
-	public Delegation(String userId, String remark) {
+	public Delegation(String userId, String reason) {
 		this.userId = userId;
-		this.remark = remark;
+		this.reason = reason;
 	}
 	public String getUserId() {
 		return userId;
 	}
-	public String getRemark() {
-		return remark;
+	public String getReason() {
+		return reason;
 	}
 
 	// 添加具体的委托流程

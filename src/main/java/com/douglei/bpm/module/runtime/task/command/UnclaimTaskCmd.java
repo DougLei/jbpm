@@ -57,8 +57,8 @@ public class UnclaimTaskCmd implements Command {
 		
 		// 处理task的isAllClaimed字段值, 改为没有全部认领
 		if(taskInstance.getTask().isAllClaimed())
-			SessionContext.getSqlSession().executeUpdate("update bpm_ru_task set is_all_claimed=0 where taskinst_id=?", Arrays.asList(taskInstance.getTask().getTaskinstId()));
-		return null;
+			SessionContext.getSqlSession().executeUpdate("update bpm_ru_task set is_all_claimed=null where taskinst_id=?", Arrays.asList(taskInstance.getTask().getTaskinstId()));
+		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	
 	private boolean existsCC; // 是否有抄送

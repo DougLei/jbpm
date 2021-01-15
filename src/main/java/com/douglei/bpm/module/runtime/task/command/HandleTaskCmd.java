@@ -22,7 +22,7 @@ import com.douglei.tools.utils.StringUtil;
  * 办理任务
  * @author DougLei
  */
-public class HandleTaskCmd extends GeneralTaskCmd implements Command {
+public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 	private TaskHandleParameter parameter;
 	public HandleTaskCmd(TaskInstance taskInstance, TaskHandleParameter parameter) {
 		super(taskInstance);

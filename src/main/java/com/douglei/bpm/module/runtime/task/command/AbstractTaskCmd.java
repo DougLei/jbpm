@@ -10,11 +10,10 @@ import com.douglei.orm.context.SessionContext;
  * 
  * @author DougLei
  */
-abstract class GeneralTaskCmd {
+abstract class AbstractTaskCmd {
 	protected TaskInstance taskInstance;
 	
-	protected GeneralTaskCmd() {}
-	public GeneralTaskCmd(TaskInstance taskInstance) {
+	public AbstractTaskCmd(TaskInstance taskInstance) {
 		this.taskInstance = taskInstance;
 	}
 

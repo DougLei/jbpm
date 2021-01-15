@@ -23,11 +23,13 @@ import com.douglei.orm.context.SessionContext;
  * 抄送
  * @author DougLei
  */
-public class CarbonCopyTaskCmd extends GeneralTaskCmd implements Command {
+public class CarbonCopyTaskCmd extends AbstractTaskCmd implements Command {
 	private String userId; // 发起抄送的用户id
 	private List<String> assignedUserIds; // 接受抄送的用户id集合
 	
-	public CarbonCopyTaskCmd() {}
+	public CarbonCopyTaskCmd() {
+		super(null);
+	}
 	public CarbonCopyTaskCmd(TaskInstance taskInstance, String userId, List<String> assignedUserIds) {
 		super(taskInstance);
 		this.userId = userId;

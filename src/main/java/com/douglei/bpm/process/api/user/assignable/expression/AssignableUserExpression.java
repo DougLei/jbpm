@@ -35,7 +35,7 @@ public interface AssignableUserExpression {
 	 * 当值为true时, 引擎在解析表达式时, 会取配置的value值, 并验证是否为空; 反之引擎会忽略value值
 	 * @return
 	 */
-	default boolean isValueRequired() {
+	default boolean valueIsRequired() {
 		return true;
 	}
 	

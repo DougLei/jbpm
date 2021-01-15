@@ -140,6 +140,7 @@
 				</candidate>
 			</option>
 			<option type="delegate" name="委托" order="">
+				<parameter reason="true/false" /><!-- 是否要输入原因, 默认值为false -->
 				<!-- 
 					可不配置, 默认使用当前任务配置的指派策略; 引擎规则限制只能选一个人; 没有<handlePolicy>配置项
 					* 只有以下可配置的内容,  <assignPolicy>中的属性这里如果配置了, 引擎会自动忽略
@@ -152,7 +153,8 @@
 				</candidate>
 			</option>
 			<option type="transfer" name="转办" order="">
-				<!-- 配置参考<option type="delegate">中的指派配置 -->
+				<!-- 配置参考<option type="delegate">中的配置 -->
+				<parameter reason="" />
 				<candidate></candidate>
 			</option>
 			<!-- 

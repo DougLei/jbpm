@@ -105,24 +105,26 @@ public class TaskService {
 	 * @param taskId
 	 * @param userId 发起委托的用户id
 	 * @param assignedUserId 接受委托的用户id
+	 * @param reason 原因
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult delegate(int taskId, String userId, String assignedUserId) {
+	public ExecutionResult delegate(int taskId, String userId, String assignedUserId, String reason) {
 		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
-		return commandExecutor.execute(new DelegateTaskCmd(taskInstance, userId, assignedUserId));
+		return commandExecutor.execute(new DelegateTaskCmd(taskInstance, userId, assignedUserId, reason));
 	}
 	/**
 	 * 委托指定id的任务
 	 * @param taskinstId
 	 * @param userId 发起委托的用户id
 	 * @param assignedUserId 接受委托的用户id
+	 * @param reason 原因
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult delegate(String taskinstId, String userId, String assignedUserId) {
+	public ExecutionResult delegate(String taskinstId, String userId, String assignedUserId, String reason) {
 		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
-		return commandExecutor.execute(new DelegateTaskCmd(taskInstance, userId, assignedUserId));
+		return commandExecutor.execute(new DelegateTaskCmd(taskInstance, userId, assignedUserId, reason));
 	}
 	
 	/**
@@ -130,24 +132,26 @@ public class TaskService {
 	 * @param taskId
 	 * @param userId 发起转办的用户id
 	 * @param assignedUserId 接受转办的用户id
+	 * @param reason 原因
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult transfer(int taskId, String userId, String assignedUserId) {
+	public ExecutionResult transfer(int taskId, String userId, String assignedUserId, String reason) {
 		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
-		return commandExecutor.execute(new TransferTaskCmd(taskInstance, userId, assignedUserId));
+		return commandExecutor.execute(new TransferTaskCmd(taskInstance, userId, assignedUserId, reason));
 	}
 	/**
 	 * 转办指定id的任务
 	 * @param taskinstId
 	 * @param userId 发起转办的用户id
 	 * @param assignedUserId 接受转办的用户id
+	 * @param reason 原因
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult transfer(String taskinstId, String userId, String assignedUserId) {
+	public ExecutionResult transfer(String taskinstId, String userId, String assignedUserId, String reason) {
 		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
-		return commandExecutor.execute(new TransferTaskCmd(taskInstance, userId, assignedUserId));
+		return commandExecutor.execute(new TransferTaskCmd(taskInstance, userId, assignedUserId, reason));
 	}
 	
 	/**

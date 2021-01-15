@@ -35,6 +35,13 @@
 			</foreach>
 		</content>
 		
+		<!-- 放弃任务(委托或转办) -->
+		<content name="giveupTask" type="update">
+			update bpm_ru_assignee set handle_state=#{handleState}, claim_time=null, is_chain_last=null where 
+			<foreach collection="assigneeList" alias="assignee" open="id in (" separator="," close=")">
+				#{assignee.id, dataType=number}
+			</foreach>
+		</content>
 		
 		<!-- 根据id删除指派信息 -->
 		<content name="deleteByIds" type="delete">

@@ -11,8 +11,16 @@ public class CarbonCopy {
 	protected String taskinstId;
 	protected String ccUserId;
 	protected Date ccTime;
-	protected String acceptUserId;
+	protected String userId;
 	
+	public CarbonCopy() {}
+	public CarbonCopy(String taskinstId, String ccUserId, Date ccTime, String userId) {
+		this.taskinstId = taskinstId;
+		this.ccUserId = ccUserId;
+		this.ccTime = ccTime;
+		this.userId = userId;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -37,10 +45,10 @@ public class CarbonCopy {
 	public void setCcTime(Date ccTime) {
 		this.ccTime = ccTime;
 	}
-	public String getAcceptUserId() {
-		return acceptUserId;
+	public String getUserId() {
+		return userId;
 	}
-	public void setAcceptUserId(String acceptUserId) {
-		this.acceptUserId = acceptUserId;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 }

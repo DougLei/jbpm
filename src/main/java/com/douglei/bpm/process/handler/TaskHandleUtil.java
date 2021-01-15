@@ -177,24 +177,19 @@ public class TaskHandleUtil {
 	 * @param assignedUsers 实际指派的用户集合
 	 * @param assignableUsers 具体可指派的所有用户集合
 	 * @param assignNumber
-	 * @return 0表示验证通过; 1表示实际指派的用户超出可指派用户的范围; 2表示实际指派人数超过上限
+	 * @throws TaskHandleException
 	 */
-	public int validateAssignedUsers(List<UserBean> assignedUsers, List<UserBean> assignableUsers, AssignNumber assignNumber) {
+	public void validateAssignedUsers(List<UserBean> assignedUsers, List<UserBean> assignableUsers, AssignNumber assignNumber) throws TaskHandleException{
 		// 判断实际指派的人, 是否都存在于可指派的用户集合中
 		for (UserBean assignedUser : assignedUsers) {
 			if(!assignableUsers.contains(assignedUser))
-				return 1;
+				throw new TaskHandleException("不能指派配置范围外的人员"); 
 		}
 		
 		// 判断实际指派的人数, 是否超过最多可指派的人数
-		if(assignNumber.isPercent()) {
-			if(assignedUsers.size() > assignNumber.calcUpperLimit(assignableUsers.size()))
-				return 2;
-			return 0;
-		}
+		int upperLimit = assignNumber.calcUpperLimit(assignableUsers.size());
+		if(assignedUsers.size() > upperLimit)
+			throw new TaskHandleException("实际指派的人数["+assignedUsers.size()+"]超过配置的上限["+upperLimit+"]");
 		
-		if(assignedUsers.size() > assignNumber.getNumber())
-			return 2;
-		return 0;
 	}
 }

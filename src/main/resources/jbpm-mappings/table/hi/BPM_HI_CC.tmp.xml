@@ -7,7 +7,7 @@
 			<column name="TASKINST_ID" property="taskinstId" dataType="char" length="36" nullable="false"/>
 			<column name="CC_USER_ID" property="ccUserId" dataType="nstring" length="150" nullable="false" />
 			<column name="CC_TIME" property="ccTime" dataType="datetime" nullable="false" />
-			<column name="ACCEPT_USER_ID" property="acceptUserId" dataType="nstring" length="150" nullable="false" />
+			<column name="USER_ID" property="userId" dataType="nstring" length="150" nullable="false" />
 			<column name="READ_TIME" property="readTime" dataType="datetime" nullable="false" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>

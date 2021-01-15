@@ -13,6 +13,7 @@ import com.douglei.orm.context.SessionContext;
 abstract class GeneralTaskCmd {
 	protected TaskInstance taskInstance;
 	
+	protected GeneralTaskCmd() {}
 	public GeneralTaskCmd(TaskInstance taskInstance) {
 		this.taskInstance = taskInstance;
 	}

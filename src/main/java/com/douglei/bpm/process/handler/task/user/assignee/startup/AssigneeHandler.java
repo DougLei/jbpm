@@ -40,31 +40,26 @@ public class AssigneeHandler {
 	 * @param currentUserTaskMetadata 当前用户任务的元数据实例
 	 * @param handleParameter
 	 * @param processEngineBeans
-	 * @throws AssignedUserValidateException
+	 * @throws TaskHandleException
 	 */
-	public void pretreatment(UserTaskMetadata currentUserTaskMetadata, HandleParameter handleParameter, ProcessEngineBeans processEngineBeans) throws AssignedUserValidateException{
+	public void pretreatment(UserTaskMetadata currentUserTaskMetadata, HandleParameter handleParameter, ProcessEngineBeans processEngineBeans) throws TaskHandleException{
 		// 根据指派策略, 进行基础验证和处理
 		AssignPolicy assignPolicy = currentUserTaskMetadata.getCandidate().getAssignPolicy();
 		if(assignPolicy.isDynamic()) {
 			if(assignedUsers.isEmpty())
-				throw new AssignedUserValidateException("[id="+currentUserTaskMetadata.getId()+", name="+currentUserTaskMetadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask未指派办理人员");
+				throw new TaskHandleException("任务未指派办理人员");
 			if(!assignPolicy.getAssignNumber().isPercent() && assignedUsers.size() > assignPolicy.getAssignNumber().getNumber())
-				throw new AssignedUserValidateException("[id="+currentUserTaskMetadata.getId()+", name="+currentUserTaskMetadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask, 实际指派的人数["+assignedUsers.size()+"]超过配置的上限["+assignPolicy.getAssignNumber().getNumber()+"]");
+				throw new TaskHandleException("任务实际指派的人数["+assignedUsers.size()+"]超过配置的上限["+assignPolicy.getAssignNumber().getNumber()+"]");
 		}
 		
 		// 获取具体可指派的所有用户集合
 		List<UserBean> assignableUsers = processEngineBeans.getTaskHandleUtil().getAssignableUsers(assignPolicy, currentUserTaskMetadata, handleParameter);
 		if(assignableUsers.isEmpty())
-			throw new AssignedUserValidateException("[id="+currentUserTaskMetadata.getId()+", name="+currentUserTaskMetadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask, 不存在可指派的办理人员");
+			throw new TaskHandleException("任务不存在可指派的办理人员");
 		
 		// 根据指派策略, 可指派的用户集合, 和实际指派的用户集合, 进行验证
 		if(assignPolicy.isDynamic()) {
-			int result = processEngineBeans.getTaskHandleUtil().validateAssignedUsers(assignedUsers, assignableUsers, assignPolicy.getAssignNumber());
-			if(result == 1)
-				throw new AssignedUserValidateException("[id="+currentUserTaskMetadata.getId()+", name="+currentUserTaskMetadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask, 不能指派配置范围外的人员做为办理人员"); 
-			if(result == 2)
-				throw new AssignedUserValidateException("[id="+currentUserTaskMetadata.getId()+", name="+currentUserTaskMetadata.getName()+", isDynamicAssign="+assignPolicy.isDynamic()+"]的UserTask, 实际指派的人数["+assignedUsers.size()+"]超过配置的上限["+assignPolicy.getAssignNumber().calcUpperLimit(assignableUsers.size())+"]");
-			
+			processEngineBeans.getTaskHandleUtil().validateAssignedUsers(assignedUsers, assignableUsers, assignPolicy.getAssignNumber());
 		}else {
 			// 静态指派, 忽略动态指派的用户
 			if(assignedUsers.size() > 0)

@@ -1,15 +1,21 @@
 package com.douglei.bpm.process.handler.task.user;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.Task;
+import com.douglei.bpm.module.runtime.task.command.CarbonCopyTaskCmd;
+import com.douglei.bpm.process.api.user.bean.factory.UserBean;
+import com.douglei.bpm.process.api.user.option.impl.carboncopy.CarbonCopyOptionHandler;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.task.user.assignee.handle.AssigneeDispatcher;
 import com.douglei.bpm.process.handler.task.user.assignee.startup.AssigneeHandler;
 import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
+import com.douglei.bpm.process.metadata.task.user.option.Option;
+import com.douglei.bpm.process.metadata.task.user.option.carboncopy.CarbonCopyOption;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -72,6 +78,29 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 		completeTask(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask(), handleParameter.getCurrentDate());
 		followTaskCompleted4Variable(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask());
 		assigneeDispatcher.dispatchAll();
+		executeCarbonCopy();
 		processEngineBeans.getTaskHandleUtil().dispatch(currentTaskMetadataEntity, handleParameter);
+	}
+
+	// 进行抄送
+	private void executeCarbonCopy() {
+		Option option = currentTaskMetadataEntity.getTaskMetadata().getOption(CarbonCopyOptionHandler.TYPE);
+		if(option == null || ((CarbonCopyOption)option).getCandidate().getAssignPolicy().isDynamic())
+			return;
+		
+		// 获取具体可抄送的所有人员集合, 并进行抄送
+		List<UserBean> assignableUsers = processEngineBeans.getTaskHandleUtil().getAssignableUsers(
+				((CarbonCopyOption)option).getCandidate().getAssignPolicy(), 
+				currentTaskMetadataEntity.getTaskMetadata(), 
+				handleParameter);
+		
+		if(assignableUsers.isEmpty())
+			return;
+		
+		new CarbonCopyTaskCmd().execute(
+				handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId(), 
+				handleParameter.getUserEntity().getCurrentHandleUser().getUserId(), 
+				handleParameter.getCurrentDate(), 
+				assignableUsers);
 	}
 }

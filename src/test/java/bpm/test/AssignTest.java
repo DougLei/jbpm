@@ -60,8 +60,8 @@ public class AssignTest {
 			System.out.println(result.getFailMessage());
 	}
 	
-	private int taskId = 1;
-	private String userId = "douglei";
+	private int taskId = 2;
+	private String userId = "wangwu";
 	
 	@Test
 	public void claim() {

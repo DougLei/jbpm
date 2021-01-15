@@ -40,7 +40,7 @@ public class ClaimTaskCmd implements Command{
 		// 查询指定userId, 判断其是否可以认领
 		List<Assignee> assigneeList = SessionContext.getSqlSession()
 				.query(Assignee.class, 
-						"select id, taskinst_id, group_id, chain_id from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state in (?,?)", 
+						"select id, taskinst_id, group_id, chain_id, mode from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state in (?,?)", 
 						Arrays.asList(taskInstance.getTask().getTaskinstId(), currentClaimUserId, HandleState.COMPETITIVE_UNCLAIM.name(), HandleState.UNCLAIM.name()));
 		if(assigneeList.isEmpty())
 			return new ExecutionResult("认领失败, 指定的userId无法认领["+taskInstance.getName()+"]任务");

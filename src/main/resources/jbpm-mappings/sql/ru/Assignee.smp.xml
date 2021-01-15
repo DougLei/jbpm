@@ -6,7 +6,7 @@
 		<content name="queryDelegations" type="select">
 			select user_id, assigned_user_id, reason, procdef_code, procdef_version from bpm_re_delegation p
 				left join bpm_re_delegation_detail s on (p.id = s.delegation_id)
-					where p.is_enabled=1 and p.start_time &lt; #{currentTime, dataType=number, length=13} and p.end_time &gt; #{currentTime, dataType=number, length=13} and  
+					where p.is_enabled=1 and p.start_time &lt;= #{currentTime, dataType=number, length=13} and p.end_time &gt;= #{currentTime, dataType=number, length=13} and 
 					<foreach collection="userIds" alias="userId" open="p.user_id in (" separator="," close=")">
 						#{userId}
 					</foreach>

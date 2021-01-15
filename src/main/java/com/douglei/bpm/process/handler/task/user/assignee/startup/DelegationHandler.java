@@ -2,6 +2,7 @@ package com.douglei.bpm.process.handler.task.user.assignee.startup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,10 +18,26 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 public class DelegationHandler {
-	private Map<String, Delegation> map; // 指派和委托的映射map, <指派的用户id, 委托的用户id>
+	private Map<String, Delegation> resultMap; // 指派和委托的映射map, <指派的用户id, 委托的用户id>
 	private DelegationHandler children;
 
-	public DelegationHandler(String processCode, String processVersion, SqlCondition condition) throws TaskHandleException{
+	/**
+	 * 
+	 * @param processCode 流程定义的code
+	 * @param processVersion 流程定义的version
+	 * @param condition 条件
+	 * @param taskinstId 任务实例id
+	 * @param userId 操作的用户id
+	 * @param counter 计数器, 用来防止出现委托死循环的情况, 传入空的HashSet实例即可
+	 * @throws TaskHandleException
+	 */
+	public DelegationHandler(String processCode, String processVersion, SqlCondition condition, String taskinstId, String userId, HashSet<String> counter) throws TaskHandleException{
+		condition.getUserIds().forEach(uid -> {
+			if(counter.contains(uid))
+				throw new TaskHandleException("递归查询委托信息出现异常, 重复的userId为["+uid+"], 任务实例id为["+taskinstId+"], 操作的用户id为["+userId+"]");
+			counter.add(uid);
+		});
+		
 		List<DelegationInfo> list = SessionContext.getSQLSession().query(DelegationInfo.class, "Assignee", "queryDelegations", condition);
 		if(list.isEmpty())
 			return;
@@ -43,9 +60,9 @@ public class DelegationHandler {
 		for(Entry<String, MultiDelegation> entry : delegationInfoMap.entrySet()) {
 			delegation = entry.getValue().isDelegate(processCode, processVersion);
 			if(delegation != null) {
-				if(this.map == null)
-					this.map = new HashMap<String, Delegation>();
-				this.map.put(entry.getKey(), delegation);
+				if(this.resultMap == null)
+					this.resultMap = new HashMap<String, Delegation>();
+				this.resultMap.put(entry.getKey(), delegation);
 				
 				if(assigneeUserIds == null) 
 					assigneeUserIds = new ArrayList<String>(delegationInfoMap.size());
@@ -53,9 +70,9 @@ public class DelegationHandler {
 			}
 		}
 		
-		if(this.map != null) { // 证明有委托, 递归去查询是否还有二次委托 
+		if(this.resultMap != null) { // 证明当前层的人员有委托, 递归去查询是否还有二次委托 
 			condition.updateUserIds(assigneeUserIds);
-			this.children = new DelegationHandler(processCode, processVersion, condition);
+			this.children = new DelegationHandler(processCode, processVersion, condition, taskinstId, userId, counter);
 		}
 	}
 
@@ -79,11 +96,11 @@ public class DelegationHandler {
 		}
 		assigneeList.add(assignee);
 		
-		if(map == null) { // 都没有委托
+		if(resultMap == null) { // 都没有委托
 			assignee.setIsChainLast(1);
 			return;
 		}
-		Delegation delegation = map.get(assigneeUserId);
+		Delegation delegation = resultMap.get(assigneeUserId);
 		if(delegation == null) { // 当前assigneeUserId没有委托
 			assignee.setIsChainLast(1);
 			return;
@@ -112,7 +129,7 @@ class MultiDelegation {
 		delegation.addDetail(delegationInfo.getProcdefCode(), delegationInfo.getProcdefVersion());
 	}
 
-	// 是否要委托, 返回委托的用户id
+	// 是否要委托, 返回具体的委托实例
 	public Delegation isDelegate(String processCode, String processVersion) {
 		for(Delegation delegation : delegationMap.values()) {
 			if(delegation.isDelegate(processCode, processVersion)) 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -93,7 +94,10 @@ public class DelegateTaskCmd implements Command {
 		DelegationHandler delegationHandler = new DelegationHandler(
 				taskInstance.getProcessMetadata().getCode(), 
 				taskInstance.getProcessMetadata().getVersion(), 
-				new SqlCondition(assignedUserIds));
+				new SqlCondition(assignedUserIds),
+				taskInstance.getTask().getTaskinstId(),
+				userId,
+				new HashSet<String>());
 		
 		List<Assignee> delegateAssigneeList = new ArrayList<Assignee>(assigneeList.size() * 3);
 		Date claimTime = new Date();

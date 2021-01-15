@@ -8,7 +8,7 @@
 		<userTask id="userTask1" name="发起的用户任务">
 			<candidate>
 				<assignPolicy>
-					<expression name="fixed" value="douglei,zhangsan"/>
+					<expression name="static" value="douglei,zhangsan"/>
 				</assignPolicy>
 			</candidate>
 		</userTask>
@@ -17,7 +17,7 @@
 		<userTask id="userTask2" name="第二个用户任务">
 			<candidate>
 				<assignPolicy isDynamic="false">
-					<expression name="fixed" value="wangwu,zhaoliu"/>
+					<expression name="static" value="wangwu,zhaoliu"/>
 				</assignPolicy>
 			</candidate>
 		</userTask>

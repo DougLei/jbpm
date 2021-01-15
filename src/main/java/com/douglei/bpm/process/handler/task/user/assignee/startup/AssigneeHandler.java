@@ -1,6 +1,7 @@
 package com.douglei.bpm.process.handler.task.user.assignee.startup;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import com.douglei.bpm.ProcessEngineBeans;
@@ -71,15 +72,22 @@ public class AssigneeHandler {
 	/**
 	 * 保存指派信息
 	 * @param taskinstId 当前的任务实例id
+	 * @param userId 当前操作的userId
 	 * @param currentUserTaskMetadata 当前用户任务的元数据实例
 	 * @throws TaskHandleException
 	 */
-	public void save(String taskinstId, UserTaskMetadata currentUserTaskMetadata) throws TaskHandleException{
+	public void save(String taskinstId, String userId, UserTaskMetadata currentUserTaskMetadata) throws TaskHandleException{
 		// 查询指派用户的委托数据, 将处理后的指派数据保存到运行表
 		List<String> assignedUserIds = new ArrayList<String>(assignedUsers.size());
 		assignedUsers.forEach(user -> assignedUserIds.add(user.getUserId()));
 		
-		DelegationHandler delegationHandler = new DelegationHandler(code, version, new SqlCondition(assignedUserIds));
+		DelegationHandler delegationHandler = new DelegationHandler(
+				code, 
+				version,
+				new SqlCondition(assignedUserIds), 
+				taskinstId,
+				userId,
+				new HashSet<String>());
 		
 		boolean isStaticAssign = !currentUserTaskMetadata.getCandidate().getAssignPolicy().isDynamic(); // 是否静态指派
 		List<Assignee> assigneeList = new ArrayList<Assignee>(assignedUsers.size() + 5); // +5是备用的长度

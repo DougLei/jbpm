@@ -12,6 +12,7 @@ import com.douglei.bpm.module.runtime.task.command.DelegateTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.HandleTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.TransferTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.UnclaimTaskCmd;
+import com.douglei.bpm.module.runtime.task.command.ViewCarbonCopyCmd;
 import com.douglei.bpm.process.api.container.ProcessContainerProxy;
 import com.douglei.orm.context.transaction.component.Transaction;
 
@@ -102,8 +103,8 @@ public class TaskService {
 	/**
 	 * 委托指定id的任务
 	 * @param taskId
-	 * @param userId 发起委托的人id
-	 * @param assignedUserId 接受委托的人id
+	 * @param userId 发起委托的用户id
+	 * @param assignedUserId 接受委托的用户id
 	 * @return 
 	 */
 	@Transaction
@@ -114,8 +115,8 @@ public class TaskService {
 	/**
 	 * 委托指定id的任务
 	 * @param taskinstId
-	 * @param userId 发起委托的人id
-	 * @param assignedUserId 接受委托的人id
+	 * @param userId 发起委托的用户id
+	 * @param assignedUserId 接受委托的用户id
 	 * @return 
 	 */
 	@Transaction
@@ -127,8 +128,8 @@ public class TaskService {
 	/**
 	 * 转办指定id的任务
 	 * @param taskId
-	 * @param userId 发起转办的人id
-	 * @param assignedUserId 接受转办的人id
+	 * @param userId 发起转办的用户id
+	 * @param assignedUserId 接受转办的用户id
 	 * @return 
 	 */
 	@Transaction
@@ -139,8 +140,8 @@ public class TaskService {
 	/**
 	 * 转办指定id的任务
 	 * @param taskinstId
-	 * @param userId 发起转办的人id
-	 * @param assignedUserId 接受转办的人id
+	 * @param userId 发起转办的用户id
+	 * @param assignedUserId 接受转办的用户id
 	 * @return 
 	 */
 	@Transaction
@@ -149,12 +150,11 @@ public class TaskService {
 		return commandExecutor.execute(new TransferTaskCmd(taskInstance, userId, assignedUserId));
 	}
 	
-	
 	/**
 	 * 抄送指定id的任务
 	 * @param taskId
-	 * @param userId 发起抄送的人id
-	 * @param assignedUserIds 接受抄送的人id集合
+	 * @param userId 发起抄送的用户id
+	 * @param assignedUserIds 接受抄送的用户id集合
 	 * @return 
 	 */
 	@Transaction
@@ -165,13 +165,24 @@ public class TaskService {
 	/**
 	 * 抄送指定id的任务
 	 * @param taskinstId
-	 * @param userId 发起抄送的人id
-	 * @param assignedUserIds 接受抄送的人id集合
+	 * @param userId 发起抄送的用户id
+	 * @param assignedUserIds 接受抄送的用户id集合
 	 * @return 
 	 */
 	@Transaction
 	public ExecutionResult carbonCopy(String taskinstId, String userId, List<String> assignedUserIds) {
 		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
 		return commandExecutor.execute(new CarbonCopyTaskCmd(taskInstance, userId, assignedUserIds));
+	}
+	
+	/**
+	 * 查看抄送
+	 * @param taskinstId
+	 * @param userId 查看抄送的用户id
+	 * @return 
+	 */
+	@Transaction
+	public ExecutionResult viewCarbonCopy(String taskinstId, String userId) {
+		return commandExecutor.execute(new ViewCarbonCopyCmd(taskinstId, userId));
 	}
 }

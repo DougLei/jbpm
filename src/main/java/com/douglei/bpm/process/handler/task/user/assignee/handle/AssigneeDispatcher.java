@@ -85,13 +85,13 @@ public class AssigneeDispatcher {
 	public void dispatch() {
 		// 1. 将链头的指派信息集合, 从运行表删除, 并保存到历史表
 		if(chainFirstAssigneeList != null) {
-			SessionContext.getSQLSession().executeUpdate("Assignee", "deleteAssigneeByIds", chainFirstAssigneeList);
+			SessionContext.getSQLSession().executeUpdate("Assignee", "deleteByIds", chainFirstAssigneeList);
 			SessionContext.getTableSession().save(chainFirstAssigneeList);
 		}
 		
 		// 2. 将指派信息集合, 从运行表删除, 并保存到历史表
 		if(assigneeList != null) {
-			SessionContext.getSQLSession().executeUpdate("Assignee", "deleteAssigneeByGroupIds", assigneeList);
+			SessionContext.getSQLSession().executeUpdate("Assignee", "deleteByGroupIds", assigneeList);
 			SessionContext.getTableSession().save(assigneeList);
 		}
 	}

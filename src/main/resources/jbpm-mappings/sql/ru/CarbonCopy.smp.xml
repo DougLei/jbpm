@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping-configuration>
+	<sql namespace="CarbonCopy">
+	
+		<!-- 根据id删除抄送信息 -->
+		<content name="deleteByIds" type="delete">
+			delete bpm_ru_cc where 
+			<foreach collection="list" alias="l" open="id in (" separator="," close=")">
+				#{l.id, dataType=number}
+			</foreach>
+		</content>
+		
+	</sql>
+</mapping-configuration>

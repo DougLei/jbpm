@@ -9,12 +9,12 @@ import com.douglei.bpm.module.runtime.task.CarbonCopy;
  * @author DougLei
  */
 public class HistoryCarbonCopy extends CarbonCopy{
-	private Date readTime;
+	private Date viewTime;
 
-	public Date getReadTime() {
-		return readTime;
+	public Date getViewTime() {
+		return viewTime;
 	}
-	public void setReadTime(Date readTime) {
-		this.readTime = readTime;
+	public void setViewTime(Date viewTime) {
+		this.viewTime = viewTime;
 	}
 }

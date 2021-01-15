@@ -11,8 +11,8 @@ import com.douglei.bpm.module.runtime.task.TaskInstance;
  */
 public class DelegateTaskCmd implements Command {
 	private TaskInstance taskInstance;
-	private String userId; // 发起委托的人id
-	private String assignedUserId; // 接受委托的人id
+	private String userId; // 发起委托的用户id
+	private String assignedUserId; // 接受委托的用户id
 	
 	public DelegateTaskCmd(TaskInstance taskInstance, String userId, String assignedUserId) {
 		this.taskInstance = taskInstance;

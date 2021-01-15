@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.douglei.bpm.process.metadata.task.user.candidate.DefaultInstance;
+import com.douglei.bpm.process.metadata.task.user.DefaultCandidateInstance;
 
 /**
  * 指派策略
@@ -12,7 +12,7 @@ import com.douglei.bpm.process.metadata.task.user.candidate.DefaultInstance;
  */
 public class AssignPolicy implements Serializable{
 	private boolean isDynamic; // 是否动态指派
-	private AssignNumber assignNumber; // 最多可指派的人数的表达式
+	protected AssignNumber assignNumber; // 最多可指派的人数的表达式
 	private List<AssignableUserExpressionEntity> assignableUserExpressionEntities; // 可指派的用户表达式实体集合
 	
 	public AssignPolicy(boolean isDynamic, AssignNumber assignNumber) {
@@ -43,7 +43,7 @@ public class AssignPolicy implements Serializable{
 	 */
 	public AssignNumber getAssignNumber() {
 		if(assignNumber == null)
-			return DefaultInstance.DEFAULT_ASSIGN_NUMBER;
+			return DefaultCandidateInstance.DEFAULT_ASSIGN_NUMBER_1;
 		return assignNumber;
 	}
 	/**

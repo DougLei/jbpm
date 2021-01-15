@@ -33,11 +33,11 @@ public abstract class GeneralParser {
 	 * @param listeners
 	 */
 	@SuppressWarnings("unchecked")
-	protected final void addListener(ProcessNodeMetadata metadata, Element listeners) {
-		if(listeners == null)
+	protected final void addListener(ProcessNodeMetadata metadata, Element element) {
+		if(element == null)
 			return;
 		
-		List<Element> elements = listeners.elements("listener");
+		List<Element> elements = element.elements("listener");
 		if(elements.isEmpty())
 			return;
 		

@@ -91,9 +91,6 @@ public class ClaimTaskCmd implements Command{
 	 * @return
 	 */
 	private boolean canClaim(ProcessEngineBeans processEngineBeans) {
-		ClaimPolicyEntity claimPolicyEntity = ((UserTaskMetadata) taskInstance.getTaskMetadataEntity().getTaskMetadata()).getCandidate().getHandlePolicy().getClaimPolicyEntity();
-		ClaimPolicy policy = processEngineBeans.getTaskHandlePolicyContainer().getClaimPolicy(claimPolicyEntity.getName());
-			
 		List<Assignee> assigneeList = SessionContext.getSQLSession().query(Assignee.class, "Assignee", "queryAssigneeClaimSituation", taskInstance.getTask().getTaskinstId());
 		List<Assignee> claimedAssigneeList= null; 
 		List<Assignee> finishedAssigneeList = null;
@@ -117,6 +114,9 @@ public class ClaimTaskCmd implements Command{
 					throw new ProcessEngineException("BUG");
 			}
 		}
+		
+		ClaimPolicyEntity claimPolicyEntity = ((UserTaskMetadata) taskInstance.getTaskMetadataEntity().getTaskMetadata()).getCandidate().getHandlePolicy().getClaimPolicyEntity();
+		ClaimPolicy policy = processEngineBeans.getTaskHandlePolicyContainer().getClaimPolicy(claimPolicyEntity.getName());
 		ClaimResult result = policy.claimValidate(claimPolicyEntity.getValue(), currentClaimUserId, assigneeList, claimedAssigneeList, finishedAssigneeList);
 		
 		// 处理task的isAllClaimed字段值, 改为全部认领

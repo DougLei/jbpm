@@ -1,5 +1,7 @@
 package com.douglei.bpm.process.parser.task.user;
 
+import java.util.List;
+
 import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Autowired;
@@ -9,7 +11,7 @@ import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.parser.GeneralParser;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.bpm.process.parser.tmp.data.TaskTemporaryData;
+import com.douglei.bpm.process.parser.temporary.data.TaskTemporaryData;
 
 /**
  * 
@@ -24,7 +26,11 @@ public class UserTaskParser extends GeneralParser implements Parser<TaskTemporar
 	@Autowired
 	private CandidateParser candidateParser;
 	
+	@Autowired
+	private OptionParser optionParser;
+	
 	@Override
+	@SuppressWarnings("unchecked")
 	public UserTaskMetadata parse(TaskTemporaryData temporaryData) throws ProcessParseException {
 		Element element = temporaryData.getElement();
 		
@@ -35,14 +41,13 @@ public class UserTaskParser extends GeneralParser implements Parser<TaskTemporar
 				element.attributeValue("defaultOutputFlow"), 
 				element.attributeValue("pageID"),
 				timeLimitParser.parse(id, name, element.attributeValue("timeLimit")),
-				candidateParser.parse(id, name, element.element("candidate")));
-		
-		// TODO 后续解析<option>
+				candidateParser.parse(id, name, element.element("candidate")),
+				optionParser.parse(id, name, element.elements("option")));
 		
 		addListener(metadata, element.element("listeners"));
 		return metadata;
 	}
-	
+
 	@Override
 	public Type getType() {
 		return Type.USER_TASK;

@@ -11,9 +11,6 @@
 		其他说明:
 		1. parallelGateway和inclusiveGateway在join时, 只能join一个父任务的分支任务, 如果配置尝试join多个父任务的分支任务, 会出现重复的网关数据
 		2. endEvent具有join功能, 且逻辑同parallelGateway和inclusiveGatewa相同
-		3. 变量的取值配置: 
-			1. 直接使用变量名, 引擎会使用最近范围内的变量值, 如果不存在则返回null; 
-			2. 范围由近到远的顺序为: transient -> local -> global
 	-->
 	<!-- 
 		工作流配置起点:
@@ -107,7 +104,7 @@
 						
 						* 系统内置的表达式包括: (name <==> value; 没写value的表示不需要填写, 即使填写了也不生效; 否则表示value必须配置)
 						** bySingle <==> , 单个用户办理
-						** byNumber <==> 12%+, 指定数量(百分比)的用户办理, value的写法格式, 参考userTask->candidate->assignPolicy中assignNum属性
+						** byNumber <==> 12%+, 指定数量(百分比)的用户办理; value的写法格式, 参考userTask->candidate->assignPolicy中assignNum属性
 					 -->
 					<claim name="" value=""/>
 				
@@ -125,13 +122,15 @@
 				* type: 操作的类型名, 必须配置, 区分大小写
 				* name: 操作描述, 可不配置, 默认值为type的值
 				* order: 操作排序, 可不配置, 默认值为0
+				
+				* 如果配置了重复type的option, 引擎会抛出异常
 			 -->
-			 <!-- 这几个操作是当前办理时, 可进行的操作 -->
+			<!-- 这几个操作是当前办理时, 可进行的操作 -->
 			<option type="carbonCopy" name="抄送" order="">
 				<!-- 
 					必须配置; 没有<handlePolicy>配置项
-					* isDynamic: 可不配置, 默认值为false; 如果值为true, 表示在任务办理结束后, 引擎会自动抄送到表达式指定的所有人; 值为false, 表示需要用户在办理任务时, 手动进行抄送
-					* assignNum: 可指派抄送的人数, 针对isDynamic=false生效; 可不配置, 默认值为100%
+					* isDynamic: 可不配置, 默认值为true; 值为true, 表示需要用户在办理任务时, 手动进行抄送; 如果值为false, 表示在任务办理结束后, 引擎会自动抄送到表达式指定的所有人
+					* assignNum: 可指派抄送的人数, 针对isDynamic=true生效; 可不配置, 默认值为100%
 					* 其他配置参考userTask中的配置
 				 -->
 				<candidate>

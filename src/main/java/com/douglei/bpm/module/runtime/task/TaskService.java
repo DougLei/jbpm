@@ -52,23 +52,25 @@ public class TaskService {
 	 * 取消认领指定id的任务
 	 * @param taskId
 	 * @param userId
+	 * @param strict 是否强制删除任务相关的其他数据信息, 目前主要是抄送信息; 建议默认传入false
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult unclaim(int taskId, String userId){
+	public ExecutionResult unclaim(int taskId, String userId, boolean strict){
 		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
-		return commandExecutor.execute(new UnclaimTaskCmd(taskInstance, userId));
+		return commandExecutor.execute(new UnclaimTaskCmd(taskInstance, userId, strict));
 	}
 	/**
 	 * 取消认领指定id的任务
 	 * @param taskinstId
 	 * @param userId
+	 * @param strict 是否强制删除任务相关的其他数据信息, 目前主要是抄送信息; 建议默认传入false
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult unclaim(String taskinstId, String userId){
+	public ExecutionResult unclaim(String taskinstId, String userId, boolean strict){
 		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
-		return commandExecutor.execute(new UnclaimTaskCmd(taskInstance, userId));
+		return commandExecutor.execute(new UnclaimTaskCmd(taskInstance, userId, strict));
 	}
 	
 	/**

@@ -2,6 +2,7 @@ package com.douglei.bpm.process.metadata.task.user.candidate;
 
 import java.io.Serializable;
 
+import com.douglei.bpm.process.metadata.task.user.DefaultCandidateInstance;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
 import com.douglei.bpm.process.metadata.task.user.candidate.handle.HandlePolicy;
 
@@ -23,7 +24,7 @@ public class Candidate implements Serializable{
 	}
 	public HandlePolicy getHandlePolicy() {
 		if(handlePolicy == null)
-			return DefaultInstance.DEFAULT_HANDLE_POLICY;
+			return DefaultCandidateInstance.DEFAULT_HANDLE_POLICY;
 		return handlePolicy;
 	}
 }

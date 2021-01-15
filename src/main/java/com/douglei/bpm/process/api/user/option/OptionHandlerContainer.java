@@ -12,23 +12,23 @@ import com.douglei.bpm.bean.annotation.Bean;
  * @author DougLei
  */
 @Bean
-public class OptionContainer implements CustomAutowired{
-	private Map<String, Option> map = new HashMap<String, Option>(); 
+public class OptionHandlerContainer implements CustomAutowired{
+	private Map<String, OptionHandler> map = new HashMap<String, OptionHandler>(); 
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setFields(Map<Class<?>, Object> beanContainer) {
-		((List<Option>)beanContainer.get(Option.class)).forEach(option -> {
-			map.put(option.getType(), option);
+		((List<OptionHandler>)beanContainer.get(OptionHandler.class)).forEach(optionHandler -> {
+			map.put(optionHandler.getType(), optionHandler);
 		});
 	}
 	
 	/**
-	 * 获取指定type的option
+	 * 获取指定type的OptionHandler
 	 * @param type
 	 * @return
 	 */
-	public Option get(String type) {
+	public OptionHandler get(String type) {
 		return map.get(type);
 	}
 }

@@ -2,7 +2,6 @@ package com.douglei.bpm.process.parser.task.user;
 
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignNumber;
-import com.douglei.tools.utils.StringUtil;
 import com.douglei.tools.utils.datatype.VerifyTypeMatchUtil;
 
 /**
@@ -15,15 +14,11 @@ public class AssignNumberParser {
 	/**
 	 * 解析指派人数
 	 * @param value
-	 * @return
+	 * @return 返回null表示value不合法
 	 */
 	public AssignNumber parse(String value) {
-		if(StringUtil.isEmpty(value))
-			return null;
-		
 		if(value.charAt(0) == '-')
 			return null;
-		
 		
 		int percentSignIndex = 0; // 百分号的下标
 		while(percentSignIndex < value.length()) {

@@ -7,7 +7,7 @@ import com.douglei.bpm.process.metadata.gateway.AbstractGatewayMetadata;
 import com.douglei.bpm.process.parser.GeneralParser;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.bpm.process.parser.tmp.data.TaskTemporaryData;
+import com.douglei.bpm.process.parser.temporary.data.TaskTemporaryData;
 
 /**
  * 

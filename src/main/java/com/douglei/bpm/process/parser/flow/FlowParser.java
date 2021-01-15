@@ -8,7 +8,7 @@ import com.douglei.bpm.process.metadata.flow.FlowMetadata;
 import com.douglei.bpm.process.parser.GeneralParser;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.bpm.process.parser.tmp.data.FlowTemporaryData;
+import com.douglei.bpm.process.parser.temporary.data.FlowTemporaryData;
 import com.douglei.tools.utils.datatype.VerifyTypeMatchUtil;
 
 /**

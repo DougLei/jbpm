@@ -1,8 +1,10 @@
 package com.douglei.bpm.process.metadata;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.douglei.bpm.process.Type;
+import com.douglei.bpm.process.api.listener.Listener;
 import com.douglei.tools.utils.StringUtil;
 
 /**
@@ -12,6 +14,7 @@ import com.douglei.tools.utils.StringUtil;
 public abstract class ProcessNodeMetadata implements Serializable {
 	private String id;
 	private String name;
+	private List<Listener> listeners;
 	
 	protected ProcessNodeMetadata(String id, String name) {
 		this.id = id;
@@ -23,6 +26,9 @@ public abstract class ProcessNodeMetadata implements Serializable {
 	}
 	public final String getName() {
 		return name;
+	}
+	public final List<Listener> getListeners() {
+		return listeners;
 	}
 	
 	/**

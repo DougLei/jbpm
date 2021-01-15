@@ -9,9 +9,10 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
-import com.douglei.bpm.process.api.user.option.impl.CarbonCopyOption;
+import com.douglei.bpm.process.api.user.option.impl.carboncopy.CarbonCopyOptionHandler;
 import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
-import com.douglei.bpm.process.metadata.task.user.option.OptionMetadata;
+import com.douglei.bpm.process.metadata.task.user.option.Option;
+import com.douglei.bpm.process.metadata.task.user.option.carboncopy.CarbonCopyOption;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -21,7 +22,8 @@ import com.douglei.orm.context.SessionContext;
 public class UnclaimTaskCmd implements Command {
 	private TaskInstance taskInstance;
 	private String userId; // 要取消认领的用户id
-	public UnclaimTaskCmd(TaskInstance taskInstance, String userId) {
+	private boolean strict; // 是否强制删除任务相关的其他数据信息, 目前主要是抄送信息
+	public UnclaimTaskCmd(TaskInstance taskInstance, String userId, boolean strict) {
 		this.taskInstance = taskInstance;
 		this.userId = userId;
 	}
@@ -40,8 +42,11 @@ public class UnclaimTaskCmd implements Command {
 			return new ExecutionResult("取消认领失败, 指定的userId无法取消认领["+taskInstance.getName()+"]任务");
 		
 		ccBeViewed();
-		if(ccBeViewed)
-			return new ExecutionResult("取消认领失败, 指定的userId抄送了["+taskInstance.getName()+"]任务, 且已被相关人员阅读, 如确实需要取消认领, 请联系流程管理员");
+		if(ccBeViewed) {
+			if(!strict)
+				return new ExecutionResult("取消认领失败, 指定的userId抄送了["+taskInstance.getName()+"]任务, 且已被相关人员阅读, 如确实需要取消认领, 请联系流程管理员");
+			SessionContext.getSqlSession().executeUpdate("delete bpm_hi_cc where taskinst_id=? and cc_user_id=?", Arrays.asList(taskInstance.getTask().getTaskinstId(), userId));
+		}
 		
 		// 取消认领
 		SessionContext.getSQLSession().executeUpdate("Assignee", "unclaimTask", assigneeList);
@@ -59,16 +64,18 @@ public class UnclaimTaskCmd implements Command {
 	private boolean existsCC; // 是否有抄送
 	private boolean ccBeViewed; // 抄送是否被查看
 	private void ccBeViewed() { // 抄送是否被查看
-		OptionMetadata carbonCopyOptionEntity = ((UserTaskMetadata)taskInstance.getTaskMetadataEntity().getTaskMetadata()).getOptionEntity(CarbonCopyOption.TYPE);
-		if(carbonCopyOptionEntity == null)
+		Option option = ((UserTaskMetadata)taskInstance.getTaskMetadataEntity().getTaskMetadata()).getOption(CarbonCopyOptionHandler.TYPE);
+		if(option == null || !((CarbonCopyOption)option).getCandidate().getAssignPolicy().isDynamic())
 			return;
 		
-		// TODO 应该再判断下抄送是否是动态的, 如果是动态的, 也就不用去查询了
+		List<Object> params = Arrays.asList(taskInstance.getTask().getTaskinstId());
 		
-		this.existsCC = true;
+		int ccCount = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(
+				"select count(id) from bpm_ru_cc where taskinst_id=? and cc_user_id=?", params)[0].toString());
+		this.existsCC = ccCount > 0;
 		
 		int beViewedCount = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(
-				"select count(id) from bpm_hi_cc where taskinst_id=? and cc_user_id=?", Arrays.asList(taskInstance.getTask().getTaskinstId()))[0].toString());
+				"select count(id) from bpm_hi_cc where taskinst_id=? and cc_user_id=?", params)[0].toString());
 		this.ccBeViewed = beViewedCount > 0;
 	}
 }

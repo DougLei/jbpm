@@ -3,7 +3,7 @@ package com.douglei.bpm.process.parser;
 import com.douglei.bpm.bean.annotation.MultiInstance;
 import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.metadata.ProcessNodeMetadata;
-import com.douglei.bpm.process.parser.tmp.data.TemporaryData;
+import com.douglei.bpm.process.parser.temporary.data.TemporaryData;
 
 /**
  * 解析器

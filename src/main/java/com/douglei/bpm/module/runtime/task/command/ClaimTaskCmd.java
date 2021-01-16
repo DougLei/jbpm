@@ -40,7 +40,7 @@ public class ClaimTaskCmd implements Command{
 		// 查询指定userId, 判断其是否可以认领
 		List<Assignee> assigneeList = SessionContext.getSqlSession()
 				.query(Assignee.class, 
-						"select id, group_id, chain_id, mode from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state in (?,?)", 
+						SQL_QUERY_CAN_CLAIM_ASSIGNEE_LIST, 
 						Arrays.asList(taskInstance.getTask().getTaskinstId(), currentClaimUserId, HandleState.COMPETITIVE_UNCLAIM.name(), HandleState.UNCLAIM.name()));
 		if(assigneeList.isEmpty())
 			return new ExecutionResult("认领失败, 指定的userId无法认领["+taskInstance.getName()+"]任务");
@@ -127,4 +127,19 @@ public class ClaimTaskCmd implements Command{
 			SessionContext.getSqlSession().executeUpdate("update bpm_ru_task set is_all_claimed=1 where taskinst_id=?", Arrays.asList(taskInstance.getTask().getTaskinstId()));
 		return result.canClaim();
 	}
+	
+	//------------------------------------------------------------------------------------------------------------------
+	// SQL
+	//------------------------------------------------------------------------------------------------------------------
+	/*
+	 * 查询用户可进行认领操作的指派信息集合: 
+	 * 
+	 * select a.id, a.group_id, a.chain_id, a.mode_ from (
+	 * 	select taskinst_id, group_id, max(chain_id) chain_id from bpm_ru_assignee 
+	 *		where taskinst_id=? and user_id=? and handle_state in (?,?) 
+	 * 			group by taskinst_id, group_id
+	 * ) r
+	 * left join bpm_ru_assignee a on (a.taskinst_id = r.taskinst_id and a.group_id = r.group_id and a.chain_id = r.chain_id)
+	 */
+	private static final String SQL_QUERY_CAN_CLAIM_ASSIGNEE_LIST = "select a.id, a.group_id, a.chain_id, a.mode_ from (select taskinst_id, group_id, max(chain_id) chain_id from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state in (?,?) group by taskinst_id, group_id) r left join bpm_ru_assignee a on (a.taskinst_id = r.taskinst_id and a.group_id = r.group_id and a.chain_id = r.chain_id)";
 }

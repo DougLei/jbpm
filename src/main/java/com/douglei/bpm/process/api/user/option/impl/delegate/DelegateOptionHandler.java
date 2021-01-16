@@ -3,6 +3,7 @@ package com.douglei.bpm.process.api.user.option.impl.delegate;
 import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Autowired;
+import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.api.user.option.OptionHandler;
 import com.douglei.bpm.process.metadata.task.user.candidate.Candidate;
 import com.douglei.bpm.process.metadata.task.user.option.Option;
@@ -13,6 +14,7 @@ import com.douglei.bpm.process.parser.ProcessParseException;
  * 
  * @author DougLei
  */
+@Bean(clazz = OptionHandler.class)
 public class DelegateOptionHandler extends OptionHandler {
 	public static final String TYPE = "delegate";
 	

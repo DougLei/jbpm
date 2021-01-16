@@ -60,7 +60,7 @@ public class AssignTest {
 			System.out.println(result.getFailMessage());
 	}
 	
-	private int taskId = 1;
+	private int taskId = 4;
 	private String userId = "jinshilei";
 	
 	@Test
@@ -68,6 +68,33 @@ public class AssignTest {
 		ExecutionResult result = engine.getRuntimeModule().getTaskService().claim(taskId, userId);
 		if(result.isSuccess())
 			System.out.println("成功认领id为["+taskId+"]的任务");
+		else
+			System.out.println(result.getFailMessage());
+	}
+	
+	@Test
+	public void delegate() {
+		ExecutionResult result = engine.getRuntimeModule().getTaskService().delegate(taskId, userId, "haha", "测试委托功能");
+		if(result.isSuccess())
+			System.out.println("成功委托id为["+taskId+"]的任务");
+		else
+			System.out.println(result.getFailMessage());
+	}
+	
+	@Test
+	public void transfer() {
+		ExecutionResult result = engine.getRuntimeModule().getTaskService().transfer(taskId, userId, "douglei", "测试转办功能");
+		if(result.isSuccess())
+			System.out.println("成功转办id为["+taskId+"]的任务");
+		else
+			System.out.println(result.getFailMessage());
+	}
+	
+	@Test
+	public void unclaim() {
+		ExecutionResult result = engine.getRuntimeModule().getTaskService().unclaim(taskId, userId, false);
+		if(result.isSuccess())
+			System.out.println("成功取消认领id为["+taskId+"]的任务");
 		else
 			System.out.println(result.getFailMessage());
 	}

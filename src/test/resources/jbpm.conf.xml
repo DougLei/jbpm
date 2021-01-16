@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration id="defaultProcessEngine">
 	<environment>
+		<property name="enableTableSessionCache" value="false" />
+		
 		<datasource class="com.alibaba.druid.pool.DruidDataSource" closeMethod="">
-			<property name="url" value="jdbc:sqlserver://localhost:1433;DatabaseName=jbpm"/>
-			<property name="username" value="sa"/>
-			<property name="password" value="root"/>
+			<property name="url" value="${jdbc.url}"/>
+			<property name="username" value="${jdbc.username}"/>
+			<property name="password" value="${jdbc.password}"/>
 		
 			<property name="maxActive" value="500" /> 
 			<property name="minIdle" value="2" /> 
@@ -13,9 +15,13 @@
 			<property name="poolPreparedStatements" value="true" /> 
 			<property name="maxPoolPreparedStatementPerConnectionSize" value="100" />
 		</datasource>
-	
+		
 		<mappings>
 			<mapping path="jbpm-mappings" />
 		</mappings>
 	</environment>
+	
+	<properties placeholderPrefix="${" placeholderSuffix="}">
+		<resource path="jdbc.properties" />
+	</properties>
 </configuration>

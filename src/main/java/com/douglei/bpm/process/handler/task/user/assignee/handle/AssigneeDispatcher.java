@@ -59,7 +59,7 @@ public class AssigneeDispatcher {
 	}
 
 	// 追加parent指派信息集合
-	private static final String QUERY_PARENT_ASSIGNEE_LIST_SQL = "select * from bpm_ru_assignee where taskinst_id=? and group_id=? and chain_id<?";
+	private static final String SQL_QUERY_PARENT_ASSIGNEE_LIST = "select * from bpm_ru_assignee where taskinst_id=? and group_id=? and chain_id<?";
 	private void appendParentAssigneeList(List<HistoryAssignee> assigneeList, Date currentDate) {
 		List<Object> sqlParameters = new ArrayList<Object>(3);
 		sqlParameters.add(taskinstId);
@@ -70,7 +70,7 @@ public class AssigneeDispatcher {
 		for (HistoryAssignee assignee : assigneeList) {
 			sqlParameters.set(1, assignee.getGroupId());
 			sqlParameters.set(2, assignee.getChainId());
-			tempList.addAll(SessionContext.getSqlSession().query(HistoryAssignee.class, QUERY_PARENT_ASSIGNEE_LIST_SQL, sqlParameters));
+			tempList.addAll(SessionContext.getSqlSession().query(HistoryAssignee.class, SQL_QUERY_PARENT_ASSIGNEE_LIST, sqlParameters));
 		}
 		assigneeList.addAll(tempList);
 	}

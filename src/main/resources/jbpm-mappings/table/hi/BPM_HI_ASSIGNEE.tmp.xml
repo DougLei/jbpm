@@ -9,7 +9,7 @@
 			<column name="CHAIN_ID" property="chainId" dataType="number" length="3" nullable="false" />
 			<column name="USER_ID" property="userId" dataType="nstring" length="150" nullable="false" />
 			<column name="REASON" property="reason" dataType="nstring" length="300" />
-			<column name="MODE" property="mode" dataType="string" length="11" nullable="false" />
+			<column name="MODE_" property="mode" dataType="string" length="11" nullable="false" />
 			<column name="HANDLE_STATE" property="handleState" dataType="string" length="19" nullable="false" />
 			<column name="CLAIM_TIME" property="claimTime" dataType="datetime" />
 			<column name="ATTITUDE" property="attitude" dataType="string" length="8" />

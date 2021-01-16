@@ -93,7 +93,7 @@ public class Assignee {
 	public String getMode() {
 		return mode.name();
 	}
-	public void setMode(String mode) {
+	public void setMode_(String mode) {
 		this.mode = AssignMode.valueOf(mode) ;
 	}
 	public HandleState getHandleStateInstance() {

@@ -87,7 +87,7 @@ public class DelegateTaskCmd implements Command {
 		Map<String, Object> parameterMap = new HashMap<String, Object>(4);
 		parameterMap.put("handleState", targetHandleState().name());
 		parameterMap.put("assigneeList", assigneeList);
-		SessionContext.getSQLSession().executeUpdate("Assignee", "giveupTask", assigneeList);
+		SessionContext.getSQLSession().executeUpdate("Assignee", "giveupTask", parameterMap);
 			
 		// 2. 查询委托人的委托信息, 组装成指派信息集合, 保存到指派表
 		List<String> assignedUserIds = new ArrayList<String>(1);

@@ -11,10 +11,10 @@
 			<column name="REASON" property="reason" dataType="nstring" length="300" />
 			<column name="MODE" property="mode" dataType="string" length="11" nullable="false" />
 			<column name="HANDLE_STATE" property="handleState" dataType="string" length="19" nullable="false" />
-			<column name="CLAIM_TIME" property="claimTime" dataType="datetime" nullable="false"/>
+			<column name="CLAIM_TIME" property="claimTime" dataType="datetime" />
 			<column name="ATTITUDE" property="attitude" dataType="string" length="8" />
 			<column name="SUGGEST" property="suggest" dataType="nstring" length="300" />
-			<column name="FINISH_TIME" property="finishTime" dataType="datetime" nullable="false"/>
+			<column name="FINISH_TIME" property="finishTime" dataType="datetime"/>
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

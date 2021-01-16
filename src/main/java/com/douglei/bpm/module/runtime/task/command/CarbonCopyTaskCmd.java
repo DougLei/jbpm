@@ -77,6 +77,12 @@ public class CarbonCopyTaskCmd extends AbstractTaskCmd implements Command {
 	 * @param assignedUsers 接受的用户集合
 	 */
 	public void execute(String taskinstId, String ccUserId, Date ccTime, List<UserBean> assignedUsers) {
+		// 判断接受的用户集合中是否包含抄送人, 如果包含则移除
+		for(int i=0; i< assignedUsers.size(); i++) {
+			if(assignedUsers.get(i).getUserId().equals(ccUserId))
+				assignedUsers.remove(i--);
+		}
+		
 		List<CarbonCopy> carbonCopies = new ArrayList<CarbonCopy>(assignedUsers.size());
 		assignedUsers.forEach(user -> {
 			carbonCopies.add(new CarbonCopy(taskinstId, ccUserId, ccTime, user.getUserId()));

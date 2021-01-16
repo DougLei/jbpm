@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -48,13 +47,16 @@ public class DelegateTaskCmd implements Command {
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		TaskMetadata taskMetadata = taskInstance.getTaskMetadataEntity().getTaskMetadata();
 		if(!taskMetadata.requiredUserHandle())
-			return new ExecutionResult(getOptionName()+"失败, ["+taskInstance.getName()+"]任务不支持用户进行"+getOptionName()+"操作");
+			return new ExecutionResult(getAssignMode().getName()+"失败, ["+taskInstance.getName()+"]任务不支持用户进行"+getAssignMode().getName()+"操作");
+		
+		if(userId.equals(assignedUserId))
+			return new ExecutionResult(getAssignMode().getName()+"失败, 不能"+getAssignMode().getName()+"给自己");
 		
 		DelegateOption option = (DelegateOption) ((UserTaskMetadata)taskMetadata).getOption(getOptionType());
 		if(option == null)
-			return new ExecutionResult(getOptionName()+"失败, ["+taskInstance.getName()+"]任务不支持用户进行"+getOptionName()+"操作");
+			return new ExecutionResult(getAssignMode().getName()+"失败, ["+taskInstance.getName()+"]任务不支持用户进行"+getAssignMode().getName()+"操作");
 		if(option.reasonIsRequired() && StringUtil.isEmpty(reason))
-			return new ExecutionResult(getOptionName()+"失败, 请输入"+getOptionName()+"的具体原因");
+			return new ExecutionResult(getAssignMode().getName()+"失败, 请输入"+getAssignMode().getName()+"的具体原因");
 		
 		// 查询指定userId, 判断其是否可以委托
 		List<Assignee> assigneeList = SessionContext.getSqlSession()
@@ -62,7 +64,7 @@ public class DelegateTaskCmd implements Command {
 						"select id, group_id, chain_id from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
 						Arrays.asList(taskInstance.getTask().getTaskinstId(), userId, HandleState.CLAIMED.name()));
 		if(assigneeList.isEmpty())
-			return new ExecutionResult(getOptionName()+"失败, 指定的userId没有["+taskInstance.getName()+"]任务的"+getOptionName()+"操作权限");
+			return new ExecutionResult(getAssignMode().getName()+"失败, 指定的userId没有["+taskInstance.getName()+"]任务的"+getAssignMode().getName()+"操作权限");
 		
 		
 		// 获取具体可委托的所有人员集合, 并对本次委托的人员进行验证
@@ -75,7 +77,7 @@ public class DelegateTaskCmd implements Command {
 				(UserTaskMetadata)taskMetadata, 
 				new GeneralHandleParameter(taskInstance, processEngineBeans.getUserBeanFactory().create(userId), null, null, null));
 		if(assignableUsers.isEmpty())
-			return new ExecutionResult("["+taskMetadata.getName()+"]任务不存在可"+getOptionName()+"的人员");
+			return new ExecutionResult("["+taskMetadata.getName()+"]任务不存在可"+getAssignMode().getName()+"的人员");
 		if(!assignableUsers.contains(new UserBean(assignedUserId)))
 			return new ExecutionResult("不能指派配置范围外的人员"); 
 		
@@ -96,8 +98,7 @@ public class DelegateTaskCmd implements Command {
 				taskInstance.getProcessMetadata().getVersion(), 
 				new SqlCondition(assignedUserIds),
 				taskInstance.getTask().getTaskinstId(),
-				userId,
-				new HashSet<String>());
+				userId);
 		
 		List<Assignee> delegateAssigneeList = new ArrayList<Assignee>(assigneeList.size() * 3);
 		Date claimTime = new Date();
@@ -132,16 +133,6 @@ public class DelegateTaskCmd implements Command {
 		return DelegateOptionHandler.TYPE;
 	}
 	
-	/**
-	 * 获取当前option的名称
-	 * <p>
-	 * 属于引擎内置的名称
-	 * @return
-	 */
-	protected String getOptionName() {
-		return "委托";
-	}
-
 	/**
 	 * 获取指派模式
 	 * @return

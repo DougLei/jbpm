@@ -54,27 +54,25 @@ public class AssigneeDispatcher {
 			return;
 		
 		// 追加parent指派信息集合
-		appendParentAssigneeList(assigneeList);
+		appendParentAssigneeList(assigneeList, currentDate);
 		this.assigneeList = assigneeList;
 	}
 
 	// 追加parent指派信息集合
 	private static final String QUERY_PARENT_ASSIGNEE_LIST_SQL = "select * from bpm_ru_assignee where taskinst_id=? and group_id=? and chain_id<?";
-	private void appendParentAssigneeList(List<HistoryAssignee> assigneeList) {
+	private void appendParentAssigneeList(List<HistoryAssignee> assigneeList, Date currentDate) {
 		List<Object> sqlParameters = new ArrayList<Object>(3);
 		sqlParameters.add(taskinstId);
 		sqlParameters.add(null);
 		sqlParameters.add(null);
 		
-		List<HistoryAssignee> tempList = null;
+		List<HistoryAssignee> tempList = new ArrayList<HistoryAssignee>(assigneeList.size() * 3);
 		for (HistoryAssignee assignee : assigneeList) {
 			sqlParameters.set(1, assignee.getGroupId());
 			sqlParameters.set(2, assignee.getChainId());
-			
-			tempList = SessionContext.getSqlSession().query(HistoryAssignee.class, QUERY_PARENT_ASSIGNEE_LIST_SQL, sqlParameters);
-			if(tempList.size() > 0)
-				assigneeList.addAll(tempList);
+			tempList.addAll(SessionContext.getSqlSession().query(HistoryAssignee.class, QUERY_PARENT_ASSIGNEE_LIST_SQL, sqlParameters));
 		}
+		assigneeList.addAll(tempList);
 	}
 	
 	/**
@@ -91,7 +89,7 @@ public class AssigneeDispatcher {
 		
 		// 2. 将指派信息集合, 从运行表删除, 并保存到历史表
 		if(assigneeList != null) {
-			SessionContext.getSQLSession().executeUpdate("Assignee", "deleteByGroupIds", assigneeList);
+			SessionContext.getSQLSession().executeUpdate("Assignee", "deleteByGroupIds", new AssigneeQueryByGroupIdSqlCondition(taskinstId, assigneeList));
 			SessionContext.getTableSession().save(assigneeList);
 		}
 	}

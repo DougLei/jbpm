@@ -5,11 +5,14 @@ select * from BPM_RE_PROCDEF
 select * from BPM_RU_PROCINST
 select * from BPM_RU_TASK
 select * from BPM_RU_ASSIGNEE
+select * from BPM_RU_CC
 select * from BPM_RU_VARIABLE
+
 
 select * from BPM_HI_PROCINST
 select * from BPM_HI_TASK
 select * from BPM_HI_ASSIGNEE
+select * from BPM_HI_CC
 select * from BPM_HI_VARIABLE
 
 
@@ -20,11 +23,13 @@ truncate table BPM_RE_PROCDEF
 truncate table BPM_RU_PROCINST
 truncate table BPM_RU_TASK
 truncate table BPM_RU_VARIABLE
+truncate table BPM_RU_CC
 truncate table BPM_RU_ASSIGNEE
 
 truncate table BPM_HI_PROCINST
 truncate table BPM_HI_TASK
 truncate table BPM_HI_VARIABLE
+truncate table BPM_HI_CC
 truncate table BPM_HI_ASSIGNEE
 
 

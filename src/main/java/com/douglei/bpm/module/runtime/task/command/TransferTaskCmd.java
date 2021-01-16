@@ -21,11 +21,6 @@ public class TransferTaskCmd extends DelegateTaskCmd {
 	}
 
 	@Override
-	protected String getOptionName() {
-		return "转办";
-	}
-
-	@Override
 	protected AssignMode getAssignMode() {
 		return AssignMode.TRANSFERRED;
 	}

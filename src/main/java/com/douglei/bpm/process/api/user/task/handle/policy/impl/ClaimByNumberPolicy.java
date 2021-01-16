@@ -32,7 +32,7 @@ public class ClaimByNumberPolicy implements ClaimPolicy{
 	}
 
 	@Override
-	public ClaimResult claimValidate(String value, String currentClaimUserId, List<Assignee> unclaimAssigneeList, List<Assignee> claimedAssigneeList, List<Assignee> finishedAssigneeList) {
+	public ClaimResult claimValidate(String value, String currentClaimUserId, List<Assignee> currentAssigneeList, List<Assignee> unclaimAssigneeList, List<Assignee> claimedAssigneeList, List<Assignee> finishedAssigneeList) {
 		int claimUpperLimit = calcUpperLimit(assignNumberParser.parse(value), unclaimAssigneeList, claimedAssigneeList, finishedAssigneeList);
 		
 		// 获得已经认领的数量
@@ -49,7 +49,7 @@ public class ClaimByNumberPolicy implements ClaimPolicy{
 		// 计算剩余可认领的数量
 		int leftCount = claimUpperLimit-claimedCount;
 		for (Assignee assignee : unclaimAssigneeList) {
-			if(assignee.getUserId().equals(currentClaimUserId))
+			if(assignee.getUserId().equals(currentClaimUserId) || inSameGroup(assignee.getGroupId(), currentAssigneeList))
 				leftCount--;
 			if(leftCount == 0)
 				break;
@@ -57,6 +57,15 @@ public class ClaimByNumberPolicy implements ClaimPolicy{
 		return new ClaimResult(true, leftCount);
 	}
 	
+	// 判断未认领的指派信息的gourpId, 是否存在于当前进行认领的用户的指派信息中
+	private boolean inSameGroup(int groupId, List<Assignee> currentAssigneeList) {
+		for (Assignee assignee : currentAssigneeList) {
+			if(groupId == assignee.getGroupId())
+				return true;
+		}
+		return false;
+	}
+
 	// 计算可认领的数量上限
 	private int calcUpperLimit(AssignNumber number, List<Assignee> unclaimAssigneeList, List<Assignee> claimedAssigneeList, List<Assignee> finishedAssigneeList) {
 		if(!number.isPercent())

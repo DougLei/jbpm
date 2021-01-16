@@ -11,6 +11,14 @@
 					<expression name="static" value="douglei,zhangsan"/>
 				</assignPolicy>
 			</candidate>
+			
+			<option type="carbonCopy" name="抄送" order="1">
+				<candidate>
+					<assignPolicy isDynamic="false">
+						<expression name="static" value="douglei,zhangsan"/>
+					</assignPolicy>
+				</candidate>
+			</option>
 		</userTask>
 		<flow id="flow2" source="userTask1" target="userTask2" />
 		

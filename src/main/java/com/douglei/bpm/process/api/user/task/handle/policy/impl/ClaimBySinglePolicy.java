@@ -25,7 +25,7 @@ public class ClaimBySinglePolicy implements ClaimPolicy{
 	}
 
 	@Override
-	public ClaimResult claimValidate(String value, String currentClaimUserId, List<Assignee> unclaimAssigneeList, List<Assignee> claimedAssigneeList, List<Assignee> finishedAssigneeList) {
+	public ClaimResult claimValidate(String value, String currentClaimUserId, List<Assignee> currentAssigneeList, List<Assignee> unclaimAssigneeList, List<Assignee> claimedAssigneeList, List<Assignee> finishedAssigneeList) {
 		if(claimedAssigneeList == null)
 			return new ClaimResult(true, 0);
 		return ClaimResult.CAN_NOT_CLAIM;

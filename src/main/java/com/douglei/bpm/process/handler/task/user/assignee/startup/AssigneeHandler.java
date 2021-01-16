@@ -1,7 +1,6 @@
 package com.douglei.bpm.process.handler.task.user.assignee.startup;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import com.douglei.bpm.ProcessEngineBeans;
@@ -86,8 +85,7 @@ public class AssigneeHandler {
 				version,
 				new SqlCondition(assignedUserIds), 
 				taskinstId,
-				userId,
-				new HashSet<String>());
+				userId);
 		
 		boolean isStaticAssign = !currentUserTaskMetadata.getCandidate().getAssignPolicy().isDynamic(); // 是否静态指派
 		List<Assignee> assigneeList = new ArrayList<Assignee>(assignedUsers.size() + 5); // +5是备用的长度

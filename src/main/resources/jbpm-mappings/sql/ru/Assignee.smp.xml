@@ -14,17 +14,17 @@
 		
 		<!-- 在认领任务时, 查询同组内有没有人已经认领 -->
 		<content name="querySameGroupClaimed" type="select">
-			select group_id from bpm_ru_assignee where taskinst_id = #{[0].taskinstId} and handle_state = 'CLAIMED' and 
-			<foreach collection="assigneeList" alias="assignee" open="group_id in (" separator="," close=")">
-				#{assignee.groupId, dataType=number}
+			select group_id from bpm_ru_assignee where taskinst_id = #{taskinstId} and handle_state = 'CLAIMED' and 
+			<foreach collection="groupIds" alias="groupId" open="group_id in (" separator="," close=")">
+				#{groupId, dataType=number}
 			</foreach> 
 		</content>
 		
 		<!-- 在认领任务时, 查询任务指派信息的认领情况 -->
 		<content name="queryAssigneeClaimSituation" type="select">
-			select id, group_id, chain_id, user_id, handle_state from bpm_ru_assignee where taskinst_id=#{taskinstId} and handle_state in ('UNCLAIM','CLAIMED')
+			select id, group_id, user_id, handle_state from bpm_ru_assignee where taskinst_id=#{taskinstId} and handle_state in ('UNCLAIM','CLAIMED')
 			union all
-			select id, group_id, chain_id, user_id, handle_state from bpm_hi_assignee where taskinst_id=#{taskinstId} and handle_state = 'FINISHED'
+			select id, group_id, user_id, handle_state from bpm_hi_assignee where taskinst_id=#{taskinstId} and handle_state = 'FINISHED'
 		</content>
 		
 		<!-- 取消认领任务 -->
@@ -53,9 +53,9 @@
 		
 		<!-- 根据groupId删除指派信息 -->
 		<content name="deleteByGroupIds" type="delete">
-			delete bpm_ru_assignee where taskinst_id= #{[0].taskinstId} and 
-			<foreach collection="assigneeList" alias="assignee" open="group_id in (" separator="," close=")">
-				#{assignee.groupId, dataType=number}
+			delete bpm_ru_assignee where taskinst_id= #{taskinstId} and 
+			<foreach collection="groupIds" alias="groupId" open="group_id in (" separator="," close=")">
+				#{groupId, dataType=number}
 			</foreach>
 		</content>
 	</sql>

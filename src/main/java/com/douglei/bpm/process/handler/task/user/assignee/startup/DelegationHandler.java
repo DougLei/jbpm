@@ -13,6 +13,7 @@ import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.orm.context.SessionContext;
 
+
 /**
  * 委托信息处理器
  * @author DougLei
@@ -28,13 +29,17 @@ public class DelegationHandler {
 	 * @param condition 条件
 	 * @param taskinstId 任务实例id
 	 * @param userId 操作的用户id
-	 * @param counter 计数器, 用来防止出现委托死循环的情况, 传入空的HashSet实例即可
 	 * @throws TaskHandleException
 	 */
-	public DelegationHandler(String processCode, String processVersion, SqlCondition condition, String taskinstId, String userId, HashSet<String> counter) throws TaskHandleException{
+	public DelegationHandler(String processCode, String processVersion, SqlCondition condition, String taskinstId, String userId) throws TaskHandleException{
+		this(processCode, processVersion, condition, taskinstId, userId, new HashSet<String>());
+	}
+	
+	// counter: 计数器, 用来防止出现委托死循环的情况
+	private DelegationHandler(String processCode, String processVersion, SqlCondition condition, String taskinstId, String userId, HashSet<String> counter) throws TaskHandleException{
 		condition.getUserIds().forEach(uid -> {
 			if(counter.contains(uid))
-				throw new TaskHandleException("递归查询委托信息出现异常, 重复的userId为["+uid+"], 任务实例id为["+taskinstId+"], 操作的用户id为["+userId+"]");
+				throw new TaskHandleException("递归查询委托信息出现重复的userId=["+uid+"], 相关的任务实例id为["+taskinstId+"], 操作的用户id为["+userId+"]");
 			counter.add(uid);
 		});
 		
@@ -75,6 +80,7 @@ public class DelegationHandler {
 			this.children = new DelegationHandler(processCode, processVersion, condition, taskinstId, userId, counter);
 		}
 	}
+	
 
 	/**
 	 * 添加指派信息

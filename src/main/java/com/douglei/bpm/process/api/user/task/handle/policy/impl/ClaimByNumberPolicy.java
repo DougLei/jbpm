@@ -68,9 +68,6 @@ public class ClaimByNumberPolicy implements ClaimPolicy{
 
 	// 计算可认领的数量上限
 	private int calcUpperLimit(AssignNumber number, List<Assignee> unclaimAssigneeList, List<Assignee> claimedAssigneeList, List<Assignee> finishedAssigneeList) {
-		if(!number.isPercent())
-			return number.getNumber();
-		
 		int total = unclaimAssigneeList.size();
 		if(claimedAssigneeList != null)
 			total += claimedAssigneeList.size();

@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.metadata.task.user.option.delegate;
 
-import com.douglei.bpm.process.metadata.task.user.DefaultCandidateInstance;
+import com.douglei.bpm.process.metadata.task.user.DefaultCandidateConfigInstance;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignNumber;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
 
@@ -16,6 +16,6 @@ public class DelegateAssignPolicy extends AssignPolicy{
 	
 	@Override
 	public AssignNumber getAssignNumber() {
-		return DefaultCandidateInstance.DEFAULT_ASSIGN_NUMBER_1;
+		return DefaultCandidateConfigInstance.DEFAULT_ASSIGN_NUMBER_1;
 	}
 }

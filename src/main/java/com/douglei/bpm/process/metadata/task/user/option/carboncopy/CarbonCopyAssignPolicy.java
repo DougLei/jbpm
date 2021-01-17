@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.metadata.task.user.option.carboncopy;
 
-import com.douglei.bpm.process.metadata.task.user.DefaultCandidateInstance;
+import com.douglei.bpm.process.metadata.task.user.DefaultCandidateConfigInstance;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignNumber;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
 
@@ -17,7 +17,7 @@ public class CarbonCopyAssignPolicy extends AssignPolicy{
 	@Override
 	public AssignNumber getAssignNumber() {
 		if(assignNumber == null)
-			return DefaultCandidateInstance.DEFAULT_ASSIGN_NUMBER_100_PERCENT;
+			return DefaultCandidateConfigInstance.DEFAULT_ASSIGN_NUMBER_100_PERCENT;
 		return assignNumber;
 	}
 }

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.douglei.bpm.process.metadata.task.user.DefaultCandidateInstance;
+import com.douglei.bpm.process.metadata.task.user.DefaultCandidateConfigInstance;
 
 /**
  * 指派策略
@@ -43,7 +43,7 @@ public class AssignPolicy implements Serializable{
 	 */
 	public AssignNumber getAssignNumber() {
 		if(assignNumber == null)
-			return DefaultCandidateInstance.DEFAULT_ASSIGN_NUMBER_1;
+			return DefaultCandidateConfigInstance.DEFAULT_ASSIGN_NUMBER_100_PERCENT;
 		return assignNumber;
 	}
 	/**

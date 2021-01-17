@@ -2,7 +2,7 @@ package com.douglei.bpm.process.metadata.task.user.candidate.handle;
 
 import java.io.Serializable;
 
-import com.douglei.bpm.process.metadata.task.user.DefaultCandidateInstance;
+import com.douglei.bpm.process.metadata.task.user.DefaultCandidateConfigInstance;
 
 /**
  * 办理策略
@@ -41,7 +41,7 @@ public class HandlePolicy implements Serializable {
 	 */
 	public ClaimPolicyEntity getClaimPolicyEntity() {
 		if(claimPolicyEntity == null)
-			return DefaultCandidateInstance.DEFAULT_CLAIM_POLICY_ENTITY;
+			return DefaultCandidateConfigInstance.DEFAULT_CLAIM_POLICY_ENTITY;
 		return claimPolicyEntity;
 	}
 	/**

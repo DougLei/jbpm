@@ -199,6 +199,5 @@ public class TaskHandleUtil {
 		int upperLimit = assignNumber.calcUpperLimit(assignableUsers.size());
 		if(assignedUsers.size() > upperLimit)
 			throw new TaskHandleException("实际指派的人数["+assignedUsers.size()+"]超过配置的上限["+upperLimit+"]");
-		
 	}
 }

@@ -56,6 +56,9 @@ public class AssignNumber implements Serializable{
 				return 1;
 			return upperLimit;
 		}
+		
+		if(number > totalCount)
+			return totalCount;
 		return number;
 	}
 	

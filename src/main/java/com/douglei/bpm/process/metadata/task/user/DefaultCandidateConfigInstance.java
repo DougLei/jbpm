@@ -6,10 +6,10 @@ import com.douglei.bpm.process.metadata.task.user.candidate.handle.ClaimPolicyEn
 import com.douglei.bpm.process.metadata.task.user.candidate.handle.HandlePolicy;
 
 /**
- * 默认的候选人配置
+ * 默认的候选人配置实例
  * @author DougLei
  */
-public class DefaultCandidateInstance {
+public class DefaultCandidateConfigInstance {
 	
 	/**
 	 * 默认的最多可指派的人数表达式: 1人

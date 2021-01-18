@@ -10,6 +10,7 @@ import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
 import com.douglei.bpm.process.api.user.option.impl.carboncopy.CarbonCopyOptionHandler;
+import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.metadata.task.user.option.Option;
 import com.douglei.bpm.process.metadata.task.user.option.carboncopy.CarbonCopyOption;
@@ -31,7 +32,7 @@ public class UnclaimTaskCmd implements Command {
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		if(!taskInstance.requiredUserHandle())
-			return new ExecutionResult("取消认领失败, ["+taskInstance.getName()+"]任务不支持用户取消认领");
+			throw new TaskHandleException("取消认领失败, ["+taskInstance.getName()+"]任务不支持用户取消认领");
 		
 		// 查询指定userId, 判断其是否可以取消认领
 		List<Assignee> assigneeList = SessionContext.getSqlSession()
@@ -39,12 +40,12 @@ public class UnclaimTaskCmd implements Command {
 						"select id from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
 						Arrays.asList(taskInstance.getTask().getTaskinstId(), userId, HandleState.CLAIMED.name()));
 		if(assigneeList.isEmpty())
-			return new ExecutionResult("取消认领失败, 指定的userId无法取消认领["+taskInstance.getName()+"]任务");
+			throw new TaskHandleException("取消认领失败, 指定的userId无法取消认领["+taskInstance.getName()+"]任务");
 		
 		ccBeViewed();
 		if(ccBeViewed) {
 			if(!strict)
-				return new ExecutionResult("取消认领失败, 指定的userId抄送了["+taskInstance.getName()+"]任务, 且已被相关人员阅读, 如确实需要取消认领, 请联系流程管理员");
+				return new ExecutionResult("取消认领失败, 指定的userId抄送了[%s]任务, 且已被相关人员阅读, 如确实需要取消认领, 请联系流程管理员", "jbpm.unclaim.fail.cc.be.viewed", taskInstance.getName());
 			SessionContext.getSqlSession().executeUpdate("delete bpm_hi_cc where taskinst_id=? and cc_user_id=?", Arrays.asList(taskInstance.getTask().getTaskinstId(), userId));
 		}
 		

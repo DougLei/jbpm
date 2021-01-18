@@ -37,7 +37,7 @@ public class ProcessRuntimeTest {
 		if(result.isSuccess())
 			System.out.println("成功启动的流程实例id为["+result.getObject(ProcessInstance.class).getId()+"]");
 		else
-			System.out.println(result.getFailMessage());
+			System.out.println(result.getMessage());
 	}
 	
 	@Test
@@ -48,7 +48,7 @@ public class ProcessRuntimeTest {
 		if(result.isSuccess())
 			System.out.println("成功认领id为["+taskId+"]的任务");
 		else
-			System.out.println(result.getFailMessage());
+			System.out.println(result.getMessage());
 	}
 	
 	@Test
@@ -64,7 +64,7 @@ public class ProcessRuntimeTest {
 		if(result.isSuccess())
 			System.out.println("成功完成id为["+taskId+"]的任务");
 		else
-			System.out.println(result.getFailMessage());
+			System.out.println(result.getMessage());
 	}
 }
 

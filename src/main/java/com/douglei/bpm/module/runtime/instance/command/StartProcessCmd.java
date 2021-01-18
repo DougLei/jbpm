@@ -6,6 +6,7 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
 import com.douglei.bpm.module.repository.definition.State;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
+import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.event.start.StartEventHandleParameter;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.orm.context.SessionContext;
@@ -26,19 +27,19 @@ public class StartProcessCmd implements Command {
 		switch (parameter.getMode()) {
 			case StartParameter.BY_PROCESS_DEFINITION_ID:
 				if(processDefinition == null) 
-					return new ExecutionResult("启动失败, 不存在id为["+parameter.getProcessDefinitionId()+"]的流程");
+					throw new TaskHandleException("启动失败, 不存在id为["+parameter.getProcessDefinitionId()+"]的流程");
 				break;
 			case StartParameter.BY_PROCESS_DEFINITION_CODE:
 				if(processDefinition == null) 
-					return new ExecutionResult("启动失败, 不存在code为["+parameter.getCode()+"]的流程; 或未设置其流程的主版本");
+					return new ExecutionResult("启动失败, 不存在code为[%s]的流程; 或未设置其流程的主版本", "jbpm.process.start.fail.unset.major.version", parameter.getCode());
 				break;
 			case StartParameter.BY_PROCESS_DEFINITION_CODE_VERSION:
 				if(processDefinition == null) 
-					return new ExecutionResult("启动失败, 不存在code为["+parameter.getCode()+"], version为["+parameter.getVersion()+"]的流程");
+					return new ExecutionResult("启动失败, 不存在code为[%s], version为[%s]的流程", "jbpm.process.start.fail.code.version.unexists", parameter.getCode(), parameter.getVersion());
 				break;
 		}
 		if(processDefinition.getStateInstance() != State.DEPLOY)
-			return new ExecutionResult("启动失败, ["+processDefinition.getName()+"]流程还未部署");
+			return new ExecutionResult("启动失败, [%s]流程还未部署", "jbpm.process.start.fail.undeploy", processDefinition.getName());
 		
 		ProcessMetadata processMetadata = processEngineBeans.getProcessContainer().getProcess(processDefinition.getId());
 		return processEngineBeans.getTaskHandleUtil()

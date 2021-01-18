@@ -30,7 +30,7 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		if(startConditionExpression != null) {
 			Map<String, Object> variableMap = handleParameter.getVariableEntities().getVariableMap();
 			if(variableMap == null || !OgnlHandler.getSingleton().getBooleanValue(startConditionExpression, variableMap))
-				return new ExecutionResult("启动失败, 当前参数不满足["+handleParameter.getProcessMetadata().getName()+"]流程的启动条件");
+				return new ExecutionResult("启动失败, 当前参数不满足[%s]流程的启动条件", "jbpm.process.start.fail.condition.mismatch", handleParameter.getProcessMetadata().getName());
 		}
 		return handle();
 	}

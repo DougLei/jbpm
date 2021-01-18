@@ -7,6 +7,7 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.instance.HistoryProcessInstanceService;
+import com.douglei.bpm.module.repository.RepositoryException;
 import com.douglei.bpm.module.runtime.instance.ProcessInstanceHandlePolicy;
 import com.douglei.bpm.module.runtime.instance.ProcessInstanceService;
 import com.douglei.bpm.process.api.container.ProcessContainerProxy;
@@ -43,7 +44,7 @@ public class ProcessDefinitionService {
 			SessionContext.getTableSession().save(processDefinition);
 		}else {
 			if(exProcessDefinition.getStateInstance() == State.DELETE)
-				return new ExecutionResult("保存失败, 已存在code为["+processDefinition.getCode()+"], version为["+processDefinition.getVersion()+"]的流程");
+				return new ExecutionResult("保存失败, 已存在code为[%s], version为[%s]的流程", "jbpm.procdef.save.fail.code.version.exists", processDefinition.getCode(), processDefinition.getVersion());
 			
 			if(exProcessDefinition.getSignature().equals(processDefinition.getSignature())){ // 没有修改流程定义的内容, 进行update
 				processDefinition.setId(exProcessDefinition.getId());
@@ -62,7 +63,7 @@ public class ProcessDefinitionService {
 				SessionContext.getTableSession().update(processDefinition); 
 			}else { // 修改了内容, 且旧的流程定义存在实例, 根据strict值, 进行升级save, 或提示操作失败
 				if(!builder.isStrict()) 
-					return new ExecutionResult("保存失败, ["+processDefinition.getName()+"]流程存在实例");
+					return new ExecutionResult("保存失败, [%s]流程存在实例", "jbpm.procdef.save.fail.instance.exists", processDefinition.getName());
 				
 				processDefinition.setIsMajorVersion(exProcessDefinition.getIsMajorVersion());
 				processDefinition.setSubversion(exProcessDefinition.getSubversion()+1);
@@ -88,9 +89,9 @@ public class ProcessDefinitionService {
 	public ExecutionResult deploy(int processDefinitionId, ProcessInstanceHandlePolicy runtimeProcessInstanceHandlePolicy) {
 		ProcessDefinition processDefinition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, name, code, version, is_major_subversion, state, content_, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
-			return new ExecutionResult("部署失败, 不存在id为["+processDefinitionId+"]的流程");
+			throw new RepositoryException("部署失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.isMajorSubversion())
-			return new ExecutionResult("部署失败, ["+processDefinition.getName()+"]流程不是主要子版本");
+			throw new RepositoryException("部署失败, ["+processDefinition.getName()+"]流程不是主要子版本");
 		if(!processDefinition.getStateInstance().supportDeploy())
 			return new ExecutionResult("部署失败, ["+processDefinition.getName()+"]流程处于["+processDefinition.getState()+"]状态");
 		
@@ -113,7 +114,7 @@ public class ProcessDefinitionService {
 	public ExecutionResult undeploy(int processDefinitionId, ProcessInstanceHandlePolicy runtimeProcessInstanceHandlePolicy, ProcessInstanceHandlePolicy historyProcessInstanceHandlePolicy) {
 		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select name, code, version, is_major_subversion, state, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
-			return new ExecutionResult("取消部署失败, 不存在id为["+processDefinitionId+"]的流程");
+			throw new RepositoryException("取消部署失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.isMajorSubversion())
 			return new ExecutionResult("取消部署失败, ["+processDefinition.getName()+"]流程不是主要子版本");
 		if(!processDefinition.getStateInstance().supportUnDeploy())
@@ -139,7 +140,7 @@ public class ProcessDefinitionService {
 	public ExecutionResult delete(int processDefinitionId, boolean strict) {
 		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select name, code, version, is_major_subversion, state, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
-			return new ExecutionResult("删除失败, 不存在id为["+processDefinitionId+"]的流程");
+			throw new RepositoryException("删除失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.isMajorSubversion())
 			return new ExecutionResult("删除失败, ["+processDefinition.getName()+"]流程不是主要子版本");
 		if(!processDefinition.getStateInstance().supportDelete())
@@ -160,7 +161,7 @@ public class ProcessDefinitionService {
 	public ExecutionResult delete4Physical(int processDefinitionId) {
 		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select type_id, name, code, version, subversion, is_major_subversion, state, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
-			return new ExecutionResult("删除失败, 不存在id为["+processDefinitionId+"]的流程");
+			throw new RepositoryException("删除失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.getStateInstance().supportPhysicalDelete())
 			return new ExecutionResult("删除失败, ["+processDefinition.getName()+"]流程处于["+processDefinition.getState()+"]状态");
 		
@@ -192,7 +193,7 @@ public class ProcessDefinitionService {
 		List<Object> paramList = Arrays.asList(processDefinitionId);
 		ProcessDefinition targetProcessDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select id, name, code, is_major_version, is_major_subversion, state, tenant_id from bpm_re_procdef where id=?", paramList);
 		if(targetProcessDefinition == null)
-			return new ExecutionResult("设置主版本失败, 不存在id为["+processDefinitionId+"]的流程");
+			throw new RepositoryException("设置主版本失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(targetProcessDefinition.isMajorVersion())
 			return new ExecutionResult("设置主版本失败, ["+targetProcessDefinition.getName()+"]流程就是主版本");
 		if(!targetProcessDefinition.isMajorSubversion())
@@ -216,7 +217,7 @@ public class ProcessDefinitionService {
 	public ExecutionResult setMajorSubversion(int processDefinitionId) {
 		ProcessDefinition targetProcessDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select id, name, code, version, subversion, is_major_subversion, state, tenant_id from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(targetProcessDefinition == null)
-			return new ExecutionResult("设置主要子版本失败, 不存在id为["+processDefinitionId+"]的流程");
+			throw new RepositoryException("设置主要子版本失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(targetProcessDefinition.isMajorSubversion())
 			return new ExecutionResult("设置主要子版本失败, ["+targetProcessDefinition.getName()+"]流程就是主要子版本");
 		
@@ -255,7 +256,7 @@ public class ProcessDefinitionService {
 	public ExecutionResult restoreStateDelete2UnDeploy(int processDefinitionId) {
 		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select name, is_major_subversion, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
-			return new ExecutionResult("还原流程状态失败, 不存在id为["+processDefinitionId+"]的流程");
+			throw new RepositoryException("还原流程状态失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.isMajorSubversion())
 			return new ExecutionResult("还原流程状态失败, ["+processDefinition.getName()+"]流程不是主要子版本");
 		if(processDefinition.getStateInstance() != State.DELETE)
@@ -275,7 +276,7 @@ public class ProcessDefinitionService {
 	public ExecutionResult updateState(int processDefinitionId, State targetState) {
 		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select name, is_major_subversion, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
-			return new ExecutionResult("修改流程状态失败, 不存在id为["+processDefinitionId+"]的流程");
+			throw new RepositoryException("修改流程状态失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.isMajorSubversion())
 			return new ExecutionResult("修改流程状态失败, ["+processDefinition.getName()+"]流程不是主要子版本");
 		if(!processDefinition.getStateInstance().supportConvert(targetState))

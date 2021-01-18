@@ -13,6 +13,7 @@ import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimResult;
+import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.task.user.assignee.handle.AssigneeQueryByGroupIdSqlCondition;
 import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.metadata.task.user.candidate.handle.ClaimPolicyEntity;
@@ -33,9 +34,9 @@ public class ClaimTaskCmd implements Command{
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		if(!taskInstance.requiredUserHandle())
-			return new ExecutionResult("认领失败, ["+taskInstance.getName()+"]任务不支持用户认领");
+			throw new TaskHandleException("认领失败, ["+taskInstance.getName()+"]任务不支持用户认领");
 		if(taskInstance.getTask().isAllClaimed())
-			return new ExecutionResult("认领失败, ["+taskInstance.getName()+"]任务的办理权限已被认领完");
+			return new ExecutionResult("认领失败, [%s]任务的办理权限已被认领完", "jbpm.claim.fail.task.all.claimed", taskInstance.getName());
 		
 		// 查询指定userId, 判断其是否可以认领
 		List<Assignee> assigneeList = SessionContext.getSqlSession()
@@ -43,7 +44,7 @@ public class ClaimTaskCmd implements Command{
 						SQL_QUERY_CAN_CLAIM_ASSIGNEE_LIST, 
 						Arrays.asList(taskInstance.getTask().getTaskinstId(), currentClaimUserId, HandleState.COMPETITIVE_UNCLAIM.name(), HandleState.UNCLAIM.name()));
 		if(assigneeList.isEmpty())
-			return new ExecutionResult("认领失败, 指定的userId无法认领["+taskInstance.getName()+"]任务");
+			throw new TaskHandleException("认领失败, 指定的userId无法认领["+taskInstance.getName()+"]任务");
 		return claim(assigneeList, processEngineBeans);
 	}
 
@@ -53,7 +54,7 @@ public class ClaimTaskCmd implements Command{
 		List<Object[]> claimedGroupIdList = SessionContext.getSQLSession().query_("Assignee", "querySameGroupClaimed", new AssigneeQueryByGroupIdSqlCondition(taskInstance.getTask().getTaskinstId(), assigneeList));
 		if(claimedGroupIdList.size() > 0) {
 			if(claimedGroupIdList.size() == assigneeList.size())
-				return new ExecutionResult("认领失败, ["+taskInstance.getName()+"]任务已被认领");
+				return new ExecutionResult("认领失败, [%s]任务已被认领", "jbpm.claim.fail.claimed.by.other", taskInstance.getName());
 			
 			int claimedGroupId;
 			for (Object[] claimedGroupIdArr : claimedGroupIdList) {
@@ -69,7 +70,7 @@ public class ClaimTaskCmd implements Command{
 		
 		// 判断当前用户能否认领
 		if(!canClaim(assigneeList, processEngineBeans))
-			return new ExecutionResult("认领失败, ["+taskInstance.getName()+"]任务的办理权限已被认领完");
+			return new ExecutionResult("认领失败, [%s]任务的办理权限已被认领完", "jbpm.claim.fail.task.all.claimed", taskInstance.getName());
 		
 		// 进行认领
 		Date claimTime = new Date();

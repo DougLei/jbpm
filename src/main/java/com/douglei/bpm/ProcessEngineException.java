@@ -6,9 +6,7 @@ package com.douglei.bpm;
  */
 public class ProcessEngineException extends RuntimeException {
 
-	public ProcessEngineException() {
-		super();
-	}
+	public ProcessEngineException() {}
 	public ProcessEngineException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}

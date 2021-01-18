@@ -23,7 +23,7 @@ public class ProcessTypeService {
 	@Transaction
 	public ExecutionResult insert(ProcessType type) {
 		if(SessionContext.getSQLSession().uniqueQuery_("ProcessType", "query4ValidateCodeExists", type) != null)
-			return new ExecutionResult("已存在编码为["+type.getCode()+"]的流程类型");
+			return new ExecutionResult("已存在编码为[%s]的流程类型", "jbpm.process.type.fail.code.exists", type.getCode());
 		
 		SessionContext.getTableSession().save(type);
 		return ExecutionResult.getDefaultSuccessInstance();
@@ -38,7 +38,7 @@ public class ProcessTypeService {
 	public ExecutionResult update(ProcessType type) {
 		Object[] obj = SessionContext.getSQLSession().uniqueQuery_("ProcessType", "query4ValidateCodeExists", type);
 		if(obj != null && type.getId() != Integer.parseInt(obj[0].toString())) 
-			return new ExecutionResult("已存在编码为["+type.getCode()+"]的流程类型");
+			return new ExecutionResult("已存在编码为[%s]的流程类型", "jbpm.process.type.fail.code.exists", type.getCode());
 		
 		SessionContext.getTableSession().update(type);
 		return ExecutionResult.getDefaultSuccessInstance();
@@ -56,7 +56,7 @@ public class ProcessTypeService {
 		
 		int count = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_("select count(id) from bpm_re_procdef where type_id = ?", param)[0].toString());
 		if(count > 0 && !strict)
-			return new ExecutionResult("该流程类型关联了["+count+"]条流程, 无法删除");
+			return new ExecutionResult("该流程类型关联了[%d]条流程, 无法删除", "jbpm.process.type.fail.ref.procdefs", count);
 		
 		SessionContext.getSqlSession().executeUpdate("delete bpm_re_proctype where id=?", param);
 		if(count > 0) 

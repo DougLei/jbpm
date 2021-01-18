@@ -27,7 +27,7 @@ public class ProcessTypeTest {
 		if(result.isSuccess())
 			System.out.println("流程类型插入成功: id=" + type.getId());
 		else
-			System.out.println("流程类型插入失败: " + result.getFailMessage());
+			System.out.println("流程类型插入失败: " + result.getMessage());
 	}
 	
 	@Test
@@ -41,7 +41,7 @@ public class ProcessTypeTest {
 		if(result.isSuccess())
 			System.out.println("流程类型修改成功: id=" + type.getId());
 		else
-			System.out.println("流程类型修改失败: " + result.getFailMessage());
+			System.out.println("流程类型修改失败: " + result.getMessage());
 	}
 	
 	@Test
@@ -52,6 +52,6 @@ public class ProcessTypeTest {
 		if(result.isSuccess())
 			System.out.println("流程类型删除成功: id=" + typeId);
 		else
-			System.out.println("流程类型删除失败: " + result.getFailMessage());
+			System.out.println("流程类型删除失败: " + result.getMessage());
 	}
 }

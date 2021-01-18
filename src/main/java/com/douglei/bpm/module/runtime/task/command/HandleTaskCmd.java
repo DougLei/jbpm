@@ -13,6 +13,7 @@ import com.douglei.bpm.module.runtime.task.TaskInstance;
 import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandleSequencePolicy;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
+import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.metadata.task.user.candidate.handle.HandlePolicy;
 import com.douglei.orm.context.SessionContext;
@@ -32,25 +33,25 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		if(StringUtil.isEmpty(parameter.getUserId()))
-			return new ExecutionResult("办理失败, 办理["+taskInstance.getName()+"]任务, 需要提供userId");
+			throw new TaskHandleException("办理失败, 办理["+taskInstance.getName()+"]任务, 需要提供userId");
 
 		UserBean currentHandleUser = processEngineBeans.getUserBeanFactory().create(parameter.getUserId());
 		
 		if(taskInstance.requiredUserHandle()) {
 			HandlePolicy handlePolicy = ((UserTaskMetadata) taskInstance.getTaskMetadataEntity().getTaskMetadata()).getCandidate().getHandlePolicy();
 			if(handlePolicy.isSuggest() && StringUtil.isEmpty(parameter.getSuggest()))
-				return new ExecutionResult("办理失败, 办理["+taskInstance.getName()+"]任务, 需要输入办理意见");
+				return new ExecutionResult("办理失败, 办理[%s]任务, 需要输入办理意见", "jbpm.handle.fail.no.suggest", taskInstance.getName());
 			if(handlePolicy.isAttitude() && parameter.getAttitude() == null)
-				return new ExecutionResult("办理失败, 办理["+taskInstance.getName()+"]任务, 需要进行表态");
+				return new ExecutionResult("办理失败, 办理[%s]任务, 需要进行表态", "jbpm.handle.fail.no.attitude", taskInstance.getName());
 			
 			// 查询指定userId, 判断其是否可以办理任务
 			if(!isClaimed(parameter.getUserId()))
-				return new ExecutionResult("办理失败, 指定的userId无法办理["+taskInstance.getName()+"]任务");
+				throw new TaskHandleException("办理失败, 指定的userId无法办理["+taskInstance.getName()+"]任务");
 			
 			// 根据办理策略, 判断当前的userId能否办理
 			int waitForPersonNumber = canHandle(handlePolicy, currentHandleUser, processEngineBeans);
 			if(waitForPersonNumber > 0)
-				return new ExecutionResult("办理失败, 指定的userId暂时不能办理["+taskInstance.getName()+"]任务, 需要等待前面"+waitForPersonNumber+"人完成办理");
+				return new ExecutionResult("办理失败, 指定的userId暂时不能办理[%s]任务, 需要等待前面%d人完成办理", "jbpm.handle.fail.wait.sequence", taskInstance.getName(), waitForPersonNumber);
 		}
 		return processEngineBeans.getTaskHandleUtil().handle(taskInstance.getTaskMetadataEntity(), new GeneralHandleParameter(
 				taskInstance,

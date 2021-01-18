@@ -30,7 +30,7 @@ public class ParallelGatewayTest {
 		if(result.isSuccess())
 			System.out.println("插入成功一条流程定义信息, 其id为: "+ ((ProcessDefinition)result.getObject()).getId());
 		else
-			System.out.println(result.getFailMessage());
+			System.out.println(result.getMessage());
 	}
 	
 	@Test
@@ -40,7 +40,7 @@ public class ParallelGatewayTest {
 		if(result.isSuccess())
 			System.out.println("id为["+processDefinitionId+"]的流程定义信息部署成功");
 		else
-			System.out.println(result.getFailMessage());
+			System.out.println(result.getMessage());
 	}
 	
 	@Test
@@ -57,7 +57,7 @@ public class ParallelGatewayTest {
 		if(result.isSuccess())
 			System.out.println("成功启动的流程实例id为["+result.getObject(ProcessInstance.class).getId()+"]");
 		else
-			System.out.println(result.getFailMessage());
+			System.out.println(result.getMessage());
 	}
 	
 	private int taskId = 7;
@@ -68,7 +68,7 @@ public class ParallelGatewayTest {
 		if(result.isSuccess())
 			System.out.println("成功认领id为["+taskId+"]的任务");
 		else
-			System.out.println(result.getFailMessage());
+			System.out.println(result.getMessage());
 	}
 	
 	@Test
@@ -83,6 +83,6 @@ public class ParallelGatewayTest {
 		if(result.isSuccess())
 			System.out.println("成功完成id为["+taskId+"]的任务");
 		else
-			System.out.println(result.getFailMessage());
+			System.out.println(result.getMessage());
 	}
 }

@@ -8,6 +8,7 @@ import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.task.HistoryCarbonCopy;
+import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -30,7 +31,7 @@ public class ViewCarbonCopyCmd implements Command {
 				"select * from bpm_ru_cc where taskinst_id=? and user_id=?", 
 				Arrays.asList(taskinstId, userId));
 		if(list.isEmpty())
-			return new ExecutionResult("不存在可以查看的抄送信息");
+			throw new TaskHandleException("不存在可以查看的抄送信息");
 		
 		// 从运行表删除
 		SessionContext.getSQLSession().executeUpdate("CarbonCopy", "deleteByIds", list);

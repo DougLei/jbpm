@@ -26,7 +26,7 @@ public class ProcessDeployTest {
 		if(result.isSuccess())
 			System.out.println("插入成功一条流程定义信息, 其id为: "+ ((ProcessDefinition)result.getObject()).getId());
 		else
-			System.out.println(result.getFailMessage());
+			System.out.println(result.getMessage());
 	}
 	
 	@Test
@@ -36,6 +36,6 @@ public class ProcessDeployTest {
 		if(result.isSuccess())
 			System.out.println("id为["+processDefinitionId+"]的流程定义信息部署成功");
 		else
-			System.out.println(result.getFailMessage());
+			System.out.println(result.getMessage());
 	}
 }

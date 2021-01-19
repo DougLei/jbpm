@@ -74,11 +74,12 @@ public class ProcessMetadata implements Serializable {
 	 * 获取任务元数据实体实例
 	 * @param taskId 任务id
 	 * @return
+	 * @throws TaskNotExistsException
 	 */
-	public TaskMetadataEntity<TaskMetadata> getTaskMetadataEntity(String taskId) {
+	public TaskMetadataEntity<TaskMetadata> getTaskMetadataEntity(String taskId) throws TaskNotExistsException{
 		TaskMetadata task = taskMap.get(taskId);
 		if(task == null)
-			throw new NullPointerException("不存在id为["+taskId+"]的任务");
+			throw new TaskNotExistsException(taskId);
 		return new TaskMetadataEntity<TaskMetadata>(this, task, flows);
 	}
 }

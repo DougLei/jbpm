@@ -56,7 +56,7 @@ public class CarbonCopyTaskCmd extends AbstractTaskCmd implements Command {
 		List<UserBean> assignableUsers = processEngineBeans.getTaskHandleUtil().getAssignableUsers(
 				assignPolicy, 
 				(UserTaskMetadata)taskMetadata, 
-				new GeneralHandleParameter(taskInstance, processEngineBeans.getUserBeanFactory().create(userId), null, null, null));
+				new GeneralHandleParameter(taskInstance, processEngineBeans.getUserBeanFactory().create(userId), null, null, null, null));
 		if(assignableUsers.isEmpty())
 			throw new TaskHandleException("["+taskMetadata.getName()+"]任务不存在可抄送的人员");
 		

@@ -76,7 +76,7 @@ public class DelegateTaskCmd implements Command {
 		List<UserBean> assignableUsers = processEngineBeans.getTaskHandleUtil().getAssignableUsers(
 				candidate.getAssignPolicy(), 
 				(UserTaskMetadata)taskMetadata, 
-				new GeneralHandleParameter(taskInstance, processEngineBeans.getUserBeanFactory().create(userId), null, null, null));
+				new GeneralHandleParameter(taskInstance, processEngineBeans.getUserBeanFactory().create(userId), null, null, null, null));
 		if(assignableUsers.isEmpty())
 			throw new TaskHandleException("["+taskMetadata.getName()+"]任务不存在可"+getAssignMode().getName()+"的人员");
 		if(!assignableUsers.contains(new UserBean(assignedUserId)))

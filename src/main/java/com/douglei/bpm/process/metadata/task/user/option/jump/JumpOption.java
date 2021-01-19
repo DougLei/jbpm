@@ -41,7 +41,7 @@ public class JumpOption extends DelegateOption {
 	public boolean isAttitude() {
 		return attitude;
 	}
-
+	
 	@Override
 	public ActiveTime getActiveTime() {
 		return ActiveTime.TASK_HANDLING;

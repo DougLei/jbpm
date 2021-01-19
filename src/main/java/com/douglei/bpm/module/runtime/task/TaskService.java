@@ -11,6 +11,7 @@ import com.douglei.bpm.module.runtime.task.command.CarbonCopyTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.ClaimTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.DelegateTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.HandleTaskCmd;
+import com.douglei.bpm.module.runtime.task.command.HandleTaskParameter;
 import com.douglei.bpm.module.runtime.task.command.JumpHandleTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.JumpTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.TransferTaskCmd;
@@ -59,7 +60,7 @@ public class TaskService {
 	 * 取消认领指定id的任务
 	 * @param taskId
 	 * @param userId
-	 * @param strict 是否强制删除任务相关的其他数据信息, 目前主要是抄送信息; 建议默认传入false
+	 * @param strict 如果进行过抄送操作, 且抄送被查看, 取消认领时是否强制删除相关数据; 建议传入false
 	 * @return
 	 */
 	@Transaction
@@ -71,7 +72,7 @@ public class TaskService {
 	 * 取消认领指定id的任务
 	 * @param taskinstId
 	 * @param userId
-	 * @param strict 是否强制删除任务相关的其他数据信息, 目前主要是抄送信息; 建议默认传入false
+	 * @param strict 如果进行过抄送操作, 且抄送被查看, 取消认领时是否强制删除相关数据; 建议传入false
 	 * @return
 	 */
 	@Transaction
@@ -87,7 +88,7 @@ public class TaskService {
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult handle(int taskId, TaskHandleParameter parameter) {
+	public ExecutionResult handle(int taskId, HandleTaskParameter parameter) {
 		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
 		return commandExecutor.execute(new HandleTaskCmd(taskInstance, parameter));
 	}
@@ -98,7 +99,7 @@ public class TaskService {
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult handle(String taskinstId, TaskHandleParameter parameter) {
+	public ExecutionResult handle(String taskinstId, HandleTaskParameter parameter) {
 		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
 		return commandExecutor.execute(new HandleTaskCmd(taskInstance, parameter));
 	}

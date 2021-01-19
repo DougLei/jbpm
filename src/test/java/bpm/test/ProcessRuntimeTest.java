@@ -11,7 +11,7 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.task.Attitude;
 import com.douglei.bpm.module.runtime.instance.ProcessInstance;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
-import com.douglei.bpm.module.runtime.task.TaskHandleParameter;
+import com.douglei.bpm.module.runtime.task.command.HandleTaskParameter;
 import com.douglei.bpm.module.runtime.variable.Scope;
 
 public class ProcessRuntimeTest {
@@ -56,7 +56,7 @@ public class ProcessRuntimeTest {
 		int taskId = 6;
 		String userId = "张三";
 		
-		TaskHandleParameter parameter = new TaskHandleParameter();
+		HandleTaskParameter parameter = new HandleTaskParameter();
 		parameter.addAssignUserId("张三");
 		parameter.setUserId(userId).setSuggest("同意了").setAttitude(Attitude.AGREE);
 		

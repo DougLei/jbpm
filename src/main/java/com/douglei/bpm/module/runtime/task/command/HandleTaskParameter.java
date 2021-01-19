@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.task;
+package com.douglei.bpm.module.runtime.task.command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +12,15 @@ import com.douglei.bpm.process.handler.VariableEntities;
  * 
  * @author DougLei
  */
-public class TaskHandleParameter {
+public class HandleTaskParameter {
 	private String businessId; // 业务id
 	private String userId; // 办理人id
+	
 	private String suggest; // 办理人意见
 	private Attitude attitude; // 办理人态度
+	
+	private String reason; // 办理人的办理原因, 即为什么办理; 该值会存储在task表的reason列中; 其和 suggest和attitude是互斥的; 用来表示特殊的任务办理, 例如网关的办理, 结束事件的办理, 流程跳转等
+	
 	private List<String> assignUserIds; // 下一环节的办理人id集合
 	private VariableEntities variableEntities = new VariableEntities(); // 流程变量
 	
@@ -25,7 +29,7 @@ public class TaskHandleParameter {
 	 * @param businessId
 	 * @return
 	 */
-	public TaskHandleParameter setBusinessId(String businessId) {
+	public HandleTaskParameter setBusinessId(String businessId) {
 		this.businessId = businessId;
 		return this;
 	}
@@ -35,7 +39,7 @@ public class TaskHandleParameter {
 	 * @param userId
 	 * @return
 	 */
-	public TaskHandleParameter setUserId(String userId) {
+	public HandleTaskParameter setUserId(String userId) {
 		this.userId = userId;
 		return this;
 	}
@@ -45,7 +49,7 @@ public class TaskHandleParameter {
 	 * @param suggest
 	 * @return
 	 */
-	public TaskHandleParameter setSuggest(String suggest) {
+	public HandleTaskParameter setSuggest(String suggest) {
 		this.suggest = suggest;
 		return this;
 	}
@@ -55,17 +59,27 @@ public class TaskHandleParameter {
 	 * @param attitude
 	 * @return
 	 */
-	public TaskHandleParameter setAttitude(Attitude attitude) {
+	public HandleTaskParameter setAttitude(Attitude attitude) {
 		this.attitude = attitude;
 		return this;
 	}
-
+	
+	/**
+	 * 设置办理人的办理原因
+	 * @param reason
+	 * @return
+	 */
+	public HandleTaskParameter setReason(String reason) {
+		this.reason = reason;
+		return this;
+	}
+	
 	/**
 	 * 添加下一环节的办理人id
 	 * @param assignUserId
 	 * @return
 	 */
-	public TaskHandleParameter addAssignUserId(String assignUserId) {
+	public HandleTaskParameter addAssignUserId(String assignUserId) {
 		if(assignUserIds == null)
 			assignUserIds = new ArrayList<String>();
 		if(assignUserIds.isEmpty() || !assignUserIds.contains(assignUserId))
@@ -79,7 +93,7 @@ public class TaskHandleParameter {
 	 * @param value
 	 * @return
 	 */
-	public TaskHandleParameter addVariable(String name, Object value) {
+	public HandleTaskParameter addVariable(String name, Object value) {
 		return addVariable(name, Scope.GLOBAL, value);
 	}
 	/**
@@ -89,7 +103,7 @@ public class TaskHandleParameter {
 	 * @param value
 	 * @return
 	 */
-	public TaskHandleParameter addVariable(String name, Scope scope, Object value) {
+	public HandleTaskParameter addVariable(String name, Scope scope, Object value) {
 		variableEntities.addVariable(name, scope, value);
 		return this;
 	}
@@ -98,7 +112,7 @@ public class TaskHandleParameter {
 	 * @param variables
 	 * @return
 	 */
-	public TaskHandleParameter addVariables(Map<String, Object> variables) {
+	public HandleTaskParameter addVariables(Map<String, Object> variables) {
 		return addVariables(Scope.GLOBAL, variables);
 	}
 	/**
@@ -107,7 +121,7 @@ public class TaskHandleParameter {
 	 * @param variables
 	 * @return
 	 */
-	public TaskHandleParameter addVariables(Scope scope, Map<String, Object> variables) {
+	public HandleTaskParameter addVariables(Scope scope, Map<String, Object> variables) {
 		variableEntities.addVariables(scope, variables);
 		return this;
 	}
@@ -116,7 +130,7 @@ public class TaskHandleParameter {
 	 * @param object
 	 * @return
 	 */
-	public TaskHandleParameter addVariables(Object object) {
+	public HandleTaskParameter addVariables(Object object) {
 		variableEntities.addVariables(object);
 		return this;
 	}
@@ -148,6 +162,13 @@ public class TaskHandleParameter {
 	 */
 	public Attitude getAttitude() {
 		return attitude;
+	}
+	/**
+	 * 获取办理人的办理原因
+	 * @return
+	 */
+	public String getReason() {
+		return reason;
 	}
 	/**
 	 * 获取下一环节的办理人id集合

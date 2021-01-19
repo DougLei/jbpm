@@ -12,7 +12,7 @@ import com.douglei.bpm.module.repository.definition.ProcessDefinition;
 import com.douglei.bpm.module.repository.definition.ProcessDefinitionBuilder;
 import com.douglei.bpm.module.runtime.instance.ProcessInstance;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
-import com.douglei.bpm.module.runtime.task.TaskHandleParameter;
+import com.douglei.bpm.module.runtime.task.command.HandleTaskParameter;
 import com.douglei.bpm.process.parser.ProcessParseException;
 
 public class AssignTest {
@@ -101,7 +101,7 @@ public class AssignTest {
 	
 	@Test
 	public void handle() {
-		TaskHandleParameter parameter = new TaskHandleParameter();
+		HandleTaskParameter parameter = new HandleTaskParameter();
 		parameter.addAssignUserId("test");
 		parameter.setUserId(userId).setSuggest("同意了").setAttitude(Attitude.AGREE);
 		

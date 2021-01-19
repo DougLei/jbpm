@@ -8,7 +8,6 @@ import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
-import com.douglei.bpm.module.runtime.task.TaskHandleParameter;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
 import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandleSequencePolicy;
@@ -24,8 +23,8 @@ import com.douglei.tools.utils.StringUtil;
  * @author DougLei
  */
 public class HandleTaskCmd extends AbstractTaskCmd implements Command {
-	private TaskHandleParameter parameter;
-	public HandleTaskCmd(TaskInstance taskInstance, TaskHandleParameter parameter) {
+	private HandleTaskParameter parameter;
+	public HandleTaskCmd(TaskInstance taskInstance, HandleTaskParameter parameter) {
 		super(taskInstance);
 		this.parameter = parameter;
 	}
@@ -58,6 +57,7 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 				currentHandleUser, 
 				parameter.getSuggest(), 
 				parameter.getAttitude(), 
+				parameter.getReason(),
 				processEngineBeans.getUserBeanFactory().create(parameter.getAssignUserIds())));
 	}
 

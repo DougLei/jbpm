@@ -26,6 +26,7 @@ public class Task {
 	@Property protected String businessId;
 	@Property protected String pageId;
 	@Property protected String userId;
+	@Property protected String reason;
 	private Integer isAllClaimed;
 	
 	public Task() {}
@@ -130,6 +131,12 @@ public class Task {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public String getReason() {
+		return reason;
+	}
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 	/**
 	 * 是否全部认领

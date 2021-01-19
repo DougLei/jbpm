@@ -1,13 +1,13 @@
 package com.douglei.bpm.module.runtime.instance;
 
-import com.douglei.bpm.module.runtime.task.TaskHandleParameter;
+import com.douglei.bpm.module.runtime.task.command.HandleTaskParameter;
 import com.douglei.tools.utils.StringUtil;
 
 /**
  * 流程的启动参数
  * @author DougLei
  */
-public class StartParameter extends TaskHandleParameter{
+public class StartParameter extends HandleTaskParameter{
 	public static final byte BY_PROCESS_DEFINITION_ID= 1; // 使用流程定义的id启动流程
 	public static final byte BY_PROCESS_DEFINITION_CODE= 2; // 使用流程定义的code启动主版本的流程
 	public static final byte BY_PROCESS_DEFINITION_CODE_VERSION = 3; // 使用流程定义的code和version启动主要子版本的流程

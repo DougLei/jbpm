@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration id="defaultProcessEngine">
 	<environment>
-		<property name="enableTableSessionCache" value="false" />
-		
 		<datasource class="com.alibaba.druid.pool.DruidDataSource" closeMethod="">
 			<property name="url" value="${jdbc.url}"/>
 			<property name="username" value="${jdbc.username}"/>

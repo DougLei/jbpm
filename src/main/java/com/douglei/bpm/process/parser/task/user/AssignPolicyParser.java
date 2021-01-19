@@ -53,7 +53,12 @@ public class AssignPolicyParser {
 		boolean isDynamic = !"false".equalsIgnoreCase(element.attributeValue("isDynamic"));
 		if(isDynamic) 
 			assignNumber = parseAssignNumber(id, name, struct, element);
-		return new AssignPolicy(isDynamic, assignNumber);
+		return createInstance(isDynamic, assignNumber);
+	}
+	
+	// 创建实例
+	protected AssignPolicy createInstance(boolean isDynamic, AssignNumber assignNumber) {
+		return new AssignPolicy(isDynamic, assignNumber); 
 	}
 
 	// 解析指派人数表达式

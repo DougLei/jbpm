@@ -104,6 +104,17 @@ public class TaskService {
 		return commandExecutor.execute(new HandleTaskCmd(taskInstance, parameter));
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 委托指定id的任务
 	 * @param taskId

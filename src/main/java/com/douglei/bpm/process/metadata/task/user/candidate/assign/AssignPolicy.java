@@ -43,7 +43,7 @@ public class AssignPolicy implements Serializable{
 	 */
 	public AssignNumber getAssignNumber() {
 		if(assignNumber == null)
-			return DefaultCandidateConfigInstance.DEFAULT_ASSIGN_NUMBER_100_PERCENT;
+			return DefaultCandidateConfigInstance.DEFAULT_ASSIGN_NUMBER_1;
 		return assignNumber;
 	}
 	/**

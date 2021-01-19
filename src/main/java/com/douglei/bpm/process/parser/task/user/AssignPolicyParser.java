@@ -57,7 +57,7 @@ public class AssignPolicyParser {
 	}
 
 	// 解析指派人数表达式
-	protected final AssignNumber parseAssignNumber(String id, String name, String struct, Element element) throws ProcessParseException{
+	private AssignNumber parseAssignNumber(String id, String name, String struct, Element element) throws ProcessParseException{
 		String assignNum = element.attributeValue("assignNum");
 		if(StringUtil.isEmpty(assignNum))
 			return null;

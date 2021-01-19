@@ -3,6 +3,7 @@ package com.douglei.bpm.module.runtime.task;
 import java.util.Arrays;
 
 import com.douglei.bpm.process.api.container.ProcessContainerProxy;
+import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.bpm.process.metadata.TaskMetadataEntity;
@@ -20,7 +21,7 @@ public class TaskInstance {
 	TaskInstance(int taskId, ProcessContainerProxy container) {
 		task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where id=?", Arrays.asList(taskId));
 		if(task == null)
-			throw new NullPointerException("不存在id为["+taskId+"]的任务");
+			throw new TaskHandleException("不存在id为["+taskId+"]的任务");
 		processMetadata = container.getProcess(task.getProcdefId());
 		taskMetadataEntity = processMetadata.getTaskMetadataEntity(task.getKey());
 	}
@@ -28,7 +29,7 @@ public class TaskInstance {
 	TaskInstance(String taskinstId, ProcessContainerProxy container) {
 		task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where taskinst_id=?", Arrays.asList(taskinstId));
 		if(task == null)
-			throw new NullPointerException("不存在taskinst_id为["+taskinstId+"]的任务");
+			throw new TaskHandleException("不存在taskinst_id为["+taskinstId+"]的任务");
 		processMetadata = container.getProcess(task.getProcdefId());
 		taskMetadataEntity = processMetadata.getTaskMetadataEntity(task.getKey());
 	}

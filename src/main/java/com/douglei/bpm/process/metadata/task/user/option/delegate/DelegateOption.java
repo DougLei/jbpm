@@ -8,18 +8,18 @@ import com.douglei.bpm.process.metadata.task.user.option.carboncopy.CarbonCopyOp
  * @author DougLei
  */
 public class DelegateOption extends CarbonCopyOption {
-	private boolean reasonIsRequired; // 是否必须输入原因
+	private boolean reason; // 是否必须输入原因
 	
-	public DelegateOption(String type, String name, int order, boolean reasonIsRequired, Candidate candidate) {
+	public DelegateOption(String type, String name, int order, boolean reason, Candidate candidate) {
 		super(type, name, order, candidate);
-		this.reasonIsRequired = reasonIsRequired;
+		this.reason = reason;
 	}
 
 	/**
 	 * 是否必须输入原因
 	 * @return
 	 */
-	public boolean reasonIsRequired() {
-		return reasonIsRequired;
+	public final boolean isReason() {
+		return reason;
 	}
 }

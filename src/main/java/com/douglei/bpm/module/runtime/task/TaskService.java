@@ -6,10 +6,13 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.CommandExecutor;
 import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.history.task.Attitude;
 import com.douglei.bpm.module.runtime.task.command.CarbonCopyTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.ClaimTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.DelegateTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.HandleTaskCmd;
+import com.douglei.bpm.module.runtime.task.command.JumpHandleTaskCmd;
+import com.douglei.bpm.module.runtime.task.command.JumpTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.TransferTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.UnclaimTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.ViewCarbonCopyCmd;
@@ -188,5 +191,63 @@ public class TaskService {
 	@Transaction
 	public ExecutionResult viewCarbonCopy(String taskinstId, String userId) {
 		return commandExecutor.execute(new ViewCarbonCopyCmd(taskinstId, userId));
+	}
+	
+	/**
+	 * 跳转指定id的任务
+	 * @param taskId
+	 * @param target 跳转的目标任务id
+	 * @param userId 进行跳转的用户id
+	 * @param reason 原因
+	 * @param assignedUserIds 指派的用户id集合(目标任务)
+	 * @return 
+	 */
+	@Transaction
+	public ExecutionResult jump(int taskId, String target, String userId, String reason, List<String> assignedUserIds) {
+		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
+		return commandExecutor.execute(new JumpTaskCmd(taskInstance, target, userId, reason, assignedUserIds));
+	}
+	/**
+	 * 跳转指定id的任务
+	 * @param taskinstId
+	 * @param target 跳转的目标任务id
+	 * @param userId 进行跳转的用户id
+	 * @param reason 原因
+	 * @param assignedUserIds 指派的用户id集合(目标任务)
+	 * @return 
+	 */
+	@Transaction
+	public ExecutionResult jump(String taskinstId, String target, String userId, String reason, List<String> assignedUserIds) {
+		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
+		return commandExecutor.execute(new JumpTaskCmd(taskInstance, target, userId, reason, assignedUserIds));
+	}
+	
+	/**
+	 * 跳转办理指定id的任务
+	 * @param taskId
+	 * @param userId 进行跳转的用户id
+	 * @param suggest 跳转办理意见
+	 * @param attitude 跳转办理态度
+	 * @param assignedUserIds 指派的用户id集合(目标任务)
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult jumpHandle(int taskId, String userId, String suggest, Attitude attitude, List<String> assignedUserIds) {
+		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
+		return commandExecutor.execute(new JumpHandleTaskCmd(taskInstance, userId, suggest, attitude, assignedUserIds));
+	}
+	/**
+	 * 跳转办理指定id的任务
+	 * @param taskinstId
+	 * @param userId 进行跳转的用户id
+	 * @param suggest 跳转办理意见
+	 * @param attitude 跳转办理态度
+	 * @param assignedUserIds 指派的用户id集合(目标任务)
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult jumpHandle(String taskinstId, String userId, String suggest, Attitude attitude, List<String> assignedUserIds) {
+		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
+		return commandExecutor.execute(new JumpHandleTaskCmd(taskInstance, userId, suggest, attitude, assignedUserIds));
 	}
 }

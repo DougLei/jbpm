@@ -1,10 +1,8 @@
 package com.douglei.bpm.process.metadata.task.user;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.douglei.bpm.process.Type;
-import com.douglei.bpm.process.api.listener.Listener;
 import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.bpm.process.metadata.TimeLimit;
 import com.douglei.bpm.process.metadata.task.user.candidate.Candidate;

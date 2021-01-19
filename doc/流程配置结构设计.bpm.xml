@@ -142,7 +142,7 @@
 			<option type="delegate" name="委托" order="">
 				<parameter reason="true/false" /><!-- 是否要输入原因, 默认值为false -->
 				<!-- 
-					可不配置, 默认使用当前任务配置的指派策略; 引擎规则限制只能选一个人; 没有<handlePolicy>配置项
+					可不配置, 默认使用当前任务配置的指派策略; 引擎规则限制只能动态选一个人; 没有<handlePolicy>配置项
 					* 只有以下可配置的内容,  <assignPolicy>中的属性这里如果配置了, 引擎会自动忽略
 					* 其他配置参考userTask中的配置说明
 				-->
@@ -158,11 +158,23 @@
 				<candidate></candidate>
 			</option>
 			<!-- 
-				流程跳转, 通过设置name可以实现退回起始节点, 退回上一任务等功能
+				流程跳转
 			 -->
-			<option type="skip" name="流程跳转" order="">
-				<parameter target="" /><!-- 要跳转的目标任务id -->
-				<candidate></candidate><!-- 必须配置, 参考userTask中的配置 -->
+			<option type="jump" name="流程跳转" order="">
+				<!-- 
+					* target: 要跳转的目标任务id, 可不配置, 在运行中也可传入; 如果这里配置了, 则运行中传入的会被忽略; 即配置的优先级高于运行中传入的
+					* suggest: 表示是否需要强制输入意见; 不区分大小写, 默认值为false; 如果配置值不合法, 则引擎会使用默认值
+					* attitude: 表示是否需要强制表态; 同上 
+					* reason: 是否要输入原因, 同上
+				 -->
+				<parameter target="" suggest="false" attitude="false" reason="false"/>
+				
+				<!-- 
+					可不配置, 默认使用target环节的候选人指派配置, 没有<handlePolicy>配置项
+				 -->
+				<candidate>
+					<assignPolicy></assignPolicy>
+				</candidate>
 			</option>
 			<option type="tracking" name="流程跟踪" order="" />
 			

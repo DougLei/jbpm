@@ -10,6 +10,7 @@ import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
 import com.douglei.bpm.process.metadata.task.user.option.Option;
 import com.douglei.bpm.process.metadata.task.user.option.carboncopy.CarbonCopyOption;
 import com.douglei.bpm.process.parser.ProcessParseException;
+import com.douglei.bpm.process.parser.task.user.AssignPolicyParser;
 
 /**
  * 
@@ -20,7 +21,7 @@ public class CarbonCopyOptionHandler extends OptionHandler{
 	public static final String TYPE = "carbonCopy";
 	
 	@Autowired
-	private CarbonCopyAssignPolicyParser assignPolicyParser;
+	private AssignPolicyParser assignPolicyParser;
 	
 	@Override
 	public String getType() {

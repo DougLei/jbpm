@@ -20,7 +20,7 @@ public class CarbonCopyOption extends Option {
 	 * 获取候选人配置
 	 * @return
 	 */
-	public Candidate getCandidate() {
+	public final Candidate getCandidate() {
 		return candidate;
 	}
 

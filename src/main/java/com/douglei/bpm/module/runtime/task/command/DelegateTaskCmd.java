@@ -56,7 +56,7 @@ public class DelegateTaskCmd implements Command {
 		DelegateOption option = (DelegateOption) ((UserTaskMetadata)taskMetadata).getOption(getOptionType());
 		if(option == null)
 			throw new TaskHandleException(getAssignMode().getName()+"失败, ["+taskInstance.getName()+"]任务不支持用户进行"+getAssignMode().getName()+"操作");
-		if(option.reasonIsRequired() && StringUtil.isEmpty(reason))
+		if(option.isReason() && StringUtil.isEmpty(reason))
 			return new ExecutionResult("%s失败, 请输入%s的具体原因", "jbpm.delegate.fail.no.reason", getAssignMode().getName(), getAssignMode().getName());
 		
 		// 查询指定userId, 判断其是否可以委托

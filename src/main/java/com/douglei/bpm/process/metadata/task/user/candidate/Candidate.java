@@ -11,8 +11,8 @@ import com.douglei.bpm.process.metadata.task.user.candidate.handle.HandlePolicy;
  * @author DougLei
  */
 public class Candidate implements Serializable{
-	protected AssignPolicy assignPolicy;
-	protected HandlePolicy handlePolicy;
+	private AssignPolicy assignPolicy;
+	private HandlePolicy handlePolicy;
 
 	public Candidate(AssignPolicy assignPolicy, HandlePolicy handlePolicy) {
 		this.assignPolicy = assignPolicy;

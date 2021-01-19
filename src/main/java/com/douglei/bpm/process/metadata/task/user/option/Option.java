@@ -30,21 +30,21 @@ public abstract class Option implements Serializable{
 	 * 获取option的类型
 	 * @return
 	 */
-	public String getType() {
+	public final String getType() {
 		return type;
 	}
 	/**
 	 * 获取option的名字
 	 * @return
 	 */
-	public String getName() {
+	public final String getName() {
 		return name;
 	}
 	/**
 	 * 获取option的排序值
 	 * @return
 	 */
-	public int getOrder() {
+	public final int getOrder() {
 		return order;
 	}
 	/**

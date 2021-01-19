@@ -6,6 +6,7 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.api.user.option.OptionHandler;
 import com.douglei.bpm.process.metadata.task.user.candidate.Candidate;
+import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
 import com.douglei.bpm.process.metadata.task.user.option.Option;
 import com.douglei.bpm.process.metadata.task.user.option.delegate.DelegateOption;
 import com.douglei.bpm.process.parser.ProcessParseException;
@@ -28,19 +29,21 @@ public class DelegateOptionHandler extends OptionHandler {
 	
 	@Override
 	public Option parse(String name, int order, String userTaskId, String userTaskName, Element element) throws ProcessParseException {
-		boolean reasonIsRequired = false;
+		boolean reason = false;
 		Element parameterElement = element.element("parameter");
 		if(parameterElement != null)
-			reasonIsRequired = "true".equalsIgnoreCase(parameterElement.attributeValue("reason"));
+			reason = "true".equalsIgnoreCase(parameterElement.attributeValue("reason"));
 		
 		element = element.element("candidate");
 		if(element == null)
-			return createOption(name, order, reasonIsRequired, null);
-		return createOption(name, order, reasonIsRequired, new Candidate(assignPolicyParser.parse(userTaskId, userTaskName, getXmlStruct() + "<candidate>", element), null));
+			return createOption(name, order, reason, null);
+		
+		AssignPolicy assignPolicy = assignPolicyParser.parse(userTaskId, userTaskName, getXmlStruct() + "<candidate>", element);
+		return createOption(name, order, reason, new Candidate(assignPolicy, null));
 	}
 
 	// 创建option实例
-	protected Option createOption(String name, int order, boolean reasonIsRequired, Candidate candidate) {
-		return new DelegateOption(TYPE, name, order, reasonIsRequired, candidate);
+	protected Option createOption(String name, int order, boolean reason, Candidate candidate) {
+		return new DelegateOption(TYPE, name, order, reason, candidate);
 	}
 }

@@ -11,12 +11,14 @@ import com.douglei.bpm.module.runtime.task.command.CarbonCopyTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.ClaimTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.DelegateTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.HandleTaskCmd;
-import com.douglei.bpm.module.runtime.task.command.HandleTaskParameter;
 import com.douglei.bpm.module.runtime.task.command.JumpHandleTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.JumpTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.TransferTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.UnclaimTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.ViewCarbonCopyCmd;
+import com.douglei.bpm.module.runtime.task.command.dispatch.DispatchTaskCmd;
+import com.douglei.bpm.module.runtime.task.command.parameter.DispatchTaskParameter;
+import com.douglei.bpm.module.runtime.task.command.parameter.HandleTaskParameter;
 import com.douglei.bpm.process.api.container.ProcessContainerProxy;
 import com.douglei.orm.context.transaction.component.Transaction;
 
@@ -104,8 +106,29 @@ public class TaskService {
 		return commandExecutor.execute(new HandleTaskCmd(taskInstance, parameter));
 	}
 	
+	/**
+	 * 调度指定id的任务
+	 * @param taskId
+	 * @param parameter
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult dispatch(int taskId, DispatchTaskParameter parameter) {
+		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
+		return commandExecutor.execute(new DispatchTaskCmd(taskInstance, parameter));
+	}
 	
-	
+	/**
+	 * 调度指定id的任务
+	 * @param taskinstId
+	 * @param parameter
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult dispatch(String taskinstId, DispatchTaskParameter parameter) {
+		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
+		return commandExecutor.execute(new DispatchTaskCmd(taskInstance, parameter));
+	}
 	
 	
 	

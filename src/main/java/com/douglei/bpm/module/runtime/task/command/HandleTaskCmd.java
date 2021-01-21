@@ -9,6 +9,7 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
+import com.douglei.bpm.module.runtime.task.command.parameter.HandleTaskParameter;
 import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandleSequencePolicy;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
@@ -61,7 +62,7 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 						parameter.getAttitude(), 
 						parameter.getReason(),
 						parameter.getBusinessId(),
-						processEngineBeans.getUserBeanFactory().create(parameter.getAssignUserIds())));
+						null));
 	}
 
 	/**

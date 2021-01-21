@@ -8,6 +8,7 @@
 			<column name="CHAIN_ID" property="chainId" dataType="number" length="3" nullable="false" />
 			<column name="USER_ID" property="userId" dataType="nstring" length="150" nullable="false" />
 			<column name="REASON" property="reason" dataType="nstring" length="300" />
+			<column name="IS_ENABLED" property="isEnabled" dataType="number" length="1" nullable="false" />
 		</columns>
 		<primaryKeyHandler type="sequence"></primaryKeyHandler>
 	</table>

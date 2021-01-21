@@ -23,9 +23,7 @@ public class GeneralHandleParameter extends AbstractHandleParameter{
 		this.processMetadata = taskInstance.getProcessMetadata();
 		
 		this.taskEntityHandler.setCurrentTaskEntity(new TaskEntity(taskInstance.getTask()));
-		
 		this.userEntity = new UserEntity(currentHandleUser, suggest, attitude, reason, assignedUsers);
-		
 		this.variableEntities = new VariableEntities(SessionContext.getTableSession().query(
 				Variable.class, 
 				"select * from bpm_ru_variable where procinst_id=? and (taskinst_id=? or scope =?)", 

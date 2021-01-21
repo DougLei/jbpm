@@ -12,15 +12,20 @@ import com.douglei.bpm.process.metadata.TaskMetadataEntity;
  * @author DougLei
  */
 public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandleParameter> extends GeneralTaskHandler {
-	protected ProcessEngineBeans processEngineBeans; 
 	protected TaskMetadataEntity<TM> currentTaskMetadataEntity; // 当前任务元数据实体实例
 	protected HP handleParameter; // 办理参数
+	protected ProcessEngineBeans processEngineBeans; 
 	
-	// 设置参数
-	final void setParameters(ProcessEngineBeans processEngineBeans, TaskMetadataEntity<TM> currentTaskMetadataEntity, HP handleParameter) {
-		this.processEngineBeans = processEngineBeans;
+	/**
+	 * 设置属性
+	 * @param currentTaskMetadataEntity
+	 * @param handleParameter
+	 * @param processEngineBeans
+	 */
+	final void setParameters(TaskMetadataEntity<TM> currentTaskMetadataEntity, HP handleParameter, ProcessEngineBeans processEngineBeans) {
 		this.currentTaskMetadataEntity = currentTaskMetadataEntity;
 		this.handleParameter = handleParameter;
+		this.processEngineBeans = processEngineBeans;
 	}
 	
 	/**

@@ -9,7 +9,6 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.task.HistoryTask;
 import com.douglei.bpm.module.history.variable.HistoryVariable;
 import com.douglei.bpm.module.runtime.task.Task;
-import com.douglei.bpm.module.runtime.variable.Variable;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -24,27 +23,24 @@ public abstract class GeneralTaskHandler {
 	/**
 	 * 完成任务
 	 * @param task
-	 * @param completeDate 完成任务的时间
+	 * @param completeTime 完成任务的时间
 	 */
-	protected final void completeTask(Task task, Date completeDate) {
+	protected final void completeTask(Task task, Date completeTime) {
 		// 从运行任务表中删除任务
-		if(task.getId() > 0) // 此判断用于拦截, 同一次处理中, 运行任务到历史任务的转移
+		if(task.getId() > 0) // 此判断用于拦截, 同一次处理中, 运行任务到历史任务的转移(同一次处理中, 不需要从运行表删除)
 			SessionContext.getSqlSession().executeUpdate("delete bpm_ru_task where id = ?", Arrays.asList(task.getId()));	
 
 		// 将任务存到历史表	
-		HistoryTask historyTask = new HistoryTask(task, completeDate);
+		HistoryTask historyTask = new HistoryTask(task, completeTime);
 		SessionContext.getTableSession().save(historyTask);	
 	}
 	
 	/**
 	 * 跟随任务完成流程变量
 	 * @param task
+	 * @param variableEntities
 	 */
-	protected final void followTaskCompleted4Variable(Task task) {
-		VariableEntities variableEntities = new VariableEntities(SessionContext.getTableSession()
-				.query(Variable.class, 
-						"select * from bpm_ru_variable where procinst_id=? and taskinst_id=?", Arrays.asList(task.getProcinstId(), task.getTaskinstId())));
-		
+	protected final void followTaskCompleted4Variable(Task task, VariableEntities variableEntities) {
 		// 将local和transient范围的变量从运行变量表删除	
 		if(variableEntities.existsLocalVariable() || variableEntities.existsTransientVariable())	
 			SessionContext.getSqlSession().executeUpdate("delete bpm_ru_variable where taskinst_id = ?", Arrays.asList(task.getTaskinstId()));	
@@ -56,6 +52,6 @@ public abstract class GeneralTaskHandler {
 				historyVariables.add(new HistoryVariable(task.getProcinstId(), task.getTaskinstId(), variableEntity));	
 			});	
 			SessionContext.getTableSession().save(historyVariables);	
-		}	
+		}
 	}
 }

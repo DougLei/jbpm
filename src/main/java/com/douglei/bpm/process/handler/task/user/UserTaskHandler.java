@@ -1,21 +1,15 @@
 package com.douglei.bpm.process.handler.task.user;
 
 import java.util.Arrays;
-import java.util.List;
 
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.Task;
-import com.douglei.bpm.module.runtime.task.command.CarbonCopyTaskCmd;
-import com.douglei.bpm.process.api.user.bean.factory.UserBean;
-import com.douglei.bpm.process.api.user.option.impl.carboncopy.CarbonCopyOptionHandler;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.task.user.assignee.handle.AssigneeDispatcher;
 import com.douglei.bpm.process.handler.task.user.assignee.startup.AssigneeHandler;
 import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
-import com.douglei.bpm.process.metadata.task.user.option.Option;
-import com.douglei.bpm.process.metadata.task.user.option.carboncopy.CarbonCopyOption;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -54,7 +48,10 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 	
 	@Override
 	public ExecutionResult handle() {
+		// 更新businessId
 		Task currentTask = handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask();
+		if(handleParameter.getBusinessId() != null && currentTask.getBusinessId() == null)
+			SessionContext.getSqlSession().executeUpdate("update bpm_ru_task set business_id=? where id=?", Arrays.asList(handleParameter.getBusinessId(), currentTask.getId()));
 		
 		// 进行指派信息的调度
 		AssigneeDispatcher assigneeDispatcher = new AssigneeDispatcher(
@@ -65,6 +62,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 				handleParameter.getCurrentDate());
 		assigneeDispatcher.dispatch();
 		
+		// 判断任务是否结束, 以及是否可以调度
 		if(isFinished()) {
 			if(currentTask.getAssignCount() > 1)
 				currentTask.setDispatchRight(handleParameter.getUserEntity().getCurrentHandleUser().getUserId());
@@ -83,65 +81,5 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 				"select count(id) from bpm_ru_assignee where taskinst_id=? and handle_state=?", 
 				Arrays.asList(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId(), HandleState.CLAIMED.name()))[0].toString());
 		return claimedAssigneeCount == 0;
-	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	// 结束用户任务
-	private void finishUserTask() {
-		completeTask(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask(), handleParameter.getCurrentDate());
-		followTaskCompleted4Variable(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask());
-		clearAssigneeList();
-		executeCarbonCopy();
-		processEngineBeans.getTaskHandleUtil().dispatch(currentTaskMetadataEntity, handleParameter);
-	}
-	
-	// 清空当前任务的所有指派信息
-	private void clearAssigneeList() {
-		SessionContext.getSqlSession().executeUpdate(
-				"delete bpm_ru_assignee where taskinst_id=?", 
-				Arrays.asList(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId()));
-	}
-
-	// 进行抄送
-	private void executeCarbonCopy() {
-		Option option = currentTaskMetadataEntity.getTaskMetadata().getOption(CarbonCopyOptionHandler.TYPE);
-		if(option == null || ((CarbonCopyOption)option).getCandidate().getAssignPolicy().isDynamic())
-			return;
-		
-		// 获取具体可抄送的所有人员集合, 并进行抄送
-		List<UserBean> assignableUsers = processEngineBeans.getTaskHandleUtil().getAssignableUsers(
-				((CarbonCopyOption)option).getCandidate().getAssignPolicy(), 
-				currentTaskMetadataEntity.getTaskMetadata(), 
-				handleParameter);
-		
-		if(assignableUsers.isEmpty())
-			return;
-		
-		new CarbonCopyTaskCmd().execute(
-				handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId(), 
-				handleParameter.getUserEntity().getCurrentHandleUser().getUserId(), 
-				handleParameter.getCurrentDate(), 
-				assignableUsers);
 	}
 }

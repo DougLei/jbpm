@@ -10,6 +10,15 @@ public class Dispatch {
 	protected int chainId;
 	protected String userId;
 	protected String reason;
+	protected int isEnabled=1;
+	
+	/**
+	 * 是否有效
+	 * @return
+	 */
+	public boolean isEnabled() {
+		return isEnabled == 1;
+	}
 	
 	public int getId() {
 		return id;
@@ -40,5 +49,11 @@ public class Dispatch {
 	}
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+	public int getIsEnabled() {
+		return isEnabled;
+	}
+	public void setIsEnabled(int isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 }

@@ -59,7 +59,7 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 			gatewayTask.setForkBranchNum(1);
 			completeTask(gatewayTask, handleParameter.getCurrentDate());
 			handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(gatewayTask, false));
-			processEngineBeans.getTaskHandleUtil().dispatch(outputFlows.get(0), handleParameter);
+			processEngineBeans.getTaskHandleUtil().dispatchByFlow(outputFlows.get(0), handleParameter);
 			return;
 		}
 		
@@ -87,7 +87,7 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 		LinkedList<TaskEntity> historyTaskEntities = handleParameter.getTaskEntityHandler().getHistoryTaskEntities(); // 历史办理的任务实体实例集合
 		int mark = historyTaskEntities.size(); // 标记初始位置
 		for (FlowMetadata flow : outputFlows) {
-			processEngineBeans.getTaskHandleUtil().dispatch(flow, handleParameter);
+			processEngineBeans.getTaskHandleUtil().dispatchByFlow(flow, handleParameter);
 			
 			while(historyTaskEntities.size() > mark) 
 				handleParameter.getTaskEntityHandler().setCurrentTaskEntity(historyTaskEntities.removeLast());

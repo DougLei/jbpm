@@ -2,7 +2,7 @@ package com.douglei.bpm.module.runtime.instance;
 
 import java.util.Map;
 
-import com.douglei.bpm.module.runtime.task.command.HandleTaskParameter;
+import com.douglei.bpm.module.runtime.task.command.parameter.HandleTaskParameter;
 import com.douglei.bpm.module.runtime.variable.Scope;
 import com.douglei.bpm.process.handler.VariableEntities;
 import com.douglei.tools.utils.StringUtil;

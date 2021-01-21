@@ -15,19 +15,16 @@ public interface HandleParameter {
 	 * @return
 	 */
 	Date getCurrentDate();
-	
 	/**
 	 * 获取流程实例id
 	 * @return
 	 */
 	String getProcessInstanceId();
-	
 	/**
 	 * 获取本次办理关联的业务id
 	 * @return
 	 */
 	String getBusinessId();
-	
 	/**
 	 * 获取流程元数据实例
 	 * @return
@@ -39,13 +36,11 @@ public interface HandleParameter {
 	 * @return
 	 */
 	TaskEntityHandler getTaskEntityHandler();
-	
 	/**
 	 * 获取办理的用户实体
 	 * @return
 	 */
 	UserEntity getUserEntity();
-	
 	/**
 	 * 获取办理时流程变量实体
 	 * @return

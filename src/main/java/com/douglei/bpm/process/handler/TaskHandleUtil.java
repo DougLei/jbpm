@@ -72,7 +72,7 @@ public class TaskHandleUtil {
 			default:
 				throw new TaskHandleException("目前还未实现["+taskMetadataEntity.getTaskMetadata().getType().getName()+"]类型的任务办理器");
 		}
-		taskHandler.setParameters(processEngineBeans, taskMetadataEntity, handleParameter);
+		taskHandler.setParameters(taskMetadataEntity, handleParameter, processEngineBeans);
 		return taskHandler;
 	}
 	
@@ -97,7 +97,7 @@ public class TaskHandleUtil {
 	}
 	
 	/**
-	 * 任务调度
+	 * task调度
 	 * <p>
 	 *  对task中的flows进行调度, 选择第一条匹配的flow执行
 	 * @param taskMetadataEntity
@@ -107,7 +107,7 @@ public class TaskHandleUtil {
 	public void dispatch(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, HandleParameter parameter) throws TaskDispatchException{
 		for(FlowMetadata flow : taskMetadataEntity.getOutputFlows()) {
 			if(flowMatching(flow, parameter.getVariableEntities().getVariableMap())) {
-				dispatch(flow, parameter);
+				dispatchByFlow(flow, parameter);
 				return;
 			}
 		}
@@ -115,7 +115,7 @@ public class TaskHandleUtil {
 		FlowMetadata defaultOutputFlow = taskMetadataEntity.getDefaultOutputFlow();
 		if(defaultOutputFlow == null)
 			throw new TaskDispatchException("执行"+taskMetadataEntity.getTaskMetadata()+"任务时, 未能匹配到满足条件的OutputFlow");
-		dispatch(defaultOutputFlow, parameter);
+		dispatchByFlow(defaultOutputFlow, parameter);
 	}
 	
 	/**
@@ -140,9 +140,20 @@ public class TaskHandleUtil {
 	 * @param flowMetadata
 	 * @param parameter
 	 */
-	public void dispatch(FlowMetadata flowMetadata, HandleParameter parameter) {
+	public void dispatchByFlow(FlowMetadata flowMetadata, HandleParameter parameter) {
 		parameter.getTaskEntityHandler().dispatch();
 		startup(parameter.getProcessMetadata().getTaskMetadataEntity(flowMetadata.getTarget()), parameter);
+	}
+	
+	/**
+	 * task调度, 属于直接调度
+	 * @param targetTaskMetadataEntity
+	 * @param parameter
+	 * @throws TaskDispatchException
+	 */
+	public void dispatchByTask(TaskMetadataEntity<TaskMetadata> targetTaskMetadataEntity, HandleParameter parameter) throws TaskDispatchException{
+		parameter.getTaskEntityHandler().dispatch();
+		startup(targetTaskMetadataEntity, parameter);
 	}
 	
 	

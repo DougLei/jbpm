@@ -40,7 +40,7 @@ public class CarbonCopyTaskCmd extends AbstractTaskCmd implements Command {
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		TaskMetadata taskMetadata = taskInstance.getTaskMetadataEntity().getTaskMetadata();
-		if(!taskMetadata.requiredUserHandle())
+		if(taskMetadata.isAuto())
 			throw new TaskHandleException("抄送失败, ["+taskInstance.getName()+"]任务不支持用户进行抄送操作");
 		
 		Option option = ((UserTaskMetadata)taskMetadata).getOption(CarbonCopyOptionHandler.TYPE);
@@ -56,7 +56,7 @@ public class CarbonCopyTaskCmd extends AbstractTaskCmd implements Command {
 		List<UserBean> assignableUsers = processEngineBeans.getTaskHandleUtil().getAssignableUsers(
 				assignPolicy, 
 				(UserTaskMetadata)taskMetadata, 
-				new GeneralHandleParameter(taskInstance, processEngineBeans.getUserBeanFactory().create(userId), null, null, null, null));
+				new GeneralHandleParameter(taskInstance, processEngineBeans.getUserBeanFactory().create(userId), null, null, null, null, null));
 		if(assignableUsers.isEmpty())
 			throw new TaskHandleException("["+taskMetadata.getName()+"]任务不存在可抄送的人员");
 		

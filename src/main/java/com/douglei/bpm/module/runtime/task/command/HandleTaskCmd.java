@@ -36,7 +36,7 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 
 		UserBean currentHandleUser = processEngineBeans.getUserBeanFactory().create(parameter.getUserId());
 		
-		if(taskInstance.requiredUserHandle()) {
+		if(!taskInstance.isAuto()) {
 			HandlePolicy handlePolicy = ((UserTaskMetadata) taskInstance.getTaskMetadataEntity().getTaskMetadata()).getCandidate().getHandlePolicy();
 			if(handlePolicy.isSuggest() && StringUtil.isEmpty(parameter.getSuggest()))
 				return new ExecutionResult("办理失败, 办理[%s]任务, 需要输入办理意见", "jbpm.handle.fail.no.suggest", taskInstance.getName());
@@ -52,13 +52,16 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 			if(waitForPersonNumber > 0)
 				return new ExecutionResult("办理失败, 指定的userId暂时不能办理[%s]任务, 需要等待前面%d人完成办理", "jbpm.handle.fail.wait.sequence", taskInstance.getName(), waitForPersonNumber);
 		}
-		return processEngineBeans.getTaskHandleUtil().handle(taskInstance.getTaskMetadataEntity(), new GeneralHandleParameter(
-				taskInstance,
-				currentHandleUser, 
-				parameter.getSuggest(), 
-				parameter.getAttitude(), 
-				parameter.getReason(),
-				processEngineBeans.getUserBeanFactory().create(parameter.getAssignUserIds())));
+		
+		return processEngineBeans.getTaskHandleUtil().handle(
+				taskInstance.getTaskMetadataEntity(), new GeneralHandleParameter(
+						taskInstance, 
+						currentHandleUser, 
+						parameter.getSuggest(), 
+						parameter.getAttitude(), 
+						parameter.getReason(),
+						parameter.getBusinessId(),
+						processEngineBeans.getUserBeanFactory().create(parameter.getAssignUserIds())));
 	}
 
 	/**

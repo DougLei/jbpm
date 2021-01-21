@@ -17,12 +17,16 @@ import com.douglei.orm.context.SessionContext;
 public class GeneralHandleParameter extends AbstractHandleParameter{
 	
 	protected GeneralHandleParameter() {}
-	public GeneralHandleParameter(TaskInstance taskInstance, UserBean currentHandleUser, String suggest, Attitude attitude, String reason, List<UserBean> assignedUsers) {
-		super.processInstanceId = taskInstance.getTask().getProcinstId();
-		super.processMetadata = taskInstance.getProcessMetadata();
-		super.taskEntityHandler.setCurrentTaskEntity(new TaskEntity(taskInstance.getTask()));
-		super.userEntity = new UserEntity(currentHandleUser, suggest, attitude, reason, assignedUsers);
-		super.variableEntities = new VariableEntities(SessionContext.getTableSession().query(
+	public GeneralHandleParameter(TaskInstance taskInstance, UserBean currentHandleUser, String suggest, Attitude attitude, String reason, String businessId, List<UserBean> assignedUsers) {
+		this.processInstanceId = taskInstance.getTask().getProcinstId();
+		this.businessId = businessId;
+		this.processMetadata = taskInstance.getProcessMetadata();
+		
+		this.taskEntityHandler.setCurrentTaskEntity(new TaskEntity(taskInstance.getTask()));
+		
+		this.userEntity = new UserEntity(currentHandleUser, suggest, attitude, reason, assignedUsers);
+		
+		this.variableEntities = new VariableEntities(SessionContext.getTableSession().query(
 				Variable.class, 
 				"select * from bpm_ru_variable where procinst_id=? and (taskinst_id=? or scope =?)", 
 				Arrays.asList(taskInstance.getTask().getProcinstId(), taskInstance.getTask().getTaskinstId(), Scope.GLOBAL.name())));

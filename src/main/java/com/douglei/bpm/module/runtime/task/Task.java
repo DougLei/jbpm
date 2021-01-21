@@ -1,10 +1,14 @@
 package com.douglei.bpm.module.runtime.task;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
+import com.douglei.bpm.ProcessEngineBugException;
 import com.douglei.bpm.bean.annotation.Property;
+import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.metadata.TaskMetadata;
+import com.douglei.orm.context.SessionContext;
 
 /**
  * 
@@ -18,6 +22,7 @@ public class Task {
 	@Property protected String parentTaskinstId;
 	@Property protected Integer joinBranchNum;
 	@Property protected Integer forkBranchNum;
+	private Integer assignCount;
 	@Property protected String key;
 	@Property protected String name;
 	@Property protected String type;
@@ -30,8 +35,8 @@ public class Task {
 	private Integer isAllClaimed;
 	
 	public Task() {}
-	public Task(int procdefId, String procinstId, String parentTaskinstId, Date startTime, TaskMetadata taskMetadata) {
-		this.procdefId = procdefId;
+	public Task(String procinstId, String parentTaskinstId, Date startTime, TaskMetadata taskMetadata, ProcessMetadata metadata) {
+		this.procdefId = metadata.getId();
 		this.procinstId = procinstId;
 		this.taskinstId = UUID.randomUUID().toString();
 		this.parentTaskinstId = parentTaskinstId;
@@ -39,7 +44,61 @@ public class Task {
 		this.name = taskMetadata.getName();
 		this.type = taskMetadata.getType().getName();
 		this.startTime = startTime;
-		this.pageId = taskMetadata.getPageID();
+		this.pageId = taskMetadata.getPageID(metadata);
+	}
+	
+	/**
+	 * 设置调度权限
+	 * @param userId
+	 */
+	public void setDispatchRight(String userId) {
+		Dispatch dispatch = new Dispatch();
+		dispatch.setTaskinstId(taskinstId);
+		dispatch.setUserId(userId);
+		SessionContext.getTableSession().save(dispatch);
+	}
+	/**
+	 * 移除调度权限
+	 * @param userId
+	 */
+	public void removeDispatchRight() {
+		int rows = SessionContext.getSqlSession().executeUpdate("delete bpm_ru_dispatch where taskinst_id=?", Arrays.asList(taskinstId));
+		if(rows == 0)
+			throw new ProcessEngineBugException("移除调度权限时, 没有查询出调度权限信息");
+		if(rows > 1)
+			throw new ProcessEngineBugException("移除调度权限时, 查询出不止一条调度权限信息");
+	}
+	/**
+	 * 交换调度权限
+	 * @param targetUserId
+	 */
+	public void exchangeDispatchRight(String targetUserId) {
+		int rows = SessionContext.getSqlSession().executeUpdate("update bpm_ru_dispatch set user_id=? where taskinst_id=?", Arrays.asList(targetUserId, taskinstId));
+		if(rows == 0)
+			throw new ProcessEngineBugException("交换调度权限时, 没有查询出调度权限信息");
+		if(rows > 1)
+			throw new ProcessEngineBugException("交换调度权限时, 查询出不止一条调度权限信息");
+	}
+	
+	/**
+	 * 设置任务被全部认领
+	 */
+	public void setAllClaimed() {
+		SessionContext.getSqlSession().executeUpdate("update bpm_ru_task set is_all_claimed=1 where taskinst_id=?", Arrays.asList(taskinstId));
+	}
+	/**
+	 * 设置任务没有被全部认领
+	 */
+	public void setNotAllClaimed() {
+		SessionContext.getSqlSession().executeUpdate("update bpm_ru_task set is_all_claimed=null where taskinst_id=?", Arrays.asList(taskinstId));
+	}
+	
+	/**
+	 * 是否全部认领
+	 * @return
+	 */
+	public boolean isAllClaimed() {
+		return isAllClaimed != null && isAllClaimed == 1;
 	}
 	
 	public int getId() {
@@ -83,6 +142,12 @@ public class Task {
 	}
 	public void setForkBranchNum(Integer forkBranchNum) {
 		this.forkBranchNum = forkBranchNum;
+	}
+	public Integer getAssignCount() {
+		return assignCount;
+	}
+	public void setAssignCount(Integer assignCount) {
+		this.assignCount = assignCount;
 	}
 	public String getKey() {
 		return key;
@@ -137,13 +202,6 @@ public class Task {
 	}
 	public void setReason(String reason) {
 		this.reason = reason;
-	}
-	/**
-	 * 是否全部认领
-	 * @return
-	 */
-	public boolean isAllClaimed() {
-		return isAllClaimed != null && isAllClaimed == 1;
 	}
 	public Integer getIsAllClaimed() {
 		return isAllClaimed;

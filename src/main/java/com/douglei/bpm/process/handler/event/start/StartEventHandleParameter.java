@@ -2,8 +2,8 @@ package com.douglei.bpm.process.handler.event.start;
 
 import java.util.UUID;
 
-import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
+import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.UserEntity;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
@@ -13,25 +13,26 @@ import com.douglei.bpm.process.metadata.ProcessMetadata;
  * @author DougLei
  */
 public class StartEventHandleParameter extends GeneralHandleParameter {
-	private StartParameter parameter;
+	private String tenantId;
 	
-	public StartEventHandleParameter(ProcessEngineBeans processEngineBeans, ProcessMetadata processMetadata, StartParameter parameter) {
-		super.processInstanceId = UUID.randomUUID().toString();
-		super.processMetadata = processMetadata;
-		super.userEntity = new UserEntity(
-				processEngineBeans.getUserBeanFactory().create(parameter.getUserId()), 
-				processEngineBeans.getUserBeanFactory().create(parameter.getAssignUserIds()));
-		super.variableEntities = parameter.getVariableEntities();
-		this.parameter = parameter;
+	public StartEventHandleParameter(ProcessMetadata processMetadata, StartParameter parameter, UserBeanFactory userBeanFactory) {
+		this.processInstanceId = UUID.randomUUID().toString();
+		this.businessId = parameter.getBusinessId();
+		this.processMetadata = processMetadata;
+		this.tenantId = parameter.getTenantId();
+		
+		this.userEntity = new UserEntity(
+				userBeanFactory.create(parameter.getUserId()), 
+				userBeanFactory.create(parameter.getAssignUserIds()));
+		
+		this.variableEntities = parameter.getVariableEntities();
 	}
 	
-	public String getBusinessId() {
-		return parameter.getBusinessId();
-	}
-	public String getUserId() {
-		return parameter.getUserId();
-	}
+	/**
+	 * 获取租户id
+	 * @return
+	 */
 	public String getTenantId() {
-		return parameter.getTenantId();
+		return tenantId;
 	}
 }

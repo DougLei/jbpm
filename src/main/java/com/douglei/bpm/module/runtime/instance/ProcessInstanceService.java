@@ -23,7 +23,7 @@ public class ProcessInstanceService {
 	/**
 	 * 启动流程
 	 * @param parameter
-	 * @return 
+	 * @return 返回对象的success=true时, 其Object属性为 {@link ProcessInstance} 类型, 记录启动的流程实例
 	 */
 	@Transaction
 	public ExecutionResult start(StartParameter parameter) {

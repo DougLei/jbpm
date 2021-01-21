@@ -93,13 +93,4 @@ public class AssigneeDispatcher {
 			SessionContext.getTableSession().save(assigneeList);
 		}
 	}
-
-	/**
-	 * 调度当前任务的所有指派信息
-	 * <p>
-	 * 将多余的指派信息直接从运行表删除
-	 */
-	public void dispatchAll() {
-		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_assignee where taskinst_id=?", Arrays.asList(taskinstId));
-	}
 }

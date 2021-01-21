@@ -23,6 +23,6 @@ public class ExclusiveGatewayHandler extends AbstractGatewayHandler{
 		SessionContext.getTableSession().save(historyTask);
 		
 		processEngineBeans.getTaskHandleUtil().dispatch(currentTaskMetadataEntity, handleParameter);
-		return ExecutionResult.getDefaultSuccessInstance();
+		return CANNOT_DISPATCH;
 	}
 }

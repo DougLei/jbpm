@@ -95,7 +95,7 @@ public class DelegationHandler {
 	public void addAssignee(String taskinstId, int groupId, int chainId, String assigneeUserId, String reason, boolean isStaticAssign, List<Assignee> assigneeList) {
 		Assignee assignee = new Assignee(taskinstId, assigneeUserId, groupId, chainId);
 		if(isStaticAssign) {
-			assignee.setModeInstance(AssignMode.STATIC);
+			assignee.setModeInstance(AssignMode.FIXED);
 		} else if(chainId > 0) {
 			assignee.setReason(reason);
 			assignee.setModeInstance(AssignMode.DELEGATED);

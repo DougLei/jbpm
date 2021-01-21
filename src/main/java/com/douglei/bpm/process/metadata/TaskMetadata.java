@@ -1,5 +1,7 @@
 package com.douglei.bpm.process.metadata;
 
+import com.douglei.tools.utils.StringUtil;
+
 /**
  * 
  * @author DougLei
@@ -9,7 +11,7 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 	
 	protected TaskMetadata(String id, String name, String defaultOutputFlowId) {
 		super(id, name);
-		this.defaultOutputFlowId = defaultOutputFlowId;
+		this.defaultOutputFlowId = StringUtil.isEmpty(defaultOutputFlowId)?null:defaultOutputFlowId;
 	}
 	
 	/**
@@ -21,9 +23,10 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 	}
 	/**
 	 * 获取任务关联的pageID, 默认值为null
+	 * @param metadata
 	 * @return
 	 */
-	public String getPageID() {
+	public String getPageID(ProcessMetadata metadata) {
 		return null;
 	}
 	/**
@@ -34,10 +37,10 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 		return null;
 	}
 	/**
-	 * 任务是否需要用户办理, 默认值为false
+	 * 是否是自动任务, 默认值为true
 	 * @return
 	 */
-	public boolean requiredUserHandle() {
-		return false;
+	public boolean isAuto() {
+		return true;
 	}
 }

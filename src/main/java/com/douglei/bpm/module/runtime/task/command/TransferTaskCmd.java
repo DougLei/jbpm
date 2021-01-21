@@ -26,6 +26,11 @@ public class TransferTaskCmd extends DelegateTaskCmd {
 	}
 
 	@Override
+	protected String getAssignModeName() {
+		return "转办";
+	}
+
+	@Override
 	protected HandleState targetHandleState() {
 		return HandleState.INVALID;
 	}

@@ -23,6 +23,7 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandleParameter> {
+	private final static ExecutionResult CAN_DISPATCH = new ExecutionResult(true);
 
 	@Override
 	public ExecutionResult startup() {
@@ -33,32 +34,43 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 				handleParameter.getUserEntity().getAssignedUsers());
 		assigneeHandler.pretreatment(currentTaskMetadataEntity.getTaskMetadata(), handleParameter, processEngineBeans);
 				
-		// 启动当前用户任务
+		// 创建当前用户任务
 		Task task = createTask(false);
+		task.setAssignCount(assigneeHandler.getAssignCount());
 		if(currentTaskMetadataEntity.getTaskMetadata().getTimeLimit() != null)
 			task.setExpiryTime(new TimeLimitParser(task.getStartTime(), currentTaskMetadataEntity.getTaskMetadata().getTimeLimit()).getExpiryTime());
-		SessionContext.getTableSession().save(task);
 		
 		// 记录指派的用户
-		assigneeHandler.save(task.getTaskinstId(), handleParameter.getUserEntity().getCurrentHandleUser().getUserId(), currentTaskMetadataEntity.getTaskMetadata());
+		assigneeHandler.save(
+				handleParameter.getUserEntity().getCurrentHandleUser().getUserId(), 
+				currentTaskMetadataEntity.getTaskMetadata(),
+				task,
+				handleParameter.getCurrentDate());
 		
-		return new ExecutionResult(task);
+		// 保存当前用户任务
+		SessionContext.getTableSession().save(task);
+		return ExecutionResult.getDefaultSuccessInstance();
 	}
-
+	
 	@Override
 	public ExecutionResult handle() {
+		Task currentTask = handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask();
+		
 		// 进行指派信息的调度
 		AssigneeDispatcher assigneeDispatcher = new AssigneeDispatcher(
-				handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId(),
+				currentTask.getTaskinstId(),
 				handleParameter.getUserEntity().getCurrentHandleUser().getUserId(),
 				handleParameter.getUserEntity().getSuggest(), 
 				handleParameter.getUserEntity().getAttitude(), 
 				handleParameter.getCurrentDate());
 		assigneeDispatcher.dispatch();
 		
-		if(isFinished()) 
-			finishUserTask(assigneeDispatcher);
-		return ExecutionResult.getDefaultSuccessInstance();
+		if(isFinished()) {
+			if(currentTask.getAssignCount() > 1)
+				currentTask.setDispatchRight(handleParameter.getUserEntity().getCurrentHandleUser().getUserId());
+			return CAN_DISPATCH;
+		}
+		return CANNOT_DISPATCH;
 	}
 	
 	// 判断任务是否结束
@@ -73,13 +85,42 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 		return claimedAssigneeCount == 0;
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// 结束用户任务
-	private void finishUserTask(AssigneeDispatcher assigneeDispatcher) {
+	private void finishUserTask() {
 		completeTask(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask(), handleParameter.getCurrentDate());
 		followTaskCompleted4Variable(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask());
-		assigneeDispatcher.dispatchAll();
+		clearAssigneeList();
 		executeCarbonCopy();
 		processEngineBeans.getTaskHandleUtil().dispatch(currentTaskMetadataEntity, handleParameter);
+	}
+	
+	// 清空当前任务的所有指派信息
+	private void clearAssigneeList() {
+		SessionContext.getSqlSession().executeUpdate(
+				"delete bpm_ru_assignee where taskinst_id=?", 
+				Arrays.asList(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId()));
 	}
 
 	// 进行抄送

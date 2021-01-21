@@ -23,6 +23,12 @@ public interface HandleParameter {
 	String getProcessInstanceId();
 	
 	/**
+	 * 获取本次办理关联的业务id
+	 * @return
+	 */
+	String getBusinessId();
+	
+	/**
 	 * 获取流程元数据实例
 	 * @return
 	 */

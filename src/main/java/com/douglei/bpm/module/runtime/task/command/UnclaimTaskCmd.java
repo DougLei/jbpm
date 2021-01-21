@@ -32,7 +32,7 @@ public class UnclaimTaskCmd implements Command {
 
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
-		if(!taskInstance.requiredUserHandle())
+		if(taskInstance.isAuto())
 			throw new TaskHandleException("取消认领失败, ["+taskInstance.getName()+"]任务不支持用户取消认领");
 		
 		// 查询指定userId, 判断其是否可以取消认领
@@ -57,7 +57,12 @@ public class UnclaimTaskCmd implements Command {
 
 		// 处理task的isAllClaimed字段值, 改为没有全部认领
 		if(taskInstance.getTask().isAllClaimed())
-			SessionContext.getSqlSession().executeUpdate("update bpm_ru_task set is_all_claimed=null where taskinst_id=?", Arrays.asList(taskInstance.getTask().getTaskinstId()));
+			taskInstance.getTask().setNotAllClaimed();
+		
+		// 如果当前认领的任务只指派了一个人, 同时取消其调度权限
+		if(taskInstance.getTask().getAssignCount() == 1)
+			taskInstance.getTask().removeDispatchRight();
+		
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	

@@ -40,7 +40,7 @@ public class ExecutionResult {
 	}
 	
 	// ------------------------------------------------------------------------------------------
-	private Object object; // 执行成功时可以传递需要的实例
+	protected Object object; // 执行成功时可以传递需要的实例
 	public ExecutionResult(Object object) {
 		this.success = true;
 		this.object = object;

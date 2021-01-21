@@ -26,10 +26,10 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 
 	@Override
 	public ExecutionResult startup() {
-		String startConditionExpression = currentTaskMetadataEntity.getTaskMetadata().getConditionExpression();
-		if(startConditionExpression != null) {
+		String conditionExpression = currentTaskMetadataEntity.getTaskMetadata().getConditionExpression();
+		if(conditionExpression != null) {
 			Map<String, Object> variableMap = handleParameter.getVariableEntities().getVariableMap();
-			if(variableMap == null || !OgnlHandler.getSingleton().getBooleanValue(startConditionExpression, variableMap))
+			if(variableMap == null || !OgnlHandler.getSingleton().getBooleanValue(conditionExpression, variableMap))
 				return new ExecutionResult("启动失败, 当前参数不满足[%s]流程的启动条件", "jbpm.process.start.fail.condition.mismatch", handleParameter.getProcessMetadata().getName());
 		}
 		return handle();
@@ -62,7 +62,7 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		instance.setTitle(getTitle(processMetadata.getTitle(), handleParameter.getVariableEntities().getVariableMap()));
 		instance.setBusinessId(handleParameter.getBusinessId());
 		instance.setPageId(processMetadata.getPageID());
-		instance.setStartUserId(handleParameter.getUserId());
+		instance.setStartUserId(handleParameter.getUserEntity().getCurrentHandleUser().getUserId());
 		instance.setStartTime(handleParameter.getCurrentDate());
 		instance.setTenantId(handleParameter.getTenantId());
 		instance.setStateInstance(ProcessInstanceState.ACTIVE);

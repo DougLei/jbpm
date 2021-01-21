@@ -32,7 +32,7 @@ public class ProcessMetadata implements Serializable {
 		this.version = version;
 		this.name = StringUtil.isEmpty(name)?(code+":"+version):name;
 		this.title = StringUtil.isEmpty(title)?this.name:title;
-		this.pageID = pageID;
+		this.pageID = StringUtil.isEmpty(pageID)?null:pageID;
 	}
 	public void setStartEvent(StartEventMetadata startEvent) {
 		this.startEvent = startEvent;

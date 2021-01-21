@@ -3,10 +3,12 @@ package com.douglei.bpm.process.metadata.task.user;
 import java.util.List;
 
 import com.douglei.bpm.process.Type;
+import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.bpm.process.metadata.TimeLimit;
 import com.douglei.bpm.process.metadata.task.user.candidate.Candidate;
 import com.douglei.bpm.process.metadata.task.user.option.Option;
+import com.douglei.tools.utils.StringUtil;
 
 /**
  * 
@@ -20,7 +22,7 @@ public class UserTaskMetadata extends TaskMetadata {
 	
 	public UserTaskMetadata(String id, String name, String defaultOutputFlowId, String pageID, TimeLimit timeLimit, Candidate candidate, List<Option> options) {
 		super(id, name, defaultOutputFlowId);
-		this.pageID = pageID;
+		this.pageID = StringUtil.isEmpty(pageID)?null:pageID;
 		this.timeLimit = timeLimit;
 		this.candidate = candidate;
 		this.options = options;
@@ -41,7 +43,9 @@ public class UserTaskMetadata extends TaskMetadata {
 	}
 	
 	@Override
-	public String getPageID() {
+	public String getPageID(ProcessMetadata metadata) {
+		if(pageID == null)
+			return metadata.getPageID();
 		return pageID;
 	}
 	@Override
@@ -49,8 +53,8 @@ public class UserTaskMetadata extends TaskMetadata {
 		return timeLimit;
 	}
 	@Override
-	public boolean requiredUserHandle() {
-		return true;
+	public boolean isAuto() {
+		return false;
 	}
 	@Override
 	public Type getType() {

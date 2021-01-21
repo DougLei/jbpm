@@ -1,7 +1,5 @@
 package com.douglei.bpm.process.parser.task.user;
 
-import java.util.List;
-
 import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Autowired;

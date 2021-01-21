@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.douglei.bpm.bean.BeanFactory;
+import com.douglei.bpm.configuration.ProcessEngineConfiguration;
 import com.douglei.bpm.process.api.container.ProcessContainer;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpression;
 import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
@@ -103,6 +104,16 @@ public class ProcessEngineBuilder {
 			logger.error("构建流程引擎时出现异常: {}", ExceptionUtil.getExceptionDetailMessage(e));
 			throw new ProcessEngineException("构建流程引擎时出现异常", e);
 		}
+	}
+	
+	/**
+	 * 设置流程的配置
+	 * @param configuration
+	 * @return
+	 */
+	public ProcessEngineBuilder setProcessEngineConfiguration(ProcessEngineConfiguration configuration) {
+		beanFactory.registerCustomBean(ProcessEngineConfiguration.class, configuration);
+		return this;
 	}
 	
 	/**

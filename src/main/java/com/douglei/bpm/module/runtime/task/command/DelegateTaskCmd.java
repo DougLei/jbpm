@@ -47,17 +47,17 @@ public class DelegateTaskCmd implements Command {
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		TaskMetadata taskMetadata = taskInstance.getTaskMetadataEntity().getTaskMetadata();
-		if(!taskMetadata.requiredUserHandle())
-			throw new TaskHandleException(getAssignMode().getName()+"失败, ["+taskInstance.getName()+"]任务不支持用户进行"+getAssignMode().getName()+"操作");
+		if(taskMetadata.isAuto())
+			throw new TaskHandleException(getAssignModeName()+"失败, ["+taskInstance.getName()+"]任务不支持用户进行"+getAssignModeName()+"操作");
 		
 		if(userId.equals(assignedUserId))
-			return new ExecutionResult("%s失败, 不能%s给自己", "jbpm.delegate.fail.to.self", getAssignMode().getName(), getAssignMode().getName());
+			return new ExecutionResult("%s失败, 不能%s给自己", "jbpm.delegate.fail.to.self", getAssignModeName(), getAssignModeName());
 		
 		DelegateOption option = (DelegateOption) ((UserTaskMetadata)taskMetadata).getOption(getOptionType());
 		if(option == null)
-			throw new TaskHandleException(getAssignMode().getName()+"失败, ["+taskInstance.getName()+"]任务不支持用户进行"+getAssignMode().getName()+"操作");
+			throw new TaskHandleException(getAssignModeName()+"失败, ["+taskInstance.getName()+"]任务不支持用户进行"+getAssignModeName()+"操作");
 		if(option.isReason() && StringUtil.isEmpty(reason))
-			return new ExecutionResult("%s失败, 请输入%s的具体原因", "jbpm.delegate.fail.no.reason", getAssignMode().getName(), getAssignMode().getName());
+			return new ExecutionResult("%s失败, 请输入%s的具体原因", "jbpm.delegate.fail.no.reason", getAssignModeName(), getAssignModeName());
 		
 		// 查询指定userId, 判断其是否可以委托
 		List<Assignee> assigneeList = SessionContext.getSqlSession()
@@ -65,7 +65,7 @@ public class DelegateTaskCmd implements Command {
 						"select id, group_id, chain_id from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
 						Arrays.asList(taskInstance.getTask().getTaskinstId(), userId, HandleState.CLAIMED.name()));
 		if(assigneeList.isEmpty())
-			throw new TaskHandleException(getAssignMode().getName()+"失败, 指定的userId没有["+taskInstance.getName()+"]任务的"+getAssignMode().getName()+"操作权限");
+			throw new TaskHandleException(getAssignModeName()+"失败, 指定的userId没有["+taskInstance.getName()+"]任务的"+getAssignModeName()+"操作权限");
 		
 		
 		// 获取具体可委托的所有人员集合, 并对本次委托的人员进行验证
@@ -76,9 +76,9 @@ public class DelegateTaskCmd implements Command {
 		List<UserBean> assignableUsers = processEngineBeans.getTaskHandleUtil().getAssignableUsers(
 				candidate.getAssignPolicy(), 
 				(UserTaskMetadata)taskMetadata, 
-				new GeneralHandleParameter(taskInstance, processEngineBeans.getUserBeanFactory().create(userId), null, null, null, null));
+				new GeneralHandleParameter(taskInstance, processEngineBeans.getUserBeanFactory().create(userId), null, null, null, null, null));
 		if(assignableUsers.isEmpty())
-			throw new TaskHandleException("["+taskMetadata.getName()+"]任务不存在可"+getAssignMode().getName()+"的人员");
+			throw new TaskHandleException("["+taskMetadata.getName()+"]任务不存在可"+getAssignModeName()+"的人员");
 		if(!assignableUsers.contains(new UserBean(assignedUserId)))
 			throw new TaskHandleException("不能指派配置范围外的人员"); 
 		
@@ -114,7 +114,7 @@ public class DelegateTaskCmd implements Command {
 					false, 
 					delegateAssigneeList);
 
-			if(delegateDeep == -1)
+			if(delegateDeep == -1) 
 				delegateDeep = delegateAssigneeList.size()-1;
 			
 			// 设置委托人的指派模式
@@ -123,6 +123,12 @@ public class DelegateTaskCmd implements Command {
 			delegateAssigneeList.get(delegateAssigneeList.size()-1).claim(claimTime);
 		}
 		SessionContext.getTableSession().save(delegateAssigneeList);
+		
+		// 如果当前认领的任务只指派了一个人, 交换其调度权限
+		String targetUserId = delegateAssigneeList.get(delegateAssigneeList.size()-1).getUserId();
+		if(taskInstance.getTask().getAssignCount() == 1 && !userId.equals(targetUserId)) 
+			taskInstance.getTask().exchangeDispatchRight(targetUserId);
+			
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	
@@ -140,6 +146,14 @@ public class DelegateTaskCmd implements Command {
 	 */
 	protected AssignMode getAssignMode() {
 		return AssignMode.DELEGATED;
+	}
+	
+	/**
+	 * 获取指派模式的名称
+	 * @return
+	 */
+	protected String getAssignModeName() {
+		return "委托";
 	}
 	
 	/**

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.task.HistoryTask;
 import com.douglei.bpm.module.history.variable.HistoryVariable;
 import com.douglei.bpm.module.runtime.task.Task;
@@ -18,6 +19,7 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 public abstract class GeneralTaskHandler {
+	protected final static ExecutionResult CANNOT_DISPATCH = new ExecutionResult(false);
 	
 	/**
 	 * 完成任务

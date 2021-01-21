@@ -43,13 +43,13 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	 * @param parentTaskinstId 当前任务关联的父任务实例id
 	 * @return
 	 */
-	protected final Task createTask(boolean createBranch, String parentTaskinstId) {
+	private Task createTask(boolean createBranch, String parentTaskinstId) {
 		Task task = new Task(
-				handleParameter.getProcessMetadata().getId(), 
 				handleParameter.getProcessInstanceId(),
 				parentTaskinstId,
 				handleParameter.getCurrentDate(),
-				currentTaskMetadataEntity.getTaskMetadata());
+				currentTaskMetadataEntity.getTaskMetadata(),
+				handleParameter.getProcessMetadata());
 		
 		handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(task, createBranch));
 		return task;
@@ -75,11 +75,11 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	 */
 	protected final HistoryTask createHistoryTask(String parentTaskinstId) {
 		HistoryTask historyTask = new HistoryTask(
-				handleParameter.getProcessMetadata().getId(), 
 				handleParameter.getProcessInstanceId(),
 				parentTaskinstId,
 				handleParameter.getCurrentDate(),
-				currentTaskMetadataEntity.getTaskMetadata());
+				currentTaskMetadataEntity.getTaskMetadata(),
+				handleParameter.getProcessMetadata());
 		
 		handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(historyTask));
 		return historyTask;
@@ -87,13 +87,13 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	
 	/**
 	 * 启动任务
-	 * @return
+	 * @return 
 	 */
 	public abstract ExecutionResult startup();
 	
 	/**
 	 * 办理任务
-	 * @return
+	 * @return 返回对象的success=true时, 其Object属性为boolean类型, 标识是否可以进行调度
 	 */
 	public abstract ExecutionResult handle();
 }

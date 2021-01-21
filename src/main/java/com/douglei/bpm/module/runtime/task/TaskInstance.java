@@ -47,8 +47,12 @@ public class TaskInstance {
 	public String getName() {
 		return taskMetadataEntity.getTaskMetadata().getName();
 	}
-	public boolean requiredUserHandle() {
-		return taskMetadataEntity.getTaskMetadata().requiredUserHandle();
+	/**
+	 * 是否是自动任务
+	 * @return
+	 */
+	public boolean isAuto() {
+		return taskMetadataEntity.getTaskMetadata().isAuto();
 	}
 	public Task getTask() {
 		return task;

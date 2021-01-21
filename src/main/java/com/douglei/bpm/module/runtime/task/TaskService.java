@@ -85,7 +85,7 @@ public class TaskService {
 	 * 办理指定id的任务
 	 * @param taskId
 	 * @param parameter
-	 * @return 
+	 * @return 返回对象的success=true时, 其Object属性为boolean类型, 标识是否可以进行调度
 	 */
 	@Transaction
 	public ExecutionResult handle(int taskId, HandleTaskParameter parameter) {
@@ -96,13 +96,20 @@ public class TaskService {
 	 * 办理指定id的任务
 	 * @param taskinstId
 	 * @param parameter
-	 * @return 
+	 * @return 返回对象的success=true时, 其Object属性为boolean类型, 标识是否可以进行调度
 	 */
 	@Transaction
 	public ExecutionResult handle(String taskinstId, HandleTaskParameter parameter) {
 		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
 		return commandExecutor.execute(new HandleTaskCmd(taskInstance, parameter));
 	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

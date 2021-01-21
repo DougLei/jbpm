@@ -90,7 +90,7 @@ public class TaskHandleUtil {
 	 * 办理任务
 	 * @param taskMetadataEntity
 	 * @param parameter
-	 * @return
+	 * @return 返回对象的success=true时, 其Object属性为boolean类型, 标识是否可以进行调度
 	 */
 	public ExecutionResult handle(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, HandleParameter parameter) {
 		return createTaskHandleInstance(taskMetadataEntity, parameter).handle();

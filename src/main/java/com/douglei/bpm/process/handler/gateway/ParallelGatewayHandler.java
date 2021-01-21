@@ -41,7 +41,7 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 		task.setReason(handleParameter.getUserEntity().getReason());
 		
 		fork(task);
-		return ExecutionResult.getDefaultSuccessInstance();
+		return CANNOT_DISPATCH;
 	}
 	
 	/**

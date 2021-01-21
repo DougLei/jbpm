@@ -1,10 +1,12 @@
 package com.douglei.bpm.process.handler.task.user.assignee.startup;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.runtime.task.Assignee;
+import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.handler.HandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
@@ -70,12 +72,16 @@ public class AssigneeHandler {
 	
 	/**
 	 * 保存指派信息
-	 * @param taskinstId 当前的任务实例id
 	 * @param userId 当前操作的userId
-	 * @param currentUserTaskMetadata 当前用户任务的元数据实例
+	 * @param currentUserTaskMetadata 当前(启动的)用户任务的元数据实例
+	 * @param currentTask 当前的任务实例
+	 * @param currentDate
 	 * @throws TaskHandleException
 	 */
-	public void save(String taskinstId, String userId, UserTaskMetadata currentUserTaskMetadata) throws TaskHandleException{
+	public void save(String userId, UserTaskMetadata currentUserTaskMetadata, Task currentTask, Date currentDate) throws TaskHandleException {
+		if(assignedUsers.isEmpty())
+			throw new TaskHandleException("任务未指派办理人员");
+		
 		// 查询指派用户的委托数据, 将处理后的指派数据保存到运行表
 		List<String> assignedUserIds = new ArrayList<String>(assignedUsers.size());
 		assignedUsers.forEach(user -> assignedUserIds.add(user.getUserId()));
@@ -84,15 +90,36 @@ public class AssigneeHandler {
 				code, 
 				version,
 				new SqlCondition(assignedUserIds), 
-				taskinstId,
+				currentTask.getTaskinstId(),
 				userId);
 		
 		boolean isStaticAssign = !currentUserTaskMetadata.getCandidate().getAssignPolicy().isDynamic(); // 是否静态指派
-		List<Assignee> assigneeList = new ArrayList<Assignee>(assignedUsers.size() + 5); // +5是备用的长度
+		List<Assignee> assigneeList = new ArrayList<Assignee>(assignedUsers.size()*2);
 		int groupId = 1;
 		for (UserBean assignedUser : assignedUsers) 
-			delegationHandler.addAssignee(taskinstId, groupId++, 0, assignedUser.getUserId(), null, isStaticAssign , assigneeList);
+			delegationHandler.addAssignee(currentTask.getTaskinstId(), groupId++, 0, assignedUser.getUserId(), null, isStaticAssign , assigneeList);
+		
+		// 之前任务记录指派的人数, 不等于当前实际指派的人数, 进行更新
+		if(currentTask.getAssignCount() != assignedUsers.size()) 
+			currentTask.setAssignCount(assignedUsers.size());
+			
+		// 如果只指派了一个人, 则直接进行认领操作
+		if(currentTask.getAssignCount() == 1) {
+			Assignee lastAssignee = assigneeList.get(assigneeList.size()-1);
+			lastAssignee.claim(currentDate);
+			
+			currentTask.setDispatchRight(lastAssignee.getUserId());
+			currentTask.setAllClaimed();
+		}
 		
 		SessionContext.getTableSession().save(assigneeList);
+	}
+	
+	/**
+	 * 获取实际指派的人数
+	 * @return
+	 */
+	public int getAssignCount() {
+		return assignedUsers.size();
 	}
 }

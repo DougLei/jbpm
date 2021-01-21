@@ -40,7 +40,7 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 		task.setReason(handleParameter.getUserEntity().getReason());
 		
 		end(task);
-		return ExecutionResult.getDefaultSuccessInstance();
+		return CANNOT_DISPATCH;
 	}
 	
 	/**

@@ -57,7 +57,7 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 				throw new TaskDispatchException("执行"+currentTaskMetadataEntity.getTaskMetadata()+"任务时, 未能匹配到满足条件的OutputFlow");
 			
 			gatewayTask.setForkBranchNum(1);
-			completeTask(gatewayTask, handleParameter.getCurrentDate());
+			completeTask(gatewayTask, handleParameter.getCurrentDate(), handleParameter.getVariableEntities());
 			handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(gatewayTask, false));
 			processEngineBeans.getTaskHandleUtil().dispatchByFlow(outputFlows.get(0), handleParameter);
 			return;

@@ -23,6 +23,7 @@ public class Task {
 	@Property protected Integer joinBranchNum;
 	@Property protected Integer forkBranchNum;
 	private Integer assignCount;
+	@Property protected String sourceKey;
 	@Property protected String key;
 	@Property protected String name;
 	@Property protected String type;
@@ -35,11 +36,12 @@ public class Task {
 	private Integer isAllClaimed;
 	
 	public Task() {}
-	public Task(String procinstId, String parentTaskinstId, Date startTime, TaskMetadata taskMetadata, ProcessMetadata metadata) {
+	public Task(String procinstId, String parentTaskinstId, Date startTime, String sourceKey, TaskMetadata taskMetadata, ProcessMetadata metadata) {
 		this.procdefId = metadata.getId();
 		this.procinstId = procinstId;
 		this.taskinstId = UUID.randomUUID().toString();
 		this.parentTaskinstId = parentTaskinstId;
+		this.sourceKey = sourceKey;
 		this.key = taskMetadata.getId();
 		this.name = taskMetadata.getName();
 		this.type = taskMetadata.getType().getName();
@@ -148,6 +150,12 @@ public class Task {
 	}
 	public void setAssignCount(Integer assignCount) {
 		this.assignCount = assignCount;
+	}
+	public String getSourceKey() {
+		return sourceKey;
+	}
+	public void setSourceKey(String sourceKey) {
+		this.sourceKey = sourceKey;
 	}
 	public String getKey() {
 		return key;

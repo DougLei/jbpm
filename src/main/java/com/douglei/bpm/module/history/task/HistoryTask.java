@@ -15,8 +15,8 @@ public class HistoryTask extends Task{
 	private Date endTime;
 
 	public HistoryTask() {}
-	public HistoryTask(String procinstId, String parentTaskinstId, Date endTime, TaskMetadata taskMetadata, ProcessMetadata metadata) {
-		super(procinstId, parentTaskinstId, endTime, taskMetadata, metadata);
+	public HistoryTask(String procinstId, String parentTaskinstId, Date endTime, String sourceKey, TaskMetadata taskMetadata, ProcessMetadata metadata) {
+		super(procinstId, parentTaskinstId, endTime, sourceKey, taskMetadata, metadata);
 		this.endTime = endTime;
 	}
 	public HistoryTask(Task task, Date endTime) {

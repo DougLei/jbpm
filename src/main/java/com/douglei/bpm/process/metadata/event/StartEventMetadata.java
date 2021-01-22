@@ -24,6 +24,10 @@ public class StartEventMetadata extends TaskMetadata {
 	}
 
 	@Override
+	public boolean supportInputFlows() {
+		return false;
+	}
+	@Override
 	public Type getType() {
 		return Type.START_EVENT;
 	}

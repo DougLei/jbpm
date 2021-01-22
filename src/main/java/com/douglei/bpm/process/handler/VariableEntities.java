@@ -16,25 +16,27 @@ import com.douglei.tools.utils.StringUtil;
  * @author DougLei
  */
 public class VariableEntities {
+	private String taskinstId;
 	private Map<String, Object> variableMap;
 	private Map<String, VariableEntity> globalVariableMap;
 	private Map<String, VariableEntity> localVariableMap;
 	private Map<String, VariableEntity> transientVariableMap;
 	
 	public VariableEntities() {}
-	public VariableEntities(List<Variable> variables) {
-		appendVariables(variables);
+	public VariableEntities(String taskinstId, List<Variable> variables) {
+		this.taskinstId = taskinstId;
+		if(variables.size() > 0) {
+			for (Variable variable : variables) 
+				addVariable(variable.getTaskinstId(), variable.getName(), variable.getScopeInstance(), variable.getDataTypeInstance(), variable.getValue());
+		}
 	}
 	
 	/**
-	 * 追加变量集合
-	 * @param variables
+	 * 获取关联的任务实例id
+	 * @return
 	 */
-	public void appendVariables(List<Variable> variables) {
-		if(variables.isEmpty()) 
-			return;
-		for (Variable variable : variables) 
-			addVariable(variable.getTaskinstId(), variable.getName(), variable.getScopeInstance(), variable.getDataTypeInstance(), variable.getValue());
+	public String getTaskinstId() {
+		return taskinstId;
 	}
 	
 	/**
@@ -93,6 +95,14 @@ public class VariableEntities {
 	 */
 	public boolean existsTransientVariable() {
 		return transientVariableMap != null;
+	}
+	
+	/**
+	 * 设置关联的任务实例id
+	 * @param taskinstId 
+	 */
+	public void setTaskinstId(String taskinstId) {
+		this.taskinstId = taskinstId;
 	}
 	
 	/**

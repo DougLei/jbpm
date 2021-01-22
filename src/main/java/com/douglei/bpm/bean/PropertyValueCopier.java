@@ -10,11 +10,6 @@ import com.douglei.bpm.bean.annotation.Property;
  */
 public class PropertyValueCopier {
 	
-	/**
-	 * 
-	 * @param source
-	 * @param target
-	 */
 	public static void copy(Object source, Object target) {
 		try {
 			for(Field field : source.getClass().getDeclaredFields()) {

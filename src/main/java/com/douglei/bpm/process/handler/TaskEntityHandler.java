@@ -29,6 +29,19 @@ public class TaskEntityHandler {
 	}
 	
 	/**
+	 * 获取上一个办理的任务的key
+	 * <p>
+	 * 作为当前任务的sourceKey
+	 * @return
+	 */
+	public String getPreviousTaskKey() {
+		TaskEntity previousTask = getPreviousTaskEntity();
+		if(previousTask == null)
+			return null;
+		return previousTask.getTask().getKey();
+	}
+	
+	/**
 	 * 获取上一个办理的任务实例
 	 * <p>
 	 * 没有任何历史任务时, 返回null

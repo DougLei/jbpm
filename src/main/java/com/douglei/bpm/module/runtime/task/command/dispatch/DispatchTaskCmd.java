@@ -25,13 +25,12 @@ import com.douglei.tools.utils.StringUtil;
 public class DispatchTaskCmd extends GeneralTaskHandler implements Command {
 	private TaskInstance taskInstance;
 	private DispatchTaskParameter parameter;
+	private GeneralHandleParameter handleParameter;
 	public DispatchTaskCmd(TaskInstance taskInstance, DispatchTaskParameter parameter) {
 		this.taskInstance = taskInstance;
 		this.parameter = parameter;
 	}
 
-	private GeneralHandleParameter handleParameter;
-	
 	@SuppressWarnings("unchecked")
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
@@ -53,26 +52,20 @@ public class DispatchTaskCmd extends GeneralTaskHandler implements Command {
 		this.handleParameter = new GeneralHandleParameter(
 				taskInstance, 
 				processEngineBeans.getUserBeanFactory().create(parameter.getUserId()), 
-				null, null, null, null, 
-				processEngineBeans.getUserBeanFactory().create(parameter.getAssignUserIds()));
+				null, null, null, null, null);
 		
 		// 完成用户任务
-		finishUserTask();
+		completeTask(taskInstance.getTask(), handleParameter.getCurrentDate(), handleParameter.getVariableEntities());
+		handleUserInfo();
 		
 		// 进行调度
 		parameter.getDispatchExecutor()
-			.setParameters((TaskMetadataEntity<UserTaskMetadata>)taskInstance.getTaskMetadataEntity(), handleParameter, processEngineBeans)
+			.setParameters((TaskMetadataEntity<UserTaskMetadata>)taskInstance.getTaskMetadataEntity(), handleParameter, parameter.getAssignUserIds(), processEngineBeans)
 			.execute();
+		
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 
-	// 结束用户任务
-	private void finishUserTask() {
-		completeTask(taskInstance.getTask(), handleParameter.getCurrentDate());
-		handleUserInfo();
-		followTaskCompleted4Variable(taskInstance.getTask(), handleParameter.getVariableEntities());
-	}
-	
 	// 处理相关的用户信息
 	private void handleUserInfo() {
 		// 移除不用的指派信息

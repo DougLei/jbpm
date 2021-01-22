@@ -1,6 +1,7 @@
 package com.douglei.bpm.process.metadata;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -45,6 +46,9 @@ public class TaskMetadataEntity<M extends TaskMetadata> {
 	 * @return
 	 */
 	public List<FlowMetadata> getInputFlows() {
+		if(!taskMetadata.supportInputFlows()) 
+			return Collections.emptyList();
+		
 		if(inputFlows == null) {
 			inputFlows = new ArrayList<FlowMetadata>(4);
 			flows.forEach(flow -> {
@@ -60,6 +64,9 @@ public class TaskMetadataEntity<M extends TaskMetadata> {
 	 * @return
 	 */
 	public List<FlowMetadata> getOutputFlows() {
+		if(!taskMetadata.supportOutFlows())
+			return Collections.emptyList();
+		
 		if(outputFlows == null) {
 			outputFlows = new ArrayList<FlowMetadata>(4);
 			flows.forEach(flow -> {

@@ -17,14 +17,14 @@ import com.douglei.tools.utils.StringUtil;
  */
 public class JumpTaskCmd implements Command{
 	private TaskInstance taskInstance;
-	private String target; // 跳转的目标任务id
+	private String targetTask; // 跳转的目标任务id
 	private String userId; // 进行跳转的用户id
 	private String reason; // 跳转原因
 	private List<String> assignedUserIds; // 指派的用户id集合(目标任务)
 	
-	public JumpTaskCmd(TaskInstance taskInstance, String target, String userId, String reason, List<String> assignedUserIds) {
+	public JumpTaskCmd(TaskInstance taskInstance, String targetTask, String userId, String reason, List<String> assignedUserIds) {
 		this.taskInstance = taskInstance;
-		this.target = target;
+		this.targetTask = targetTask;
 		this.userId = userId;
 		this.reason = reason;
 		this.assignedUserIds = assignedUserIds;
@@ -35,11 +35,11 @@ public class JumpTaskCmd implements Command{
 		if(StringUtil.isEmpty(userId))
 			throw new TaskHandleException("跳转失败, 跳转["+taskInstance.getName()+"]任务, 需要提供userId");
 
-		TaskMetadataEntity<TaskMetadata> targetTask = taskInstance.getProcessMetadata().getTaskMetadataEntity(target);
+		TaskMetadataEntity<TaskMetadata> targetTaskMetadataEntity = taskInstance.getProcessMetadata().getTaskMetadataEntity(targetTask);
 		
 		ExecutionResult result = completeCurrentTask();
 		if(result.isSuccess())
-			result = targetTaskStartup(targetTask);
+			result = dispatchTargetTask(targetTaskMetadataEntity);
 		return result;
 	}
 	
@@ -48,8 +48,7 @@ public class JumpTaskCmd implements Command{
 	 * @return
 	 */
 	private ExecutionResult completeCurrentTask() {
-		// 判断当前任务是否还存在
-		
+		// 有没有人认领了还未办理完成的: 如果删除了, 在办理那里尝试抛出异常
 		
 		
 		
@@ -63,11 +62,11 @@ public class JumpTaskCmd implements Command{
 	}
 
 	/**
-	 * 启动目标任务
-	 * @param targetTask
+	 * 调度目标任务
+	 * @param targetTaskMetadataEntity
 	 * @return
 	 */
-	private ExecutionResult targetTaskStartup(TaskMetadataEntity<TaskMetadata> targetTask) {
+	private ExecutionResult dispatchTargetTask(TaskMetadataEntity<TaskMetadata> targetTaskMetadataEntity) {
 		// TODO Auto-generated method stub
 		
 		return ExecutionResult.getDefaultSuccessInstance();

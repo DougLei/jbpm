@@ -15,6 +15,21 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 	}
 	
 	/**
+	 * 当前任务是否支持输入流, 默认值为true
+	 * @return
+	 */
+	public boolean supportInputFlows() {
+		return true;
+	}
+	/**
+	 * 当前任务是否支持输出流, 默认值为true
+	 * @return
+	 */
+	public boolean supportOutFlows() {
+		return true;
+	}
+	
+	/**
 	 * 获取任务默认输出流的id, 默认值为null
 	 * @return
 	 */

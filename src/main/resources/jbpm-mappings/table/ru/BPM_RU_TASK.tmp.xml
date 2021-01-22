@@ -11,6 +11,7 @@
 			<column name="JOIN_BRANCH_NUM" property="joinBranchNum" dataType="number" length="3" />
 			<column name="FORK_BRANCH_NUM" property="forkBranchNum" dataType="number" length="3" />
 			<column name="ASSIGN_COUNT" property="assignCount" dataType="number" length="4" />
+			<column name="SOURCE_KEY" property="sourceKey" dataType="string" length="50" />
 			<column name="KEY_" property="key" dataType="string" length="50" nullable="false"/>
 			<column name="NAME" property="name" dataType="nstring" length="100" nullable="false"/>
 			<column name="TYPE" property="type" dataType="string" length="20" nullable="false"/>

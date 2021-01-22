@@ -22,7 +22,7 @@ abstract class AbstractTaskCmd {
 	 * @param userId
 	 * @return
 	 */
-	public final boolean isClaimed(String userId) {
+	protected final boolean isClaimed(String userId) {
 		int count = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(
 				"select count(id) from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
 				Arrays.asList(taskInstance.getTask().getTaskinstId(), userId, HandleState.CLAIMED.name()))[0].toString());

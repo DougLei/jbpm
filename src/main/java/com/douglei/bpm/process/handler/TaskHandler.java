@@ -53,6 +53,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 				handleParameter.getProcessInstanceId(),
 				parentTaskinstId,
 				handleParameter.getCurrentDate(),
+				handleParameter.getTaskEntityHandler().getPreviousTaskKey(),
 				currentTaskMetadataEntity.getTaskMetadata(),
 				handleParameter.getProcessMetadata());
 		
@@ -83,6 +84,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 				handleParameter.getProcessInstanceId(),
 				parentTaskinstId,
 				handleParameter.getCurrentDate(),
+				handleParameter.getTaskEntityHandler().getPreviousTaskKey(),
 				currentTaskMetadataEntity.getTaskMetadata(),
 				handleParameter.getProcessMetadata());
 		

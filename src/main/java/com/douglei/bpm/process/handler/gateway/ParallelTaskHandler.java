@@ -40,6 +40,7 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 					previousTaskEntity.getTask().getProcinstId(), 
 					null, 
 					currentDate, 
+					previousTaskEntity.getTask().getKey(),
 					currentJoinTaskMetadataEntity.getTaskMetadata(), 
 					currentJoinTaskMetadataEntity.getProcessMetadata());
 			joinTask.setJoinBranchNum(1);
@@ -64,7 +65,7 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 		
 		ParallelTaskHolder parallelTaskHolder = new ParallelTaskHolder(parentTaskinstId, !isRecursive);
 		if(parallelTaskHolder.tasks.isEmpty()) { // 所有分支任务均完成
-			completeTask(parentTask, currentDate);
+			completeTask(parentTask, currentDate, null);
 			if(parentTask.getParentTaskinstId() != null) 
 				join(Arrays.asList(parentTask.getParentTaskinstId()), true);
 		}
@@ -78,8 +79,8 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 				SessionContext.getTableSession().save(joinTask);
 			}else {
 				SessionContext.getSqlSession().executeUpdate(
-						"update bpm_ru_task set join_branch_num=? where id=?", 
-						Arrays.asList(joinTask.getJoinBranchNum(), joinTask.getId()));
+						"update bpm_ru_task set source_key=?, join_branch_num=? where id=?", 
+						Arrays.asList(joinTask.getSourceKey(), joinTask.getJoinBranchNum(), joinTask.getId()));
 			}
 			return null; 
 		}
@@ -97,13 +98,14 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 		private List<Task> tasks; // 并行任务集合
 		private Task joinTask; // 进行join的任务实例
 		
-		ParallelTaskHolder(List<Object> parentTaskinstId, boolean setJoinTask) {
+		ParallelTaskHolder(List<Object> parentTaskinstId, boolean createJoinTaskInstance) {
 			this.tasks = SessionContext.getTableSession().query(Task.class, "select * from bpm_ru_task where parent_taskinst_id=?", parentTaskinstId);
-			if(setJoinTask) {
+			if(createJoinTaskInstance) {
 				// 设置进行join的任务实例, 如果不存在就创建出来
 				for (int i = 0; i < tasks.size(); i++) {
 					if(tasks.get(i).getKey().equals(currentJoinTaskMetadataEntity.getTaskMetadata().getId())) {
 						joinTask = tasks.remove(i);
+						joinTask.setSourceKey(previousTaskEntity.getTask().getKey());
 						joinTask.setJoinBranchNum(joinTask.getJoinBranchNum()+1);
 						break;
 					}
@@ -113,6 +115,7 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 							previousTaskEntity.getTask().getProcinstId(), 
 							previousTaskEntity.getTask().getParentTaskinstId(), 
 							currentDate,
+							previousTaskEntity.getTask().getKey(),
 							currentJoinTaskMetadataEntity.getTaskMetadata(),
 							currentJoinTaskMetadataEntity.getProcessMetadata());
 					joinTask.setJoinBranchNum(1);

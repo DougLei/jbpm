@@ -9,6 +9,7 @@ import com.douglei.bpm.process.api.user.option.impl.carboncopy.CarbonCopyOptionH
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskDispatchException;
 import com.douglei.bpm.process.metadata.TaskMetadataEntity;
+import com.douglei.bpm.process.metadata.TaskNotExistsException;
 import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.metadata.task.user.option.Option;
 import com.douglei.bpm.process.metadata.task.user.option.carboncopy.CarbonCopyOption;
@@ -20,18 +21,21 @@ import com.douglei.bpm.process.metadata.task.user.option.carboncopy.CarbonCopyOp
 public abstract class DispatchExecutor {
 	protected TaskMetadataEntity<UserTaskMetadata> currentUserTaskMetadataEntity;
 	protected GeneralHandleParameter handleParameter;
+	protected List<String> assignUserIds; // 实际指派的用户id集合
 	protected ProcessEngineBeans processEngineBeans;
 	
 	/**
 	 * 设置属性
 	 * @param currentUserTaskMetadataEntity
 	 * @param handleParameter
+	 * @param assignUserIds 实际指派的用户id集合
 	 * @param processEngineBeans
 	 * @return
 	 */
-	final DispatchExecutor setParameters(TaskMetadataEntity<UserTaskMetadata> currentUserTaskMetadataEntity, GeneralHandleParameter handleParameter, ProcessEngineBeans processEngineBeans) {
+	final DispatchExecutor setParameters(TaskMetadataEntity<UserTaskMetadata> currentUserTaskMetadataEntity, GeneralHandleParameter handleParameter, List<String> assignUserIds, ProcessEngineBeans processEngineBeans) {
 		this.currentUserTaskMetadataEntity = currentUserTaskMetadataEntity;
 		this.handleParameter = handleParameter;
+		this.assignUserIds = assignUserIds;
 		this.processEngineBeans = processEngineBeans;
 		return this;
 	}
@@ -62,8 +66,19 @@ public abstract class DispatchExecutor {
 	}
 	
 	/**
+	 * 设置实际指派的用户集合
+	 * @param 
+	 */
+	protected void setAssignedUsers(List<String> assignUserIds) {
+		List<UserBean> assignedUsers = processEngineBeans.getUserBeanFactory().create(assignUserIds);
+		if(assignedUsers != null && !assignedUsers.isEmpty())
+			handleParameter.getUserEntity().getAssignedUsers().addAll(assignedUsers);
+	}
+	
+	/**
 	 * 进行调度
+	 * @throws TaskNotExistsException
 	 * @throws TaskDispatchException
 	 */
-	public abstract void execute() throws TaskDispatchException;
+	public abstract void execute() throws TaskNotExistsException, TaskDispatchException;
 }

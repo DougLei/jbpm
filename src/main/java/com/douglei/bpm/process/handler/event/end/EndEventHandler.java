@@ -10,9 +10,7 @@ import com.douglei.bpm.module.history.variable.HistoryVariable;
 import com.douglei.bpm.module.runtime.instance.ProcessInstance;
 import com.douglei.bpm.module.runtime.instance.ProcessInstanceState;
 import com.douglei.bpm.module.runtime.task.Task;
-import com.douglei.bpm.module.runtime.variable.Variable;
 import com.douglei.bpm.process.handler.HandleParameter;
-import com.douglei.bpm.process.handler.TaskDispatchException;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.VariableEntities;
 import com.douglei.bpm.process.handler.gateway.ParallelTaskHandler;
@@ -48,7 +46,7 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 	 * @param endTask
 	 */
 	private void end(Task endTask) {
-		completeTask(endTask, handleParameter.getCurrentDate());
+		completeTask(endTask, handleParameter.getCurrentDate(), handleParameter.getVariableEntities());
 		
 		if(isAllFinished()) 
 			finishProcessInstance();
@@ -81,11 +79,7 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 	// 保存流程变量
 	private void saveVariables() {
 		String processInstanceId = handleParameter.getProcessInstanceId();
-		VariableEntities variableEntities = new VariableEntities(SessionContext.getTableSession().query(
-				Variable.class, "select * from bpm_ru_variable where procinst_id=?", Arrays.asList(processInstanceId)));
-		
-		// 删除所有流程变量
-		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_variable where procinst_id = ?", Arrays.asList(processInstanceId));	
+		VariableEntities variableEntities = handleParameter.getVariableEntities();
 		
 		// 将global范围的变量保存到历史表
 		if(variableEntities.existsGlobalVariable()) {
@@ -96,7 +90,7 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 			SessionContext.getTableSession().save(historyVariables);
 		}
 		
-		if(variableEntities.existsLocalVariable())
-			throw new TaskDispatchException("结束流程时, 还存在local范围的变量");
+		// 删除所有流程变量
+		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_variable where procinst_id = ?", Arrays.asList(processInstanceId));	
 	}
 }

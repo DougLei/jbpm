@@ -24,9 +24,8 @@ public class GeneralHandleParameter extends AbstractHandleParameter{
 		
 		this.taskEntityHandler.setCurrentTaskEntity(new TaskEntity(taskInstance.getTask()));
 		this.userEntity = new UserEntity(currentHandleUser, suggest, attitude, reason, assignedUsers);
-		this.variableEntities = new VariableEntities(SessionContext.getTableSession().query(
-				Variable.class, 
-				"select * from bpm_ru_variable where procinst_id=? and (taskinst_id=? or scope =?)", 
-				Arrays.asList(taskInstance.getTask().getProcinstId(), taskInstance.getTask().getTaskinstId(), Scope.GLOBAL.name())));
+		this.variableEntities = new VariableEntities(
+				taskInstance.getTask().getTaskinstId(), 
+				SessionContext.getTableSession().query(Variable.class, "select * from bpm_ru_variable where procinst_id=? and (taskinst_id=? or scope =?)", Arrays.asList(taskInstance.getTask().getProcinstId(), taskInstance.getTask().getTaskinstId(), Scope.GLOBAL.name())));
 	}
 }

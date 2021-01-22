@@ -14,6 +14,10 @@ public class EndEventMetadata extends TaskMetadata {
 	}
 	
 	@Override
+	public boolean supportOutFlows() {
+		return false;
+	}
+	@Override
 	public Type getType() {
 		return Type.END_EVENT;
 	}

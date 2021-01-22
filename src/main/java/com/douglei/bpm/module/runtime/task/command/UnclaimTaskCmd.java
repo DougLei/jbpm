@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.douglei.bpm.ProcessEngineBeans;
+import com.douglei.bpm.ProcessEngineBugException;
 import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Assignee;
@@ -60,8 +61,13 @@ public class UnclaimTaskCmd implements Command {
 			taskInstance.getTask().setNotAllClaimed();
 		
 		// 如果当前认领的任务只指派了一个人, 同时取消其调度权限
-		if(taskInstance.getTask().getAssignCount() == 1)
-			taskInstance.getTask().removeDispatchRight();
+		if(taskInstance.getTask().getAssignCount() == 1) {
+			int rows = taskInstance.getTask().deleteAllDispatch();
+			if(rows == 0)
+				throw new ProcessEngineBugException("移除调度权限时, 没有查询出调度权限信息");
+			if(rows > 1)
+				throw new ProcessEngineBugException("移除调度权限时, 查询出不止一条调度权限信息");
+		}
 		
 		return ExecutionResult.getDefaultSuccessInstance();
 	}

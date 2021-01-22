@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
-import com.douglei.bpm.ProcessEngineBugException;
 import com.douglei.bpm.bean.annotation.Property;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.metadata.TaskMetadata;
@@ -60,26 +59,17 @@ public class Task {
 		SessionContext.getTableSession().save(dispatch);
 	}
 	/**
-	 * 移除调度权限
-	 * @param userId
+	 * 删除所有调度权限
 	 */
-	public void removeDispatchRight() {
-		int rows = SessionContext.getSqlSession().executeUpdate("delete bpm_ru_dispatch where taskinst_id=?", Arrays.asList(taskinstId));
-		if(rows == 0)
-			throw new ProcessEngineBugException("移除调度权限时, 没有查询出调度权限信息");
-		if(rows > 1)
-			throw new ProcessEngineBugException("移除调度权限时, 查询出不止一条调度权限信息");
+	public int deleteAllDispatch() {
+		return SessionContext.getSqlSession().executeUpdate("delete bpm_ru_dispatch where taskinst_id=?", Arrays.asList(taskinstId));
 	}
+	
 	/**
-	 * 交换调度权限
-	 * @param targetUserId
+	 * 删除所有(运行)指派信息
 	 */
-	public void exchangeDispatchRight(String targetUserId) {
-		int rows = SessionContext.getSqlSession().executeUpdate("update bpm_ru_dispatch set user_id=? where taskinst_id=?", Arrays.asList(targetUserId, taskinstId));
-		if(rows == 0)
-			throw new ProcessEngineBugException("交换调度权限时, 没有查询出调度权限信息");
-		if(rows > 1)
-			throw new ProcessEngineBugException("交换调度权限时, 查询出不止一条调度权限信息");
+	public void deleteAllAssignee() {
+		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_assignee where taskinst_id=?", Arrays.asList(taskinstId));
 	}
 	
 	/**
@@ -94,7 +84,6 @@ public class Task {
 	public void setNotAllClaimed() {
 		SessionContext.getSqlSession().executeUpdate("update bpm_ru_task set is_all_claimed=null where taskinst_id=?", Arrays.asList(taskinstId));
 	}
-	
 	/**
 	 * 是否全部认领
 	 * @return

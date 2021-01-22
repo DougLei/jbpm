@@ -8,6 +8,7 @@ import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.api.user.option.impl.carboncopy.CarbonCopyOptionHandler;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskDispatchException;
+import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.bpm.process.metadata.TaskMetadataEntity;
 import com.douglei.bpm.process.metadata.TaskNotExistsException;
 import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
@@ -19,23 +20,23 @@ import com.douglei.bpm.process.metadata.task.user.option.carboncopy.CarbonCopyOp
  * @author DougLei
  */
 public abstract class DispatchExecutor {
-	protected TaskMetadataEntity<UserTaskMetadata> currentUserTaskMetadataEntity;
+	protected TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity;
 	protected GeneralHandleParameter handleParameter;
-	protected List<String> assignUserIds; // 实际指派的用户id集合
+	protected List<String> assignedUserIds; // 实际指派的用户id集合
 	protected ProcessEngineBeans processEngineBeans;
 	
 	/**
 	 * 设置属性
 	 * @param currentUserTaskMetadataEntity
 	 * @param handleParameter
-	 * @param assignUserIds 实际指派的用户id集合
+	 * @param assignedUserIds 实际指派的用户id集合
 	 * @param processEngineBeans
 	 * @return
 	 */
-	final DispatchExecutor setParameters(TaskMetadataEntity<UserTaskMetadata> currentUserTaskMetadataEntity, GeneralHandleParameter handleParameter, List<String> assignUserIds, ProcessEngineBeans processEngineBeans) {
-		this.currentUserTaskMetadataEntity = currentUserTaskMetadataEntity;
+	protected final DispatchExecutor setParameters(TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity, GeneralHandleParameter handleParameter, List<String> assignedUserIds, ProcessEngineBeans processEngineBeans) {
+		this.currentTaskMetadataEntity = currentTaskMetadataEntity;
 		this.handleParameter = handleParameter;
-		this.assignUserIds = assignUserIds;
+		this.assignedUserIds = assignedUserIds;
 		this.processEngineBeans = processEngineBeans;
 		return this;
 	}
@@ -44,7 +45,7 @@ public abstract class DispatchExecutor {
 	 * 进行抄送
 	 */
 	protected final void executeCarbonCopy() {
-		UserTaskMetadata userTaskMetadata = currentUserTaskMetadataEntity.getTaskMetadata();
+		UserTaskMetadata userTaskMetadata = currentTaskMetadataEntity.getTaskMetadata();
 		Option option = userTaskMetadata.getOption(CarbonCopyOptionHandler.TYPE);
 		if(option == null || ((CarbonCopyOption)option).getCandidate().getAssignPolicy().isDynamic())
 			return;
@@ -67,10 +68,10 @@ public abstract class DispatchExecutor {
 	
 	/**
 	 * 设置实际指派的用户集合
-	 * @param 
+	 * @param assignedUserIds
 	 */
-	protected void setAssignedUsers(List<String> assignUserIds) {
-		List<UserBean> assignedUsers = processEngineBeans.getUserBeanFactory().create(assignUserIds);
+	protected void setAssignedUsers(List<String> assignedUserIds) {
+		List<UserBean> assignedUsers = processEngineBeans.getUserBeanFactory().create(assignedUserIds);
 		if(assignedUsers != null && !assignedUsers.isEmpty())
 			handleParameter.getUserEntity().getAssignedUsers().addAll(assignedUsers);
 	}

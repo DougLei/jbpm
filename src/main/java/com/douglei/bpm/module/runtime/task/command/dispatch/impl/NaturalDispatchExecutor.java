@@ -13,7 +13,7 @@ public class NaturalDispatchExecutor extends DispatchExecutor {
 	@Override
 	public void execute() throws TaskNotExistsException, TaskDispatchException {
 		executeCarbonCopy();
-		setAssignedUsers(assignUserIds);
+		setAssignedUsers(assignedUserIds);
 		processEngineBeans.getTaskHandleUtil().dispatch(currentUserTaskMetadataEntity, handleParameter);
 	}
 }

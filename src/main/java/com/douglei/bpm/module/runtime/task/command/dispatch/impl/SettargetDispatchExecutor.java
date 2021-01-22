@@ -56,17 +56,17 @@ public class SettargetDispatchExecutor extends DispatchExecutor {
 		if(taskinstId != null) {
 			List<Object[]> list = SessionContext.getSqlSession().query_("select user_id from bpm_hi_assignee where taskinst_id=? and handle_state=?", Arrays.asList(taskinstId, HandleState.FINISHED.name()));
 			if(list.size() > 0) {
-				if(assignUserIds==null) {
-					assignUserIds = new ArrayList<String>(list.size());
-				}else if(assignUserIds.size() > 0) {
-					assignUserIds.clear();
+				if(assignedUserIds==null) {
+					assignedUserIds = new ArrayList<String>(list.size());
+				}else if(assignedUserIds.size() > 0) {
+					assignedUserIds.clear();
 				}
 				list.forEach(object -> {
-					assignUserIds.add(object[0].toString());
+					assignedUserIds.add(object[0].toString());
 				});
 			}
 		}
-		setAssignedUsers(assignUserIds);
+		setAssignedUsers(assignedUserIds);
 		
 		processEngineBeans.getTaskHandleUtil().dispatchByTask(targetTaskMetadataEntity, handleParameter);
 	}

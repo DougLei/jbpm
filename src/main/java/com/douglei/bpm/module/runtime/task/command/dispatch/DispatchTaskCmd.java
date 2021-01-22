@@ -69,14 +69,12 @@ public class DispatchTaskCmd extends GeneralTaskHandler implements Command {
 	// 处理相关的用户信息
 	private void handleUserInfo() {
 		// 移除不用的指派信息
-		SessionContext.getSqlSession().executeUpdate(
-				"delete bpm_ru_assignee where taskinst_id=?", 
-				Arrays.asList(taskInstance.getTask().getTaskinstId()));
+		taskInstance.getTask().deleteAllAssignee();
 		
 		// 转移调度信息(从运行表到历史表)
 		List<HistoryDispatch> historyDispatchs = SessionContext.getTableSession().query(HistoryDispatch.class, "select * from bpm_ru_dispatch where taskinst_id=? order by is_enabled desc", Arrays.asList(taskInstance.getTask().getTaskinstId()));
 		historyDispatchs.get(0).setDispatchTime(handleParameter.getCurrentDate());
 		SessionContext.getTableSession().save(historyDispatchs);
-		SessionContext.getSqlSession().executeUpdate("delete from bpm_ru_dispatch where taskinst_id=?", Arrays.asList(taskInstance.getTask().getTaskinstId()));
+		taskInstance.getTask().deleteAllDispatch();
 	}
 }

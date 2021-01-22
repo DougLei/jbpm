@@ -224,13 +224,15 @@ public class TaskService {
 	 * @param targetTask 跳转的目标任务id
 	 * @param userId 进行跳转的用户id
 	 * @param reason 原因
-	 * @param assignedUserIds 指派的用户id集合(目标任务)
+	 * @param executeCC 是否进行抄送
+	 * @param activateLastAssigneeList 如果之前流过目标任务, 是否激活其最后一次的指派信息
+	 * @param assignedUserIds 指派的用户id集合
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult jump(int taskId, String targetTask, String userId, String reason, List<String> assignedUserIds) {
+	public ExecutionResult jump(int taskId, String targetTask, String userId, String reason, boolean executeCC, boolean activateLastAssigneeList, List<String> assignedUserIds) {
 		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
-		return commandExecutor.execute(new JumpTaskCmd(taskInstance, targetTask, userId, reason, assignedUserIds));
+		return commandExecutor.execute(new JumpTaskCmd(taskInstance, targetTask, userId, reason, executeCC, activateLastAssigneeList, assignedUserIds));
 	}
 	/**
 	 * 跳转指定id的任务
@@ -238,12 +240,14 @@ public class TaskService {
 	 * @param targetTask 跳转的目标任务id
 	 * @param userId 进行跳转的用户id
 	 * @param reason 原因
-	 * @param assignedUserIds 指派的用户id集合(目标任务)
+	 * @param executeCC 是否进行抄送
+	 * @param activateLastAssigneeList 如果之前流过目标任务, 是否激活其最后一次的指派信息
+	 * @param assignedUserIds 指派的用户id集合
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult jump(String taskinstId, String targetTask, String userId, String reason, List<String> assignedUserIds) {
+	public ExecutionResult jump(String taskinstId, String targetTask, String userId, String reason, boolean executeCC, boolean activateLastAssigneeList, List<String> assignedUserIds) {
 		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
-		return commandExecutor.execute(new JumpTaskCmd(taskInstance, targetTask, userId, reason, assignedUserIds));
+		return commandExecutor.execute(new JumpTaskCmd(taskInstance, targetTask, userId, reason, executeCC, activateLastAssigneeList, assignedUserIds));
 	}
 }

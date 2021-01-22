@@ -27,7 +27,7 @@ public abstract class DispatchExecutor {
 	
 	/**
 	 * 设置属性
-	 * @param currentUserTaskMetadataEntity
+	 * @param currentTaskMetadataEntity
 	 * @param handleParameter
 	 * @param assignedUserIds 实际指派的用户id集合
 	 * @param processEngineBeans
@@ -45,7 +45,10 @@ public abstract class DispatchExecutor {
 	 * 进行抄送
 	 */
 	protected final void executeCarbonCopy() {
-		UserTaskMetadata userTaskMetadata = currentTaskMetadataEntity.getTaskMetadata();
+		if(currentTaskMetadataEntity.getTaskMetadata().isAuto())
+			return;
+		
+		UserTaskMetadata userTaskMetadata = (UserTaskMetadata) currentTaskMetadataEntity.getTaskMetadata();
 		Option option = userTaskMetadata.getOption(CarbonCopyOptionHandler.TYPE);
 		if(option == null || ((CarbonCopyOption)option).getCandidate().getAssignPolicy().isDynamic())
 			return;

@@ -13,8 +13,6 @@ import com.douglei.bpm.module.runtime.task.command.parameter.DispatchTaskParamet
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.GeneralTaskHandler;
 import com.douglei.bpm.process.handler.TaskHandleException;
-import com.douglei.bpm.process.metadata.TaskMetadataEntity;
-import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.tools.utils.StringUtil;
 
@@ -31,7 +29,6 @@ public class DispatchTaskCmd extends GeneralTaskHandler implements Command {
 		this.parameter = parameter;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		if(taskInstance.isAuto())
@@ -60,7 +57,7 @@ public class DispatchTaskCmd extends GeneralTaskHandler implements Command {
 		
 		// 进行调度
 		parameter.getDispatchExecutor()
-			.setParameters((TaskMetadataEntity<UserTaskMetadata>)taskInstance.getTaskMetadataEntity(), handleParameter, parameter.getAssignUserIds(), processEngineBeans)
+			.setParameters(taskInstance.getTaskMetadataEntity(), handleParameter, parameter.getAssignUserIds(), processEngineBeans)
 			.execute();
 		
 		return ExecutionResult.getDefaultSuccessInstance();

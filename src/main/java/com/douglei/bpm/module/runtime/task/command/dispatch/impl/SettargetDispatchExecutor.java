@@ -47,7 +47,7 @@ public class SettargetDispatchExecutor extends DispatchExecutor {
 	 * @param targetTaskKey 
 	 */
 	protected final void execute(String taskinstId, String targetTaskKey) {
-		TaskMetadataEntity<TaskMetadata> targetTaskMetadataEntity = currentUserTaskMetadataEntity.getProcessMetadata().getTaskMetadataEntity(targetTaskKey);
+		TaskMetadataEntity<TaskMetadata> targetTaskMetadataEntity = currentTaskMetadataEntity.getProcessMetadata().getTaskMetadataEntity(targetTaskKey);
 		
 		if(executeCC)
 			executeCarbonCopy();

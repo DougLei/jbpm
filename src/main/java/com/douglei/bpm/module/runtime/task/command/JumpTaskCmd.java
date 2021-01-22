@@ -7,15 +7,12 @@ import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
-import com.douglei.bpm.module.runtime.task.command.dispatch.DispatchExecutor;
 import com.douglei.bpm.module.runtime.task.command.dispatch.impl.SettargetDispatchExecutor;
-import com.douglei.bpm.module.runtime.task.command.parameter.DispatchTaskParameter;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.GeneralTaskHandler;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.metadata.TaskMetadata;
 import com.douglei.bpm.process.metadata.TaskMetadataEntity;
-import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.tools.utils.StringUtil;
 
 /**
@@ -65,26 +62,19 @@ public class JumpTaskCmd extends GeneralTaskHandler implements Command{
 		task.deleteAllAssignee();
 		task.deleteAllDispatch();
 		
+		
 		// 进行调度
-		new JumpDispatchExecutor(targetTask, activateLastAssigneeList, executeCC)
-			.setParameters_(taskInstance.getTaskMetadataEntity(), handleParameter, assignedUserIds, processEngineBeans)
-			.execute();
+		new JumpDispatchExecutor(targetTask, activateLastAssigneeList, executeCC, 
+				taskInstance.getTaskMetadataEntity(), handleParameter, assignedUserIds, processEngineBeans).execute();
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	
-	/**
-	 * 跳转调度
-	 * @author DougLei
-	 */
+	// 跳转调度
 	class JumpDispatchExecutor extends SettargetDispatchExecutor{
-
-		public JumpDispatchExecutor(String targetTask, boolean activateLastAssigneeList, boolean executeCC) {
+		public JumpDispatchExecutor(String targetTask, boolean activateLastAssigneeList, boolean executeCC, 
+				TaskMetadataEntity<? extends TaskMetadata> currentUserTaskMetadataEntity, GeneralHandleParameter handleParameter, List<String> assignedUserIds, ProcessEngineBeans processEngineBeans) {
 			super(targetTask, activateLastAssigneeList, executeCC);
-		}
-		
-		JumpDispatchExecutor setParameters_(TaskMetadataEntity<UserTaskMetadata> currentUserTaskMetadataEntity, GeneralHandleParameter handleParameter, List<String> assignedUserIds, ProcessEngineBeans processEngineBeans) {
 			setParameters(currentUserTaskMetadataEntity, handleParameter, assignedUserIds, processEngineBeans);
-			return this;
 		}
 	}
 }

@@ -172,9 +172,10 @@ public class ProcessDefinitionService {
 		SessionContext.getSqlSession().executeUpdate("delete bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		
 		if(processDefinition.isMajorSubversion() && processDefinition.getSubversion() > 0) { // 如果被删除的流程是主要子版本, 且子版本值不为0, 需要将上一个子版本的流程自动设置为主要子版本, 主要版本同理
-			ProcessDefinition beforeProcessDefinition = SessionContext.getSQLSession().queryFirst(ProcessDefinition.class, "ProcessDefinition", "querySubversions", processDefinition);
+			List<ProcessDefinition> beforeList = SessionContext.getSQLSession().queryLimit(ProcessDefinition.class, "ProcessDefinition", "querySubversions", 1, 1, processDefinition);
 			
-			if(beforeProcessDefinition != null) {
+			if(beforeList.size() > 0) {
+				ProcessDefinition beforeProcessDefinition = beforeList.get(0);
 				beforeProcessDefinition.setTypeId(processDefinition.getTypeId());
 				beforeProcessDefinition.setIsMajorSubversion(1);
 				beforeProcessDefinition.setStateInstance(processDefinition.getStateInstance());

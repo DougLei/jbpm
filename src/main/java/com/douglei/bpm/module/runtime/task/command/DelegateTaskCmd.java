@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.douglei.bpm.ProcessEngineBeans;
-import com.douglei.bpm.ProcessEngineBugException;
 import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.AssignMode;
@@ -48,7 +47,7 @@ public class DelegateTaskCmd implements Command {
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		TaskMetadata taskMetadata = taskInstance.getTaskMetadataEntity().getTaskMetadata();
-		if(taskMetadata.isAuto())
+		if(!taskInstance.isUserTask())
 			throw new TaskHandleException(getAssignModeName()+"失败, ["+taskInstance.getName()+"]任务不支持用户进行"+getAssignModeName()+"操作");
 		
 		if(userId.equals(assignedUserId))
@@ -124,17 +123,6 @@ public class DelegateTaskCmd implements Command {
 			delegateAssigneeList.get(delegateAssigneeList.size()-1).claim(claimTime);
 		}
 		SessionContext.getTableSession().save(delegateAssigneeList);
-		
-		// 如果当前认领的任务只指派了一个人, 交换其调度权限
-		String targetUserId = delegateAssigneeList.get(delegateAssigneeList.size()-1).getUserId();
-		if(taskInstance.getTask().getAssignCount() == 1 && !userId.equals(targetUserId)) { 
-			int rows = SessionContext.getSqlSession().executeUpdate("update bpm_ru_dispatch set user_id=? where taskinst_id=?", Arrays.asList(targetUserId, taskInstance.getTask().getTaskinstId()));
-			if(rows == 0)
-				throw new ProcessEngineBugException("交换调度权限时, 没有查询出调度权限信息");
-			if(rows > 1)
-				throw new ProcessEngineBugException("交换调度权限时, 查询出不止一条调度权限信息");
-		}
-		
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	

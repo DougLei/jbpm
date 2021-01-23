@@ -26,14 +26,14 @@ public abstract class DispatchExecutor {
 	protected ProcessEngineBeans processEngineBeans;
 	
 	/**
-	 * 设置属性
+	 * 设置调度执行器的必要参数
 	 * @param currentTaskMetadataEntity
 	 * @param handleParameter
 	 * @param assignedUserIds 实际指派的用户id集合
 	 * @param processEngineBeans
 	 * @return
 	 */
-	protected final DispatchExecutor setParameters(TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity, GeneralHandleParameter handleParameter, List<String> assignedUserIds, ProcessEngineBeans processEngineBeans) {
+	public final DispatchExecutor setParameters(TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity, GeneralHandleParameter handleParameter, List<String> assignedUserIds, ProcessEngineBeans processEngineBeans) {
 		this.currentTaskMetadataEntity = currentTaskMetadataEntity;
 		this.handleParameter = handleParameter;
 		this.assignedUserIds = assignedUserIds;
@@ -45,7 +45,7 @@ public abstract class DispatchExecutor {
 	 * 进行抄送
 	 */
 	protected final void executeCarbonCopy() {
-		if(currentTaskMetadataEntity.getTaskMetadata().isAuto())
+		if(!currentTaskMetadataEntity.getTaskMetadata().isUserTask())
 			return;
 		
 		UserTaskMetadata userTaskMetadata = (UserTaskMetadata) currentTaskMetadataEntity.getTaskMetadata();

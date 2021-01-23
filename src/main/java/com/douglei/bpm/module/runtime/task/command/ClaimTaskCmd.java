@@ -33,7 +33,7 @@ public class ClaimTaskCmd implements Command{
 	
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
-		if(taskInstance.isAuto())
+		if(!taskInstance.isUserTask())
 			throw new TaskHandleException("认领失败, ["+taskInstance.getName()+"]任务不支持用户认领");
 		if(taskInstance.getTask().isAllClaimed())
 			return new ExecutionResult("认领失败, [%s]任务的办理权限已被认领完", "jbpm.claim.fail.task.all.claimed", taskInstance.getName());
@@ -87,11 +87,6 @@ public class ClaimTaskCmd implements Command{
 		// 处理task的isAllClaimed字段值, 改为全部认领
 		if(result.getLeftCount() == 0)
 			taskInstance.getTask().setAllClaimed();
-		
-		// 如果当前认领的任务只指派了一个人, 同时赋予其调度权限
-		if(taskInstance.getTask().getAssignCount() == 1)
-			taskInstance.getTask().setDispatchRight(currentClaimUserId);
-		
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 

@@ -9,12 +9,12 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.command.CarbonCopyTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.ClaimTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.DelegateTaskCmd;
+import com.douglei.bpm.module.runtime.task.command.DispatchTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.HandleTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.JumpTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.TransferTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.UnclaimTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.ViewCarbonCopyCmd;
-import com.douglei.bpm.module.runtime.task.command.dispatch.DispatchTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.parameter.DispatchTaskParameter;
 import com.douglei.bpm.module.runtime.task.command.parameter.HandleTaskParameter;
 import com.douglei.bpm.process.api.container.ProcessContainerProxy;
@@ -33,6 +33,9 @@ public class TaskService {
 	@Autowired
 	private CommandExecutor commandExecutor;
 	
+	// ------------------------------------------------------------------------
+	// 针对用户任务的api
+	// ------------------------------------------------------------------------
 	/**
 	 * 认领指定id的任务
 	 * @param taskId
@@ -79,29 +82,6 @@ public class TaskService {
 	public ExecutionResult unclaim(String taskinstId, String userId, boolean strict){
 		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
 		return commandExecutor.execute(new UnclaimTaskCmd(taskInstance, userId, strict));
-	}
-	
-	/**
-	 * 办理指定id的任务
-	 * @param taskId
-	 * @param parameter
-	 * @return 返回对象的success=true时, 其Object属性为boolean类型, 标识是否可以进行调度
-	 */
-	@Transaction
-	public ExecutionResult handle(int taskId, HandleTaskParameter parameter) {
-		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
-		return commandExecutor.execute(new HandleTaskCmd(taskInstance, parameter));
-	}
-	/**
-	 * 办理指定id的任务
-	 * @param taskinstId
-	 * @param parameter
-	 * @return 返回对象的success=true时, 其Object属性为boolean类型, 标识是否可以进行调度
-	 */
-	@Transaction
-	public ExecutionResult handle(String taskinstId, HandleTaskParameter parameter) {
-		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
-		return commandExecutor.execute(new HandleTaskCmd(taskInstance, parameter));
 	}
 	
 	/**
@@ -206,7 +186,6 @@ public class TaskService {
 		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
 		return commandExecutor.execute(new CarbonCopyTaskCmd(taskInstance, userId, assignedUserIds));
 	}
-	
 	/**
 	 * 查看抄送
 	 * @param taskinstId
@@ -218,36 +197,60 @@ public class TaskService {
 		return commandExecutor.execute(new ViewCarbonCopyCmd(taskinstId, userId));
 	}
 	
+	// ------------------------------------------------------------------------
+	// 针对所有任务的api
+	// ------------------------------------------------------------------------
 	/**
-	 * 跳转指定id的任务
+	 * 办理指定id的任务
+	 * @param taskId
+	 * @param parameter
+	 * @return 返回对象的success=true时, 其Object属性为boolean类型, 标识是否可以进行调度
+	 */
+	@Transaction
+	public ExecutionResult handle(int taskId, HandleTaskParameter parameter) {
+		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
+		return commandExecutor.execute(new HandleTaskCmd(taskInstance, parameter));
+	}
+	/**
+	 * 办理指定id的任务
+	 * @param taskinstId
+	 * @param parameter
+	 * @return 返回对象的success=true时, 其Object属性为boolean类型, 标识是否可以进行调度
+	 */
+	@Transaction
+	public ExecutionResult handle(String taskinstId, HandleTaskParameter parameter) {
+		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
+		return commandExecutor.execute(new HandleTaskCmd(taskInstance, parameter));
+	}
+	
+	/**
+	 * 从指定id的任务进行跳转
 	 * @param taskId
 	 * @param targetTask 跳转的目标任务id
 	 * @param userId 进行跳转的用户id
 	 * @param reason 原因
-	 * @param executeCC 是否进行抄送
-	 * @param activateLastAssigneeList 如果之前流过目标任务, 是否激活其最后一次的指派信息
 	 * @param assignedUserIds 指派的用户id集合
+	 * @param strict 如果存在已经认领的指派信息, 跳转时是否强制删除相关数据; 建议传入false
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult jump(int taskId, String targetTask, String userId, String reason, boolean executeCC, boolean activateLastAssigneeList, List<String> assignedUserIds) {
+	public ExecutionResult jump(int taskId, String targetTask, String userId, String reason, List<String> assignedUserIds, boolean strict) {
 		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
-		return commandExecutor.execute(new JumpTaskCmd(taskInstance, targetTask, userId, reason, executeCC, activateLastAssigneeList, assignedUserIds));
+		return commandExecutor.execute(new JumpTaskCmd(taskInstance, targetTask, userId, reason, assignedUserIds, strict));
 	}
 	/**
-	 * 跳转指定id的任务
+	 * 从指定id的任务进行跳转
 	 * @param taskinstId
 	 * @param targetTask 跳转的目标任务id
 	 * @param userId 进行跳转的用户id
 	 * @param reason 原因
-	 * @param executeCC 是否进行抄送
-	 * @param activateLastAssigneeList 如果之前流过目标任务, 是否激活其最后一次的指派信息
 	 * @param assignedUserIds 指派的用户id集合
+	 * @param strict 如果存在已经认领的指派信息, 跳转时是否强制删除相关数据; 建议传入false
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult jump(String taskinstId, String targetTask, String userId, String reason, boolean executeCC, boolean activateLastAssigneeList, List<String> assignedUserIds) {
+	public ExecutionResult jump(String taskinstId, String targetTask, String userId, String reason, List<String> assignedUserIds, boolean strict) {
 		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
-		return commandExecutor.execute(new JumpTaskCmd(taskInstance, targetTask, userId, reason, executeCC, activateLastAssigneeList, assignedUserIds));
+		return commandExecutor.execute(new JumpTaskCmd(taskInstance, targetTask, userId, reason, assignedUserIds, strict));
 	}
 }

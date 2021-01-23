@@ -52,10 +52,10 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 		return null;
 	}
 	/**
-	 * 是否是自动任务, 默认值为true
+	 * 是否是用户任务, 默认值为false
 	 * @return
 	 */
-	public boolean isAuto() {
-		return true;
+	public boolean isUserTask() {
+		return false;
 	}
 }

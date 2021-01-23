@@ -37,7 +37,7 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 
 		UserBean currentHandleUser = processEngineBeans.getUserBeanFactory().create(parameter.getUserId());
 		
-		if(!taskInstance.isAuto()) {
+		if(taskInstance.isUserTask()) {
 			HandlePolicy handlePolicy = ((UserTaskMetadata) taskInstance.getTaskMetadataEntity().getTaskMetadata()).getCandidate().getHandlePolicy();
 			if(handlePolicy.isSuggest() && StringUtil.isEmpty(parameter.getSuggest()))
 				return new ExecutionResult("办理失败, 办理[%s]任务, 需要输入办理意见", "jbpm.handle.fail.no.suggest", taskInstance.getName());

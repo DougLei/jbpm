@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.task.command.dispatch;
+package com.douglei.bpm.module.runtime.task.command;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,9 +31,8 @@ public class DispatchTaskCmd extends GeneralTaskHandler implements Command {
 
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
-		if(taskInstance.isAuto())
+		if(!taskInstance.isUserTask())
 			throw new TaskHandleException("调度失败, ["+taskInstance.getName()+"]任务不支持用户调度");
-		
 		if(StringUtil.isEmpty(parameter.getUserId()))
 			throw new TaskHandleException("调度失败, 调度["+taskInstance.getName()+"]任务, 需要提供userId");
 
@@ -43,7 +42,6 @@ public class DispatchTaskCmd extends GeneralTaskHandler implements Command {
 			throw new TaskHandleException("调度失败, 指定的userId无权调度["+taskInstance.getName()+"]任务");
 		if(count > 1)
 			throw new ProcessEngineBugException("同一个任务的调度信息存在"+count+"条有效数据");
-		
 		
 		// 创建调度用办理参数实例
 		this.handleParameter = new GeneralHandleParameter(

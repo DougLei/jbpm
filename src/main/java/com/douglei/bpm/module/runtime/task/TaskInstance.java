@@ -48,11 +48,11 @@ public class TaskInstance {
 		return taskMetadataEntity.getTaskMetadata().getName();
 	}
 	/**
-	 * 是否是自动任务
+	 * 是否是用户任务
 	 * @return
 	 */
-	public boolean isAuto() {
-		return taskMetadataEntity.getTaskMetadata().isAuto();
+	public boolean isUserTask() {
+		return taskMetadataEntity.getTaskMetadata().isUserTask();
 	}
 	public Task getTask() {
 		return task;

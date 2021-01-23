@@ -103,12 +103,9 @@ public class AssigneeHandler {
 		if(currentTask.getAssignCount() != assignedUsers.size()) 
 			currentTask.setAssignCount(assignedUsers.size());
 			
-		// 如果只指派了一个人, 则直接进行认领操作
+		// 如果只指派了一个人, 则进行认领操作
 		if(currentTask.getAssignCount() == 1) {
-			Assignee lastAssignee = assigneeList.get(assigneeList.size()-1);
-			lastAssignee.claim(currentDate);
-			
-			currentTask.setDispatchRight(lastAssignee.getUserId());
+			assigneeList.get(assigneeList.size()-1).claim(currentDate);
 			currentTask.setAllClaimed();
 		}
 		

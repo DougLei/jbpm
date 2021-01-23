@@ -64,8 +64,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 		
 		// 判断任务是否结束, 以及是否可以调度
 		if(isFinished()) {
-			if(currentTask.getAssignCount() > 1)
-				currentTask.setDispatchRight(handleParameter.getUserEntity().getCurrentHandleUser().getUserId());
+			currentTask.setDispatchRight(handleParameter.getUserEntity().getCurrentHandleUser().getUserId());
 			return CAN_DISPATCH;
 		}
 		return CANNOT_DISPATCH;
@@ -73,13 +72,17 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 	
 	// 判断任务是否结束
 	private boolean isFinished() {
-		if(!handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().isAllClaimed())
+		Task currentTask = handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask();
+		if(!currentTask.isAllClaimed())
 			return false;
+		
+		if(currentTask.getAssignCount() == 1)
+			return true;
 		
 		// 查询当前任务, 已经认领的指派信息数量
 		int claimedAssigneeCount = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(
 				"select count(id) from bpm_ru_assignee where taskinst_id=? and handle_state=?", 
-				Arrays.asList(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId(), HandleState.CLAIMED.name()))[0].toString());
+				Arrays.asList(currentTask.getTaskinstId(), HandleState.CLAIMED.name()))[0].toString());
 		return claimedAssigneeCount == 0;
 	}
 }

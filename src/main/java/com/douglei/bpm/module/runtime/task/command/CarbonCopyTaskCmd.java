@@ -40,7 +40,7 @@ public class CarbonCopyTaskCmd extends AbstractTaskCmd implements Command {
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		TaskMetadata taskMetadata = taskInstance.getTaskMetadataEntity().getTaskMetadata();
-		if(taskMetadata.isAuto())
+		if(!taskInstance.isUserTask())
 			throw new TaskHandleException("抄送失败, ["+taskInstance.getName()+"]任务不支持用户进行抄送操作");
 		
 		Option option = ((UserTaskMetadata)taskMetadata).getOption(CarbonCopyOptionHandler.TYPE);

@@ -59,7 +59,7 @@ public class Task {
 		SessionContext.getTableSession().save(dispatch);
 	}
 	/**
-	 * 删除所有调度权限
+	 * 删除所有(运行)调度权限
 	 */
 	public int deleteAllDispatch() {
 		return SessionContext.getSqlSession().executeUpdate("delete bpm_ru_dispatch where taskinst_id=?", Arrays.asList(taskinstId));

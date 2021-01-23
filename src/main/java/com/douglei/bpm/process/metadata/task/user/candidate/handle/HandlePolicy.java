@@ -9,14 +9,14 @@ import com.douglei.bpm.process.metadata.task.user.DefaultCandidateConfigInstance
  * @author DougLei
  */
 public class HandlePolicy implements Serializable {
-	private boolean suggest; // 是否需要强制输入意见
-	private boolean attitude; // 是否需要强制表态
+	private boolean suggestIsRequired; // 是否需要强制输入意见
+	private boolean attitudeIsRequired; // 是否需要强制表态
 	private ClaimPolicyEntity claimPolicyEntity; // 认领策略
 	private MultiHandlePolicyEntity multiHandlePolicyEntity; // 多人办理策略
 	
-	public HandlePolicy(boolean suggest, boolean attitude, ClaimPolicyEntity claimPolicyEntity, MultiHandlePolicyEntity multiHandlePolicyEntity) {
-		this.suggest = suggest;
-		this.attitude = attitude;
+	public HandlePolicy(boolean suggestIsRequired, boolean attitudeIsRequired, ClaimPolicyEntity claimPolicyEntity, MultiHandlePolicyEntity multiHandlePolicyEntity) {
+		this.suggestIsRequired = suggestIsRequired;
+		this.attitudeIsRequired = attitudeIsRequired;
 		this.claimPolicyEntity = claimPolicyEntity;
 		this.multiHandlePolicyEntity = multiHandlePolicyEntity;
 	}
@@ -25,15 +25,15 @@ public class HandlePolicy implements Serializable {
 	 * 是否需要强制输入意见
 	 * @return
 	 */
-	public boolean isSuggest() {
-		return suggest;
+	public boolean suggestIsRequired() {
+		return suggestIsRequired;
 	}
 	/**
 	 * 是否需要强制表态
 	 * @return
 	 */
-	public boolean isAttitude() {
-		return attitude;
+	public boolean attitudeIsRequired() {
+		return attitudeIsRequired;
 	}
 	/**
 	 * 获取认领策略实体

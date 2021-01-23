@@ -29,21 +29,21 @@ public class DelegateOptionHandler extends OptionHandler {
 	
 	@Override
 	public Option parse(String name, int order, String userTaskId, String userTaskName, Element element) throws ProcessParseException {
-		boolean reason = false;
+		boolean reasonIsRequired = false;
 		Element parameterElement = element.element("parameter");
 		if(parameterElement != null)
-			reason = "true".equalsIgnoreCase(parameterElement.attributeValue("reason"));
+			reasonIsRequired = "true".equalsIgnoreCase(parameterElement.attributeValue("reason"));
 		
 		element = element.element("candidate");
 		if(element == null)
-			return createOption(name, order, reason, null);
+			return createOption(name, order, reasonIsRequired, null);
 		
 		AssignPolicy assignPolicy = assignPolicyParser.parse(userTaskId, userTaskName, getXmlStruct() + "<candidate>", element);
-		return createOption(name, order, reason, new Candidate(assignPolicy, null));
+		return createOption(name, order, reasonIsRequired, new Candidate(assignPolicy, null));
 	}
 
 	// 创建option实例
-	protected Option createOption(String name, int order, boolean reason, Candidate candidate) {
-		return new DelegateOption(TYPE, name, order, reason, candidate);
+	protected Option createOption(String name, int order, boolean reasonIsRequired, Candidate candidate) {
+		return new DelegateOption(TYPE, name, order, reasonIsRequired, candidate);
 	}
 }

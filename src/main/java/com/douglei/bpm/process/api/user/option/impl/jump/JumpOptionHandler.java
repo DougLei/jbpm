@@ -3,7 +3,6 @@ package com.douglei.bpm.process.api.user.option.impl.jump;
 import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Autowired;
-import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.api.user.option.OptionHandler;
 import com.douglei.bpm.process.metadata.task.user.candidate.Candidate;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
@@ -17,24 +16,17 @@ import com.douglei.tools.utils.StringUtil;
  * 
  * @author DougLei
  */
-@Bean(clazz = OptionHandler.class)
-public class JumpOptionHandler extends OptionHandler{
-	public static final String TYPE = "jump";
+public abstract class JumpOptionHandler extends OptionHandler{
 	
 	@Autowired
 	private AssignPolicyParser assignPolicyParser;
 	
 	@Override
-	public String getType() {
-		return TYPE;
-	}
-
-	@Override
 	public Option parse(String name, int order, String userTaskId, String userTaskName, Element element) throws ProcessParseException {
 		String target = null;
-		boolean suggest = false;
-		boolean attitude = false;
-		boolean reason = false;
+		boolean suggestIsRequired = false;
+		boolean attitudeIsRequired = false;
+		boolean reasonIsRequired = false;
 		
 		Element parameterElement = element.element("parameter");
 		if(parameterElement != null) {
@@ -42,16 +34,16 @@ public class JumpOptionHandler extends OptionHandler{
 			if(StringUtil.isEmpty(target))
 				target = null;
 			
-			suggest = "true".equalsIgnoreCase(parameterElement.attributeValue("suggest"));
-			attitude = "true".equalsIgnoreCase(parameterElement.attributeValue("attitude"));
-			reason = "true".equalsIgnoreCase(parameterElement.attributeValue("reason"));
+			suggestIsRequired = "true".equalsIgnoreCase(parameterElement.attributeValue("suggest"));
+			attitudeIsRequired = "true".equalsIgnoreCase(parameterElement.attributeValue("attitude"));
+			reasonIsRequired = "true".equalsIgnoreCase(parameterElement.attributeValue("reason"));
 		}
 		
 		element = element.element("candidate");
 		if(element == null) 
-			return new JumpOption(TYPE, name, order, reason, target, suggest, attitude, null);
+			return new JumpOption(getType(), name, order, reasonIsRequired, target, suggestIsRequired, attitudeIsRequired, null);
 		
 		AssignPolicy assignPolicy = assignPolicyParser.parse(userTaskId, userTaskName, getXmlStruct(), element);
-		return new JumpOption(TYPE, name, order, reason, target, suggest, attitude, new Candidate(assignPolicy, null));
+		return new JumpOption(getType(), name, order, reasonIsRequired, target, suggestIsRequired, attitudeIsRequired, new Candidate(assignPolicy, null));
 	}
 }

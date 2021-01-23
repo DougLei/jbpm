@@ -10,14 +10,14 @@ import com.douglei.bpm.process.metadata.task.user.option.delegate.DelegateOption
  */
 public class JumpOption extends DelegateOption {
 	private String target;
-	private boolean suggest; // 是否需要强制输入意见
-	private boolean attitude; // 是否需要强制表态
+	private boolean suggestIsRequired; // 是否需要强制输入意见
+	private boolean attitudeIsRequired; // 是否需要强制表态
 	
-	public JumpOption(String type, String name, int order, boolean reason, String target, boolean suggest, boolean attitude, Candidate candidate) {
-		super(type, name, order, reason, candidate);
+	public JumpOption(String type, String name, int order, boolean reasonIsRequired, String target, boolean suggestIsRequired, boolean attitudeIsRequired, Candidate candidate) {
+		super(type, name, order, reasonIsRequired, candidate);
 		this.target = target;
-		this.suggest = suggest;
-		this.attitude = attitude;
+		this.suggestIsRequired = suggestIsRequired;
+		this.attitudeIsRequired = attitudeIsRequired;
 	}
 	
 	/**
@@ -31,15 +31,15 @@ public class JumpOption extends DelegateOption {
 	 * 是否需要强制输入意见
 	 * @return
 	 */
-	public boolean isSuggest() {
-		return suggest;
+	public boolean suggestIsRequired() {
+		return suggestIsRequired;
 	}
 	/**
 	 * 是否需要强制表态
 	 * @return
 	 */
-	public boolean isAttitude() {
-		return attitude;
+	public boolean attitudeIsRequired() {
+		return attitudeIsRequired;
 	}
 	
 	@Override

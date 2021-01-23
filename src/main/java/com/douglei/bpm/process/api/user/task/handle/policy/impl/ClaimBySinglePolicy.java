@@ -20,7 +20,7 @@ public class ClaimBySinglePolicy implements ClaimPolicy{
 	}
 
 	@Override
-	public boolean isValueRequired() {
+	public boolean valueIsRequired() {
 		return false;
 	}
 

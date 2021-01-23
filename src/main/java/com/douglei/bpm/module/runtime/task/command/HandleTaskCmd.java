@@ -39,9 +39,9 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 		
 		if(taskInstance.isUserTask()) {
 			HandlePolicy handlePolicy = ((UserTaskMetadata) taskInstance.getTaskMetadataEntity().getTaskMetadata()).getCandidate().getHandlePolicy();
-			if(handlePolicy.isSuggest() && StringUtil.isEmpty(parameter.getSuggest()))
+			if(handlePolicy.suggestIsRequired() && StringUtil.isEmpty(parameter.getSuggest()))
 				return new ExecutionResult("办理失败, 办理[%s]任务, 需要输入办理意见", "jbpm.handle.fail.no.suggest", taskInstance.getName());
-			if(handlePolicy.isAttitude() && parameter.getAttitude() == null)
+			if(handlePolicy.attitudeIsRequired() && parameter.getAttitude() == null)
 				return new ExecutionResult("办理失败, 办理[%s]任务, 需要进行表态", "jbpm.handle.fail.no.attitude", taskInstance.getName());
 			
 			// 查询指定userId, 判断其是否可以办理任务

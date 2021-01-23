@@ -72,7 +72,7 @@ public class CandidateParser {
 			throw new ProcessParseException("<userTask id="+id+" name="+name+"><candidate><handlePolicy><claim>的name属性值["+policyName+"]不合法");
 		
 		String policyValue = null;
-		if(claimPolicy.isValueRequired()) {
+		if(claimPolicy.valueIsRequired()) {
 			policyValue = element.attributeValue("value");
 			if(StringUtil.isEmpty(policyValue))
 				throw new ProcessParseException("<userTask id="+id+" name="+name+"><candidate><handlePolicy><claim>的value属性值不能为空");

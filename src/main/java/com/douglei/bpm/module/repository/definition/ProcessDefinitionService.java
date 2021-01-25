@@ -11,6 +11,8 @@ import com.douglei.bpm.module.repository.RepositoryException;
 import com.douglei.bpm.module.runtime.instance.ProcessInstanceHandlePolicy;
 import com.douglei.bpm.module.runtime.instance.ProcessInstanceService;
 import com.douglei.bpm.process.api.container.ProcessContainerProxy;
+import com.douglei.bpm.process.parser.ProcessParseException;
+import com.douglei.bpm.process.parser.ProcessParser;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
 
@@ -30,14 +32,21 @@ public class ProcessDefinitionService {
 	@Autowired
 	private ProcessContainerProxy processContainer;
 	
+	@Autowired
+	private ProcessParser parser;
+	
 	/**
 	 * 保存流程定义
 	 * @param builder
 	 * @return
+	 * @throws ProcessParseException
 	 */
 	@Transaction
-	public ExecutionResult insert(ProcessDefinitionBuilder builder) {
+	public ExecutionResult insert(ProcessDefinitionBuilder builder) throws ProcessParseException{
 		ProcessDefinition processDefinition = builder.getProcessDefinition();
+		if(builder.isValidate())
+			parser.parse(processDefinition.getId(), processDefinition.getContent());
+		
 		ProcessDefinition exProcessDefinition = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "query4Save", processDefinition);
 		if(exProcessDefinition == null) {
 			// 新的流程定义, 进行save
@@ -54,13 +63,16 @@ public class ProcessDefinitionService {
 				processDefinition.setContent(null);
 				processDefinition.setSignature(null);
 				SessionContext.getTableSession().update(processDefinition);
-			}else if(exProcessDefinition.getStateInstance() == State.INITIAL 
+			} else if(exProcessDefinition.getStateInstance() == State.INITIAL 
 					|| (!processInstanceService.exists(exProcessDefinition.getId()) && !historyProcessInstanceService.exists(exProcessDefinition.getId()))) { // 修改了内容, 但旧的流程不存在实例, 进行update
 				processDefinition.setId(exProcessDefinition.getId());
 				processDefinition.setIsMajorVersion(exProcessDefinition.getIsMajorVersion());
 				processDefinition.setSubversion(exProcessDefinition.getSubversion());
 				processDefinition.setStateInstance(exProcessDefinition.getStateInstance());
-				SessionContext.getTableSession().update(processDefinition); 
+				SessionContext.getTableSession().update(processDefinition);
+				
+				if(processDefinition.getStateInstance() == State.DEPLOY) // 刷新容器中的流程定义实例
+					processContainer.addProcess(processDefinition);
 			}else { // 修改了内容, 且旧的流程定义存在实例, 根据strict值, 进行升级save, 或提示操作失败
 				if(!builder.isStrict()) 
 					return new ExecutionResult("保存失败, [%s]流程存在实例", "jbpm.procdef.save.fail.instance.exists", processDefinition.getName());
@@ -222,7 +234,7 @@ public class ProcessDefinitionService {
 		if(targetProcessDefinition.isMajorSubversion())
 			return new ExecutionResult("设置主要子版本失败, [%s]流程就是主要子版本", "jbpm.procdef.set.major.subversion.fail.already.was", targetProcessDefinition.getName());
 		
-		// 进行必要的数据交换后, 执行update
+		// 查询主要子版本的流程定义信息, 进行必要的数据交换后, 执行update
 		ProcessDefinition majorSubversionProcessDefinition = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "queryMajorSubversion", targetProcessDefinition);
 		if(majorSubversionProcessDefinition == null)
 			throw new RepositoryException("设置流程的主要子版本时, 未查询到code=["+targetProcessDefinition.getCode()+"], version=["+targetProcessDefinition.getVersion()+"]的主要子版本数据");
@@ -270,22 +282,8 @@ public class ProcessDefinitionService {
 	/**
 	 * 修改流程的状态
 	 * @param processDefinitionId
-	 * @param targetState
-	 * @return
+	 * @param state
 	 */
-	@Transaction
-	public ExecutionResult updateState(int processDefinitionId, State targetState) {
-		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select name, is_major_subversion, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
-		if(processDefinition == null)
-			throw new RepositoryException("修改流程状态失败, 不存在id为["+processDefinitionId+"]的流程");
-		if(!processDefinition.isMajorSubversion())
-			return new ExecutionResult("修改流程状态失败, [%s]流程不是主要子版本", "jbpm.procdef.update.state.fail.not.major.subversion", processDefinition.getName());
-		if(!processDefinition.getStateInstance().supportConvert(targetState))
-			return new ExecutionResult("修改流程状态失败, 不能将[%s]状态更新为[%s]状态", "jbpm.procdef.update.state.fail.unsupport", processDefinition.getState(), targetState);
-
-		updateState_(processDefinitionId, targetState);
-		return ExecutionResult.getDefaultSuccessInstance();
-	}
 	private void updateState_(int processDefinitionId, State state) {
 		SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set state=?, is_major_version=0 where id=?", Arrays.asList(state.name(), processDefinitionId));
 	}

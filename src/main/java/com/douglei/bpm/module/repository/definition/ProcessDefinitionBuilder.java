@@ -20,6 +20,7 @@ import com.douglei.tools.utils.StringUtil;
 public class ProcessDefinitionBuilder {
 	private ProcessDefinition processDefinition;
 	private boolean strict; // 如果构建出的流程定义已经存在实例, 根据该参数决定是无法保存本次的流程定义(false), 或是强制更新子版本来保存(true)
+	private boolean validate; // 是否对流程定义内容进行校验, 校验失败时会抛出 {@link ProcessParseException} 
 	
 	/**
 	 * 根据文件构建流程定义实例
@@ -126,6 +127,14 @@ public class ProcessDefinitionBuilder {
 	public void setStrict(boolean strict) {
 		this.strict = strict;
 	}
+	
+	/**
+	 * 设置是否对流程定义的内容进行校验, 校验失败时会抛出 {@link ProcessParseException} 
+	 * @param validate
+	 */
+	public void setValidate(boolean validate) {
+		this.validate = validate;
+	}
 
 	/**
 	 * 设置流程定义的类型id
@@ -171,6 +180,14 @@ public class ProcessDefinitionBuilder {
 	 */
 	boolean isStrict() {
 		return strict;
+	}
+	
+	/**
+	 * 是否对流程定义的内容进行校验, 校验失败时会抛出 {@link ProcessParseException} 
+	 * @return
+	 */
+	boolean isValidate() {
+		return validate;
 	}
 
 	/**

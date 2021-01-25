@@ -9,49 +9,17 @@ public enum State {
 	/**
 	 * 初始化
 	 */
-	INITIAL(true, false, true, false){
-		@Override
-		public boolean supportConvert(State targetState) {
-			switch(targetState) {
-				case DEPLOY:
-				case DELETE:
-					return true;
-				default:
-					return false;
-			}
-		}
-	}, 
+	INITIAL(true, false, true, false), 
 	
 	/**
 	 * 部署
 	 */
-	DEPLOY(false, true, false, false){
-		@Override
-		public boolean supportConvert(State targetState) {
-			switch(targetState) {
-				case UNDEPLOY:
-					return true;
-				default:
-					return false;
-			}
-		}
-	}, 
+	DEPLOY(false, true, false, false), 
 	
 	/**
 	 * 未部署
 	 */
-	UNDEPLOY(true, false, true, false){
-		@Override
-		public boolean supportConvert(State targetState) {
-			switch(targetState) {
-				case DEPLOY:
-				case DELETE:
-					return true;
-				default:
-					return false;
-			}
-		}
-	}, 
+	UNDEPLOY(true, false, true, false), 
 	
 	/**
 	 * 无效
@@ -61,17 +29,7 @@ public enum State {
 	/**
 	 * 删除
 	 */
-	DELETE(false, false, false, true){
-		@Override
-		public boolean supportConvert(State targetState) {
-			switch(targetState) {
-				case UNDEPLOY:
-					return true;
-				default:
-					return false;
-			}
-		}
-	}; 
+	DELETE(false, false, false, true); 
 
 	private boolean supportDeploy; // 当前状态是是否支持部署
 	private boolean supportUnDeploy; // 当前状态是是否支持取消部署
@@ -95,14 +53,5 @@ public enum State {
 	}
 	public boolean supportPhysicalDelete() {
 		return supportPhysicalDelete;
-	}
-	
-	/**
-	 * 当前状态是否支持转换为目标状态
-	 * @param targetState
-	 * @return
-	 */
-	public boolean supportConvert(State targetState) {
-		return false;
 	}
 }

@@ -6,6 +6,7 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
+import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.bpm.process.parser.ProcessParser;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.transaction.component.Transaction;
@@ -31,11 +32,12 @@ public class ProcessContainerProxy {
 	}
 	
 	/**
-	 * 添加流程
+	 * 添加流程, 如果存在相同id的流程, 将其cover; 如果不存在相同id的流程, 将其add
 	 * @param processDefinition
 	 * @return 返回解析出的流程实例
+	 * @throws ProcessParseException
 	 */
-	public ProcessMetadata addProcess(ProcessDefinition processDefinition) {
+	public ProcessMetadata addProcess(ProcessDefinition processDefinition) throws ProcessParseException{
 		ProcessMetadata process = parser.parse(processDefinition.getId(), processDefinition.getContent());
 		container.addProcess(process);
 		return process;

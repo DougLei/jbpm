@@ -5,7 +5,7 @@ package com.douglei.bpm.module.repository.definition;
  * @author DougLei
  */
 public class ProcessDefinition {
-	private Integer id;
+	private int id;
 	private int typeId;
 	private String name;
 	private String code;
@@ -28,10 +28,10 @@ public class ProcessDefinition {
 		this.state = State.INITIAL;
 	}
 	
-	public Integer getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public int getTypeId() {

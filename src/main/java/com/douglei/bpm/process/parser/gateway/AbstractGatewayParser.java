@@ -36,15 +36,15 @@ public abstract class AbstractGatewayParser extends GeneralParser implements Par
 		
 		int unextendScopeWeight = 0;
 		String value = element.attributeValue("global");
-		if(value != null && !"true".equalsIgnoreCase(value))
+		if(value != null && "false".equalsIgnoreCase(value))
 			unextendScopeWeight += Scope.GLOBAL.getWeight();
 		
 		value = element.attributeValue("local");
-		if(value != null || !"true".equalsIgnoreCase(value))
+		if(value != null || "false".equalsIgnoreCase(value))
 			unextendScopeWeight += Scope.LOCAL.getWeight();
 		
 		value = element.attributeValue("transient");
-		if(value != null || !"true".equalsIgnoreCase(value))
+		if(value != null || "false".equalsIgnoreCase(value))
 			unextendScopeWeight += Scope.TRANSIENT.getWeight();
 		
 		return unextendScopeWeight;

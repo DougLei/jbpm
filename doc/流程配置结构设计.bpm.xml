@@ -211,7 +211,7 @@
 				变量继承配置, 从上一个任务流转过来时, 引擎会带着上一个任务的所有流程变量, 需要配置网关中可使用哪些范围的流程变量; 可不配置, 默认使用所有范围的流程变量; 如果配置了, 则使用指定范围的流程变量
 				* global: 全局范围, 基于整个流程实例; 值为true, 表示继承, 反之不继承; 可不配置, 默认值为true; 不区分大小写
 				* local: 本地范围, 同上
-				* transient: 瞬时范围
+				* transient: 瞬时范围, 同上
 			 -->
 			<variableExtend global="true" local="true" transient="true"/>
 			<listeners></listeners><!-- 参考startEvent中的listeners配置 -->

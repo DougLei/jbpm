@@ -43,8 +43,8 @@ public class ProcessDefinitionBuilder {
 	 * @param content
 	 */
 	public ProcessDefinitionBuilder(String content) {
-		Map<String, String> attribute = getProcessAttributeMap(content);
-		this.processDefinition = new ProcessDefinition(attribute.get("name"), attribute.get("code"), attribute.get("version"));
+		Map<String, String> attributeMap = getProcessAttributeMap(content);
+		this.processDefinition = new ProcessDefinition(attributeMap.get("name"), attributeMap.get("code"), attributeMap.get("version"));
 		this.processDefinition.setContent(content);
 		this.processDefinition.setSignature(DigestUtils.md5Hex(content));
 	}

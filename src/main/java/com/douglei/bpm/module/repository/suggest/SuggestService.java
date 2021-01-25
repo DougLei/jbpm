@@ -50,11 +50,16 @@ public class SuggestService {
 	/**
 	 * 删除指定userId的意见
 	 * @param userId
+	 * @param tenantId 租户id, 可为null
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult deleteByUserId(String userId) {
-		SessionContext.getSqlSession().executeUpdate("delete bpm_re_suggest where user_id=?", Arrays.asList(userId));
+	public ExecutionResult deleteByUserId(String userId, String tenantId) {
+		if(tenantId == null)
+			SessionContext.getSqlSession().executeUpdate("delete bpm_re_suggest where user_id=?", Arrays.asList(userId));
+		else
+			SessionContext.getSqlSession().executeUpdate("delete bpm_re_suggest where user_id=? and tenant_id=?", Arrays.asList(userId, tenantId));
+		
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	

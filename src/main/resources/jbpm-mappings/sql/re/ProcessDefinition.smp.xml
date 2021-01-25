@@ -10,14 +10,6 @@
 			</if>
 		</content>
 		
-		<!-- 子版本自增 -->
-		<content name="subversionIncrement" type="update">
-			update bpm_re_procdef set subversion= subversion+1 where code = #{code} and version = #{version} and subversion &gt;= #{subversion, dataType=number} 
-			<if test="tenantId != null and tenantId != ''">
-				and tenant_id = #{tenantId}
-			</if>
-		</content>
-		
 		<!-- 根据code, 查询主版本的流程定义id值 -->
 		<content name="queryMajorVersionId" type="select">
 			select id from bpm_re_procdef where is_major_version=1 and code = #{code}  

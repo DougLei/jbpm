@@ -81,7 +81,6 @@ public class ProcessDefinitionService {
 				processDefinition.setIsMajorVersion(exProcessDefinition.getIsMajorVersion());
 				processDefinition.setSubversion(exProcessDefinition.getSubversion()+1);
 				processDefinition.setStateInstance(exProcessDefinition.getStateInstance());
-				SessionContext.getSQLSession().executeUpdate("ProcessDefinition", "subversionIncrement", processDefinition); // 解决subversion冲突
 				SessionContext.getTableSession().save(processDefinition);
 				
 				// 修改旧的流程定义状态, 关联的流程类型id, 以及是否是主要版本, 主要子版本

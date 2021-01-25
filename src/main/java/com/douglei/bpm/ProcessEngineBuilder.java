@@ -14,7 +14,7 @@ import com.douglei.bpm.process.api.container.ProcessContainer;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpression;
 import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
-import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandleSequencePolicy;
+import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandlePolicy;
 import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
 import com.douglei.orm.context.RegistrationResult;
@@ -161,8 +161,8 @@ public class ProcessEngineBuilder {
 	 * @param policy
 	 * @return
 	 */
-	public ProcessEngineBuilder addSerialHandleSequencePolicy(SerialHandleSequencePolicy policy) {
-		beanFactory.registerCustomBean(SerialHandleSequencePolicy.class, policy);
+	public ProcessEngineBuilder addSerialHandleSequencePolicy(SerialHandlePolicy policy) {
+		beanFactory.registerCustomBean(SerialHandlePolicy.class, policy);
 		return this;
 	}
 	

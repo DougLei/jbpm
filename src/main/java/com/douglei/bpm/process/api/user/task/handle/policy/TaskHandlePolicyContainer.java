@@ -14,7 +14,7 @@ import com.douglei.bpm.bean.annotation.Bean;
 @Bean
 public class TaskHandlePolicyContainer implements CustomAutowired{
 	private Map<String, ClaimPolicy> claimPolicyMap = new HashMap<String, ClaimPolicy>();
-	private Map<String, SerialHandleSequencePolicy> serialHandleSequencePolicyMap = new HashMap<String, SerialHandleSequencePolicy>();
+	private Map<String, SerialHandlePolicy> serialHandlePolicyMap = new HashMap<String, SerialHandlePolicy>();
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -22,15 +22,13 @@ public class TaskHandlePolicyContainer implements CustomAutowired{
 		((List<ClaimPolicy>)beanContainer.get(ClaimPolicy.class)).forEach(policy -> {
 			claimPolicyMap.put(policy.getName(), policy);
 		});
-		((List<SerialHandleSequencePolicy>)beanContainer.get(SerialHandleSequencePolicy.class)).forEach(policy -> {
-			serialHandleSequencePolicyMap.put(policy.getName(), policy);
+		((List<SerialHandlePolicy>)beanContainer.get(SerialHandlePolicy.class)).forEach(policy -> {
+			serialHandlePolicyMap.put(policy.getName(), policy);
 		});
 	}
 	
 	/**
-	 * 获取指定name的策略
-	 * <p>
-	 * 任务认领策略
+	 * 获取指定name的任务认领策略
 	 * @param name
 	 * @return
 	 */
@@ -39,13 +37,11 @@ public class TaskHandlePolicyContainer implements CustomAutowired{
 	}
 	
 	/**
-	 * 获取指定name的策略
-	 * <p>
-	 * 串行办理任务时的办理顺序策略
+	 * 获取指定name的串行办理策略
 	 * @param name
 	 * @return
 	 */
-	public SerialHandleSequencePolicy getSerialHandleSequencePolicy(String name) {
-		return serialHandleSequencePolicyMap.get(name);
+	public SerialHandlePolicy getSerialHandlePolicy(String name) {
+		return serialHandlePolicyMap.get(name);
 	}
 }

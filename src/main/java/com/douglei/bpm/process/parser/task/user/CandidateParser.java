@@ -6,12 +6,12 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.TaskHandlePolicyContainer;
-import com.douglei.bpm.process.api.user.task.handle.policy.impl.SerialHandleByClaimTimeSequencePolicy;
+import com.douglei.bpm.process.api.user.task.handle.policy.impl.SerialHandleByClaimTimePolicy;
 import com.douglei.bpm.process.metadata.task.user.candidate.Candidate;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
 import com.douglei.bpm.process.metadata.task.user.candidate.handle.ClaimPolicyEntity;
 import com.douglei.bpm.process.metadata.task.user.candidate.handle.HandlePolicy;
-import com.douglei.bpm.process.metadata.task.user.candidate.handle.MultiHandlePolicyEntity;
+import com.douglei.bpm.process.metadata.task.user.candidate.handle.SerialHandlePolicyEntity;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.tools.utils.StringUtil;
 
@@ -53,10 +53,10 @@ public class CandidateParser {
 			return null;
 		
 		return new HandlePolicy(
-				Boolean.parseBoolean(element.attributeValue("suggest")), 
-				Boolean.parseBoolean(element.attributeValue("attitude")), 
+				"true".equalsIgnoreCase(element.attributeValue("suggest")), 
+				"true".equalsIgnoreCase(element.attributeValue("attitude")), 
 				parseClaimPolicyEntity(id, name, element.element("claim")),
-				parseMultiHandlePolicyEntity(id, name, element.element("multiple")));
+				parseSerialHandlePolicyEntity(id, name, element.element("serialHandle")));
 	}
 	// 解析认领策略
 	private ClaimPolicyEntity parseClaimPolicyEntity(String id, String name, Element element) {
@@ -81,21 +81,18 @@ public class CandidateParser {
 		}
 		return new ClaimPolicyEntity(policyName, policyValue);
 	}
-	// 解析多人办理策略
-	private MultiHandlePolicyEntity parseMultiHandlePolicyEntity(String id, String name, Element element) {
+	// 解析串行办理策略
+	private SerialHandlePolicyEntity parseSerialHandlePolicyEntity(String id, String name, Element element) {
 		if(element == null)
 			return null;
 		
-		if(Boolean.parseBoolean(element.attributeValue("serialHandle"))) {
-			// 当是串行办理时, 获取串行办理任务时的办理顺序策略名称, 并对其进行验证
-			String serialHandleSequencePolicyName = element.attributeValue("serialHandleSequence");
-			if(StringUtil.isEmpty(serialHandleSequencePolicyName)) {
-				serialHandleSequencePolicyName = SerialHandleByClaimTimeSequencePolicy.POLICY_NAME;
-			}else if(taskHandlePolicyContainer.getSerialHandleSequencePolicy(serialHandleSequencePolicyName) == null){
-				throw new ProcessParseException("<userTask id="+id+" name="+name+"><candidate><handlePolicy><multiple>的serialHandleSequence属性值["+serialHandleSequencePolicyName+"]不合法");
-			}
-			return new MultiHandlePolicyEntity(true, serialHandleSequencePolicyName); 
+		// 获取串行办理的策略名称, 并对其进行验证
+		String policyName = element.attributeValue("name");
+		if(StringUtil.isEmpty(policyName)) {
+			policyName = SerialHandleByClaimTimePolicy.POLICY_NAME;
+		}else if(taskHandlePolicyContainer.getSerialHandlePolicy(policyName) == null){
+			throw new ProcessParseException("<userTask id="+id+" name="+name+"><candidate><handlePolicy><serialHandle>的name属性值["+policyName+"]不合法");
 		}
-		return new MultiHandlePolicyEntity(false, null);
+		return new SerialHandlePolicyEntity(policyName); 
 	}
 }

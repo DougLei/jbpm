@@ -7,7 +7,7 @@ import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 
 /**
- * 串行办理的顺序策略
+ * 串行办理的策略
  * <p>
  * 
  * 如果需要访问数据库, 可直接调用以下方法:
@@ -20,7 +20,7 @@ import com.douglei.bpm.process.api.user.bean.factory.UserBean;
  * @author DougLei
  */
 @MultiInstance
-public interface SerialHandleSequencePolicy {
+public interface SerialHandlePolicy {
 	
 	/**
 	 * 获取策略名称, 必须唯一; 默认值为类名全路径

@@ -11,7 +11,6 @@ import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
 import com.douglei.bpm.module.runtime.task.command.parameter.HandleTaskParameter;
 import com.douglei.bpm.process.api.user.bean.factory.UserBean;
-import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandleSequencePolicy;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
@@ -73,27 +72,24 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 	 * @return 需要等待的人数, 返回0表示可以进行办理
 	 */
 	private int canHandle(HandlePolicy handlePolicy, UserBean currentHandleUser, ProcessEngineBeans processEngineBeans) {
-		if(handlePolicy.isMultiHandle() && handlePolicy.getMultiHandlePolicyEntity().isSerialHandle()) {
-			SerialHandleSequencePolicy policy = processEngineBeans.getTaskHandlePolicyContainer().getSerialHandleSequencePolicy(
-					handlePolicy.getMultiHandlePolicyEntity().getSerialHandleSequencePolicyName());
-			
-			// 查询当前任务, 所有认领状态的指派信息
-			List<Assignee> claimedAssigneeList = SessionContext.getSqlSession()
-					.query(Assignee.class, 
-							"select * from bpm_ru_assignee where taskinst_id=? and handle_state=?", 
-							Arrays.asList(taskInstance.getTask().getTaskinstId(), HandleState.CLAIMED.name()));
-			
-			int count = 0; // 记录是否全部是当前用户的指派信息
-			for (Assignee assignee : claimedAssigneeList) {
-				if(!assignee.getUserId().equals(currentHandleUser.getUserId()))
-					break;
-				count++;
-			}
-			
-			if(count == claimedAssigneeList.size())
-				return 0;
-			return policy.canHandle(currentHandleUser, claimedAssigneeList);
+		if(taskInstance.getTask().getAssignCount() == 1 || handlePolicy.getSerialHandlePolicyEntity() == null)
+			return 0;
+		
+		// 查询当前任务, 所有认领状态的指派信息
+		List<Assignee> claimedAssigneeList = SessionContext.getSqlSession()
+				.query(Assignee.class, 
+						"select * from bpm_ru_assignee where taskinst_id=? and handle_state=?", 
+						Arrays.asList(taskInstance.getTask().getTaskinstId(), HandleState.CLAIMED.name()));
+		
+		int count = 0; // 记录是否全部是当前用户的指派信息
+		for (Assignee assignee : claimedAssigneeList) {
+			if(!assignee.getUserId().equals(currentHandleUser.getUserId()))
+				break;
+			count++;
 		}
-		return 0;
+		
+		if(count == claimedAssigneeList.size())
+			return 0;
+		return processEngineBeans.getTaskHandlePolicyContainer().getSerialHandlePolicy(handlePolicy.getSerialHandlePolicyEntity().getName()).canHandle(currentHandleUser, claimedAssigneeList);
 	}
 }

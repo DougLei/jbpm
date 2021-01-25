@@ -17,7 +17,7 @@ import com.douglei.tools.utils.StringUtil;
  * 
  * @author DougLei
  */
-public class ProcessDefinitionBuilder {
+public class ProcessDefinitionEntity {
 	private ProcessDefinition processDefinition;
 	private boolean strict; // 如果构建出的流程定义已经存在实例, 根据该参数决定是无法保存本次的流程定义(false), 或是强制更新子版本来保存(true)
 	private boolean validate; // 是否对流程定义内容进行校验, 校验失败时会抛出 {@link ProcessParseException} 
@@ -27,7 +27,7 @@ public class ProcessDefinitionBuilder {
 	 * @param file
 	 * @throws FileNotFoundException
 	 */
-	public ProcessDefinitionBuilder(File file) throws FileNotFoundException {
+	public ProcessDefinitionEntity(File file) throws FileNotFoundException {
 		this(new FileBufferedReader(new FileInputStream(file)).readAll(1000).toString());
 	}
 	
@@ -35,7 +35,7 @@ public class ProcessDefinitionBuilder {
 	 * 根据classpath下的资源文件构建流程定义实例
 	 * @param file
 	 */
-	public ProcessDefinitionBuilder(ClasspathFile file) {
+	public ProcessDefinitionEntity(ClasspathFile file) {
 		this(new FileBufferedReader(file.getName()).readAll(1000).toString());
 	}
 	
@@ -43,7 +43,7 @@ public class ProcessDefinitionBuilder {
 	 * 根据流程配置内容构建流程定义实例
 	 * @param content
 	 */
-	public ProcessDefinitionBuilder(String content) {
+	public ProcessDefinitionEntity(String content) {
 		Map<String, String> attributeMap = getProcessAttributeMap(content);
 		this.processDefinition = new ProcessDefinition(attributeMap.get("name"), attributeMap.get("code"), attributeMap.get("version"));
 		this.processDefinition.setContent(content);
@@ -141,7 +141,7 @@ public class ProcessDefinitionBuilder {
 	 * @param typeId
 	 * @return
 	 */
-	public ProcessDefinitionBuilder setTypeId(int typeId) {
+	public ProcessDefinitionEntity setTypeId(int typeId) {
 		processDefinition.setTypeId(typeId);
 		return this;
 	}
@@ -151,7 +151,7 @@ public class ProcessDefinitionBuilder {
 	 * @param description
 	 * @return
 	 */
-	public ProcessDefinitionBuilder setDescription(String description) {
+	public ProcessDefinitionEntity setDescription(String description) {
 		processDefinition.setDescription(description);
 		return this;
 	}
@@ -161,7 +161,7 @@ public class ProcessDefinitionBuilder {
 	 * @param description
 	 * @return
 	 */
-	public ProcessDefinitionBuilder setTenantId(String tenantId) {
+	public ProcessDefinitionEntity setTenantId(String tenantId) {
 		processDefinition.setTenantId(tenantId);
 		return this;
 	}

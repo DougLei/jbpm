@@ -25,15 +25,15 @@ public class StartProcessCmd implements Command {
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		ProcessDefinition processDefinition = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "query4Start", parameter);
 		switch (parameter.getMode()) {
-			case StartParameter.BY_PROCESS_DEFINITION_ID:
+			case StartParameter.BY_ID:
 				if(processDefinition == null) 
-					throw new TaskHandleException("启动失败, 不存在id为["+parameter.getProcessDefinitionId()+"]的流程");
+					throw new TaskHandleException("启动失败, 不存在id为["+parameter.getId()+"]的流程");
 				break;
-			case StartParameter.BY_PROCESS_DEFINITION_CODE:
+			case StartParameter.BY_CODE:
 				if(processDefinition == null) 
 					return new ExecutionResult("启动失败, 不存在code为[%s]的流程; 或未设置其流程的主版本", "jbpm.process.start.fail.unset.major.version", parameter.getCode());
 				break;
-			case StartParameter.BY_PROCESS_DEFINITION_CODE_VERSION:
+			case StartParameter.BY_CODE_VERSION:
 				if(processDefinition == null) 
 					return new ExecutionResult("启动失败, 不存在code为[%s], version为[%s]的流程", "jbpm.process.start.fail.code.version.unexists", parameter.getCode(), parameter.getVersion());
 				break;

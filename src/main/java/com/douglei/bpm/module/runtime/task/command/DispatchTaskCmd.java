@@ -55,7 +55,7 @@ public class DispatchTaskCmd extends GeneralTaskHandler implements Command {
 		
 		// 进行调度
 		parameter.getDispatchExecutor()
-			.setParameters(taskInstance.getTaskMetadataEntity(), handleParameter, parameter.getAssignUserIds(), processEngineBeans)
+			.setParameters(taskInstance.getTaskMetadataEntity(), handleParameter, parameter.getAssignedUserIds(), processEngineBeans)
 			.execute();
 		
 		return ExecutionResult.getDefaultSuccessInstance();

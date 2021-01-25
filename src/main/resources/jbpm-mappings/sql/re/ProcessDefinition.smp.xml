@@ -40,7 +40,7 @@
 			select id, name, state from bpm_re_procdef where 
 			<switch>
 				<if test="mode == 1">
-					id = #{processDefinitionId, dataType=number}
+					id = #{id, dataType=number}
 				</if>
 				<if test="mode == 2">
 					code = #{code} and is_major_version=1  
@@ -54,9 +54,6 @@
 						and tenant_id = #{tenantId} 
 					</if>
 				</if>
-				<else>
-					1=2 
-				</else>
 			</switch>
 		</content>
 		

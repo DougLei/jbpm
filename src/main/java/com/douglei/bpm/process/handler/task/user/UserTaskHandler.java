@@ -50,8 +50,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 	public ExecutionResult handle() {
 		// 更新businessId
 		Task currentTask = handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask();
-		if(handleParameter.getBusinessId() != null && currentTask.getBusinessId() == null)
-			SessionContext.getSqlSession().executeUpdate("update bpm_ru_task set business_id=? where id=?", Arrays.asList(handleParameter.getBusinessId(), currentTask.getId()));
+		currentTask.addBusinessId(handleParameter.getBusinessId());
 		
 		// 进行指派信息的调度
 		AssigneeDispatcher assigneeDispatcher = new AssigneeDispatcher(

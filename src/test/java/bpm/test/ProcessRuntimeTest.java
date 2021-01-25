@@ -30,7 +30,7 @@ public class ProcessRuntimeTest {
 		parameter.addVariable("day", 15);
 		parameter.addVariable("user", Scope.LOCAL, new User("douglei 4 user"));
 		parameter.setUserId("金石磊");
-		parameter.addAssignUserId("douglei");
+		parameter.addAssignedUserId("douglei");
 		
 		
 		ExecutionResult result = engine.getRuntimeModule().getProcessInstanceService().start(parameter);
@@ -57,7 +57,7 @@ public class ProcessRuntimeTest {
 		String userId = "张三";
 		
 		HandleTaskParameter parameter = new HandleTaskParameter();
-		parameter.addAssignUserId("张三");
+		parameter.addAssignedUserId("张三");
 		parameter.setSuggest("同意了").setAttitude(Attitude.AGREE).setUserId(userId);
 		
 		ExecutionResult result = engine.getRuntimeModule().getTaskService().handle(taskId, parameter);

@@ -49,6 +49,15 @@ public class Task {
 	}
 	
 	/**
+	 * 记录业务id
+	 * @param businessId
+	 */
+	public void addBusinessId(String businessId) {
+		if(businessId != null && this.businessId == null)
+			SessionContext.getSqlSession().executeUpdate("update bpm_ru_task set business_id=? where id=?", Arrays.asList(businessId, id));
+	}
+	
+	/**
 	 * 设置调度权限
 	 * @param userId
 	 */

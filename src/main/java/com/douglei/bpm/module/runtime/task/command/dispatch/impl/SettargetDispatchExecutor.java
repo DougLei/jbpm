@@ -34,7 +34,7 @@ public class SettargetDispatchExecutor extends DispatchExecutor {
 	public void execute() throws TaskNotExistsException, TaskDispatchException {
 		String taskinstId= null;
 		if(activateLastAssigneeList) {
-			List<Object[]> list = SessionContext.getSqlSession().queryLimit_("select taskinst_id from bpm_hi_task where procinst_id=? and key_=? order by end_time desc", 1, 1, Arrays.asList(handleParameter.getProcessInstanceId(), targetTask));
+			List<Object[]> list = SessionContext.getSqlSession().limitQuery_("select taskinst_id from bpm_hi_task where procinst_id=? and key_=? order by end_time desc", 1, 1, Arrays.asList(handleParameter.getProcessInstanceId(), targetTask));
 			if(list.size() == 1)
 				taskinstId = list.get(0)[0].toString();
 		}

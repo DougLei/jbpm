@@ -21,7 +21,7 @@ public class StartEventHandleParameter extends GeneralHandleParameter {
 		this.processMetadata = processMetadata;
 		this.tenantId = parameter.getTenantId();
 		
-		this.userEntity = new UserEntity(userBeanFactory.create(parameter.getUserId()), userBeanFactory.create(parameter.getAssignUserIds()));
+		this.userEntity = new UserEntity(userBeanFactory.create(parameter.getUserId()), userBeanFactory.create(parameter.getAssignedUserIds()));
 		this.variableEntities = parameter.getVariableEntities();
 	}
 	

@@ -50,7 +50,7 @@ public class ParallelGatewayTest {
 		parameter.addVariable("name", "金石磊");
 		parameter.addVariable("day", 15);
 		parameter.setUserId("金石磊");
-		parameter.addAssignUserId("douglei");
+		parameter.addAssignedUserId("douglei");
 		
 		
 		ExecutionResult result = engine.getRuntimeModule().getProcessInstanceService().start(parameter);
@@ -76,7 +76,7 @@ public class ParallelGatewayTest {
 		String userId = "douglei";
 		
 		HandleTaskParameter parameter = new HandleTaskParameter();
-		parameter.addAssignUserId("douglei");
+		parameter.addAssignedUserId("douglei");
 		parameter.setSuggest("同意了").setAttitude(Attitude.AGREE).setUserId(userId);
 		
 		ExecutionResult result = engine.getRuntimeModule().getTaskService().handle(taskId, parameter);

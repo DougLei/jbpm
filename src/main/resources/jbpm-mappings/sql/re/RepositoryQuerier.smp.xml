@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping-configuration>
+	<sql namespace="RepositoryQuerier">
+		
+		<!-- 查询流程类型 -->
+		<content name="queryProcessType" type="select">
+			select id, code, name from bpm_re_proctype
+		</content>
+		
+		<!-- 查询流程定义 -->
+		<content name="queryProcessDefinition" type="select">
+			select 
+				d.id, d.name, d.code, d.version, d.is_major_version, d.state, d.description, 
+				t.code t_code, t.name t_name 
+					from bpm_re_procdef d 
+						left join bpm_re_proctype t on (d.type_id = t.id)
+		</content>
+		
+	</sql>
+</mapping-configuration>

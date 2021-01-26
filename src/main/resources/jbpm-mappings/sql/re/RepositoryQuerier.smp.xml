@@ -9,11 +9,8 @@
 		
 		<!-- 查询流程定义 -->
 		<content name="queryProcessDefinition" type="select">
-			select 
-				d.id, d.name, d.code, d.version, d.is_major_version, d.state, d.description, 
-				t.code t_code, t.name t_name 
-					from bpm_re_procdef d 
-						left join bpm_re_proctype t on (d.type_id = t.id)
+			select d.id, d.name, d.code, d.version, d.is_major_version, d.state, d.description, t.code t_code, t.name t_name from bpm_re_procdef d 
+				left join bpm_re_proctype t on (d.type_id = t.id)
 		</content>
 		
 	</sql>

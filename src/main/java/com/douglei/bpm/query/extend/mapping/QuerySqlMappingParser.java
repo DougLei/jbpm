@@ -34,7 +34,7 @@ class QuerySqlMappingParser extends MappingParser<QuerySqlMapping>{
 		querySqlMetadata.setContent(parseContent(Dom4jUtil.getElement("content", querySqlElement)));
 		
 		// 设置参数标准
-		setParameterStandard(querySqlElement.element("parameter-standards"));
+		setParameterStandardMap(querySqlElement.element("parameter-standards"));
 		
 		return new QuerySqlMapping(querySqlMetadata);
 	}
@@ -58,7 +58,7 @@ class QuerySqlMappingParser extends MappingParser<QuerySqlMapping>{
 	}
 	
 	// 设置参数标准
-	private void setParameterStandard(Element element) {
+	private void setParameterStandardMap(Element element) {
 		if(element == null)
 			return;
 		

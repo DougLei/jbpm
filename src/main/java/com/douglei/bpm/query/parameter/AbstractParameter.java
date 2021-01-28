@@ -1,7 +1,5 @@
 package com.douglei.bpm.query.parameter;
 
-import com.douglei.bpm.query.parameter.op.LogicalOperator;
-
 /**
  * 
  * @author DougLei

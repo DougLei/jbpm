@@ -15,14 +15,14 @@
 			<!-- 
 				具体的参数标准, name不能重复, 否则会抛出异常
 				* name: 列名, 必填, 不能为空
-				* dataType: 列的数据类型, 可不填, 默认为string, 目前可使用值有: string, 
+				* dataType: 列的数据类型, 必填, 不能为空, 目前可使用值有(不区分大小写): STRING, NUMBER, DATE
 				* required: 该参数是否必须, 可为空, 默认为false
 			 -->
 			<parameter-standard name="" dataType="" required="">
 				<!-- 
 					参数支持的操作, 可配置多组; 配置的操作不能重复, 否则会抛出异常; 也可不配置, 即无限次使用所有操作
-					* name: 操作名, 可不填, 默认为eq, 目前可使用值有: eq(等于), ne(不等于), ge(大于等于), gt(大于), le(小于等于), lt(小于), like, nlike(like取反), btn, nbtn(btn取反), in, nin(in取反), order(排序)
-					* times: 该参数可使用此操作的次数, 可不配置, 默认值为1, 小于1时, 使用默认值, 配置不合法时会抛出异常
+					* name: 操作名, 必填, 不能为空, 目前可使用值有(不区分大小写): EQ(等于), NE(不等于), GE(大于等于), GT(大于), LE(小于等于), LT(小于), LIKE, NLIKE(LIKE取反), BTN, NBTN(BTN取反), IN, NIN(IN取反), ORDER(排序)
+					* times: 该参数可使用此操作的次数, 可不配置, 默认值为0, 表示不限制次数; 小于0时, 使用默认值, 配置不合法时会抛出异常
 				 -->
 				<operator name="" times="1"/>
 			</parameter-standard>		

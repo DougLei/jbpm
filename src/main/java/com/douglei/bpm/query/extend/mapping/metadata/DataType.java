@@ -6,4 +6,9 @@ package com.douglei.bpm.query.extend.mapping.metadata;
  */
 public enum DataType {
 	
+	STRING,
+	
+	NUMBER,
+	
+	DATE;
 }

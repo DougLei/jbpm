@@ -64,7 +64,7 @@ public class QuerySqlAssembler {
 		public ParameterStandardEntity(ParameterStandardMetadata parameterStandard) {
 			
 			
-			operatorHandler = new OperatorHandler(parameterStandard.getOperatorEntities());
+//			operatorHandler = new OperatorHandler(parameterStandard.getOperatorEntities());
 		}
 	}
 	

@@ -1,6 +1,5 @@
 package com.douglei.bpm.query.extend.mapping.metadata;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,8 +41,6 @@ public class QuerySqlMetadata extends AbstractMetadata{
 		return content;
 	}
 	public Map<String, ParameterStandardMetadata> getParameterStandardMap() {
-		if(parameterStandardMap == null)
-			return Collections.emptyMap();
 		return parameterStandardMap;
 	}
 }

@@ -1,11 +1,15 @@
 package com.douglei.bpm.query.extend.mapping;
 
 import java.io.InputStream;
+import java.util.List;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
 
 import com.douglei.bpm.query.extend.mapping.metadata.ContentMetadata;
+import com.douglei.bpm.query.extend.mapping.metadata.DataType;
+import com.douglei.bpm.query.extend.mapping.metadata.Operator;
+import com.douglei.bpm.query.extend.mapping.metadata.OperatorEntity;
 import com.douglei.bpm.query.extend.mapping.metadata.ParameterStandardMetadata;
 import com.douglei.bpm.query.extend.mapping.metadata.QuerySqlMetadata;
 import com.douglei.orm.mapping.MappingParser;
@@ -67,11 +71,31 @@ class QuerySqlMappingParser extends MappingParser<QuerySqlMapping>{
 	}
 
 	// 解析参数标准
+	@SuppressWarnings("unchecked")
 	private ParameterStandardMetadata parseParameterStandard(Element element) {
-		String name = getNameAttributeValue("<parameter-standard>", element);
-		// TODO 
+		ParameterStandardMetadata metadata = new ParameterStandardMetadata(
+				getNameAttributeValue("<parameter-standard>", element),
+				DataType.valueOf(element.attributeValue("dataType").toUpperCase()),
+				"true".equalsIgnoreCase(element.attributeValue("required")));
 		
+		// 解析支持的操作
+		List<Element> elements = element.elements("operator");
+		if(elements.isEmpty()) 
+			return metadata;
 		
-		return null;
+		for (Element elem : elements) 
+			metadata.addOperatorEntity(new OperatorEntity(
+					Operator.valueOf(elem.attributeValue("name").toUpperCase()), 
+					parseTimes(elem.attributeValue("times"))));
+		return metadata;
+	}
+	private int parseTimes(String str) {
+		if(StringUtil.isEmpty(str))
+			return 0;
+		
+		int times = Integer.parseInt(str);
+		if(times < 0)
+			return 0;
+		return times;
 	}
 }

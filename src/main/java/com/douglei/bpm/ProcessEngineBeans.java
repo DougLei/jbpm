@@ -11,7 +11,7 @@ import com.douglei.bpm.process.api.user.task.handle.policy.TaskHandlePolicyConta
 import com.douglei.bpm.process.handler.TaskHandleUtil;
 
 /**
- * 流程的bean实例
+ * 流程(可对外提供)的bean实例
  * @author DougLei
  */
 @Bean
@@ -38,7 +38,7 @@ public class ProcessEngineBeans {
 	@Autowired
 	private OptionHandlerContainer optionHandlerContainer; // OptionHandler的容器
 	
-	
+	// -------------------------------------------------------------------------------------------------
 	public ProcessEngineConfiguration getProcessEngineConfiguration() {
 		return processEngineConfiguration;
 	}

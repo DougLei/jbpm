@@ -22,4 +22,8 @@
 	<properties placeholderPrefix="${" placeholderSuffix="}">
 		<resource path="jdbc.properties" />
 	</properties>
+	
+	<extend-options>
+		<option type="mappingType" value="com.douglei.bpm.query.extend.mapping.QuerySqlMappingType" />
+	</extend-options>
 </configuration>

@@ -9,7 +9,7 @@ import com.douglei.orm.mapping.metadata.AbstractMetadata;
  */
 public class QuerySqlMapping extends Mapping {
 
-	public QuerySqlMapping(String type, AbstractMetadata metadata) {
-		super(type, metadata);
+	public QuerySqlMapping(AbstractMetadata metadata) {
+		super(QuerySqlMappingType.NAME, metadata);
 	}
 }

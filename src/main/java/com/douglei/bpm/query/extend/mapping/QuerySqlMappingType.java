@@ -6,13 +6,14 @@ import com.douglei.orm.mapping.Mapping;
 import com.douglei.orm.mapping.type.MappingType;
 
 /**
- * 查询sql资源
+ * 查询sql映射类型
  * @author DougLei
  */
 public class QuerySqlMappingType extends MappingType {
-
+	public static final String NAME = "querysql";
+	
 	public QuerySqlMappingType() {
-		super("querysql", ".qsmp.xml", 70, false);
+		super(NAME, ".qsmp.xml", 70, false);
 	}
 
 	@Override

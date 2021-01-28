@@ -5,4 +5,8 @@
 			<mapping path="jbpm-mappings" />
 		</mappings>
 	</environment>
+	
+	<extend-options>
+		<option type="mappingType" value="com.douglei.bpm.query.extend.mapping.QuerySqlMappingType" />
+	</extend-options>
 </configuration>

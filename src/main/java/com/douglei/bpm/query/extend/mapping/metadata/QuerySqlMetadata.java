@@ -1,20 +1,28 @@
 package com.douglei.bpm.query.extend.mapping.metadata;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.douglei.orm.mapping.metadata.AbstractMetadata;
 
 /**
  * 
  * @author DougLei
  */
-public class QuerySqlMetadata implements Serializable{
-	private String name;
-	private String content;
-	private List<ParameterStandardMetadata> parameterStandards;
+public class QuerySqlMetadata extends AbstractMetadata{
+	private ContentMetadata content;
+	private Map<String, ParameterStandardMetadata> parameterStandardMap;
 	
-	public QuerySqlMetadata(String name, String content) {
-		this.name = name;
+	public QuerySqlMetadata(String name) {
+		super.name = name;
+	}
+	
+	/**
+	 * 设置sql内容
+	 * @param content
+	 */
+	public void setContent(ContentMetadata content) {
 		this.content = content;
 	}
 	
@@ -23,10 +31,19 @@ public class QuerySqlMetadata implements Serializable{
 	 * @param metadata
 	 */
 	public void addParameterStandard(ParameterStandardMetadata metadata) {
-		if(parameterStandards == null)
-			parameterStandards = new ArrayList<ParameterStandardMetadata>();
-		else if(parameterStandards.contains(metadata))
-			throw new IllegalArgumentException("在["+name+"]映射中, 重复配置了name为["+metadata.getName()+"]的<parameter-standard>元素");
-		parameterStandards.add(metadata);
+		if(parameterStandardMap == null)
+			parameterStandardMap = new HashMap<String, ParameterStandardMetadata>();
+		else if(parameterStandardMap.containsKey(metadata.getName()))
+			throw new IllegalArgumentException("重复配置了name为["+metadata.getName()+"]的<parameter-standard>元素");
+		parameterStandardMap.put(metadata.getName(), metadata);
+	}
+
+	public ContentMetadata getContent() {
+		return content;
+	}
+	public Map<String, ParameterStandardMetadata> getParameterStandardMap() {
+		if(parameterStandardMap == null)
+			return Collections.emptyMap();
+		return parameterStandardMap;
 	}
 }

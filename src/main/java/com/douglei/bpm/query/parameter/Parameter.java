@@ -8,18 +8,18 @@ import com.douglei.bpm.query.extend.mapping.metadata.Operator;
  */
 public class Parameter extends AbstractParameter{
 	private Operator operator; // 运算符
-	private String columnName; // 参与运算的列名
+	private String name; // 参与运算的列名
 	private Object[] values; // 参与运算的值
 	
 	/**
 	 * 
 	 * @param operator 运算符 
-	 * @param columnName 参与运算的列名
+	 * @param name 参与运算的列名
 	 * @param values 参与运算的值
 	 */
-	public Parameter(Operator operator, String columnName, Object... values) {
+	public Parameter(Operator operator, String name, Object... values) {
 		this.operator = operator;
-		this.columnName = columnName;
+		this.name = name;
 		this.values = values;
 	}
 }

@@ -7,15 +7,11 @@ import java.io.Serializable;
  * @author DougLei
  */
 public class ParameterStandardMetadata implements Serializable {
-	private String prefix;
 	private String name;
 	private DataType dataType;
 	private boolean required;
-	private Operator[] operator;
+	private OperatorEntity[] operatorEntities;
 	
-	public String getPrefix() {
-		return prefix;
-	}
 	public String getName() {
 		return name;
 	}
@@ -25,7 +21,7 @@ public class ParameterStandardMetadata implements Serializable {
 	public boolean isRequired() {
 		return required;
 	}
-	public Operator[] getOperator() {
-		return operator;
+	public OperatorEntity[] getOperatorEntities() {
+		return operatorEntities;
 	}
 }

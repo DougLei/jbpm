@@ -17,7 +17,7 @@ public class ContentMetadata implements Serializable{
 		this.content = content;
 	}
 	
-	public boolean isPackage_() {
+	public boolean isPackage() {
 		return package_;
 	}
 	public boolean isAppend() {

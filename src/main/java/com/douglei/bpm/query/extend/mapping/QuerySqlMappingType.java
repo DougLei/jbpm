@@ -10,7 +10,7 @@ import com.douglei.orm.mapping.type.MappingType;
  * @author DougLei
  */
 public class QuerySqlMappingType extends MappingType {
-	public static final String NAME = "querysql";
+	public static final String NAME = "query-sql";
 	
 	public QuerySqlMappingType() {
 		super(NAME, ".qsmp.xml", 70, false);

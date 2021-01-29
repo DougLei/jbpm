@@ -12,8 +12,8 @@ public enum Operator {
 	LE,
 	LT,
 	
-	CTN,
-	NCTN,
+	LIKE,
+	NLIKE,
 	
 	BTN,
 	NBTN,

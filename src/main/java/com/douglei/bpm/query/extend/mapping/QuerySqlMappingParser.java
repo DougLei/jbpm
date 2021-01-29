@@ -1,7 +1,10 @@
 package com.douglei.bpm.query.extend.mapping;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -31,7 +34,7 @@ class QuerySqlMappingParser extends MappingParser<QuerySqlMapping>{
 		Element rootElement = document.getRootElement();
 		
 		// 创建QuerySqlMetadata实例
-		Element querySqlElement = Dom4jUtil.getElement("query-sql", rootElement);
+		Element querySqlElement = Dom4jUtil.getElement(QuerySqlMappingType.NAME, rootElement);
 		querySqlMetadata = new QuerySqlMetadata(getNameAttributeValue("<query-sql>", querySqlElement));
 		
 		// 设置sql内容
@@ -62,18 +65,34 @@ class QuerySqlMappingParser extends MappingParser<QuerySqlMapping>{
 	}
 	
 	// 设置参数标准
+	@SuppressWarnings("unchecked")
 	private void setParameterStandardMap(Element element) {
 		if(element == null)
 			return;
 		
-		for (Object object : element.elements("parameter-standard")) 
-			querySqlMetadata.addParameterStandard(parseParameterStandard((Element)object));
+		List<Element> elements = element.elements("parameter-standard");
+		if(elements.isEmpty())
+			return;
+		
+		Map<String, ParameterStandardMetadata> psmMap= new HashMap<String, ParameterStandardMetadata>();
+		ParameterStandardMetadata psm = null;
+		boolean existsRequired = false;
+		for (Element elem: elements) {
+			psm = parseParameterStandard(elem);
+			if(psmMap.containsKey(psm.getName()))
+				throw new MetadataParseException("重复配置了name为["+psm.getName()+"]的<parameter-standard>元素");
+			psmMap.put(psm.getName(), psm);
+			
+			if(psm.isRequired() && !existsRequired)
+				existsRequired = true;
+		}
+		querySqlMetadata.setParameterStandardMap(existsRequired, psmMap);
 	}
 
 	// 解析参数标准
 	@SuppressWarnings("unchecked")
 	private ParameterStandardMetadata parseParameterStandard(Element element) {
-		ParameterStandardMetadata metadata = new ParameterStandardMetadata(
+		ParameterStandardMetadata psm = new ParameterStandardMetadata(
 				getNameAttributeValue("<parameter-standard>", element),
 				DataType.valueOf(element.attributeValue("dataType").toUpperCase()),
 				"true".equalsIgnoreCase(element.attributeValue("required")));
@@ -81,13 +100,19 @@ class QuerySqlMappingParser extends MappingParser<QuerySqlMapping>{
 		// 解析支持的操作
 		List<Element> elements = element.elements("operator");
 		if(elements.isEmpty()) 
-			return metadata;
+			return psm;
 		
-		for (Element elem : elements) 
-			metadata.addOperatorEntity(new OperatorEntity(
-					Operator.valueOf(elem.attributeValue("name").toUpperCase()), 
-					parseTimes(elem.attributeValue("times"))));
-		return metadata;
+		List<OperatorEntity> entities = new ArrayList<OperatorEntity>(elements.size());
+		OperatorEntity entity = null;
+		for (Element elem : elements) {
+			entity = new OperatorEntity(Operator.valueOf(elem.attributeValue("name").toUpperCase()), parseTimes(elem.attributeValue("times")));
+			if(!psm.getDataType().support(entity.getOperator()))
+				throw new MetadataParseException("["+psm.getDataType()+"]类型不支持使用["+entity.getOperator()+"]操作");
+			entities.add(entity);
+		}
+		
+		psm.setOperatorEntities(entities);
+		return psm;
 	}
 	private int parseTimes(String str) {
 		if(StringUtil.isEmpty(str))
@@ -98,4 +123,17 @@ class QuerySqlMappingParser extends MappingParser<QuerySqlMapping>{
 			return 0;
 		return times;
 	}
+	
+	
+//	/**
+//	 * 添加参数支持的操作实体
+//	 * @param entity
+//	 */
+//	public void addOperatorEntity(OperatorEntity entity) {
+//		if(operatorEntities == null)
+//			operatorEntities = new ArrayList<OperatorEntity>();
+//		else if(operatorEntities.contains(entity))
+//			throw new IllegalArgumentException("重复配置了name为["+entity.getOperator()+"]的<operator>元素");
+//		operatorEntities.add(entity);
+//	}
 }

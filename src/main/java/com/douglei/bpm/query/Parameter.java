@@ -1,4 +1,4 @@
-package com.douglei.bpm.query.parameter;
+package com.douglei.bpm.query;
 
 import com.douglei.bpm.query.extend.mapping.metadata.Operator;
 

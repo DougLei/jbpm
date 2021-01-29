@@ -1,7 +1,6 @@
 package com.douglei.bpm.query.extend.mapping.metadata;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,19 +18,10 @@ public class ParameterStandardMetadata implements Serializable {
 		this.dataType = dataType;
 		this.required = required;
 	}
-	
-	/**
-	 * 添加参数支持的操作实体
-	 * @param entity
-	 */
-	public void addOperatorEntity(OperatorEntity entity) {
-		if(operatorEntities == null)
-			operatorEntities = new ArrayList<OperatorEntity>();
-		else if(operatorEntities.contains(entity))
-			throw new IllegalArgumentException("重复配置了name为["+entity.getOperator()+"]的<operator>元素");
-		operatorEntities.add(entity);
+	public void setOperatorEntities(List<OperatorEntity> operatorEntities) {
+		this.operatorEntities = operatorEntities;
 	}
-	
+
 	public String getName() {
 		return name;
 	}

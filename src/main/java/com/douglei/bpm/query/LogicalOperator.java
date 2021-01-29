@@ -1,4 +1,4 @@
-package com.douglei.bpm.query.parameter;
+package com.douglei.bpm.query;
 
 /**
  * 逻辑运算符

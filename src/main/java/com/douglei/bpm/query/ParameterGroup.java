@@ -1,4 +1,4 @@
-package com.douglei.bpm.query.parameter;
+package com.douglei.bpm.query;
 
 import java.util.ArrayList;
 import java.util.List;

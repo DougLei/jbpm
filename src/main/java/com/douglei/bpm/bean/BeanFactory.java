@@ -14,8 +14,8 @@ import com.douglei.bpm.bean.annotation.DefaultInstance;
 import com.douglei.bpm.bean.entity.BeanEntity;
 import com.douglei.bpm.bean.entity.CustomBeanEntity;
 import com.douglei.bpm.bean.entity.GeneralBeanEntity;
-import com.douglei.tools.instances.resource.scanner.impl.ClassScanner;
-import com.douglei.tools.utils.reflect.ClassLoadUtil;
+import com.douglei.tools.instances.scanner.impl.ClassScanner;
+import com.douglei.tools.utils.reflect.ClassUtil;
 
 /**
  * 
@@ -29,7 +29,7 @@ public class BeanFactory {
 		Class<?> instanceClazz = null;
 		Bean bean = null;
 		for (String classpath : new ClassScanner().scan("com.douglei.bpm")) { // 扫描指定路径下的所有class
-			instanceClazz = ClassLoadUtil.loadClass(classpath);
+			instanceClazz = ClassUtil.loadClass(classpath);
 			bean = instanceClazz.getAnnotation(Bean.class);
 			if(bean != null)
 				putInstance2BeanContainer(new GeneralBeanEntity(bean, instanceClazz), beanContainer);

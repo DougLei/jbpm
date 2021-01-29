@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.douglei.bpm.process.handler.VariableEntity;
+import com.douglei.tools.utils.JdkSerializeUtil;
 import com.douglei.tools.utils.datatype.dateformat.DateFormatUtil;
-import com.douglei.tools.utils.serialize.JdkSerializeProcessor;
 
 /**
  * 
@@ -42,7 +42,7 @@ public class Variable {
 					this.dateVal = DateFormatUtil.parseDate(variableEntity.getValue());
 					break;
 				case OBJECT:
-					this.objectVal = JdkSerializeProcessor.serialize2ByteArray(new ObjectValue(variableEntity.getValue()));
+					this.objectVal = JdkSerializeUtil.serialize2ByteArray(new ObjectValue(variableEntity.getValue()));
 					break;
 			}
 		}
@@ -62,7 +62,7 @@ public class Variable {
 				return dateVal;
 			case OBJECT:
 				if(objectVal != null)
-					return JdkSerializeProcessor.deserializeFromByteArray(ObjectValue.class, objectVal).getValue();
+					return JdkSerializeUtil.deserializeFromByteArray(ObjectValue.class, objectVal).getValue();
 		}
 		return null;
 	}

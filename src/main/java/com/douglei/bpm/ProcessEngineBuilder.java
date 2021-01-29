@@ -23,7 +23,7 @@ import com.douglei.orm.mapping.handler.entity.MappingEntity;
 import com.douglei.orm.mapping.handler.entity.impl.AddOrCoverMappingEntity;
 import com.douglei.orm.mapping.type.MappingTypeContainer;
 import com.douglei.orm.sessionfactory.SessionFactory;
-import com.douglei.tools.instances.resource.scanner.impl.ResourceScanner;
+import com.douglei.tools.instances.scanner.impl.ResourceScanner;
 import com.douglei.tools.utils.ExceptionUtil;
 
 /**

@@ -9,7 +9,7 @@ import java.util.Map;
 import com.douglei.bpm.module.runtime.variable.DataType;
 import com.douglei.bpm.module.runtime.variable.Scope;
 import com.douglei.bpm.module.runtime.variable.Variable;
-import com.douglei.tools.utils.StringUtil;
+import com.douglei.tools.StringUtil;
 
 /**
  * 

@@ -8,7 +8,7 @@ import java.util.Map;
 
 import com.douglei.bpm.process.metadata.event.StartEventMetadata;
 import com.douglei.bpm.process.metadata.flow.FlowMetadata;
-import com.douglei.tools.utils.StringUtil;
+import com.douglei.tools.StringUtil;
 
 /**
  * 

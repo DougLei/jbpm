@@ -11,8 +11,8 @@ import com.douglei.bpm.process.api.user.option.OptionHandler;
 import com.douglei.bpm.process.api.user.option.OptionHandlerContainer;
 import com.douglei.bpm.process.metadata.task.user.option.Option;
 import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.tools.utils.StringUtil;
-import com.douglei.tools.utils.datatype.VerifyTypeMatchUtil;
+import com.douglei.tools.StringUtil;
+import com.douglei.tools.datatype.DataTypeValidateUtil;
 
 /**
  *                                          
@@ -55,7 +55,7 @@ public class OptionParser {
 			// option的order
 			order = 0;
 			optionOrder = element.attributeValue("order");
-			if(VerifyTypeMatchUtil.isInteger(optionOrder))
+			if(DataTypeValidateUtil.isInteger(optionOrder))
 				order = Integer.parseInt(optionOrder);
 			
 			option = optionHandler.parse(optionName, order, id, name, element);

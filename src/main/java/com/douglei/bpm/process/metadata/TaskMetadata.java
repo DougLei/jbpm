@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.metadata;
 
-import com.douglei.tools.utils.StringUtil;
+import com.douglei.tools.StringUtil;
 
 /**
  * 

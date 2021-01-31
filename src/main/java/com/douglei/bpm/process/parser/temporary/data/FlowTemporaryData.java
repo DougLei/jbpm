@@ -3,7 +3,7 @@ package com.douglei.bpm.process.parser.temporary.data;
 import org.dom4j.Element;
 
 import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.tools.utils.StringUtil;
+import com.douglei.tools.StringUtil;
 
 /**
  * 

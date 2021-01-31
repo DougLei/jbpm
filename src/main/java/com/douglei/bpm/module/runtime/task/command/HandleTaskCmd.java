@@ -16,7 +16,7 @@ import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.metadata.task.user.candidate.handle.HandlePolicy;
 import com.douglei.orm.context.SessionContext;
-import com.douglei.tools.utils.StringUtil;
+import com.douglei.tools.StringUtil;
 
 /**
  * 办理任务

@@ -9,7 +9,7 @@ import com.douglei.bpm.process.parser.GeneralParser;
 import com.douglei.bpm.process.parser.Parser;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.bpm.process.parser.temporary.data.FlowTemporaryData;
-import com.douglei.tools.utils.datatype.VerifyTypeMatchUtil;
+import com.douglei.tools.datatype.DataTypeValidateUtil;
 
 /**
  * 
@@ -24,7 +24,7 @@ public class FlowParser extends GeneralParser implements Parser<FlowTemporaryDat
 		
 		int order = 0;
 		String orderValue = element.attributeValue("order");
-		if(VerifyTypeMatchUtil.isInteger(orderValue))
+		if(DataTypeValidateUtil.isInteger(orderValue))
 			order = Integer.parseInt(orderValue);
 		
 		FlowMetadata metadata = new FlowMetadata(

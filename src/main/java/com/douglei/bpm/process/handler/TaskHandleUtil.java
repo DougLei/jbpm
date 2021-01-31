@@ -24,7 +24,7 @@ import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignNumber;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignableUserExpressionEntity;
-import com.douglei.tools.instances.ognl.OgnlHandler;
+import com.douglei.tools.ognl.OgnlHandler;
 
 /**
  * 任务办理工具

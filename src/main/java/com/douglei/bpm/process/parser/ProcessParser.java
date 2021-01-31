@@ -24,7 +24,7 @@ import com.douglei.bpm.process.parser.event.StartEventParser;
 import com.douglei.bpm.process.parser.flow.FlowParser;
 import com.douglei.bpm.process.parser.temporary.data.FlowTemporaryData;
 import com.douglei.bpm.process.parser.temporary.data.TaskTemporaryData;
-import com.douglei.tools.utils.StringUtil;
+import com.douglei.tools.StringUtil;
 
 /**
  * process解析器

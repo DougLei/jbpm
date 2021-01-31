@@ -2,7 +2,7 @@ package com.douglei.bpm.process.parser.task.user;
 
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignNumber;
-import com.douglei.tools.utils.datatype.VerifyTypeMatchUtil;
+import com.douglei.tools.datatype.DataTypeValidateUtil;
 
 /**
  * 
@@ -31,7 +31,7 @@ public class AssignNumberParser {
 			return null;
 		
 		String str = value.substring(0, percentSignIndex);
-		if(!VerifyTypeMatchUtil.isInteger(str))
+		if(!DataTypeValidateUtil.isInteger(str))
 			return null;
 		
 		

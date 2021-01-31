@@ -14,8 +14,8 @@ import com.douglei.bpm.bean.annotation.DefaultInstance;
 import com.douglei.bpm.bean.entity.BeanEntity;
 import com.douglei.bpm.bean.entity.CustomBeanEntity;
 import com.douglei.bpm.bean.entity.GeneralBeanEntity;
-import com.douglei.tools.instances.scanner.impl.ClassScanner;
-import com.douglei.tools.utils.reflect.ClassUtil;
+import com.douglei.tools.reflect.ClassUtil;
+import com.douglei.tools.scanner.impl.ClassScanner;
 
 /**
  * 

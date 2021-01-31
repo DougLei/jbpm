@@ -10,8 +10,8 @@ import java.util.Map;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.tools.instances.file.reader.FileBufferedReader;
-import com.douglei.tools.utils.StringUtil;
+import com.douglei.tools.StringUtil;
+import com.douglei.tools.file.reader.FileBufferedReader;
 
 /**
  * 

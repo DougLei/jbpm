@@ -13,7 +13,7 @@ import com.douglei.bpm.process.metadata.task.user.candidate.handle.ClaimPolicyEn
 import com.douglei.bpm.process.metadata.task.user.candidate.handle.HandlePolicy;
 import com.douglei.bpm.process.metadata.task.user.candidate.handle.SerialHandlePolicyEntity;
 import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.tools.utils.StringUtil;
+import com.douglei.tools.StringUtil;
 
 /**
  * 

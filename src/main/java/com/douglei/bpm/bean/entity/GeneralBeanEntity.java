@@ -9,7 +9,7 @@ import com.douglei.aop.ProxyMethod;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.orm.context.TransactionProxyInterceptor;
 import com.douglei.orm.context.transaction.component.Transaction;
-import com.douglei.tools.utils.reflect.ConstructorUtil;
+import com.douglei.tools.reflect.ConstructorUtil;
 
 /**
  * 

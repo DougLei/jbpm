@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.api.listener.Listener;
-import com.douglei.tools.utils.StringUtil;
+import com.douglei.tools.StringUtil;
 
 /**
  * 流程节点抽象父类

@@ -10,7 +10,7 @@ import com.douglei.bpm.process.metadata.task.user.option.Option;
 import com.douglei.bpm.process.metadata.task.user.option.jump.JumpOption;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.bpm.process.parser.task.user.AssignPolicyParser;
-import com.douglei.tools.utils.StringUtil;
+import com.douglei.tools.StringUtil;
 
 /**
  * 

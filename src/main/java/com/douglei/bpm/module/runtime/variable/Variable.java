@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.douglei.bpm.process.handler.VariableEntity;
-import com.douglei.tools.utils.JdkSerializeUtil;
-import com.douglei.tools.utils.datatype.dateformat.DateFormatUtil;
+import com.douglei.tools.JdkSerializeUtil;
+import com.douglei.tools.datatype.DateFormatUtil;
 
 /**
  * 

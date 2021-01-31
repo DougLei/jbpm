@@ -4,8 +4,8 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.metadata.TimeLimit;
 import com.douglei.bpm.process.metadata.TimeLimitType;
 import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.tools.utils.StringUtil;
-import com.douglei.tools.utils.datatype.VerifyTypeMatchUtil;
+import com.douglei.tools.StringUtil;
+import com.douglei.tools.datatype.DataTypeValidateUtil;
 
 /**
  * 
@@ -90,7 +90,7 @@ public class TimeLimitParser {
 	private int getLimitTime(StringBuilder sb) {
 		if(sb.length() > 0 && sb.charAt(0) != '-') {
 			String str = sb.toString();
-			if(VerifyTypeMatchUtil.isInteger(str)) {
+			if(DataTypeValidateUtil.isInteger(str)) {
 				int limitTime = Integer.parseInt(str);
 				if(limitTime > 0) {
 					sb.setLength(0);

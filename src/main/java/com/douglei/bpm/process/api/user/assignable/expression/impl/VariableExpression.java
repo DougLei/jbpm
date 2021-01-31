@@ -10,7 +10,7 @@ import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpr
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpressionParameter;
 import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
-import com.douglei.tools.instances.ognl.OgnlHandler;
+import com.douglei.tools.ognl.OgnlHandler;
 
 /**
  * 使用流程变量指派用户

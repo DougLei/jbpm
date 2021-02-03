@@ -24,7 +24,7 @@ import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignNumber;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
 import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignableUserExpressionEntity;
-import com.douglei.tools.ognl.OgnlHandler;
+import com.douglei.tools.OgnlUtil;
 
 /**
  * 任务办理工具
@@ -132,7 +132,7 @@ public class TaskHandleUtil {
 			return true;
 		if(variableMap == null) 
 			return false;
-		return OgnlHandler.getSingleton().getBooleanValue(conditionExpression, variableMap);
+		return OgnlUtil.getSingleton().getBooleanValue(conditionExpression, variableMap);
 	}
 	
 	/**

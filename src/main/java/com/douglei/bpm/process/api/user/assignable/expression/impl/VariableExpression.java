@@ -10,7 +10,7 @@ import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpr
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpressionParameter;
 import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
-import com.douglei.tools.ognl.OgnlHandler;
+import com.douglei.tools.OgnlUtil;
 
 /**
  * 使用流程变量指派用户
@@ -18,7 +18,7 @@ import com.douglei.tools.ognl.OgnlHandler;
  */
 @Bean(clazz=AssignableUserExpression.class)
 public class VariableExpression implements AssignableUserExpression {
-	private OgnlHandler ognlHandler = OgnlHandler.getSingleton();
+	private OgnlUtil ognlHandler = OgnlUtil.getSingleton();
 	
 	@Autowired
 	private UserBeanFactory userBeanFactory;

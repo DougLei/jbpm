@@ -16,7 +16,7 @@ import com.douglei.bpm.process.handler.VariableEntities;
 import com.douglei.bpm.process.metadata.ProcessMetadata;
 import com.douglei.bpm.process.metadata.event.StartEventMetadata;
 import com.douglei.orm.context.SessionContext;
-import com.douglei.tools.ognl.OgnlHandler;
+import com.douglei.tools.OgnlUtil;
 
 /**
  * 
@@ -29,7 +29,7 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		String conditionExpression = currentTaskMetadataEntity.getTaskMetadata().getConditionExpression();
 		if(conditionExpression != null) {
 			Map<String, Object> variableMap = handleParameter.getVariableEntities().getVariableMap();
-			if(variableMap == null || !OgnlHandler.getSingleton().getBooleanValue(conditionExpression, variableMap))
+			if(variableMap == null || !OgnlUtil.getSingleton().getBooleanValue(conditionExpression, variableMap))
 				return new ExecutionResult("启动失败, 当前参数不满足[%s]流程的启动条件", "jbpm.process.start.fail.condition.mismatch", handleParameter.getProcessMetadata().getName());
 		}
 		return handle();
@@ -96,7 +96,7 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		
 		Object value = null;
 		for (String variableName : variableNames) {
-			value = OgnlHandler.getSingleton().getObjectValue(variableName, variableMap);;
+			value = OgnlUtil.getSingleton().getObjectValue(variableName, variableMap);;
 			if(value != null)
 				title = title.replaceAll(TitleVariableConstant.PREFIX_4_REGEX + variableName + TitleVariableConstant.SUFFIX, value.toString());
 		}

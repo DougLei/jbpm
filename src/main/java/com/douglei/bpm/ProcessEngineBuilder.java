@@ -21,10 +21,10 @@ import com.douglei.orm.context.RegistrationResult;
 import com.douglei.orm.context.SessionFactoryContainer;
 import com.douglei.orm.mapping.handler.entity.MappingEntity;
 import com.douglei.orm.mapping.handler.entity.impl.AddOrCoverMappingEntity;
-import com.douglei.orm.mapping.type.MappingTypeContainer;
+import com.douglei.orm.metadata.type.MetadataTypeContainer;
 import com.douglei.orm.sessionfactory.SessionFactory;
 import com.douglei.tools.ExceptionUtil;
-import com.douglei.tools.scanner.impl.ResourceScanner;
+import com.douglei.tools.file.scanner.impl.ResourceScanner;
 
 /**
  * 流程引擎构建器, 一个构建器只能构建一个引擎
@@ -55,7 +55,7 @@ public class ProcessEngineBuilder {
 			SessionFactoryContainer.getSingleton().register(sessionFactory);
 			this.engine = new ProcessEngineByBuiltinSessionFactory(sessionFactory.getId());
 		} catch (Exception e) {
-			logger.error("构建流程引擎时出现异常: {}", ExceptionUtil.getExceptionDetailMessage(e));
+			logger.error("构建流程引擎时出现异常: {}", ExceptionUtil.getStackTrace(e));
 			throw new ProcessEngineException("构建流程引擎时出现异常", e);
 		}
 	}
@@ -82,7 +82,7 @@ public class ProcessEngineBuilder {
 			SessionFactoryContainer.getSingleton().register(sessionFactory);
 			this.engine = new ProcessEngineByBuiltinSessionFactory(sessionFactory.getId());
 		} catch (Exception e) {
-			logger.error("构建流程引擎时出现异常: {}", ExceptionUtil.getExceptionDetailMessage(e));
+			logger.error("构建流程引擎时出现异常: {}", ExceptionUtil.getStackTrace(e));
 			throw new ProcessEngineException("构建流程引擎时出现异常", e);
 		}
 	}
@@ -93,7 +93,7 @@ public class ProcessEngineBuilder {
 	 */
 	public ProcessEngineBuilder(SessionFactory externalSessionFactory) {
 		try {
-			List<String> mappingFiles = new ResourceScanner(MappingTypeContainer.getFileSuffixes().toArray(new String[MappingTypeContainer.getFileSuffixes().size()])).scan("jbpm-mappings");// 工作流引擎相关的mapping文件根路径
+			List<String> mappingFiles = new ResourceScanner(MetadataTypeContainer.getFileSuffixes().toArray(new String[MetadataTypeContainer.getFileSuffixes().size()])).scan("jbpm-mappings");// 工作流引擎相关的mapping文件根路径
 			List<MappingEntity> mappingEntities = new ArrayList<MappingEntity>(mappingFiles.size());
 			mappingFiles.forEach(mappingFile -> mappingEntities.add(new AddOrCoverMappingEntity(mappingFile)));
 			externalSessionFactory.getMappingHandler().execute(mappingEntities);
@@ -101,7 +101,7 @@ public class ProcessEngineBuilder {
 			RegistrationResult registrationResult = SessionFactoryContainer.getSingleton().register(externalSessionFactory);
 			this.engine = new ProcessEngineByExternalSessionFactory(externalSessionFactory.getId(), registrationResult, mappingFiles);
 		} catch (Exception e) {
-			logger.error("构建流程引擎时出现异常: {}", ExceptionUtil.getExceptionDetailMessage(e));
+			logger.error("构建流程引擎时出现异常: {}", ExceptionUtil.getStackTrace(e));
 			throw new ProcessEngineException("构建流程引擎时出现异常", e);
 		}
 	}

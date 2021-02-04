@@ -33,7 +33,6 @@ import com.douglei.tools.file.scanner.impl.ResourceScanner;
 public class ProcessEngineBuilder {
 	private static final Logger logger = LoggerFactory.getLogger(ProcessEngineBuilder.class);
 	private static final String DEFAULT_CONFIGURATION_FILE_PATH = "jbpm.conf.xml"; // 默认的配置文件路径
-	private boolean isBuild;
 	private ProcessEngine engine;
 	private BeanFactory beanFactory = new BeanFactory();
 	
@@ -171,12 +170,11 @@ public class ProcessEngineBuilder {
 	 * @return
 	 */
 	public ProcessEngine build() {
-		if(isBuild)
+		if(engine != null)
 			return engine;
 		
 		beanFactory.registerCustomBean(ProcessEngine.class, engine);
 		beanFactory.autowireBeans();
-		isBuild = true;
 		return engine;
 	}
 }

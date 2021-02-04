@@ -36,7 +36,7 @@ public class ProcessDefinitionEntity {
 	 * @param file
 	 */
 	public ProcessDefinitionEntity(ClasspathFile file) {
-		this(new FileBufferedReader(file.getName()).readAll(1000).toString());
+		this(new FileBufferedReader(file.getFile()).readAll(1000).toString());
 	}
 	
 	/**

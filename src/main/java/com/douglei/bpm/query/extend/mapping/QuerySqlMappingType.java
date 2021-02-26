@@ -3,13 +3,14 @@ package com.douglei.bpm.query.extend.mapping;
 import java.io.InputStream;
 
 import com.douglei.orm.mapping.Mapping;
+import com.douglei.orm.mapping.MappingType;
 import com.douglei.orm.metadata.type.MetadataType;
 
 /**
  * 查询sql映射类型
  * @author DougLei
  */
-public class QuerySqlMappingType extends MetadataType {
+public class QuerySqlMappingType extends MappingType {
 	public static final String NAME = "query-sql";
 	
 	public QuerySqlMappingType() {

@@ -18,7 +18,7 @@ import com.douglei.bpm.query.extend.mapping.metadata.QuerySqlMetadata;
 import com.douglei.orm.configuration.Dom4jUtil;
 import com.douglei.orm.mapping.MappingParser;
 import com.douglei.orm.mapping.impl.MappingParserContext;
-import com.douglei.orm.mapping.metadata.parser.MetadataParseException;
+import com.douglei.orm.mapping.metadata.MetadataParseException;
 import com.douglei.tools.StringUtil;
 
 /**

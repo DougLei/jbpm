@@ -16,8 +16,8 @@ import com.douglei.bpm.query.extend.mapping.metadata.OperatorEntity;
 import com.douglei.bpm.query.extend.mapping.metadata.ParameterStandardMetadata;
 import com.douglei.bpm.query.extend.mapping.metadata.QuerySqlMetadata;
 import com.douglei.orm.configuration.Dom4jUtil;
+import com.douglei.orm.mapping.MappingParseToolContext;
 import com.douglei.orm.mapping.MappingParser;
-import com.douglei.orm.mapping.impl.MappingParserContext;
 import com.douglei.orm.mapping.metadata.MetadataParseException;
 import com.douglei.tools.StringUtil;
 
@@ -30,7 +30,7 @@ class QuerySqlMappingParser extends MappingParser<QuerySqlMapping>{
 	
 	@Override
 	public QuerySqlMapping parse(InputStream input) throws Exception {
-		Document document = MappingParserContext.getSAXReader().read(input);
+		Document document = MappingParseToolContext.getSAXReader().read(input);
 		Element rootElement = document.getRootElement();
 		
 		// 创建QuerySqlMetadata实例

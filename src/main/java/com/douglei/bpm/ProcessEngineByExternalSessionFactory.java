@@ -6,9 +6,9 @@ import java.util.List;
 
 import com.douglei.orm.context.RegistrationResult;
 import com.douglei.orm.context.SessionFactoryContainer;
-import com.douglei.orm.mapping.handler.MappingHandlerException;
+import com.douglei.orm.mapping.handler.MappingHandleException;
+import com.douglei.orm.mapping.handler.entity.DeleteMappingEntity;
 import com.douglei.orm.mapping.handler.entity.MappingEntity;
-import com.douglei.orm.mapping.handler.entity.impl.DeleteMappingEntity;
 import com.douglei.orm.sessionfactory.SessionFactory;
 
 /**
@@ -26,7 +26,7 @@ class ProcessEngineByExternalSessionFactory extends ProcessEngine {
 	}
 	
 	@Override
-	public void destroy() throws MappingHandlerException {
+	public void destroy() throws MappingHandleException {
 		SessionFactory sessionFactory = null;
 		if(registrationResult == RegistrationResult.SUCCESS)
 			sessionFactory = SessionFactoryContainer.getSingleton().remove(id, false);

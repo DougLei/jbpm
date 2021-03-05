@@ -9,7 +9,7 @@ import com.douglei.aop.ProxyMethod;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.orm.context.TransactionProxyInterceptor;
 import com.douglei.orm.context.transaction.component.Transaction;
-import com.douglei.tools.reflect.ConstructorUtil;
+import com.douglei.tools.reflect.ClassUtil;
 
 /**
  * 
@@ -38,7 +38,7 @@ public class GeneralBeanEntity extends BeanEntity{
 				throw new NullPointerException("["+instanceClazz.getName()+"]类被注解为事物Bean, 但是类中却没有任何方法有["+Transaction.class.getName()+"]注解");
 			super.instance = ProxyBeanContainer.createProxy(instanceClazz, new TransactionProxyInterceptor(instanceClazz, methods));
 		}else {
-			super.instance = ConstructorUtil.newInstance(instanceClazz);
+			super.instance = ClassUtil.newInstance(instanceClazz);
 		}
 	}
 }

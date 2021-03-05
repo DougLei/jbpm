@@ -8,7 +8,7 @@ import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
 import com.douglei.bpm.process.api.container.ProcessContainerProxy;
-import com.douglei.orm.mapping.handler.MappingHandlerException;
+import com.douglei.orm.mapping.handler.MappingHandleException;
 
 /**
  * 流程引擎
@@ -62,7 +62,7 @@ public abstract class ProcessEngine {
 	
 	/**
 	 * 销毁引擎
-	 * @throws MappingHandlerException
+	 * @throws MappingHandleException
 	 */
-	protected abstract void destroy() throws MappingHandlerException;
+	protected abstract void destroy() throws MappingHandleException;
 }

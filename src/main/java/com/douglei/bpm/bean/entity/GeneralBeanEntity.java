@@ -7,8 +7,8 @@ import java.util.List;
 import com.douglei.aop.ProxyBeanContainer;
 import com.douglei.aop.ProxyMethod;
 import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.orm.context.Transaction;
 import com.douglei.orm.context.TransactionProxyInterceptor;
-import com.douglei.orm.context.transaction.component.Transaction;
 import com.douglei.tools.reflect.ClassUtil;
 
 /**

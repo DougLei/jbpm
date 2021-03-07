@@ -8,7 +8,7 @@ import com.douglei.bpm.module.CommandExecutor;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.instance.command.StartProcessCmd;
 import com.douglei.orm.context.SessionContext;
-import com.douglei.orm.context.transaction.component.Transaction;
+import com.douglei.orm.context.Transaction;
 
 /**
  * 运行实例服务

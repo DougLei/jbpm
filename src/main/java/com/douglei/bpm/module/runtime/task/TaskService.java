@@ -18,7 +18,7 @@ import com.douglei.bpm.module.runtime.task.command.ViewCarbonCopyCmd;
 import com.douglei.bpm.module.runtime.task.command.parameter.DispatchTaskParameter;
 import com.douglei.bpm.module.runtime.task.command.parameter.HandleTaskParameter;
 import com.douglei.bpm.process.api.container.ProcessContainerProxy;
-import com.douglei.orm.context.transaction.component.Transaction;
+import com.douglei.orm.context.Transaction;
 
 /**
  * 运行任务服务

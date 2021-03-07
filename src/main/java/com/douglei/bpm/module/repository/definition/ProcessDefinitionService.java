@@ -14,7 +14,7 @@ import com.douglei.bpm.process.api.container.ProcessContainerProxy;
 import com.douglei.bpm.process.parser.ProcessParseException;
 import com.douglei.bpm.process.parser.ProcessParser;
 import com.douglei.orm.context.SessionContext;
-import com.douglei.orm.context.transaction.component.Transaction;
+import com.douglei.orm.context.Transaction;
 
 /**
  * 流程定义服务

@@ -5,7 +5,7 @@ import java.util.Arrays;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.orm.context.SessionContext;
-import com.douglei.orm.context.transaction.component.Transaction;
+import com.douglei.orm.context.Transaction;
 
 /**
  * 

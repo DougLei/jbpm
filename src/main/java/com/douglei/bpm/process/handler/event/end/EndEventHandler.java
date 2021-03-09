@@ -14,7 +14,7 @@ import com.douglei.bpm.process.handler.HandleParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.VariableEntities;
 import com.douglei.bpm.process.handler.gateway.ParallelTaskHandler;
-import com.douglei.bpm.process.metadata.event.EndEventMetadata;
+import com.douglei.bpm.process.mapping.metadata.event.EndEventMetadata;
 import com.douglei.orm.context.SessionContext;
 
 /**

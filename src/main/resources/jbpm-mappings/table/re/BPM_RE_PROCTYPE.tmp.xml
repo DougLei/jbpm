@@ -3,11 +3,16 @@
 	<!-- 流程类型表 -->
 	<table name="BPM_RE_PROCTYPE" class="com.douglei.bpm.module.repository.type.ProcessType" createMode="create" strict="true">
 		<columns>
-			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
+			<column name="ID" property="id" dataType="number" length="10" />
 			<column name="CODE" property="code" dataType="string" length="50" nullable="false" />
 			<column name="NAME" property="name" dataType="nstring" length="100" nullable="false" />
 			<column name="TENANT_ID" property="tenantId" dataType="nstring" length="150" />
 		</columns>
-		<primaryKeyHandler type="sequence"></primaryKeyHandler>
+		
+		<constraints>
+			<constraint type="PRIMARY_KEY" isAutoIncrement="true">
+				<column name="ID" />
+			</constraint>
+		</constraints>
 	</table>
 </mapping-configuration>

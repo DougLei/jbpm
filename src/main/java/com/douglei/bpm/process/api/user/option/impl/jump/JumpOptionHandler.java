@@ -4,12 +4,12 @@ import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.process.api.user.option.OptionHandler;
-import com.douglei.bpm.process.metadata.task.user.candidate.Candidate;
-import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
-import com.douglei.bpm.process.metadata.task.user.option.Option;
-import com.douglei.bpm.process.metadata.task.user.option.jump.JumpOption;
-import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.bpm.process.parser.task.user.AssignPolicyParser;
+import com.douglei.bpm.process.mapping.metadata.task.user.candidate.Candidate;
+import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignPolicy;
+import com.douglei.bpm.process.mapping.metadata.task.user.option.Option;
+import com.douglei.bpm.process.mapping.metadata.task.user.option.jump.JumpOption;
+import com.douglei.bpm.process.mapping.parser.ProcessParseException;
+import com.douglei.bpm.process.mapping.parser.task.user.AssignPolicyParser;
 import com.douglei.tools.StringUtil;
 
 /**

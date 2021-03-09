@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-import com.douglei.bpm.process.parser.ProcessParseException;
+import com.douglei.bpm.process.mapping.parser.ProcessParseException;
 import com.douglei.tools.StringUtil;
 import com.douglei.tools.file.reader.FileBufferedReader;
 
@@ -20,7 +20,6 @@ import com.douglei.tools.file.reader.FileBufferedReader;
 public class ProcessDefinitionEntity {
 	private ProcessDefinition processDefinition;
 	private boolean strict; // 如果构建出的流程定义已经存在实例, 根据该参数决定是无法保存本次的流程定义(false), 或是强制更新子版本来保存(true)
-	private boolean validate; // 是否对流程定义内容进行校验, 校验失败时会抛出 {@link ProcessParseException} 
 	
 	/**
 	 * 根据文件构建流程定义实例
@@ -28,7 +27,9 @@ public class ProcessDefinitionEntity {
 	 * @throws FileNotFoundException
 	 */
 	public ProcessDefinitionEntity(File file) throws FileNotFoundException {
-		this(new FileBufferedReader(new FileInputStream(file)).readAll(1000).toString());
+		try(FileBufferedReader reader = new FileBufferedReader(new FileInputStream(file))){
+			init(reader.readAll(1500).toString());
+		}
 	}
 	
 	/**
@@ -36,7 +37,9 @@ public class ProcessDefinitionEntity {
 	 * @param file
 	 */
 	public ProcessDefinitionEntity(ClasspathFile file) {
-		this(new FileBufferedReader(file.getFile()).readAll(1000).toString());
+		try(FileBufferedReader reader = new FileBufferedReader(file.getFile())){
+			init(reader.readAll(1500).toString());
+		}
 	}
 	
 	/**
@@ -44,6 +47,11 @@ public class ProcessDefinitionEntity {
 	 * @param content
 	 */
 	public ProcessDefinitionEntity(String content) {
+		init(content);
+	}
+	
+	// 根据流程配置内容构建流程定义实例
+	private void init(String content) {
 		Map<String, String> attributeMap = getProcessAttributeMap(content);
 		this.processDefinition = new ProcessDefinition(attributeMap.get("name"), attributeMap.get("code"), attributeMap.get("version"));
 		this.processDefinition.setContent(content);
@@ -129,14 +137,6 @@ public class ProcessDefinitionEntity {
 	}
 	
 	/**
-	 * 设置是否对流程定义的内容进行校验, 校验失败时会抛出 {@link ProcessParseException} 
-	 * @param validate
-	 */
-	public void setValidate(boolean validate) {
-		this.validate = validate;
-	}
-
-	/**
 	 * 设置流程定义的类型id
 	 * @param typeId
 	 * @return
@@ -182,14 +182,6 @@ public class ProcessDefinitionEntity {
 		return strict;
 	}
 	
-	/**
-	 * 是否对流程定义的内容进行校验, 校验失败时会抛出 {@link ProcessParseException} 
-	 * @return
-	 */
-	boolean isValidate() {
-		return validate;
-	}
-
 	/**
 	 * 流程的基础属性
 	 * @author DougLei

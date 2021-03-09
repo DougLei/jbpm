@@ -3,11 +3,16 @@
 	<!-- 流程委托明细表 -->
 	<table name="BPM_RE_DELEGATION_DETAIL" class="com.douglei.bpm.module.repository.delegation.ProcessDelegationDetail" createMode="create" strict="true">
 		<columns>
-			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
+			<column name="ID" property="id" dataType="number" length="10" />
 			<column name="DELEGATION_ID" property="delegationId" dataType="number" length="10" nullable="false" />
 			<column name="PROCDEF_CODE" property="procdefCode" dataType="string" length="50" nullable="false" />
 			<column name="PROCDEF_VERSION" property="procdefVersion" dataType="string" length="50" />
 		</columns>
-		<primaryKeyHandler type="sequence"></primaryKeyHandler>
+		
+		<constraints>
+			<constraint type="PRIMARY_KEY" isAutoIncrement="true">
+				<column name="ID" />
+			</constraint>
+		</constraints>
 	</table>
 </mapping-configuration>

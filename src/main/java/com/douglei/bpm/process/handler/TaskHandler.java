@@ -4,8 +4,8 @@ import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.task.HistoryTask;
 import com.douglei.bpm.module.runtime.task.Task;
-import com.douglei.bpm.process.metadata.TaskMetadata;
-import com.douglei.bpm.process.metadata.TaskMetadataEntity;
+import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
+import com.douglei.bpm.process.mapping.metadata.TaskMetadataEntity;
 
 /**
  * 任务处理器

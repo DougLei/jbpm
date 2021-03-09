@@ -8,14 +8,14 @@
 		<userTask id="userTask1" name="发起的用户任务">
 			<candidate>
 				<assignPolicy>
-					<expression name="static" value="douglei,zhangsan"/>
+					<expression name="fixed" value="douglei,zhangsan"/>
 				</assignPolicy>
 			</candidate>
 			
 			<option type="carbonCopy" name="抄送" order="1">
 				<candidate>
 					<assignPolicy isDynamic="false">
-						<expression name="static" value="douglei,zhangsan"/>
+						<expression name="fixed" value="douglei,zhangsan"/>
 					</assignPolicy>
 				</candidate>
 			</option>
@@ -23,7 +23,7 @@
 			<option type="delegate" name="委托" order="">
 				<candidate>
 					<assignPolicy>
-						<expression name="static" value="haha"/>
+						<expression name="fixed" value="haha"/>
 					</assignPolicy>
 				</candidate>
 			</option>
@@ -38,7 +38,7 @@
 		<userTask id="userTask2" name="第二个用户任务">
 			<candidate>
 				<assignPolicy isDynamic="false">
-					<expression name="static" value="wangwu,zhaoliu"/>
+					<expression name="fixed" value="wangwu,zhaoliu"/>
 				</assignPolicy>
 			</candidate>
 		</userTask>

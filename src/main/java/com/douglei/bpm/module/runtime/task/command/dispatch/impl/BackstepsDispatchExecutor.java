@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.douglei.bpm.ProcessEngineBugException;
 import com.douglei.bpm.process.handler.TaskDispatchException;
-import com.douglei.bpm.process.metadata.TaskNotExistsException;
+import com.douglei.bpm.process.mapping.metadata.TaskNotExistsException;
 import com.douglei.orm.context.SessionContext;
 
 /**

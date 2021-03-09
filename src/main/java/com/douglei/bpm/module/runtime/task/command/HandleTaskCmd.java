@@ -13,8 +13,8 @@ import com.douglei.bpm.module.runtime.task.command.parameter.HandleTaskParameter
 import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
-import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
-import com.douglei.bpm.process.metadata.task.user.candidate.handle.HandlePolicy;
+import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
+import com.douglei.bpm.process.mapping.metadata.task.user.candidate.handle.HandlePolicy;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.tools.StringUtil;
 

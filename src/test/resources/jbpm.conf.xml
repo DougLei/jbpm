@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration id="defaultProcessEngine">
+<configuration id="defaultJBPMId">
 	<environment>
 		<datasource class="com.alibaba.druid.pool.DruidDataSource" closeMethod="">
 			<property name="url" value="${jdbc.url}"/>
@@ -14,16 +14,12 @@
 			<property name="maxPoolPreparedStatementPerConnectionSize" value="100" />
 		</datasource>
 		
-		<mappings>
-			<mapping path="jbpm-mappings" />
-		</mappings>
+		<mapping>
+			<scanner path="jbpm-mappings"/>
+		</mapping>
+		
+		<properties placeholderPrefix="${" placeholderSuffix="}">
+			<resource path="jdbc.properties" />
+		</properties>
 	</environment>
-	
-	<properties placeholderPrefix="${" placeholderSuffix="}">
-		<resource path="jdbc.properties" />
-	</properties>
-	
-	<extend-options>
-		<option type="mappingType" value="com.douglei.bpm.query.extend.mapping.QuerySqlMappingType" />
-	</extend-options>
 </configuration>

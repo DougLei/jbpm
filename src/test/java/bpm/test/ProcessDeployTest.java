@@ -9,7 +9,7 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.repository.definition.ClasspathFile;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
 import com.douglei.bpm.module.repository.definition.ProcessDefinitionEntity;
-import com.douglei.bpm.process.parser.ProcessParseException;
+import com.douglei.bpm.process.mapping.parser.ProcessParseException;
 
 public class ProcessDeployTest {
 	private ProcessEngine engine;

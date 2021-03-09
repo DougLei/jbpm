@@ -10,9 +10,8 @@ import com.douglei.bpm.module.history.instance.HistoryProcessInstanceService;
 import com.douglei.bpm.module.repository.RepositoryException;
 import com.douglei.bpm.module.runtime.instance.ProcessInstanceService;
 import com.douglei.bpm.module.runtime.task.HandleState;
-import com.douglei.bpm.process.api.container.ProcessContainerProxy;
-import com.douglei.bpm.process.parser.ProcessParseException;
-import com.douglei.bpm.process.parser.ProcessParser;
+import com.douglei.bpm.process.mapping.ProcessMappingContainer;
+import com.douglei.bpm.process.mapping.parser.ProcessParseException;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.Transaction;
 
@@ -30,10 +29,7 @@ public class ProcessDefinitionService {
 	private HistoryProcessInstanceService historyInstanceService;
 	
 	@Autowired
-	private ProcessContainerProxy container;
-	
-	@Autowired
-	private ProcessParser parser;
+	private ProcessMappingContainer container;
 	
 	/**
 	 * 保存流程定义
@@ -44,9 +40,6 @@ public class ProcessDefinitionService {
 	@Transaction
 	public ExecutionResult insert(ProcessDefinitionEntity entity) throws ProcessParseException{
 		ProcessDefinition processDefinition = entity.getProcessDefinition();
-		if(entity.isValidate())
-			parser.parse(processDefinition.getId(), processDefinition.getContent());
-		
 		ProcessDefinition exProcessDefinition = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "query4Save", processDefinition);
 		if(exProcessDefinition == null) {
 			// 新的流程定义, 进行save

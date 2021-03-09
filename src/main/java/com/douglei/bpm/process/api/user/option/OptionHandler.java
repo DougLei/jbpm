@@ -3,8 +3,8 @@ package com.douglei.bpm.process.api.user.option;
 import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.MultiInstance;
-import com.douglei.bpm.process.metadata.task.user.option.Option;
-import com.douglei.bpm.process.parser.ProcessParseException;
+import com.douglei.bpm.process.mapping.metadata.task.user.option.Option;
+import com.douglei.bpm.process.mapping.parser.ProcessParseException;
 
 /**
  * 

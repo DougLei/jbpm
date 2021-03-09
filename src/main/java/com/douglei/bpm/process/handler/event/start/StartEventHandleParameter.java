@@ -6,7 +6,7 @@ import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.UserEntity;
-import com.douglei.bpm.process.metadata.ProcessMetadata;
+import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
 
 /**
  * 

@@ -14,6 +14,9 @@ import com.douglei.bpm.bean.annotation.DefaultInstance;
 import com.douglei.bpm.bean.entity.BeanEntity;
 import com.douglei.bpm.bean.entity.CustomBeanEntity;
 import com.douglei.bpm.bean.entity.GeneralBeanEntity;
+import com.douglei.bpm.process.mapping.ProcessMappingType;
+import com.douglei.bpm.process.mapping.parser.ProcessMappingParser;
+import com.douglei.orm.mapping.MappingTypeContainer;
 import com.douglei.tools.file.scanner.impl.ClassScanner;
 import com.douglei.tools.reflect.ClassUtil;
 
@@ -29,7 +32,7 @@ public class BeanFactory {
 		Class<?> instanceClazz = null;
 		Bean bean = null;
 		for (String classpath : new ClassScanner().scan("com.douglei.bpm")) { // 扫描指定路径下的所有class
-			instanceClazz = ClassUtil.loadClass(classpath);
+			instanceClazz = ClassUtil.loadClass2(classpath);
 			bean = instanceClazz.getAnnotation(Bean.class);
 			if(bean != null)
 				putInstance2BeanContainer(new GeneralBeanEntity(bean, instanceClazz), beanContainer);
@@ -57,6 +60,7 @@ public class BeanFactory {
 	public void autowireBeans() {
 		try {
 			autowireBeans(beanContainer.values());
+			afterAutowireBeans();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -94,9 +98,9 @@ public class BeanFactory {
 		field.setAccessible(true);
 		if(value instanceof ProxyBean) {
 			if(object instanceof ProxyBean) {
-				field.set(((ProxyBean)object).getOriginObject(), ((ProxyBean)value).getProxy());
+				field.set(((ProxyBean)object).getOriginObject(), ((ProxyBean)value).getProxyObject());
 			}else {
-				field.set(object, ((ProxyBean)value).getProxy());
+				field.set(object, ((ProxyBean)value).getProxyObject());
 			}
 		}else {
 			if(object instanceof ProxyBean) {
@@ -126,6 +130,16 @@ public class BeanFactory {
 		value = defaultInstance.clazz().newInstance();
 		putInstance2BeanContainer(new CustomBeanEntity(field.getType(), value), defaultBeanContainer);
 		return value;
+	}
+	
+	/**
+	 * 自动装配的后续操作
+	 */
+	private void afterAutowireBeans() {
+		if(!MappingTypeContainer.exists(ProcessMappingType.NAME, ProcessMappingType.FILE_SUFFIX)) 
+			MappingTypeContainer.register(new ProcessMappingType((ProcessMappingParser)beanContainer.get(ProcessMappingParser.class)));
+//		if(!MappingTypeContainer.exists("query-sql", ".qsmp.xml")) 
+//			MappingTypeContainer.register(new QuerySqlMappingType());
 	}
 	
 	/**

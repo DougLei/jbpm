@@ -3,7 +3,7 @@
 	<!-- 流程运行任务表 -->
 	<table name="BPM_RU_TASK" class="com.douglei.bpm.module.runtime.task.Task" createMode="create" strict="true">
 		<columns>
-			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
+			<column name="ID" property="id" dataType="number" length="10" />
 			<column name="PROCDEF_ID" property="procdefId" dataType="number" length="10" nullable="false"/>
 			<column name="PROCINST_ID" property="procinstId" dataType="char" length="36" nullable="false"/>
 			<column name="TASKINST_ID" property="taskinstId" dataType="char" length="36" nullable="false"/>
@@ -21,6 +21,11 @@
 			<column name="PAGE_ID" property="pageId" dataType="string" length="500"/>
 			<column name="IS_ALL_CLAIMED" property="isAllClaimed" dataType="number" length="1" />
 		</columns>
-		<primaryKeyHandler type="sequence"></primaryKeyHandler>
+		
+		<constraints>
+			<constraint type="PRIMARY_KEY" isAutoIncrement="true">
+				<column name="ID" />
+			</constraint>
+		</constraints>
 	</table>
 </mapping-configuration>

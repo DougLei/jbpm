@@ -2,7 +2,7 @@ package com.douglei.bpm.process.handler.gateway;
 
 import com.douglei.bpm.process.handler.HandleParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
-import com.douglei.bpm.process.metadata.gateway.AbstractGatewayMetadata;
+import com.douglei.bpm.process.mapping.metadata.gateway.AbstractGatewayMetadata;
 
 /**
  * 

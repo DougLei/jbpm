@@ -2,7 +2,7 @@ package com.douglei.bpm.module.history.task;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.process.api.container.ProcessContainerProxy;
+import com.douglei.bpm.process.mapping.ProcessMappingContainer;
 
 /**
  * 历史任务服务
@@ -12,7 +12,7 @@ import com.douglei.bpm.process.api.container.ProcessContainerProxy;
 public class HistoryTaskService {
 	
 	@Autowired
-	private ProcessContainerProxy processContainer;
+	private ProcessMappingContainer container;
 	
 	
 	

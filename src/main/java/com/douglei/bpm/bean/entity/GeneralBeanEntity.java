@@ -36,7 +36,7 @@ public class GeneralBeanEntity extends BeanEntity{
 			
 			if(methods == null)
 				throw new NullPointerException("["+instanceClazz.getName()+"]类被注解为事物Bean, 但是类中却没有任何方法有["+Transaction.class.getName()+"]注解");
-			super.instance = ProxyBeanContainer.createProxy(instanceClazz, new TransactionProxyInterceptor(instanceClazz, methods));
+			super.instance = ProxyBeanContainer.createProxy(instanceClazz, new TransactionProxyInterceptor(methods));
 		}else {
 			super.instance = ClassUtil.newInstance(instanceClazz);
 		}

@@ -2,7 +2,7 @@ package com.douglei.bpm.process.handler;
 
 import java.util.Date;
 
-import com.douglei.bpm.process.metadata.ProcessMetadata;
+import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
 
 /**
  * 办理参数接口

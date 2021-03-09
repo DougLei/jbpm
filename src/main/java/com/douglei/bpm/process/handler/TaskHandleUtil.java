@@ -17,13 +17,13 @@ import com.douglei.bpm.process.handler.gateway.ExclusiveGatewayHandler;
 import com.douglei.bpm.process.handler.gateway.InclusiveGatewayHandler;
 import com.douglei.bpm.process.handler.gateway.ParallelGatewayHandler;
 import com.douglei.bpm.process.handler.task.user.UserTaskHandler;
-import com.douglei.bpm.process.metadata.TaskMetadata;
-import com.douglei.bpm.process.metadata.TaskMetadataEntity;
-import com.douglei.bpm.process.metadata.flow.FlowMetadata;
-import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
-import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignNumber;
-import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
-import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignableUserExpressionEntity;
+import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
+import com.douglei.bpm.process.mapping.metadata.TaskMetadataEntity;
+import com.douglei.bpm.process.mapping.metadata.flow.FlowMetadata;
+import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
+import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignNumber;
+import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignPolicy;
+import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignableUserExpressionEntity;
 import com.douglei.tools.OgnlUtil;
 
 /**
@@ -132,7 +132,7 @@ public class TaskHandleUtil {
 			return true;
 		if(variableMap == null) 
 			return false;
-		return OgnlUtil.getSingleton().getBooleanValue(conditionExpression, variableMap);
+		return OgnlUtil.getBooleanValue(conditionExpression, variableMap);
 	}
 	
 	/**

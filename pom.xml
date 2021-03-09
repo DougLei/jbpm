@@ -14,11 +14,6 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.douglei</groupId>
-			<artifactId>ji18n</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.26</version>
@@ -38,12 +33,6 @@
 			<artifactId>logback-access</artifactId>
 			<version>1.2.3</version>
 		</dependency>
-		<dependency>
-		    <groupId>ognl</groupId>
-		    <artifactId>ognl</artifactId>
-		    <version>3.2.10</version>
-		</dependency>
-		
 		
 		<dependency>
 		    <groupId>com.oracle</groupId>

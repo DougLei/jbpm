@@ -2,7 +2,7 @@ package com.douglei.bpm.module.runtime.task.command.dispatch.impl;
 
 import com.douglei.bpm.module.runtime.task.command.dispatch.DispatchExecutor;
 import com.douglei.bpm.process.handler.TaskDispatchException;
-import com.douglei.bpm.process.metadata.TaskNotExistsException;
+import com.douglei.bpm.process.mapping.metadata.TaskNotExistsException;
 
 /**
  * 自然调度

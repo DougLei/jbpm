@@ -3,9 +3,9 @@ package com.douglei.bpm.process.api.user.option.impl.transfer;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.api.user.option.OptionHandler;
 import com.douglei.bpm.process.api.user.option.impl.delegate.DelegateOptionHandler;
-import com.douglei.bpm.process.metadata.task.user.candidate.Candidate;
-import com.douglei.bpm.process.metadata.task.user.option.Option;
-import com.douglei.bpm.process.metadata.task.user.option.transfer.TransferOption;
+import com.douglei.bpm.process.mapping.metadata.task.user.candidate.Candidate;
+import com.douglei.bpm.process.mapping.metadata.task.user.option.Option;
+import com.douglei.bpm.process.mapping.metadata.task.user.option.transfer.TransferOption;
 
 /**
  * 

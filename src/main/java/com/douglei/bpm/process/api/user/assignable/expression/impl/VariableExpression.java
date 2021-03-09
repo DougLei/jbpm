@@ -18,7 +18,6 @@ import com.douglei.tools.OgnlUtil;
  */
 @Bean(clazz=AssignableUserExpression.class)
 public class VariableExpression implements AssignableUserExpression {
-	private OgnlUtil ognlHandler = OgnlUtil.getSingleton();
 	
 	@Autowired
 	private UserBeanFactory userBeanFactory;
@@ -37,7 +36,7 @@ public class VariableExpression implements AssignableUserExpression {
 		List<String> list = new ArrayList<String>();
 		Object userIds;
 		for (String variableName : value.split(",")) {
-			userIds = ognlHandler.getObjectValue(variableName.trim(), variableMap);
+			userIds = OgnlUtil.getObjectValue(variableName.trim(), variableMap);
 			if(userIds != null) {
 				for(String userId : userIds.toString().split(",")) 
 					list.add(userId.trim());

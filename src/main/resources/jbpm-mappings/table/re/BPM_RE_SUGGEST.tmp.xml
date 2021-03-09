@@ -3,11 +3,16 @@
 	<!-- 流程常用意见表 -->
 	<table name="BPM_RE_SUGGEST" class="com.douglei.bpm.module.repository.suggest.Suggest" createMode="create" strict="true">
 		<columns>
-			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
+			<column name="ID" property="id" dataType="number" length="10" />
 			<column name="CONTENT_" property="content" dataType="nstring" length="300" nullable="false" />
 			<column name="USER_ID" property="userId" dataType="nstring" length="150" />
 			<column name="TENANT_ID" property="tenantId" dataType="nstring" length="150" />
 		</columns>
-		<primaryKeyHandler type="sequence"></primaryKeyHandler>
+		
+		<constraints>
+			<constraint type="PRIMARY_KEY" isAutoIncrement="true">
+				<column name="ID" />
+			</constraint>
+		</constraints>
 	</table>
 </mapping-configuration>

@@ -8,5 +8,4 @@ import com.douglei.bpm.bean.annotation.DefaultInstance;
  */
 @DefaultInstance(clazz=DefaultProcessEngineConfiguration.class)
 public interface ProcessEngineConfiguration {
-	
 }

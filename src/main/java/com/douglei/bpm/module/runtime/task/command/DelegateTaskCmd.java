@@ -20,10 +20,10 @@ import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.task.user.assignee.startup.DelegationHandler;
 import com.douglei.bpm.process.handler.task.user.assignee.startup.SqlCondition;
-import com.douglei.bpm.process.metadata.TaskMetadata;
-import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
-import com.douglei.bpm.process.metadata.task.user.candidate.Candidate;
-import com.douglei.bpm.process.metadata.task.user.option.delegate.DelegateOption;
+import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
+import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
+import com.douglei.bpm.process.mapping.metadata.task.user.candidate.Candidate;
+import com.douglei.bpm.process.mapping.metadata.task.user.option.delegate.DelegateOption;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.tools.StringUtil;
 

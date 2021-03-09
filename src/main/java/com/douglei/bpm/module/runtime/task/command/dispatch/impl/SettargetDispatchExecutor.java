@@ -7,9 +7,9 @@ import java.util.List;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.command.dispatch.DispatchExecutor;
 import com.douglei.bpm.process.handler.TaskDispatchException;
-import com.douglei.bpm.process.metadata.TaskMetadata;
-import com.douglei.bpm.process.metadata.TaskMetadataEntity;
-import com.douglei.bpm.process.metadata.TaskNotExistsException;
+import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
+import com.douglei.bpm.process.mapping.metadata.TaskMetadataEntity;
+import com.douglei.bpm.process.mapping.metadata.TaskNotExistsException;
 import com.douglei.orm.context.SessionContext;
 
 /**

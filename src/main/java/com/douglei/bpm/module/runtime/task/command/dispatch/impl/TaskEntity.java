@@ -1,7 +1,7 @@
 package com.douglei.bpm.module.runtime.task.command.dispatch.impl;
 
 import com.douglei.bpm.module.runtime.task.Task;
-import com.douglei.bpm.process.metadata.ProcessMetadata;
+import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
 
 /**
  * 

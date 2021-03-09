@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration id="defaultJBPMId">
 	<environment>
-		<mappings>
-			<mapping path="jbpm-mappings" />
-		</mappings>
+		<mapping>
+			<scanner path="jbpm-mappings"/>
+		</mapping>
 	</environment>
-	
-	<extend-options>
-		<option type="mappingType" value="com.douglei.bpm.query.extend.mapping.QuerySqlMappingType" />
-	</extend-options>
 </configuration>

@@ -15,8 +15,8 @@ import com.douglei.bpm.module.runtime.task.TaskInstance;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimResult;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.task.user.assignee.handle.AssigneeQueryByGroupIdSqlCondition;
-import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
-import com.douglei.bpm.process.metadata.task.user.candidate.handle.ClaimPolicyEntity;
+import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
+import com.douglei.bpm.process.mapping.metadata.task.user.candidate.handle.ClaimPolicyEntity;
 import com.douglei.orm.context.SessionContext;
 
 /**

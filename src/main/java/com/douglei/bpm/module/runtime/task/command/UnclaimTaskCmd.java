@@ -11,9 +11,9 @@ import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
 import com.douglei.bpm.process.api.user.option.impl.carboncopy.CarbonCopyOptionHandler;
 import com.douglei.bpm.process.handler.TaskHandleException;
-import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
-import com.douglei.bpm.process.metadata.task.user.option.Option;
-import com.douglei.bpm.process.metadata.task.user.option.carboncopy.CarbonCopyOption;
+import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
+import com.douglei.bpm.process.mapping.metadata.task.user.option.Option;
+import com.douglei.bpm.process.mapping.metadata.task.user.option.carboncopy.CarbonCopyOption;
 import com.douglei.orm.context.SessionContext;
 
 /**

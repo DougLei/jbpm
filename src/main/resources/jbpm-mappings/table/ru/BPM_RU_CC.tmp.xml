@@ -3,12 +3,17 @@
 	<!-- 流程运行抄送表 -->
 	<table name="BPM_RU_CC" class="com.douglei.bpm.module.runtime.task.CarbonCopy" createMode="create" strict="true">
 		<columns>
-			<column name="ID" property="id" dataType="number" primaryKey="true" length="10" />
+			<column name="ID" property="id" dataType="number" length="10" />
 			<column name="TASKINST_ID" property="taskinstId" dataType="char" length="36" nullable="false"/>
 			<column name="CC_USER_ID" property="ccUserId" dataType="nstring" length="150" nullable="false" />
 			<column name="CC_TIME" property="ccTime" dataType="datetime" nullable="false" />
 			<column name="USER_ID" property="userId" dataType="nstring" length="150" nullable="false" />
 		</columns>
-		<primaryKeyHandler type="sequence"></primaryKeyHandler>
+		
+		<constraints>
+			<constraint type="PRIMARY_KEY" isAutoIncrement="true">
+				<column name="ID" />
+			</constraint>
+		</constraints>
 	</table>
 </mapping-configuration>

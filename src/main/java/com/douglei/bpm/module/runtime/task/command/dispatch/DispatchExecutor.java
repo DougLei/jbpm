@@ -8,12 +8,12 @@ import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.api.user.option.impl.carboncopy.CarbonCopyOptionHandler;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskDispatchException;
-import com.douglei.bpm.process.metadata.TaskMetadata;
-import com.douglei.bpm.process.metadata.TaskMetadataEntity;
-import com.douglei.bpm.process.metadata.TaskNotExistsException;
-import com.douglei.bpm.process.metadata.task.user.UserTaskMetadata;
-import com.douglei.bpm.process.metadata.task.user.option.Option;
-import com.douglei.bpm.process.metadata.task.user.option.carboncopy.CarbonCopyOption;
+import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
+import com.douglei.bpm.process.mapping.metadata.TaskMetadataEntity;
+import com.douglei.bpm.process.mapping.metadata.TaskNotExistsException;
+import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
+import com.douglei.bpm.process.mapping.metadata.task.user.option.Option;
+import com.douglei.bpm.process.mapping.metadata.task.user.option.carboncopy.CarbonCopyOption;
 
 /**
  * 调度执行器

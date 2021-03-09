@@ -7,8 +7,8 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimResult;
-import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignNumber;
-import com.douglei.bpm.process.parser.task.user.AssignNumberParser;
+import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignNumber;
+import com.douglei.bpm.process.mapping.parser.task.user.AssignNumberParser;
 
 /**
  * 指定人数(百分比)的认领策略

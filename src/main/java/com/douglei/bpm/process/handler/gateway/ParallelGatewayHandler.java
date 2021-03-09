@@ -7,7 +7,7 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.handler.TaskDispatchException;
 import com.douglei.bpm.process.handler.TaskEntity;
-import com.douglei.bpm.process.metadata.flow.FlowMetadata;
+import com.douglei.bpm.process.mapping.metadata.flow.FlowMetadata;
 import com.douglei.orm.context.SessionContext;
 
 /**

@@ -3,9 +3,9 @@ package com.douglei.bpm.process.api.user.option.impl.delegate;
 import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.process.metadata.task.user.candidate.assign.AssignPolicy;
-import com.douglei.bpm.process.metadata.task.user.option.delegate.DelegateAssignPolicy;
-import com.douglei.bpm.process.parser.task.user.AssignPolicyParser;
+import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignPolicy;
+import com.douglei.bpm.process.mapping.metadata.task.user.option.delegate.DelegateAssignPolicy;
+import com.douglei.bpm.process.mapping.parser.task.user.AssignPolicyParser;
 
 /**
  * 

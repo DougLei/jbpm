@@ -8,7 +8,7 @@ import com.douglei.bpm.module.repository.definition.State;
 import com.douglei.bpm.module.runtime.instance.StartParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.event.start.StartEventHandleParameter;
-import com.douglei.bpm.process.metadata.ProcessMetadata;
+import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -41,7 +41,7 @@ public class StartProcessCmd implements Command {
 		if(processDefinition.getStateInstance() != State.DEPLOY)
 			return new ExecutionResult("启动失败, [%s]流程还未部署", "jbpm.process.start.fail.undeploy", processDefinition.getName());
 		
-		ProcessMetadata processMetadata = processEngineBeans.getProcessContainer().getProcess(processDefinition.getId());
+		ProcessMetadata processMetadata = processEngineBeans.getProcessMappingContainer().getProcess(processDefinition.getId());
 		return processEngineBeans.getTaskHandleUtil().startup(
 				processMetadata.getStartEventMetadataEntity(),
 				new StartEventHandleParameter(processMetadata, parameter, processEngineBeans.getUserBeanFactory()));

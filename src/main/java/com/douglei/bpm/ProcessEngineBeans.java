@@ -3,12 +3,12 @@ package com.douglei.bpm;
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.configuration.ProcessEngineConfiguration;
-import com.douglei.bpm.process.api.container.ProcessContainerProxy;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpressionContainer;
 import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
 import com.douglei.bpm.process.api.user.option.OptionHandlerContainer;
 import com.douglei.bpm.process.api.user.task.handle.policy.TaskHandlePolicyContainer;
 import com.douglei.bpm.process.handler.TaskHandleUtil;
+import com.douglei.bpm.process.mapping.ProcessMappingContainer;
 
 /**
  * 流程(可对外提供)的bean实例
@@ -21,7 +21,7 @@ public class ProcessEngineBeans {
 	private ProcessEngineConfiguration processEngineConfiguration; // 流程引擎配置
 	
 	@Autowired
-	private ProcessContainerProxy processContainer; // 流程容器
+	private ProcessMappingContainer processMappingContainer; // 流程容器
 	
 	@Autowired
 	private TaskHandleUtil taskHandleUtil; // 任务办理工具
@@ -42,8 +42,8 @@ public class ProcessEngineBeans {
 	public ProcessEngineConfiguration getProcessEngineConfiguration() {
 		return processEngineConfiguration;
 	}
-	public ProcessContainerProxy getProcessContainer() {
-		return processContainer;
+	public ProcessMappingContainer getProcessMappingContainer() {
+		return processMappingContainer;
 	}
 	public TaskHandleUtil getTaskHandleUtil() {
 		return taskHandleUtil;

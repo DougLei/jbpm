@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.UUID;
 
 import com.douglei.bpm.bean.annotation.Property;
-import com.douglei.bpm.process.metadata.ProcessMetadata;
-import com.douglei.bpm.process.metadata.TaskMetadata;
+import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
+import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
 import com.douglei.orm.context.SessionContext;
 
 /**

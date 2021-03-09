@@ -42,7 +42,7 @@ public class Variable {
 					this.dateVal = DateFormatUtil.parseDate(variableEntity.getValue());
 					break;
 				case OBJECT:
-					this.objectVal = JdkSerializeUtil.serialize2ByteArray(new ObjectValue(variableEntity.getValue()));
+					this.objectVal = JdkSerializeUtil.serialize4ByteArray(new ObjectValue(variableEntity.getValue()));
 					break;
 			}
 		}
@@ -62,7 +62,7 @@ public class Variable {
 				return dateVal;
 			case OBJECT:
 				if(objectVal != null)
-					return JdkSerializeUtil.deserializeFromByteArray(ObjectValue.class, objectVal).getValue();
+					return JdkSerializeUtil.deserialize4ByteArray(ObjectValue.class, objectVal).getValue();
 		}
 		return null;
 	}

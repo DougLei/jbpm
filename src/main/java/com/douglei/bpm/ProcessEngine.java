@@ -1,24 +1,52 @@
 package com.douglei.bpm;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.sql.DataSource;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
-import com.douglei.bpm.process.api.container.ProcessContainerProxy;
-import com.douglei.orm.mapping.handler.MappingHandleException;
+import com.douglei.orm.configuration.Configuration;
+import com.douglei.orm.configuration.ExternalDataSource;
+import com.douglei.orm.context.RegistrationResult;
+import com.douglei.orm.context.SessionFactoryContainer;
+import com.douglei.orm.context.SessionFactoryIdHolder;
+import com.douglei.orm.mapping.MappingTypeContainer;
+import com.douglei.orm.mapping.handler.entity.AddOrCoverMappingEntity;
+import com.douglei.orm.mapping.handler.entity.DeleteMappingEntity;
+import com.douglei.orm.mapping.handler.entity.MappingEntity;
+import com.douglei.orm.sessionfactory.SessionFactory;
+import com.douglei.tools.file.scanner.impl.ResourceScanner;
 
 /**
  * 流程引擎
  * @author DougLei
  */
-public abstract class ProcessEngine {
-	protected final String id; // 引擎id, 即SessionFactory的id, 所以也可以从SessionFactoryContainer.get().getId()来获取
+public class ProcessEngine {
+	private SessionFactoryMapper mapper = new SessionFactoryMapper();
+	private String id; // 引擎唯一标识
 	
-	@Autowired
-	private ProcessContainerProxy processContainer;
+	ProcessEngine(String id, String filepath) {
+		SessionFactory factory = new Configuration().buildSessionFactory(filepath);
+		SessionFactoryContainer.getSingleton().register(factory);
+		this.mapper.put(factory, SessionFactoryType.BUILTIN);
+		this.id = id;
+	}
+	ProcessEngine(String id, SessionFactory factory) {
+		RegistrationResult result = SessionFactoryContainer.getSingleton().register(factory);
+		mapper.put(factory, (result==RegistrationResult.SUCCESS)?SessionFactoryType.HALF:SessionFactoryType.EXTERNAL);
+		this.id = id;
+	}
+	ProcessEngine(String id, String dataSourceId, DataSource dataSource, String closeName) {
+		addDataSource(dataSourceId, dataSource, closeName);
+		this.id = id;
+	}
 	
 	@Autowired
 	private RepositoryModule repositoryModule;
@@ -29,40 +57,139 @@ public abstract class ProcessEngine {
 	@Autowired
 	private HistoryModule historyModule;
 	
-	protected ProcessEngine(String id) {
-		this.id = id;
-	}
-	
-	
-	public void test(Object obj) {}
-	public void test(List<? extends Object> objs) {}
-	public void in() {
-		List<String> s = new ArrayList<String>();
-		test(s);
+	/**
+	 * (多数据源)给引擎添加新的数据源
+	 * @param dataSourceId 数据源唯一标识
+	 * @param dataSource 数据源
+	 * @param closeName 数据源的关闭方法名, 可为null; 在销毁引擎时, 如果为null, 则不会自动关闭数据源
+	 */
+	public void addDataSource(String dataSourceId, DataSource dataSource, String closeName) {
+		Configuration configuration = new Configuration();
+		configuration.setId(dataSourceId);
+		configuration.setExternalDataSource(new ExternalDataSource(dataSource, closeName));
 		
-		
-	}
-	
-	
-	public final String getId() {
-		return id;
-	}
-	public final ProcessContainerProxy getProcessContainer() {
-		return processContainer;
-	}
-	public final RepositoryModule getRepositoryModule() {
-		return repositoryModule;
-	}
-	public final RuntimeModule getRuntimeModule() {
-		return runtimeModule;
-	}
-	public final HistoryModule getHistoryModule() {
-		return historyModule;
+		SessionFactory factory = configuration.buildSessionFactory("jbpm.conf.xml");
+		SessionFactoryContainer.getSingleton().register(factory);
+		this.mapper.put(factory, SessionFactoryType.BUILTIN);
 	}
 	
 	/**
-	 * 销毁引擎
-	 * @throws MappingHandleException
+	 * (多数据源)设置流程引擎要使用的数据源
+	 * @param dataSourceId 数据源唯一标识
 	 */
-	protected abstract void destroy() throws MappingHandleException;
+	public void setDataSourceId(String dataSourceId) {
+		SessionFactoryIdHolder.setId(dataSourceId);
+	}
+	
+	/**
+	 * 获取引擎唯一标识
+	 * @return
+	 */
+	public String geId() {
+		return id;
+	}
+	/**
+	 * 获取RepositoryModule实例
+	 * @return
+	 */
+	public RepositoryModule getRepositoryModule() {
+		return repositoryModule;
+	}
+	/**
+	 * 获取RuntimeModule实例
+	 * @return
+	 */
+	public RuntimeModule getRuntimeModule() {
+		return runtimeModule;
+	}
+	/**
+	 * 获取HistoryModule实例
+	 * @return
+	 */
+	public HistoryModule getHistoryModule() {
+		return historyModule;
+	}
+	/**
+	 * 销毁引擎
+	 */
+	public void destroy() {
+		SessionFactory factory = SessionFactoryContainer.getSingleton().get();
+		switch(mapper.get(factory.getId())) {
+			case BUILTIN:
+				SessionFactoryContainer.getSingleton().remove(factory.getId(), true);
+				return;
+			case HALF:
+				SessionFactoryContainer.getSingleton().remove(factory.getId(), false);
+				break;
+			case EXTERNAL:
+				break;
+		}
+		
+		List<MappingEntity> entities = new ArrayList<MappingEntity>(mapper.getMappingFiles().size());
+		mapper.getMappingFiles().forEach(mappingFile -> {
+			String filename = mappingFile.substring(mappingFile.lastIndexOf(File.separatorChar)+1);
+			entities.add(new DeleteMappingEntity(filename.substring(0, filename.indexOf(".")), false));
+		});
+		factory.getMappingHandler().execute(entities);
+	}
 }
+
+/**
+ * 
+ * @author DougLei
+ */
+class SessionFactoryMapper {
+	private Map<String, SessionFactoryType> map = new HashMap<String, SessionFactoryType>(); // key=SessionFactory的id, value为SessionFactory的类型
+	private List<String> mappingFiles;
+	
+	/**
+	 * 
+	 * @param factory
+	 * @param type
+	 * @param parser
+	 */
+	public void put(SessionFactory factory, SessionFactoryType type) {
+		map.put(factory.getId(), type);
+		
+		if(type != SessionFactoryType.BUILTIN) {
+			// 加载工作流相关mapping文件
+			if(this.mappingFiles == null)
+				this.mappingFiles = new ResourceScanner(MappingTypeContainer.getFileSuffixes()).scan("jbpm-mappings");
+			
+			List<MappingEntity> mappingEntities = new ArrayList<MappingEntity>(mappingFiles.size());
+			this.mappingFiles.forEach(mappingFile -> mappingEntities.add(new AddOrCoverMappingEntity(mappingFile)));
+			factory.getMappingHandler().execute(mappingEntities);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param dataSourceId
+	 * @return
+	 */
+	public SessionFactoryType get(String dataSourceId) {
+		SessionFactoryType type = map.get(dataSourceId);
+		if(type == null)
+			throw new ProcessEngineException("流程引擎中不存在id为"+dataSourceId+"的数据源");
+		return type;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public List<String> getMappingFiles() {
+		return mappingFiles;
+	}
+}
+
+/**
+ * 
+ * @author DougLei
+ */
+enum SessionFactoryType {
+	BUILTIN, 
+	EXTERNAL,
+	HALF;
+}
+

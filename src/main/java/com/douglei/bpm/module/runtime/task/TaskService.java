@@ -17,7 +17,7 @@ import com.douglei.bpm.module.runtime.task.command.UnclaimTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.ViewCarbonCopyCmd;
 import com.douglei.bpm.module.runtime.task.command.parameter.DispatchTaskParameter;
 import com.douglei.bpm.module.runtime.task.command.parameter.HandleTaskParameter;
-import com.douglei.bpm.process.api.container.ProcessContainerProxy;
+import com.douglei.bpm.process.mapping.ProcessMappingContainer;
 import com.douglei.orm.context.Transaction;
 
 /**
@@ -28,7 +28,7 @@ import com.douglei.orm.context.Transaction;
 public class TaskService {
 	
 	@Autowired
-	private ProcessContainerProxy processContainer;
+	private ProcessMappingContainer container;
 	
 	@Autowired
 	private CommandExecutor commandExecutor;
@@ -44,7 +44,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult claim(int taskId, String userId){
-		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
+		TaskInstance taskInstance = new TaskInstance(taskId, container);
 		return commandExecutor.execute(new ClaimTaskCmd(taskInstance, userId));
 	}
 	/**
@@ -55,7 +55,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult claim(String taskinstId, String userId){
-		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
+		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
 		return commandExecutor.execute(new ClaimTaskCmd(taskInstance, userId));
 	}
 	
@@ -68,7 +68,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult unclaim(int taskId, String userId, boolean strict){
-		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
+		TaskInstance taskInstance = new TaskInstance(taskId, container);
 		return commandExecutor.execute(new UnclaimTaskCmd(taskInstance, userId, strict));
 	}
 	/**
@@ -80,7 +80,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult unclaim(String taskinstId, String userId, boolean strict){
-		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
+		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
 		return commandExecutor.execute(new UnclaimTaskCmd(taskInstance, userId, strict));
 	}
 	
@@ -92,7 +92,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult dispatch(int taskId, DispatchTaskParameter parameter) {
-		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
+		TaskInstance taskInstance = new TaskInstance(taskId, container);
 		return commandExecutor.execute(new DispatchTaskCmd(taskInstance, parameter));
 	}
 	
@@ -104,7 +104,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult dispatch(String taskinstId, DispatchTaskParameter parameter) {
-		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
+		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
 		return commandExecutor.execute(new DispatchTaskCmd(taskInstance, parameter));
 	}
 	
@@ -118,7 +118,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult delegate(int taskId, String userId, String assignedUserId, String reason) {
-		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
+		TaskInstance taskInstance = new TaskInstance(taskId, container);
 		return commandExecutor.execute(new DelegateTaskCmd(taskInstance, userId, assignedUserId, reason));
 	}
 	/**
@@ -131,7 +131,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult delegate(String taskinstId, String userId, String assignedUserId, String reason) {
-		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
+		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
 		return commandExecutor.execute(new DelegateTaskCmd(taskInstance, userId, assignedUserId, reason));
 	}
 	
@@ -145,7 +145,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult transfer(int taskId, String userId, String assignedUserId, String reason) {
-		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
+		TaskInstance taskInstance = new TaskInstance(taskId, container);
 		return commandExecutor.execute(new TransferTaskCmd(taskInstance, userId, assignedUserId, reason));
 	}
 	/**
@@ -158,7 +158,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult transfer(String taskinstId, String userId, String assignedUserId, String reason) {
-		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
+		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
 		return commandExecutor.execute(new TransferTaskCmd(taskInstance, userId, assignedUserId, reason));
 	}
 	
@@ -171,7 +171,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult carbonCopy(int taskId, String userId, List<String> assignedUserIds) {
-		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
+		TaskInstance taskInstance = new TaskInstance(taskId, container);
 		return commandExecutor.execute(new CarbonCopyTaskCmd(taskInstance, userId, assignedUserIds));
 	}
 	/**
@@ -183,7 +183,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult carbonCopy(String taskinstId, String userId, List<String> assignedUserIds) {
-		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
+		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
 		return commandExecutor.execute(new CarbonCopyTaskCmd(taskInstance, userId, assignedUserIds));
 	}
 	/**
@@ -208,7 +208,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult handle(int taskId, HandleTaskParameter parameter) {
-		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
+		TaskInstance taskInstance = new TaskInstance(taskId, container);
 		return commandExecutor.execute(new HandleTaskCmd(taskInstance, parameter));
 	}
 	/**
@@ -219,7 +219,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult handle(String taskinstId, HandleTaskParameter parameter) {
-		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
+		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
 		return commandExecutor.execute(new HandleTaskCmd(taskInstance, parameter));
 	}
 	
@@ -235,7 +235,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult jump(int taskId, String targetTask, String userId, String reason, List<String> assignedUserIds, boolean strict) {
-		TaskInstance taskInstance = new TaskInstance(taskId, processContainer);
+		TaskInstance taskInstance = new TaskInstance(taskId, container);
 		return commandExecutor.execute(new JumpTaskCmd(taskInstance, targetTask, userId, reason, assignedUserIds, strict));
 	}
 	/**
@@ -250,7 +250,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult jump(String taskinstId, String targetTask, String userId, String reason, List<String> assignedUserIds, boolean strict) {
-		TaskInstance taskInstance = new TaskInstance(taskinstId, processContainer);
+		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
 		return commandExecutor.execute(new JumpTaskCmd(taskInstance, targetTask, userId, reason, assignedUserIds, strict));
 	}
 }

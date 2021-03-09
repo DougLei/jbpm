@@ -81,7 +81,7 @@ public class ProcessMappingParser extends MappingParser implements CustomAutowir
 		for (Element element : elements) {
 			elementName = element.getName();
 			if(!parserMap.containsKey(elementName))
-				throw new ProcessParseException("流程引擎不支持解析<"+elementName+">标签");
+				throw new ProcessParseException("流程引擎不支持解析<"+elementName+">");
 			
 			id = element.attributeValue("id");
 			if(StringUtil.isEmpty(id))

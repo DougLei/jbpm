@@ -2,6 +2,7 @@ package com.douglei.bpm.process.mapping;
 
 import java.util.Arrays;
 
+import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
 import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
@@ -19,6 +20,9 @@ import com.douglei.orm.mapping.handler.entity.DeleteMappingEntity;
 @Bean(isTransaction=true)
 public class ProcessMappingContainer {
 	
+	@Autowired
+	private SessionFactoryContainer container;
+	
 	/**
 	 * 添加流程
 	 * @param definition
@@ -26,7 +30,7 @@ public class ProcessMappingContainer {
 	 */
 	public Mapping addProcess(ProcessDefinition definition) {
 		AddOrCoverMappingEntity4Process entity = new AddOrCoverMappingEntity4Process(definition);
-		SessionFactoryContainer.getSingleton().get().getMappingHandler().execute(entity);
+		container.get().getMappingHandler().execute(entity);
 		return entity.getMapping();
 	}
 	
@@ -37,7 +41,7 @@ public class ProcessMappingContainer {
 	 */
 	public void deleteProcess(int processDefinitionId) {
 		DeleteMappingEntity entity = new DeleteMappingEntity(processDefinitionId+"");
-		SessionFactoryContainer.getSingleton().get().getMappingHandler().execute(entity);
+		container.get().getMappingHandler().execute(entity);
 	}
 
 	/**
@@ -47,7 +51,7 @@ public class ProcessMappingContainer {
 	 */
 	@Transaction
 	public ProcessMetadata getProcess(int processDefinitionId) {
-		Mapping mapping = SessionFactoryContainer.getSingleton().get().getMappingHandler().getMapping(processDefinitionId+"", ProcessMappingType.NAME, false);
+		Mapping mapping = container.get().getMappingHandler().getMapping(processDefinitionId+"", ProcessMappingType.NAME, false);
 		if(mapping == null) {
 			ProcessDefinition definition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, content_ from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 			if(definition == null)

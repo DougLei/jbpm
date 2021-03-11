@@ -6,6 +6,7 @@ package com.douglei.bpm.module.repository.type;
  */
 public class ProcessType {
 	private int id;
+	private int parentId;
 	private String code;
 	private String name;
 	private String tenantId;
@@ -15,6 +16,12 @@ public class ProcessType {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public int getParentId() {
+		return parentId;
+	}
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
 	}
 	public String getCode() {
 		return code;

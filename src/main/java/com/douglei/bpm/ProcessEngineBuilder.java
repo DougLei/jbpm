@@ -8,6 +8,7 @@ import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpr
 import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandlePolicy;
+import com.douglei.orm.context.SessionFactoryContainer;
 import com.douglei.orm.sessionfactory.SessionFactory;
 
 /**
@@ -92,6 +93,7 @@ public class ProcessEngineBuilder {
 			engine = new ProcessEngine(engineId, filepath);
 			
 			beanFactory.registerCustomBean(ProcessEngine.class, engine);
+			beanFactory.registerCustomBean(SessionFactoryContainer.class, SessionFactoryContainer.getSingleton());
 			beanFactory.autowireBeans();
 		}
 		return engine;
@@ -107,6 +109,7 @@ public class ProcessEngineBuilder {
 			engine = new ProcessEngine(engineId, factory);
 			
 			beanFactory.registerCustomBean(ProcessEngine.class, engine);
+			beanFactory.registerCustomBean(SessionFactoryContainer.class, SessionFactoryContainer.getSingleton());
 			beanFactory.autowireBeans();
 		}
 		return engine;
@@ -124,6 +127,7 @@ public class ProcessEngineBuilder {
 			engine = new ProcessEngine(engineId, dataSourceId, dataSource, closeName);
 			
 			beanFactory.registerCustomBean(ProcessEngine.class, engine);
+			beanFactory.registerCustomBean(SessionFactoryContainer.class, SessionFactoryContainer.getSingleton());
 			beanFactory.autowireBeans();
 		}
 		return engine;

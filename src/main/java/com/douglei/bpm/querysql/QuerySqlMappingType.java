@@ -11,6 +11,7 @@ import com.douglei.orm.mapping.handler.entity.AddOrCoverMappingEntity;
  * @author DougLei
  */
 public class QuerySqlMappingType extends MappingType {
+	private static QuerySqlMappingParser parser = new QuerySqlMappingParser();
 	public static final String NAME = "query-sql";
 	public static final String FILE_SUFFIX = ".qsmp.xml";
 	
@@ -20,6 +21,6 @@ public class QuerySqlMappingType extends MappingType {
 
 	@Override
 	public MappingSubject parse(AddOrCoverMappingEntity entity, InputStream input) throws Exception {
-		return new QuerySqlMappingParser().parse(entity, input);
+		return parser.parse(entity, input);
 	}
 }

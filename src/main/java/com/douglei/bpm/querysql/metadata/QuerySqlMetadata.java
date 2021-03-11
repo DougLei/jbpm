@@ -9,28 +9,21 @@ import com.douglei.orm.mapping.metadata.AbstractMetadata;
  * @author DougLei
  */
 public class QuerySqlMetadata extends AbstractMetadata {
-	private ContentMetadata content;
-	private boolean existsRequired; // 是否存在必须的参数标准, 即是否有required=true的参数标准
-	private Map<String, ParameterStandardMetadata> parameterStandardMap;
+	private String sql;
+	private Map<String, ParameterMetadata> parameterMap;
 	
-	public QuerySqlMetadata(String name) {
-		super.name = name;
+	public QuerySqlMetadata(String name, String sql) {
+		this.name = name;
+		this.sql = sql;
 	}
-	
-	public void setContent(ContentMetadata content) {
-		this.content = content;
-	}
-	public void setParameterStandardMap(boolean existsRequired, Map<String, ParameterStandardMetadata> parameterStandardMap) {
-		this.parameterStandardMap = parameterStandardMap;
+	public void setParameterMap(Map<String, ParameterMetadata> parameterMap) {
+		this.parameterMap = parameterMap;
 	}
 
-	public ContentMetadata getContent() {
-		return content;
+	public String getSql() {
+		return sql;
 	}
-	public boolean existsRequired() {
-		return existsRequired;
-	}
-	public Map<String, ParameterStandardMetadata> getParameterStandardMap() {
-		return parameterStandardMap;
+	public Map<String, ParameterMetadata> getParameterMap() {
+		return parameterMap;
 	}
 }

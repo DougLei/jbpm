@@ -4,6 +4,7 @@
 	<table name="BPM_RE_PROCTYPE" class="com.douglei.bpm.module.repository.type.ProcessType" createMode="create" strict="true">
 		<columns>
 			<column name="ID" property="id" dataType="number" length="10" />
+			<column name="PARENT_ID" property="parentId" dataType="number" length="10" />
 			<column name="CODE" property="code" dataType="string" length="50" nullable="false" />
 			<column name="NAME" property="name" dataType="nstring" length="100" nullable="false" />
 			<column name="TENANT_ID" property="tenantId" dataType="nstring" length="150" />

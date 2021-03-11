@@ -13,6 +13,7 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.mapping.AddOrCoverMappingEntity4Process;
 import com.douglei.bpm.process.mapping.ProcessMapping;
+import com.douglei.bpm.process.mapping.ProcessMappingType;
 import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
 import com.douglei.bpm.process.mapping.metadata.ProcessMetadataAdapter;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
@@ -22,6 +23,7 @@ import com.douglei.bpm.process.mapping.parser.event.StartEventParser;
 import com.douglei.bpm.process.mapping.parser.flow.FlowParser;
 import com.douglei.bpm.process.mapping.parser.temporary.data.FlowTemporaryData;
 import com.douglei.bpm.process.mapping.parser.temporary.data.TaskTemporaryData;
+import com.douglei.orm.configuration.Dom4jUtil;
 import com.douglei.orm.mapping.MappingParseToolContext;
 import com.douglei.orm.mapping.MappingParser;
 import com.douglei.orm.mapping.MappingSubject;
@@ -56,7 +58,7 @@ public class ProcessMappingParser extends MappingParser implements CustomAutowir
 		Element rootElement = MappingParseToolContext.getMappingParseTool().getSAXReader().read(input).getRootElement();
 		
 		// 解析ProcessMetadata
-		Element processElement = rootElement.element("process");
+		Element processElement = Dom4jUtil.getElement(ProcessMappingType.NAME, rootElement);
 		ProcessMetadata processMetadata = new ProcessMetadata(((AddOrCoverMappingEntity4Process)entity).getId(), 
 				processElement.attributeValue("code"), processElement.attributeValue("version"), processElement.attributeValue("name"), 
 				processElement.attributeValue("title"), processElement.attributeValue("pageID"));
@@ -64,7 +66,7 @@ public class ProcessMappingParser extends MappingParser implements CustomAutowir
 		// 构建流程结构
 		buildProcessStruct(processMetadata, processElement.elements());
 		
-		return buildMappingSubjectByDom4j(new ProcessMapping(new ProcessMetadataAdapter(processMetadata)), rootElement);
+		return buildMappingSubjectByDom4j(entity.isEnableProperty(), new ProcessMapping(new ProcessMetadataAdapter(processMetadata)), rootElement);
 	}
 	
 	/**

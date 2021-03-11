@@ -2,30 +2,18 @@
 <mapping-configuration>
 	<!-- 配置资源名 -->
 	<query-sql name="">
-		<!-- 
-			content中配置具体的select sql
-			* package: 是否需要包装成子查询, 默认为true
-			* append: 是否要追加条件, 默认为false, 如果package为true时, append的配置会被忽略
-		 -->
-		<content package="" append="">
-		</content>
+		<!-- content中配置具体的select sql -->
+		<content></content>
 		
-		<!-- 参数标准集合, 可为空, 即没有标准, 完全由调用方把控 -->
-		<parameter-standards>
+		<!-- 参数集合, 不可为空, 否则会抛出异常 -->
+		<parameters>
 			<!-- 
-				具体的参数标准, name不能重复, 否则会抛出异常
-				* name: 列名, 必填, 不能为空
-				* dataType: 列的数据类型, 必填, 不能为空, 目前可使用值有(不区分大小写, 建议大写): STRING, NUMBER, DATETIME
+				具体的参数
+				* name: 列名, 必填, 必须在上面select sql的结果集中存在, 不能为空; 不区分大小写(建议大写, 框架会自动转大写); 不能重复配置
+				* dataType: 列的数据类型, 必填, 不能为空, 目前可使用值(不区分大小写): string, number, datetime
 				* required: 该参数是否必须, 可为空, 默认为false
 			 -->
-			<parameter-standard name="" dataType="" required="">
-				<!-- 
-					参数支持的操作, 可配置多组; 配置的操作不能重复, 否则会抛出异常; 也可不配置, 即无限次使用所有操作
-					* name: 操作名, 必填, 不能为空, 目前可使用值有(不区分大小写, 建议大写): EQ(等于), NE(不等于), GE(大于等于), GT(大于), LE(小于等于), LT(小于), LIKE, NLIKE(LIKE取反), BTN, NBTN(BTN取反), IN, NIN(IN取反), ORDER(排序)
-					* times: 该参数可使用此操作的次数, 可不配置, 默认值为0, 表示不限制次数; 小于0时, 使用默认值, 配置不合法时会抛出异常
-				 -->
-				<operator name="" times="1"/>
-			</parameter-standard>		
-		</parameter-standards>	
+			<parameter name="" dataType="" required="" />		
+		</parameters>	
 	</query-sql>
 </mapping-configuration>

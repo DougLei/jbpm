@@ -164,7 +164,7 @@ public class ProcessDefinitionService {
 		
 		// 如果被删除的流程是主要子版本, 且子版本值不为0, 需要尝试将上一个子版本的流程设置为主要子版本
 		if(processDefinition.isMajorSubversion() && processDefinition.getSubversion() > 0) { 
-			List<ProcessDefinition> beforeList = SessionContext.getSQLSession().limitQuery(ProcessDefinition.class, "ProcessDefinition", "querySubversions", 1, 1, processDefinition);
+			List<ProcessDefinition> beforeList = SessionContext.getSQLSession().limitQuery(ProcessDefinition.class, 1, 1, "ProcessDefinition", "querySubversions", processDefinition);
 			if(beforeList.size() > 0) {
 				ProcessDefinition beforeProcessDefinition = beforeList.get(0);
 				beforeProcessDefinition.setTypeId(processDefinition.getTypeId());

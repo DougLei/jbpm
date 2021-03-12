@@ -1,5 +1,8 @@
 package bpm.test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -7,6 +10,11 @@ import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.repository.type.ProcessType;
+import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.AbstractParameter;
+import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.LogicalOperator;
+import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.Operator;
+import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.Parameter;
+import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.ParameterGroup;
 
 public class ProcessTypeTest {
 	private ProcessEngine engine;
@@ -14,6 +22,22 @@ public class ProcessTypeTest {
 	@Before
 	public void init() {
 		engine = new ProcessEngineBuilder().build();
+	}
+	
+	@Test
+	public void query() {
+		List<AbstractParameter> parameters = new ArrayList<AbstractParameter>();
+		parameters.add(new Parameter(false, Operator.EQ, "NAME", "病假", "产假").setNext(LogicalOperator.OR));
+		
+		ParameterGroup group = new ParameterGroup();
+		group.addParameter(new Parameter(false, Operator.EQ, "CODE", "nianjia").setNext(LogicalOperator.OR).setNext(LogicalOperator.AND));
+		group.addParameter(new Parameter(false, Operator.EQ, "id", 5));
+		parameters.add(group);
+		
+		List<ProcessType> list = engine.getRepositoryModule().getTypeService().query(parameters);
+		for (ProcessType processType : list) {
+			System.out.println(processType.getId() + "\t" + processType.getName());
+		}
 	}
 	
 	@Test

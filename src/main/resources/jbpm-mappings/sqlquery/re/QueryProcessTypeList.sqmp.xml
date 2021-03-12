@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping-configuration>
+	<!-- 查询流程类型列表 -->
+	<sql-query name="queryProcessTypeList">
+		<content>
+			select id, code, name from bpm_re_proctype
+		</content>
+		
+		<parameters>
+			<parameter name="ID" dataType="number" />		
+			<parameter name="CODE" dataType="string" />		
+			<parameter name="NAME" dataType="string" />		
+		</parameters>	
+	</sql-query>
+</mapping-configuration>

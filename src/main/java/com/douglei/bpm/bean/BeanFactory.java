@@ -16,7 +16,6 @@ import com.douglei.bpm.bean.entity.CustomBeanEntity;
 import com.douglei.bpm.bean.entity.GeneralBeanEntity;
 import com.douglei.bpm.process.mapping.ProcessMappingType;
 import com.douglei.bpm.process.mapping.parser.ProcessMappingParser;
-import com.douglei.bpm.querysql.QuerySqlMappingType;
 import com.douglei.orm.mapping.MappingTypeContainer;
 import com.douglei.tools.file.scanner.impl.ClassScanner;
 import com.douglei.tools.reflect.ClassUtil;
@@ -139,8 +138,6 @@ public class BeanFactory {
 	private void afterAutowireBeans() {
 		if(!MappingTypeContainer.exists(ProcessMappingType.NAME, ProcessMappingType.FILE_SUFFIX)) 
 			MappingTypeContainer.register(new ProcessMappingType((ProcessMappingParser)beanContainer.get(ProcessMappingParser.class)));
-		if(!MappingTypeContainer.exists(QuerySqlMappingType.NAME, QuerySqlMappingType.FILE_SUFFIX)) 
-			MappingTypeContainer.register(new QuerySqlMappingType());
 	}
 	
 	/**

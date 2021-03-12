@@ -5,8 +5,11 @@ import java.util.List;
 
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.orm.context.PropagationBehavior;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.Transaction;
+import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.AbstractParameter;
+import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.SQLQueryParameter;
 
 /**
  * 流程类型服务
@@ -14,6 +17,16 @@ import com.douglei.orm.context.Transaction;
  */
 @Bean(isTransaction=true)
 public class ProcessTypeService {
+	
+	/**
+	 * 查询类型
+	 * @param parameters
+	 * @return
+	 */
+	@Transaction(propagationBehavior=PropagationBehavior.SUPPORTS)
+	public List<ProcessType> query(List<AbstractParameter> parameters) {
+		return SessionContext.getSQLQuerySession().query(ProcessType.class, new SQLQueryParameter("queryProcessTypeList", parameters));
+	}
 	
 	/**
 	 * 保存类型
@@ -28,6 +41,7 @@ public class ProcessTypeService {
 		SessionContext.getTableSession().save(type);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
+	
 	
 	/**
 	 * 修改类型

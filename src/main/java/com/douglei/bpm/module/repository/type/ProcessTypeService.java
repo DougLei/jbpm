@@ -8,8 +8,8 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.orm.context.PropagationBehavior;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.Transaction;
+import com.douglei.orm.sessionfactory.sessions.session.sqlquery.SQLQueryParameter;
 import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.AbstractParameter;
-import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.SQLQueryParameter;
 
 /**
  * 流程类型服务

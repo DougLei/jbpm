@@ -4,7 +4,7 @@
 		
 		<!-- 保存时查询流程定义 -->
 		<content name="query4Insert" type="select">
-			select id, is_major_version, subversion, signature, state from bpm_re_procdef where code = #{code} and version = #{version} and is_major_subversion=1 
+			select id, type_id, is_major_version, subversion, signature, state from bpm_re_procdef where code = #{code} and version = #{version} and is_major_subversion=1 
 			<if test="tenantId != null and tenantId != ''">
 				and tenant_id = #{tenantId}
 			</if>

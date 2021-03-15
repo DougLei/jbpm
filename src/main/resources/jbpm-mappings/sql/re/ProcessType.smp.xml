@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping-configuration>
 	<sql namespace="ProcessType">
-		<!-- 查询验证流程类型 -->
-		<content name="query4Validate" type="select">
+		<!-- insert时查询流程类型 -->
+		<content name="query4Insert" type="select">
 			select id, parent_id, code from bpm_re_proctype where 
 			
 			<switch>
@@ -19,7 +19,15 @@
 			</if>
 		</content>
 		
-		<!-- 查询验证流程类型 -->
+		<!-- update时查询流程类型 -->
+		<content name="query4Update" type="select">
+			select id from bpm_re_proctype where code=#{code} 
+			<if test="tenantId != null">
+				and tenant_id = #{tenantId}
+			</if>
+		</content>
+		
+		<!-- delete时查询流程类型 -->
 		<content name="query4Delete" type="select">
 			select count(id) from bpm_re_proctype where parent_id =#{id, dataType=number, length=10}
 			union all
@@ -47,7 +55,7 @@
 		<!-- 删除类型 -->
 		<content name="deleteType" type="delete">
 			delete bpm_re_proctype where 
-			<foreach collection="typeIds" alias="typeId" open="id in (" separator="," close=")">
+			<foreach collection="ids" alias="typeId" open="id in (" separator="," close=")">
 				#{typeId, dataType=number, length=10}
 			</foreach> 
 		</content>

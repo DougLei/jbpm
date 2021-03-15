@@ -40,51 +40,63 @@ public class ProcessDefinitionService {
 	@Transaction
 	public ExecutionResult insert(ProcessDefinitionEntity entity) throws ProcessParseException{
 		ProcessDefinition processDefinition = entity.getProcessDefinition();
-		ProcessDefinition exProcessDefinition = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "query4Insert", processDefinition);
-		if(exProcessDefinition == null) {
-			// 新的流程定义, 进行save
+		ProcessDefinition old = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "query4Insert", processDefinition);
+		
+		// 新的流程定义, 进行save
+		if(old == null) { 
+			validateTypeId(processDefinition.getTypeId());
 			SessionContext.getTableSession().save(processDefinition);
-		}else {
-			if(exProcessDefinition.getStateInstance() == State.DELETE)
-				return new ExecutionResult("保存失败, 已存在code为[%s], version为[%s]的流程", "jbpm.procdef.save.fail.code.version.exists", processDefinition.getCode(), processDefinition.getVersion());
+			return new ExecutionResult(processDefinition);
+		}
+		
+		// 旧的流程定义, 进行update
+		if(old.getStateInstance() == State.DELETE)
+			return new ExecutionResult("保存失败, 已存在code为[%s], version为[%s]的流程", "jbpm.procdef.save.fail.code.version.exists", processDefinition.getCode(), processDefinition.getVersion());
+		
+		if(processDefinition.getTypeId() != old.getTypeId())
+			validateTypeId(processDefinition.getTypeId());
+		
+		if(old.getSignature().equals(processDefinition.getSignature())){ // 没有修改流程定义的内容, 进行update
+			processDefinition.setId(old.getId());
+			processDefinition.setIsMajorVersion(old.getIsMajorVersion());
+			processDefinition.setSubversion(old.getSubversion());
+			processDefinition.setStateInstance(old.getStateInstance());
+			processDefinition.setContent(null);
+			processDefinition.setSignature(null);
+			SessionContext.getTableSession().update(processDefinition);
+		} else if(old.getStateInstance() == State.INITIAL 
+				|| (!instanceService.exists(old.getId()) && !historyInstanceService.exists(old.getId()))) { // 修改了内容, 但旧的流程处于初始化状态, 或不存在实例, 进行update
+			processDefinition.setId(old.getId());
+			processDefinition.setIsMajorVersion(old.getIsMajorVersion());
+			processDefinition.setSubversion(old.getSubversion());
+			processDefinition.setStateInstance(old.getStateInstance());
+			SessionContext.getTableSession().update(processDefinition);
 			
-			if(exProcessDefinition.getSignature().equals(processDefinition.getSignature())){ // 没有修改流程定义的内容, 进行update
-				processDefinition.setId(exProcessDefinition.getId());
-				processDefinition.setIsMajorVersion(exProcessDefinition.getIsMajorVersion());
-				processDefinition.setSubversion(exProcessDefinition.getSubversion());
-				processDefinition.setStateInstance(exProcessDefinition.getStateInstance());
-				processDefinition.setContent(null);
-				processDefinition.setSignature(null);
-				SessionContext.getTableSession().update(processDefinition);
-			} else if(exProcessDefinition.getStateInstance() == State.INITIAL 
-					|| (!instanceService.exists(exProcessDefinition.getId()) && !historyInstanceService.exists(exProcessDefinition.getId()))) { // 修改了内容, 但旧的流程不存在实例, 进行update
-				processDefinition.setId(exProcessDefinition.getId());
-				processDefinition.setIsMajorVersion(exProcessDefinition.getIsMajorVersion());
-				processDefinition.setSubversion(exProcessDefinition.getSubversion());
-				processDefinition.setStateInstance(exProcessDefinition.getStateInstance());
-				SessionContext.getTableSession().update(processDefinition);
-				
-				if(processDefinition.getStateInstance() == State.DEPLOY) // 刷新容器中的流程定义实例
-					container.addProcess(processDefinition);
-			}else { // 修改了内容, 且旧的流程定义存在实例, 根据strict值, 进行升级save, 或提示操作失败
-				if(!entity.isStrict()) 
-					return new ExecutionResult("保存失败, [%s]流程存在实例", "jbpm.procdef.save.fail.instance.exists", processDefinition.getName());
-				
-				// 保存新的流程定义
-				processDefinition.setIsMajorVersion(exProcessDefinition.getIsMajorVersion());
-				processDefinition.setSubversion(exProcessDefinition.getSubversion()+1);
-				processDefinition.setStateInstance(exProcessDefinition.getStateInstance());
-				SessionContext.getTableSession().save(processDefinition);
-				
-				// 修改旧的流程定义状态, 关联的流程类型id, 以及是否是主要版本, 主要子版本
-				exProcessDefinition.setIsMajorVersion(0);
-				exProcessDefinition.setStateInstance(State.INVALID);
-				SessionContext.getTableSession().update(exProcessDefinition);
-			}
+			if(processDefinition.getStateInstance() == State.DEPLOY) // 刷新容器中的流程定义实例
+				container.addProcess(processDefinition);
+		}else { // 修改了内容, 且旧的流程定义存在实例, 根据strict值, 进行升级save, 或提示操作失败
+			if(!entity.isStrict()) 
+				return new ExecutionResult("保存失败, [%s]流程存在实例", "jbpm.procdef.save.fail.instance.exists", processDefinition.getName());
+			
+			// 保存新的流程定义
+			processDefinition.setIsMajorVersion(old.getIsMajorVersion());
+			processDefinition.setSubversion(old.getSubversion()+1);
+			processDefinition.setStateInstance(old.getStateInstance());
+			SessionContext.getTableSession().save(processDefinition);
+			
+			// 修改旧的流程定义状态, 关联的流程类型id, 以及是否是主要版本, 主要子版本
+			old.setIsMajorVersion(0);
+			old.setStateInstance(State.INVALID);
+			SessionContext.getTableSession().update(old);
 		}
 		return new ExecutionResult(processDefinition);
 	}
-	
+	// 验证类型id值
+	private void validateTypeId(int typeId) {
+		if(typeId != 0 && SessionContext.getSqlSession().uniqueQuery_("select id from bpm_re_proctype where id=?", Arrays.asList(typeId)) == null)
+			throw new RepositoryException("保存失败, 不存在id为["+typeId+"]的流程类型");
+	}
+
 	/**
 	 * 流程部署
 	 * @param processDefinitionId 

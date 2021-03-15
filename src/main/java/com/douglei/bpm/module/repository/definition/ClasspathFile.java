@@ -5,21 +5,21 @@ package com.douglei.bpm.module.repository.definition;
  * @author DougLei
  */
 public class ClasspathFile {
-	private String file; // 基于java resource路径的文件
+	private String path; // 基于java resource路径的文件
 
 	/**
 	 * 基于java resource路径的文件
-	 * @param file
+	 * @param path
 	 */
-	public ClasspathFile(String file) {
-		this.file = file;
+	public ClasspathFile(String path) {
+		this.path = path;
 	}
 	
 	/**
 	 * 获取基于java resource路径的文件
 	 * @return
 	 */
-	public String getFile() {
-		return file;
+	public String getPath() {
+		return path;
 	}
 }

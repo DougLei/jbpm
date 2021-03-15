@@ -28,7 +28,7 @@ public class ProcessDefinitionEntity {
 	 */
 	public ProcessDefinitionEntity(File file) throws FileNotFoundException {
 		try(FileBufferedReader reader = new FileBufferedReader(new FileInputStream(file))){
-			init(reader.readAll(1500).toString());
+			init(reader.readAll(1000));
 		}
 	}
 	
@@ -37,8 +37,8 @@ public class ProcessDefinitionEntity {
 	 * @param file
 	 */
 	public ProcessDefinitionEntity(ClasspathFile file) {
-		try(FileBufferedReader reader = new FileBufferedReader(file.getFile())){
-			init(reader.readAll(1500).toString());
+		try(FileBufferedReader reader = new FileBufferedReader(file.getPath())){
+			init(reader.readAll(1000));
 		}
 	}
 	

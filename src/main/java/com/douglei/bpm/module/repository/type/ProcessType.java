@@ -1,5 +1,7 @@
 package com.douglei.bpm.module.repository.type;
 
+import java.util.List;
+
 /**
  * 流程类型
  * @author DougLei
@@ -10,6 +12,7 @@ public class ProcessType {
 	private String code;
 	private String name;
 	private String tenantId;
+	private List<ProcessType> children;
 
 	public int getId() {
 		return id;
@@ -40,5 +43,11 @@ public class ProcessType {
 	}
 	public void setTenantId(String tenantId) {
 		this.tenantId = tenantId;
+	}
+	public List<ProcessType> getChildren() {
+		return children;
+	}
+	public void setChildren(List<ProcessType> children) {
+		this.children = children;
 	}
 }

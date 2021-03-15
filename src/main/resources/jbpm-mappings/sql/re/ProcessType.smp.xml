@@ -1,13 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping-configuration>
 	<sql namespace="ProcessType">
-		<!-- 查询验证流程类型的code是否存在 -->
-		<content name="query4ValidateCodeExists" type="select">
-			select id from bpm_re_proctype where code = #{code}
+		<!-- 查询验证流程类型 -->
+		<content name="query4Validate" type="select">
+			select id, parent_id, code from bpm_re_proctype where 
+			
+			<switch>
+				<if test="parentId != 0">
+					(code=#{code} or id=#{parentId, dataType=number, length=10})
+				</if>
+				<else>
+					code=#{code} 
+				</else>
+			</switch>
 			
 			<if test="tenantId != null">
 				and tenant_id = #{tenantId}
 			</if>
+		</content>
+		
+		<!-- 查询验证流程类型 -->
+		<content name="query4Delete" type="select">
+			select count(id) from bpm_re_proctype where parent_id =#{id, dataType=number, length=10}
+			union all
+			select count(id) from bpm_re_procdef where type_id =#{id, dataType=number, length=10}
+			union all
+			select parent_id from bpm_re_proctype where id=#{id, dataType=number, length=10}
+		</content>
+		
+		<!-- 查询子类型的id -->
+		<content name="queryChildrenIds" type="select">
+			select id from bpm_re_proctype where 
+			<foreach collection="typeIds" alias="typeId" open="parent_id in (" separator="," close=")">
+				#{[0], dataType=number, length=10}
+			</foreach> 
+		</content>
+		
+		<!-- 更新流程定义关联的类型 -->
+		<content name="updateProcdefRefType" type="update">
+			update bpm_re_procdef set type_id=#{targetId, dataType=number, length=10} where  
+			<foreach collection="ids" alias="typeId" open="type_id in (" separator="," close=")">
+				#{typeId, dataType=number, length=10}
+			</foreach> 
+		</content>
+		
+		<!-- 删除类型 -->
+		<content name="deleteType" type="delete">
+			delete bpm_re_proctype where 
+			<foreach collection="typeIds" alias="typeId" open="id in (" separator="," close=")">
+				#{typeId, dataType=number, length=10}
+			</foreach> 
 		</content>
 	</sql>
 </mapping-configuration>

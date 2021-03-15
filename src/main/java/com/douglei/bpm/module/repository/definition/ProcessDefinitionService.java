@@ -40,7 +40,7 @@ public class ProcessDefinitionService {
 	@Transaction
 	public ExecutionResult insert(ProcessDefinitionEntity entity) throws ProcessParseException{
 		ProcessDefinition processDefinition = entity.getProcessDefinition();
-		ProcessDefinition exProcessDefinition = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "query4Save", processDefinition);
+		ProcessDefinition exProcessDefinition = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "query4Insert", processDefinition);
 		if(exProcessDefinition == null) {
 			// 新的流程定义, 进行save
 			SessionContext.getTableSession().save(processDefinition);

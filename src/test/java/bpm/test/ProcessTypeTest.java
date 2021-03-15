@@ -1,20 +1,16 @@
 package bpm.test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.alibaba.fastjson.JSONObject;
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.repository.type.ProcessType;
-import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.AbstractParameter;
-import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.LogicalOperator;
-import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.Operator;
-import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.Parameter;
-import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.ParameterGroup;
+import com.douglei.orm.sessionfactory.sessions.sqlsession.RecursiveEntity;
 
 public class ProcessTypeTest {
 	private ProcessEngine engine;
@@ -26,25 +22,26 @@ public class ProcessTypeTest {
 	
 	@Test
 	public void query() {
-		List<AbstractParameter> parameters = new ArrayList<AbstractParameter>();
-		parameters.add(new Parameter(false, Operator.EQ, "NAME", "病假", "产假").setNext(LogicalOperator.OR));
+//		List<AbstractParameter> parameters = new ArrayList<AbstractParameter>();
+//		parameters.add(new Parameter(false, Operator.EQ, "NAME", "病假", "产假").setNext(LogicalOperator.OR));
+//		
+//		ParameterGroup group = new ParameterGroup();
+//		group.addParameter(new Parameter(false, Operator.EQ, "CODE", "nianjia").setNext(LogicalOperator.OR).setNext(LogicalOperator.AND));
+//		group.addParameter(new Parameter(false, Operator.EQ, "id", 5));
+//		parameters.add(group);
 		
-		ParameterGroup group = new ParameterGroup();
-		group.addParameter(new Parameter(false, Operator.EQ, "CODE", "nianjia").setNext(LogicalOperator.OR).setNext(LogicalOperator.AND));
-		group.addParameter(new Parameter(false, Operator.EQ, "id", 5));
-		parameters.add(group);
-		
-		List<ProcessType> list = engine.getRepositoryModule().getTypeService().query(parameters);
-		for (ProcessType processType : list) {
-			System.out.println(processType.getId() + "\t" + processType.getName());
-		}
+		RecursiveEntity entity = new RecursiveEntity();
+		entity.setValue(0);
+		List<ProcessType> list = engine.getRepositoryModule().getTypeService().query(entity, null);
+		System.out.println(JSONObject.toJSON(list));
 	}
 	
 	@Test
 	public void save() {
 		ProcessType type = new ProcessType();
-		type.setCode("t_code");
-		type.setName("测试类型");
+//		type.setParentId(2);
+		type.setCode("baoxiao");
+		type.setName("报销");
 		type.setTenantId("douglei");
 		ExecutionResult result = engine.getRepositoryModule().getTypeService().insert(type);
 		
@@ -57,9 +54,10 @@ public class ProcessTypeTest {
 	@Test
 	public void update() {
 		ProcessType type = new ProcessType();
-		type.setId(4);
-		type.setCode("test_code2");
-		type.setName("测试类型xxxx");
+		type.setId(3);
+		type.setParentId(2);
+		type.setCode("chanjia-gai");
+		type.setName("产假-改111");
 		ExecutionResult result = engine.getRepositoryModule().getTypeService().update(type);
 		
 		if(result.isSuccess())
@@ -70,8 +68,8 @@ public class ProcessTypeTest {
 	
 	@Test
 	public void delete() {
-		int typeId = 3;
-		ExecutionResult result = engine.getRepositoryModule().getTypeService().delete(typeId, false);
+		int typeId = 2;
+		ExecutionResult result = engine.getRepositoryModule().getTypeService().delete(typeId, true);
 		
 		if(result.isSuccess())
 			System.out.println("流程类型删除成功: id=" + typeId);

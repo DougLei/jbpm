@@ -22,6 +22,7 @@ public class ProcessDeployTest {
 	@Test
 	public void insert() throws ProcessParseException {
 		ProcessDefinitionEntity builder = new ProcessDefinitionEntity(new ClasspathFile("test.bpm.xml"));
+		builder.setTypeId(2);
 		ExecutionResult result = engine.getRepositoryModule().getDefinitionService().insert(builder);
 		if(result.isSuccess())
 			System.out.println("插入成功一条流程定义信息, 其id为: "+ ((ProcessDefinition)result.getObject()).getId());

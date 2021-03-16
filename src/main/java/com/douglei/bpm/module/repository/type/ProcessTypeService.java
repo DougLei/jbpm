@@ -10,12 +10,12 @@ import java.util.Map;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.repository.RepositoryException;
+import com.douglei.bpm.query.QueryExecutor;
 import com.douglei.orm.context.PropagationBehavior;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.Transaction;
 import com.douglei.orm.sessionfactory.sessions.session.sqlquery.SQLQueryEntity;
 import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.AbstractParameter;
-import com.douglei.orm.sessionfactory.sessions.sqlsession.RecursiveEntity;
 
 /**
  * 流程类型服务
@@ -26,13 +26,14 @@ public class ProcessTypeService {
 	
 	/**
 	 * 查询类型
-	 * @param entity
+	 * @param executor
 	 * @param parameters
 	 * @return
 	 */
 	@Transaction(propagationBehavior=PropagationBehavior.SUPPORTS)
-	public List<ProcessType> query(RecursiveEntity entity, List<AbstractParameter> parameters) {
-		return SessionContext.getSQLQuerySession().recursiveQuery(ProcessType.class, entity, new SQLQueryEntity("queryProcessTypeList", parameters));
+	public Object query(QueryExecutor executor, List<AbstractParameter> parameters) {
+		SQLQueryEntity entity = new SQLQueryEntity("queryProcessTypeList", parameters);
+		return executor.execute(ProcessType.class, entity);
 	}
 	
 	/**

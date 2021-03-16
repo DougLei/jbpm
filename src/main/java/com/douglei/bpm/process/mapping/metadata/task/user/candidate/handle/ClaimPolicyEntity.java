@@ -1,10 +1,12 @@
 package com.douglei.bpm.process.mapping.metadata.task.user.candidate.handle;
 
+import com.douglei.orm.mapping.metadata.Metadata;
+
 /**
  * 认领策略
  * @author DougLei
  */
-public class ClaimPolicyEntity {
+public class ClaimPolicyEntity implements Metadata{
 	private String name; // 策略名称
 	private String value; // 策略需要的值
 	

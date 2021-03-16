@@ -1,12 +1,12 @@
 package com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign;
 
-import java.io.Serializable;
+import com.douglei.orm.mapping.metadata.Metadata;
 
 /**
  * 可指派的用户表达式实体
  * @author DougLei
  */
-public class AssignableUserExpressionEntity implements Serializable {
+public class AssignableUserExpressionEntity implements Metadata {
 	private String name; // 表达式名称
 	private String value; // 具体的表达式值
 	

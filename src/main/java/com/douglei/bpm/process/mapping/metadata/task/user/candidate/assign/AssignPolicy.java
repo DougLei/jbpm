@@ -5,12 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.douglei.bpm.process.mapping.metadata.task.user.DefaultCandidateConfigInstance;
+import com.douglei.orm.mapping.metadata.Metadata;
 
 /**
  * 指派策略
  * @author DougLei
  */
-public class AssignPolicy implements Serializable{
+public class AssignPolicy implements Metadata{
 	private boolean isDynamic; // 是否动态指派
 	protected AssignNumber assignNumber; // 最多可指派的人数的表达式
 	private List<AssignableUserExpressionEntity> assignableUserExpressionEntities; // 可指派的用户表达式实体集合

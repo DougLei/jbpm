@@ -1,14 +1,13 @@
 package com.douglei.bpm.process.mapping.metadata.task.user.candidate.handle;
 
-import java.io.Serializable;
-
 import com.douglei.bpm.process.mapping.metadata.task.user.DefaultCandidateConfigInstance;
+import com.douglei.orm.mapping.metadata.Metadata;
 
 /**
  * 办理策略
  * @author DougLei
  */
-public class HandlePolicy implements Serializable {
+public class HandlePolicy implements Metadata {
 	private boolean suggestIsRequired; // 是否需要强制输入意见
 	private boolean attitudeIsRequired; // 是否需要强制表态
 	private ClaimPolicyEntity claimPolicyEntity; // 认领策略

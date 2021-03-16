@@ -1,16 +1,15 @@
 package com.douglei.bpm.process.mapping.metadata.task.user.candidate;
 
-import java.io.Serializable;
-
 import com.douglei.bpm.process.mapping.metadata.task.user.DefaultCandidateConfigInstance;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignPolicy;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.handle.HandlePolicy;
+import com.douglei.orm.mapping.metadata.Metadata;
 
 /**
  * 候选人配置
  * @author DougLei
  */
-public class Candidate implements Serializable{
+public class Candidate implements Metadata{
 	private AssignPolicy assignPolicy;
 	private HandlePolicy handlePolicy;
 

@@ -2,11 +2,13 @@ package com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign;
 
 import java.io.Serializable;
 
+import com.douglei.orm.mapping.metadata.Metadata;
+
 /**
  * 最多可指派的人数的表达式
  * @author DougLei
  */
-public class AssignNumber implements Serializable{
+public class AssignNumber implements Metadata{
 	private int number;
 	private boolean percent; // 是否是百分比
 	private boolean ceiling; // 是否向上取整; false表示向下取整; 默认值为false

@@ -2,7 +2,7 @@ package com.douglei.bpm.query.impl;
 
 import java.util.Map;
 
-import com.douglei.bpm.query.QueryExecutor;
+import com.douglei.bpm.query.SqlQueryExecutor;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.sessionfactory.sessions.session.sqlquery.SQLQueryEntity;
 import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.QueryMode;
@@ -11,7 +11,7 @@ import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.QueryMode;
  * 
  * @author DougLei
  */
-public class UniqueQueryExecutor implements QueryExecutor {
+public class UniqueQueryExecutor implements SqlQueryExecutor {
 
 	@Override
 	public QueryMode getMode() {

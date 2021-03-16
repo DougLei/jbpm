@@ -3,7 +3,7 @@ package com.douglei.bpm.query.impl;
 import java.util.List;
 import java.util.Map;
 
-import com.douglei.bpm.query.QueryExecutor;
+import com.douglei.bpm.query.SqlQueryExecutor;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.sessionfactory.sessions.session.sqlquery.SQLQueryEntity;
 import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.QueryMode;
@@ -12,7 +12,7 @@ import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.QueryMode;
  * 
  * @author DougLei
  */
-public class LimitQueryExecutor implements QueryExecutor {
+public class LimitQueryExecutor implements SqlQueryExecutor {
 	private int startRow;
 	private int length;
 	

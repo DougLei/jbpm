@@ -3,7 +3,7 @@ package com.douglei.bpm.query.impl;
 import java.util.List;
 import java.util.Map;
 
-import com.douglei.bpm.query.QueryExecutor;
+import com.douglei.bpm.query.SqlQueryExecutor;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.sessionfactory.sessions.session.sqlquery.SQLQueryEntity;
 import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.QueryMode;
@@ -13,7 +13,7 @@ import com.douglei.orm.sessionfactory.sessions.sqlsession.RecursiveEntity;
  * 
  * @author DougLei
  */
-public class RecursiveQueryExecutor implements QueryExecutor {
+public class RecursiveQueryExecutor implements SqlQueryExecutor {
 	private RecursiveEntity entity1;
 	
 	/**

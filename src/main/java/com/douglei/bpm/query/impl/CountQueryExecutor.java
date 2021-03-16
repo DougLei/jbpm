@@ -1,6 +1,6 @@
 package com.douglei.bpm.query.impl;
 
-import com.douglei.bpm.query.QueryExecutor;
+import com.douglei.bpm.query.SqlQueryExecutor;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.sessionfactory.sessions.session.sqlquery.SQLQueryEntity;
 import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.QueryMode;
@@ -9,7 +9,7 @@ import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.QueryMode;
  * 
  * @author DougLei
  */
-public class CountQueryExecutor implements QueryExecutor {
+public class CountQueryExecutor implements SqlQueryExecutor {
 	
 	@Override
 	public QueryMode getMode() {

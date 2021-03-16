@@ -10,7 +10,7 @@ import java.util.Map;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.repository.RepositoryException;
-import com.douglei.bpm.query.QueryExecutor;
+import com.douglei.bpm.query.SqlQueryExecutor;
 import com.douglei.orm.context.PropagationBehavior;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.Transaction;
@@ -31,7 +31,7 @@ public class ProcessTypeService {
 	 * @return
 	 */
 	@Transaction(propagationBehavior=PropagationBehavior.SUPPORTS)
-	public Object query(QueryExecutor executor, List<AbstractParameter> parameters) {
+	public Object query(SqlQueryExecutor executor, List<AbstractParameter> parameters) {
 		SQLQueryEntity entity = new SQLQueryEntity("queryProcessTypeList", parameters);
 		return executor.execute(ProcessType.class, entity);
 	}

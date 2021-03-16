@@ -7,7 +7,7 @@ import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.QueryMode;
  * 
  * @author DougLei
  */
-public interface QueryExecutor {
+public interface SqlQueryExecutor {
 
 	/**
 	 * 获取查询器的查询模式

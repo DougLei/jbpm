@@ -179,10 +179,10 @@ public class TaskHandleUtil {
 				assignableUsers.addAll(tempList);
 		}
 		
-		// 去重
 		if(assignableUsers.size() < 2)
 			return assignableUsers;
 		
+		// 去重
 		HashSet<UserBean> hashset = new HashSet<UserBean>(assignableUsers);
 		if(hashset.size() == assignableUsers.size())
 			return assignableUsers;

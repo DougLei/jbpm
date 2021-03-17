@@ -32,7 +32,7 @@ public class ProcessTypeService {
 	 */
 	@Transaction(propagationBehavior=PropagationBehavior.SUPPORTS)
 	public Object query(SqlQueryExecutor executor, List<AbstractParameter> parameters) {
-		SQLQueryEntity entity = new SQLQueryEntity("queryProcessTypeList", parameters);
+		SQLQueryEntity entity = new SQLQueryEntity("QueryProcessTypeList", parameters);
 		return executor.execute(ProcessType.class, entity);
 	}
 	

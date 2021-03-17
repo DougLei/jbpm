@@ -19,7 +19,8 @@ import com.douglei.tools.file.reader.FileBufferedReader;
  */
 public class ProcessDefinitionEntity {
 	private ProcessDefinition processDefinition;
-	private boolean strict; // 如果构建出的流程定义已经存在实例, 根据该参数决定是无法保存本次的流程定义(false), 或是强制更新子版本来保存(true)
+	private boolean ignore; // 是否忽略流程实例
+	private boolean strict; // 是否强制保存流程定义
 	
 	/**
 	 * 根据文件构建流程定义实例
@@ -129,6 +130,14 @@ public class ProcessDefinitionEntity {
 	}
 	
 	/**
+	 * 设置是否忽略流程实例
+	 * @param ignore
+	 */
+	public void setIgnore(boolean ignore) {
+		this.ignore = ignore;
+	}
+	
+	/**
 	 * 设置是否强制保存流程定义
 	 * @param strict
 	 */
@@ -175,7 +184,15 @@ public class ProcessDefinitionEntity {
 	}
 	
 	/**
-	 * 是否要强制保存
+	 * 是否忽略流程实例
+	 * @return
+	 */
+	boolean isIgnore() {
+		return ignore;
+	}
+	
+	/**
+	 * 是否强制保存流程定义
 	 * @return
 	 */
 	boolean isStrict() {

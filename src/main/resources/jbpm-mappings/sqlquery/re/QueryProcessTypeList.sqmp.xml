@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping-configuration>
 	<!-- 查询流程类型列表 -->
-	<sql-query name="queryProcessTypeList">
+	<sql-query name="QueryProcessTypeList">
 		<content>
 			select id, parent_id, code, name, tenant_id from bpm_re_proctype
 		</content>

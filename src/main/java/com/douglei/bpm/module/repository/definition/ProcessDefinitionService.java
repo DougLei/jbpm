@@ -6,12 +6,11 @@ import java.util.List;
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.history.instance.HistoryProcessInstanceService;
 import com.douglei.bpm.module.repository.RepositoryException;
-import com.douglei.bpm.module.runtime.instance.ProcessInstanceService;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.process.mapping.ProcessMappingContainer;
 import com.douglei.bpm.process.mapping.parser.ProcessParseException;
+import com.douglei.orm.context.PropagationBehavior;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.Transaction;
 
@@ -23,13 +22,20 @@ import com.douglei.orm.context.Transaction;
 public class ProcessDefinitionService {
 	
 	@Autowired
-	private ProcessInstanceService instanceService;
-	
-	@Autowired
-	private HistoryProcessInstanceService historyInstanceService;
-	
-	@Autowired
 	private ProcessMappingContainer container;
+	
+	/**
+	 * 是否存在(运行/历史)实例
+	 * @param processDefinitionId
+	 * @return
+	 */
+	@Transaction(propagationBehavior=PropagationBehavior.SUPPORTS)
+	public boolean existsInstance(int processDefinitionId) {
+		List<Object[]> list = SessionContext.getSqlSession().query_(
+				"select count(id) from bpm_ru_procinst where procdef_id=? union all select count(id) from bpm_hi_procinst where procdef_id=?", 
+				Arrays.asList(processDefinitionId, processDefinitionId));
+		return Integer.parseInt(list.get(0)[0].toString()) > 0 || Integer.parseInt(list.get(1)[0].toString()) > 0;
+	}
 	
 	/**
 	 * 保存流程定义
@@ -56,7 +62,8 @@ public class ProcessDefinitionService {
 		if(processDefinition.getTypeId() != old.getTypeId())
 			validateTypeId(processDefinition.getTypeId());
 		
-		if(old.getSignature().equals(processDefinition.getSignature())){ // 没有修改流程定义的内容, 进行update
+		// 没有修改流程定义的内容, 进行update
+		if(old.getSignature().equals(processDefinition.getSignature())){ 
 			processDefinition.setId(old.getId());
 			processDefinition.setIsMajorVersion(old.getIsMajorVersion());
 			processDefinition.setSubversion(old.getSubversion());
@@ -64,8 +71,10 @@ public class ProcessDefinitionService {
 			processDefinition.setContent(null);
 			processDefinition.setSignature(null);
 			SessionContext.getTableSession().update(processDefinition);
-		} else if(old.getStateInstance() == State.INITIAL 
-				|| (!instanceService.exists(old.getId()) && !historyInstanceService.exists(old.getId()))) { // 修改了内容, 但旧的流程处于初始化状态, 或不存在实例, 进行update
+		} 
+		
+		// 修改了内容, 但旧的流程处于初始化状态, 或忽略流程实例, 或不存在实例, 进行update
+		else if(old.getStateInstance() == State.INITIAL || entity.isIgnore() || !existsInstance(old.getId())) { 
 			processDefinition.setId(old.getId());
 			processDefinition.setIsMajorVersion(old.getIsMajorVersion());
 			processDefinition.setSubversion(old.getSubversion());
@@ -74,7 +83,10 @@ public class ProcessDefinitionService {
 			
 			if(processDefinition.getStateInstance() == State.DEPLOY) // 刷新容器中的流程定义实例
 				container.addProcess(processDefinition);
-		}else { // 修改了内容, 且旧的流程定义存在实例, 根据strict值, 进行升级save, 或提示操作失败
+		}
+		
+		// 修改了内容, 且旧的流程定义存在实例, 根据strict值, 进行升级save, 或提示操作失败
+		else { 
 			if(!entity.isStrict()) 
 				return new ExecutionResult("保存失败, [%s]流程存在实例", "jbpm.procdef.save.fail.instance.exists", processDefinition.getName());
 			
@@ -168,7 +180,7 @@ public class ProcessDefinitionService {
 			throw new RepositoryException("删除失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.getStateInstance().supportPhysicalDelete())
 			return new ExecutionResult("删除失败, [%s]流程处于[%s]状态", "jbpm.procdef.physical.delete.fail.state.error", processDefinition.getName(), processDefinition.getState());
-		if(instanceService.exists(processDefinitionId) || historyInstanceService.exists(processDefinitionId))
+		if(existsInstance(processDefinitionId))
 			return new ExecutionResult("删除失败, [%s]流程存在实例, 如确实需要删除, 请先处理相关实例", "jbpm.procdef.physical.delete.fail.instance.exists", processDefinition.getName());
 		
 		// 直接删除

@@ -1,21 +1,12 @@
 package bpm.test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.repository.type.ProcessType;
-import com.douglei.bpm.query.impl.UniqueQueryExecutor;
-import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.AbstractParameter;
-import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.Operator;
-import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.Parameter;
 
 public class ProcessTypeTest {
 	private ProcessEngine engine;
@@ -36,17 +27,17 @@ public class ProcessTypeTest {
 //		parameters.add(group);
 		
 		
-		UniqueQueryExecutor executor = new UniqueQueryExecutor();
+//		UniqueQueryExecutor executor = new UniqueQueryExecutor();
 		
 //		QueryExecutorImpl executor = new QueryExecutorImpl();
 		
 //		RecursiveQueryExecutor executor = new RecursiveQueryExecutor(new RecursiveEntity().setValue(0));
 		
-		List<AbstractParameter> parameters = new ArrayList<AbstractParameter>();
-		parameters.add(new Parameter(false, Operator.EQ, "code", "qingjia"));
-		
-		Object result = engine.getRepositoryModule().getTypeService().query(executor, parameters);
-		System.out.println(JSONObject.toJSONString(result, SerializerFeature.PrettyFormat));
+//		List<AbstractParameter> parameters = new ArrayList<AbstractParameter>();
+//		parameters.add(new Parameter(false, Operator.EQ, "code", "qingjia"));
+//		
+//		Object result = engine.getRepositoryModule().getTypeService().query(executor, parameters);
+//		System.out.println(JSONObject.toJSONString(result, SerializerFeature.PrettyFormat));
 	}
 	
 	@Test

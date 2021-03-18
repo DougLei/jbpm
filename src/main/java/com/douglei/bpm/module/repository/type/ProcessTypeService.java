@@ -10,12 +10,8 @@ import java.util.Map;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.repository.RepositoryException;
-import com.douglei.bpm.query.SqlQueryExecutor;
-import com.douglei.orm.context.PropagationBehavior;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.Transaction;
-import com.douglei.orm.sessionfactory.sessions.session.sqlquery.SQLQueryEntity;
-import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.AbstractParameter;
 
 /**
  * 流程类型服务
@@ -23,18 +19,6 @@ import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.AbstractPar
  */
 @Bean(isTransaction=true)
 public class ProcessTypeService {
-	
-	/**
-	 * 查询类型
-	 * @param executor
-	 * @param parameters
-	 * @return
-	 */
-	@Transaction(propagationBehavior=PropagationBehavior.SUPPORTS)
-	public Object query(SqlQueryExecutor executor, List<AbstractParameter> parameters) {
-		SQLQueryEntity entity = new SQLQueryEntity("QueryProcessTypeList", parameters);
-		return executor.execute(ProcessType.class, entity);
-	}
 	
 	/**
 	 * 保存类型

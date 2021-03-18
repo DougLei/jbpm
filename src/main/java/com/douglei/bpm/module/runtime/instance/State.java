@@ -4,7 +4,7 @@ package com.douglei.bpm.module.runtime.instance;
  * 流程实例状态
  * @author DougLei
  */
-public enum ProcessInstanceState {
+public enum State {
 	
 	/**
 	 * 活动中

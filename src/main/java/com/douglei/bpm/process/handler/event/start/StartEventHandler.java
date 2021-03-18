@@ -9,7 +9,7 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.history.task.HistoryTask;
 import com.douglei.bpm.module.history.variable.HistoryVariable;
 import com.douglei.bpm.module.runtime.instance.ProcessInstance;
-import com.douglei.bpm.module.runtime.instance.ProcessInstanceState;
+import com.douglei.bpm.module.runtime.instance.State;
 import com.douglei.bpm.module.runtime.variable.Variable;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.VariableEntities;
@@ -65,7 +65,7 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		instance.setStartUserId(handleParameter.getUserEntity().getCurrentHandleUser().getUserId());
 		instance.setStartTime(handleParameter.getCurrentDate());
 		instance.setTenantId(handleParameter.getTenantId());
-		instance.setStateInstance(ProcessInstanceState.ACTIVE);
+		instance.setStateInstance(State.ACTIVE);
 		
 		SessionContext.getTableSession().save(instance);
 		return instance;

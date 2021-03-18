@@ -2,6 +2,9 @@ package com.douglei.bpm.process.mapping;
 
 import java.util.Arrays;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
+import com.douglei.bpm.ProcessEngineException;
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
@@ -53,9 +56,11 @@ public class ProcessMappingContainer {
 	public ProcessMetadata getProcess(int processDefinitionId) {
 		Mapping mapping = container.get().getMappingHandler().getMapping(processDefinitionId+"", ProcessMappingType.NAME, false);
 		if(mapping == null) {
-			ProcessDefinition definition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, content_ from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
+			ProcessDefinition definition = SessionContext.getTableSession().uniqueQuery(ProcessDefinition.class, "select id, content_, signature from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 			if(definition == null)
-				throw new NullPointerException("从容器获取流程失败, 不存在id为["+processDefinitionId+"]的流程");
+				throw new ProcessEngineException("从容器获取流程失败, 不存在id为["+processDefinitionId+"]的流程");
+			if(!DigestUtils.md5Hex(definition.getContent()).equals(definition.getSignature()))
+				throw new ProcessEngineException("从容器获取流程失败, id为["+processDefinitionId+"]的流程配置数据被篡改");
 			mapping = addProcess(definition);
 		}
 		return ((ProcessMetadataAdapter)mapping.getMetadata()).getProcessMetadata();

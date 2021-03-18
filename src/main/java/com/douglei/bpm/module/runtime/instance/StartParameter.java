@@ -35,7 +35,7 @@ public class StartParameter extends HandleTaskParameter{
 	public StartParameter(String code, String version, String tenantId) {
 		this(null, code, version, tenantId);
 	}
-	public StartParameter(Integer id, String code, String version, String tenantId) {
+	private StartParameter(Integer id, String code, String version, String tenantId) {
 		if(id == null && code == null)
 			throw new TaskHandleException("启动流程时, 流程定义的id或code, 至少有一个不能为空");
 		

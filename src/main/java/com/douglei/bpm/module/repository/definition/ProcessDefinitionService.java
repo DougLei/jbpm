@@ -262,20 +262,20 @@ public class ProcessDefinitionService {
 	}
 	
 	/**
-	 * 还原流程的状态, 从{@link HandleState.DELETE}还原为{@link HandleState.UNDEPLOY}
+	 * 撤销删除, 从{@link HandleState.DELETE}还原为{@link HandleState.UNDEPLOY};
 	 * @param processDefinitionId
 	 * @param targetState
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult restoreStateDelete2UnDeploy(int processDefinitionId) {
+	public ExecutionResult undoDelete(int processDefinitionId) {
 		ProcessDefinition processDefinition = SessionContext.getSqlSession().uniqueQuery(ProcessDefinition.class, "select name, is_major_subversion, state from bpm_re_procdef where id=?", Arrays.asList(processDefinitionId));
 		if(processDefinition == null)
-			throw new RepositoryException("还原流程状态失败, 不存在id为["+processDefinitionId+"]的流程");
+			throw new RepositoryException("撤销删除失败, 不存在id为["+processDefinitionId+"]的流程");
 		if(!processDefinition.isMajorSubversion())
-			return new ExecutionResult("还原流程状态失败, [%s]流程不是主要子版本", "jbpm.procdef.restore.fail.not.major.subversion", processDefinition.getName());
+			return new ExecutionResult("撤销删除失败, [%s]流程不是主要子版本", "jbpm.procdef.undo.delete.fail.not.major.subversion", processDefinition.getName());
 		if(processDefinition.getStateInstance() != State.DELETE)
-			return new ExecutionResult("还原流程状态失败, 不能将[%s]状态还原为[%s]状态", "jbpm.procdef.restore.fail.unsupport", processDefinition.getState(), State.UNDEPLOY);
+			return new ExecutionResult("撤销删除失败, [%s]流程未处于[%s]状态", "jbpm.procdef.undo.delete.fail.state.error", processDefinition.getName(), State.DELETE);
 
 		updateState_(processDefinitionId, State.UNDEPLOY);
 		return ExecutionResult.getDefaultSuccessInstance();

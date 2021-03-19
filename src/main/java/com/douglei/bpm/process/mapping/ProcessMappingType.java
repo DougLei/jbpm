@@ -17,7 +17,7 @@ public class ProcessMappingType extends MappingType {
 	
 	private ProcessMappingParser parser;
 	public ProcessMappingType(ProcessMappingParser parser) {
-		super(NAME, FILE_SUFFIX, 70, false);
+		super(NAME, FILE_SUFFIX, 60, false);
 		this.parser = parser;
 	}
 

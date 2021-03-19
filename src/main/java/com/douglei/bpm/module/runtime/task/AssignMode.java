@@ -9,20 +9,20 @@ public enum AssignMode {
 	/**
 	 * 固定的办理人
 	 */
-	FIXED(),
+	FIXED,
 	
 	/**
 	 * 指派的办理人
 	 */
-	ASSIGNED(),
+	ASSIGNED,
 	
 	/**
 	 * 委托的办理人
 	 */
-	DELEGATED(),
+	DELEGATED,
 	
 	/**
 	 * 移交的办理人
 	 */
-	TRANSFERRED();
+	TRANSFERRED;
 }

@@ -34,12 +34,28 @@ public class TaskInstance {
 		taskMetadataEntity = processMetadata.getTaskMetadataEntity(task.getKey());
 	}
 
+	/**
+	 * 获取流程元数据实例
+	 * @return
+	 */
 	public ProcessMetadata getProcessMetadata() {
 		return processMetadata;
 	}
+	/**
+	 * 获取任务元数据实例
+	 * @return
+	 */
 	public TaskMetadataEntity<? extends TaskMetadata> getTaskMetadataEntity() {
 		return taskMetadataEntity;
 	}
+	/**
+	 * 获取任务实例
+	 * @return
+	 */
+	public Task getTask() {
+		return task;
+	}
+	
 	/**
 	 * 获取配置的任务name
 	 * @return
@@ -53,8 +69,5 @@ public class TaskInstance {
 	 */
 	public boolean isUserTask() {
 		return taskMetadataEntity.getTaskMetadata().isUserTask();
-	}
-	public Task getTask() {
-		return task;
 	}
 }

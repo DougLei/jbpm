@@ -35,6 +35,14 @@ public class TimeLimitParser {
 	private TimeLimit parse_(String id, String name, String timeLimit) {
 		TimeLimit tl = new TimeLimit(); 
 		
+		// 纯数字, 使用默认格式: dn(天/自然日)
+		if(DataTypeValidateUtil.isInteger(timeLimit)) {
+			tl.addDays(Integer.parseInt(timeLimit));
+			tl.setType(TimeLimitType.NATURAL);
+			return tl;
+		}
+		
+		// 非纯数字, 按照标准格式去解析
 		StringBuilder sb = new StringBuilder(timeLimit.length());
 		char c;
 		int index = 0, limitTimeValue;
@@ -42,19 +50,6 @@ public class TimeLimitParser {
 		while(index < timeLimit.length()) {
 			c = timeLimit.charAt(index++);
 			switch(c) {
-				case 'n':
-				case 'N':
-					tl.setType(TimeLimitType.NATURAL);
-					break loop;
-				case 'w':
-				case 'W':
-					tl.setType(TimeLimitType.WORKING);
-					break loop;
-				case 's':
-				case 'S':
-					tl.setType(TimeLimitType.SWORKING);
-					break loop;
-					
 				case 'd': // 天
 				case 'D':
 					limitTimeValue = getLimitTime(sb);
@@ -76,6 +71,19 @@ public class TimeLimitParser {
 						return null;
 					tl.addMinutes(limitTimeValue);
 					break;
+					
+				case 'n': // 自然日
+				case 'N':
+					tl.setType(TimeLimitType.NATURAL);
+					break loop;
+				case 'w': // 工作日
+				case 'W':
+					tl.setType(TimeLimitType.WORKING);
+					break loop;
+				case 's': // 智能工作日
+				case 'S':
+					tl.setType(TimeLimitType.SWORKING);
+					break loop;
 					
 				default:
 					sb.append(c);

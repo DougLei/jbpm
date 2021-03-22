@@ -33,7 +33,7 @@ public class ProcessMappingContainer {
 	 */
 	public Mapping addProcess(ProcessDefinition definition) {
 		AddOrCoverMappingEntity4Process entity = new AddOrCoverMappingEntity4Process(definition);
-		container.get().getMappingHandler().execute(entity);
+		container.get().getMappingHandler().execute(entity.enableProperty());
 		return entity.getMapping();
 	}
 	
@@ -43,8 +43,9 @@ public class ProcessMappingContainer {
 	 * @param processDefinitionId
 	 */
 	public void deleteProcess(int processDefinitionId) {
-		DeleteMappingEntity entity = new DeleteMappingEntity(processDefinitionId+"");
-		container.get().getMappingHandler().execute(entity);
+		String code = processDefinitionId+"";
+		if(container.get().getMappingHandler().exists(code))
+			container.get().getMappingHandler().execute(new DeleteMappingEntity(code).enableProperty());
 	}
 
 	/**

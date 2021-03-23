@@ -38,10 +38,9 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 	}
 	/**
 	 * 获取任务关联的pageID, 默认值为null
-	 * @param metadata
 	 * @return
 	 */
-	public String getPageID(ProcessMetadata metadata) {
+	public String getPageID() {
 		return null;
 	}
 	/**

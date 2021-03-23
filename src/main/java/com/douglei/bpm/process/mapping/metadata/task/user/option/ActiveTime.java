@@ -12,6 +12,11 @@ public enum ActiveTime {
 	TASK_HANDLING,
 	
 	/**
+	 * 任务调度中
+	 */
+	TASK_DISPATCHING,
+	
+	/**
 	 * 任务完成后
 	 */
 	TASK_FINISHED;

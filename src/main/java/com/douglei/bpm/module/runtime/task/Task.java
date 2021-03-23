@@ -45,7 +45,7 @@ public class Task {
 		this.name = taskMetadata.getName();
 		this.type = taskMetadata.getType().getName();
 		this.startTime = startTime;
-		this.pageId = taskMetadata.getPageID(metadata);
+		this.pageId = taskMetadata.getPageID();
 	}
 	
 	/**

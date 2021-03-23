@@ -3,7 +3,6 @@ package com.douglei.bpm.process.mapping.metadata.task.user;
 import java.util.List;
 
 import com.douglei.bpm.process.Type;
-import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.TimeLimit;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.Candidate;
@@ -31,6 +30,9 @@ public class UserTaskMetadata extends TaskMetadata {
 	public Candidate getCandidate() {
 		return candidate;
 	}
+	public List<Option> getOptions() {
+		return options;
+	}
 	public Option getOption(String type) {
 		if(options == null)
 			return null;
@@ -43,9 +45,7 @@ public class UserTaskMetadata extends TaskMetadata {
 	}
 	
 	@Override
-	public String getPageID(ProcessMetadata metadata) {
-		if(pageID == null)
-			return metadata.getPageID();
+	public String getPageID() {
 		return pageID;
 	}
 	@Override

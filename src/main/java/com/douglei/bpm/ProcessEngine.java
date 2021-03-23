@@ -12,6 +12,7 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
+import com.douglei.bpm.process.mapping.ProcessMappingContainer;
 import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
 import com.douglei.orm.context.RegistrationResult;
@@ -47,6 +48,9 @@ public class ProcessEngine {
 		addDataSource(dataSourceId, dataSource, closeName);
 		this.id = id;
 	}
+	
+	@Autowired
+	private ProcessMappingContainer processContainer;
 	
 	@Autowired
 	private RepositoryModule repositoryModule;
@@ -87,6 +91,13 @@ public class ProcessEngine {
 	 */
 	public String geId() {
 		return id;
+	}
+	/**
+	 * 获取流程容器实例
+	 * @return
+	 */
+	public ProcessMappingContainer getProcessContainer() {
+		return processContainer;
 	}
 	/**
 	 * 获取RepositoryModule实例

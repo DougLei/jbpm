@@ -1,7 +1,5 @@
 package com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign;
 
-import java.io.Serializable;
-
 import com.douglei.orm.mapping.metadata.Metadata;
 
 /**
@@ -66,6 +64,6 @@ public class AssignNumber implements Metadata{
 	
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + " [number=" + number + ", percent=" + percent + ", ceiling=" + ceiling + "]";
+		return "AssignNumber [number=" + number + ", percent=" + percent + ", ceiling=" + ceiling + "]";
 	}
 }

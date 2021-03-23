@@ -37,28 +37,23 @@ public class OptionParser {
 			return null;
 		
 		List<Option> options = new ArrayList<Option>(elements.size());
-		
-		OptionHandler optionHandler = null;
-		String optionName, optionOrder;
-		int order;
-		Option option = null;
 		for (Element element : elements) {
-			optionHandler = optionHandlerContainer.get(element.attributeValue("type"));
+			OptionHandler optionHandler = optionHandlerContainer.get(element.attributeValue("type"));
 			if(optionHandler == null)
 				throw new ProcessParseException("<userTask id="+id+" name="+name+"><option>的type属性值["+element.attributeValue("type")+"]不合法");
 			
 			// option的name
-			optionName = element.attributeValue("name");
+			String optionName = element.attributeValue("name");
 			if(StringUtil.isEmpty(optionName))
 				optionName = element.attributeValue("type");
 			
 			// option的order
-			order = 0;
-			optionOrder = element.attributeValue("order");
+			int order = 0;
+			String optionOrder = element.attributeValue("order");
 			if(DataTypeValidateUtil.isInteger(optionOrder))
 				order = Integer.parseInt(optionOrder);
 			
-			option = optionHandler.parse(optionName, order, id, name, element);
+			Option option = optionHandler.parse(optionName, order, id, name, element);
 			if(option == null)
 				throw new ProcessParseException("<userTask id="+id+" name="+name+"><option type="+element.attributeValue("type")+">的配置不合法");
 			if(options.size() > 0 && options.contains(option))

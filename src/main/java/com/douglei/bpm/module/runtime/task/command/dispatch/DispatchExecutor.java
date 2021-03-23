@@ -5,7 +5,7 @@ import java.util.List;
 import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.runtime.task.command.CarbonCopyTaskCmd;
 import com.douglei.bpm.process.api.user.bean.factory.UserBean;
-import com.douglei.bpm.process.api.user.option.impl.carboncopy.CarbonCopyOptionHandler;
+import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskDispatchException;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
@@ -49,7 +49,7 @@ public abstract class DispatchExecutor {
 			return;
 		
 		UserTaskMetadata userTaskMetadata = (UserTaskMetadata) currentTaskMetadataEntity.getTaskMetadata();
-		Option option = userTaskMetadata.getOption(CarbonCopyOptionHandler.TYPE);
+		Option option = userTaskMetadata.getOption(OptionTypeConstants.CARBON_COPY);
 		if(option == null || ((CarbonCopyOption)option).getCandidate().getAssignPolicy().isDynamic())
 			return;
 		

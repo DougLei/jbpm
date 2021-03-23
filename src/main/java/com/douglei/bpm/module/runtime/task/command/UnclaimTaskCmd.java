@@ -9,7 +9,7 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
-import com.douglei.bpm.process.api.user.option.impl.carboncopy.CarbonCopyOptionHandler;
+import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.option.Option;
@@ -64,7 +64,7 @@ public class UnclaimTaskCmd implements Command {
 	
 	private boolean existsCC; // 是否有抄送
 	private boolean ccBeViewed() { // 抄送是否被查看
-		Option option = ((UserTaskMetadata)taskInstance.getTaskMetadataEntity().getTaskMetadata()).getOption(CarbonCopyOptionHandler.TYPE);
+		Option option = ((UserTaskMetadata)taskInstance.getTaskMetadataEntity().getTaskMetadata()).getOption(OptionTypeConstants.CARBON_COPY);
 		if(option == null || !((CarbonCopyOption)option).getCandidate().getAssignPolicy().isDynamic())
 			return false;
 		

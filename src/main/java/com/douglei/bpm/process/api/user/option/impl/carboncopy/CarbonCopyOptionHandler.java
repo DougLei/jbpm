@@ -5,6 +5,7 @@ import org.dom4j.Element;
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.api.user.option.OptionHandler;
+import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.Candidate;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignPolicy;
 import com.douglei.bpm.process.mapping.metadata.task.user.option.Option;
@@ -17,14 +18,13 @@ import com.douglei.bpm.process.mapping.parser.ProcessParseException;
  */
 @Bean(clazz = OptionHandler.class)
 public class CarbonCopyOptionHandler extends OptionHandler{
-	public static final String TYPE = "carbonCopy";
 	
 	@Autowired
 	private CarbonCopyAssignPolicyParser assignPolicyParser;
 	
 	@Override
 	public String getType() {
-		return TYPE;
+		return OptionTypeConstants.CARBON_COPY;
 	}
 
 	@Override
@@ -34,6 +34,6 @@ public class CarbonCopyOptionHandler extends OptionHandler{
 			throw new ProcessParseException("<userTask id="+userTaskId+" name="+userTaskName+">"+getXmlStruct()+"下必须配置<candidate>");
 		
 		AssignPolicy assignPolicy = assignPolicyParser.parse(userTaskId, userTaskName, getXmlStruct() + "<candidate>", element);
-		return new CarbonCopyOption(TYPE, name, order, new Candidate(assignPolicy, null));
+		return new CarbonCopyOption(OptionTypeConstants.CARBON_COPY, name, order, new Candidate(assignPolicy, null));
 	}
 }

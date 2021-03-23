@@ -15,7 +15,7 @@ import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
 import com.douglei.bpm.process.api.user.bean.factory.UserBean;
-import com.douglei.bpm.process.api.user.option.impl.delegate.DelegateOptionHandler;
+import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.task.user.assignee.startup.DelegationHandler;
@@ -131,7 +131,7 @@ public class DelegateTaskCmd implements Command {
 	 * @return
 	 */
 	protected String getOptionType() {
-		return DelegateOptionHandler.TYPE;
+		return OptionTypeConstants.DELEGATE;
 	}
 	
 	/**

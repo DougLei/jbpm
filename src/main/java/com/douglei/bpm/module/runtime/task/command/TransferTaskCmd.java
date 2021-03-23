@@ -3,7 +3,7 @@ package com.douglei.bpm.module.runtime.task.command;
 import com.douglei.bpm.module.runtime.task.AssignMode;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
-import com.douglei.bpm.process.api.user.option.impl.transfer.TransferOptionHandler;
+import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
 
 /**
  * 转办任务
@@ -17,7 +17,7 @@ public class TransferTaskCmd extends DelegateTaskCmd {
 
 	@Override
 	protected String getOptionType() {
-		return TransferOptionHandler.TYPE;
+		return OptionTypeConstants.TRANSFER;
 	}
 
 	@Override

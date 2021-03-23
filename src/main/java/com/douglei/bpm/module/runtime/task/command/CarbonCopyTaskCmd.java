@@ -10,7 +10,7 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.CarbonCopy;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
 import com.douglei.bpm.process.api.user.bean.factory.UserBean;
-import com.douglei.bpm.process.api.user.option.impl.carboncopy.CarbonCopyOptionHandler;
+import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
@@ -43,7 +43,7 @@ public class CarbonCopyTaskCmd extends AbstractTaskCmd implements Command {
 		if(!taskInstance.isUserTask())
 			throw new TaskHandleException("抄送失败, ["+taskInstance.getName()+"]任务不支持用户进行抄送操作");
 		
-		Option option = ((UserTaskMetadata)taskMetadata).getOption(CarbonCopyOptionHandler.TYPE);
+		Option option = ((UserTaskMetadata)taskMetadata).getOption(OptionTypeConstants.CARBON_COPY);
 		if(option == null || !((CarbonCopyOption)option).getCandidate().getAssignPolicy().isDynamic())
 			throw new TaskHandleException("抄送失败, ["+taskInstance.getName()+"]任务不支持用户进行抄送操作");
 		

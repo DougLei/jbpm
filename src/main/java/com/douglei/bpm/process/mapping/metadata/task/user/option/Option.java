@@ -19,10 +19,6 @@ public abstract class Option implements Serializable{
 	
 	@Override
 	public final boolean equals(Object obj) {
-		if(obj == null)
-			return false;
-		if(this == obj)
-			return true;
 		return type.equals(((Option) obj).type);
 	}
 

@@ -127,11 +127,11 @@
 				
 				* 如果配置了重复type的option, 引擎会抛出异常
 			 -->
-			<!-- 这几个操作是当前办理时, 可进行的操作 -->
+			<!-- 这几个操作是办理时, 可进行的操作 -->
 			<option type="carbonCopy" name="抄送" order="">
 				<!-- 
 					必须配置; 没有<handlePolicy>配置项
-					* isDynamic: 可不配置, 默认值为true; 值为true, 表示需要用户在办理任务时, 手动进行抄送; 如果值为false, 表示在任务办理结束后, 引擎会自动抄送到表达式指定的所有人
+					* isDynamic: 可不配置, 默认值为true; 值为true, 表示需要用户在办理任务时, 手动指派人员进行抄送; 如果值为false, 表示在任务办理结束后, 引擎会自动抄送到表达式指定的所有人
 					* assignNum: 可指派抄送的人数, 针对isDynamic=true生效; 可不配置, 默认值为100%
 					* 其他配置参考userTask中的配置
 				 -->
@@ -160,7 +160,7 @@
 				<candidate></candidate>
 			</option>
 			<!-- 
-				流程跳转
+				流程跳转; 是调度时, 可进行的操作
 			 -->
 			<option type="jump" name="流程跳转" order="">
 				<!-- 

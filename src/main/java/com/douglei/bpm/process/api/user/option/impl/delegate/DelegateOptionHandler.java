@@ -5,6 +5,7 @@ import org.dom4j.Element;
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.api.user.option.OptionHandler;
+import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.Candidate;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignPolicy;
 import com.douglei.bpm.process.mapping.metadata.task.user.option.Option;
@@ -17,14 +18,13 @@ import com.douglei.bpm.process.mapping.parser.ProcessParseException;
  */
 @Bean(clazz = OptionHandler.class)
 public class DelegateOptionHandler extends OptionHandler {
-	public static final String TYPE = "delegate";
 	
 	@Autowired
 	private DelegateAssignPolicyParser assignPolicyParser;
 	
 	@Override
 	public String getType() {
-		return TYPE;
+		return OptionTypeConstants.DELEGATE;
 	}
 	
 	@Override
@@ -44,6 +44,6 @@ public class DelegateOptionHandler extends OptionHandler {
 
 	// 创建option实例
 	protected Option createOption(String name, int order, boolean reasonIsRequired, Candidate candidate) {
-		return new DelegateOption(TYPE, name, order, reasonIsRequired, candidate);
+		return new DelegateOption(OptionTypeConstants.DELEGATE, name, order, reasonIsRequired, candidate);
 	}
 }

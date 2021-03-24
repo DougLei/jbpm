@@ -14,6 +14,7 @@ import com.douglei.bpm.process.api.user.bean.factory.impl.UserBeanFactoryImpl;
  * 	SessionContext.getSqlSession()
  * 	SessionContext.getTableSession()
  * 	SessionContext.getSQLSession()
+ * 	SessionContext.getSQLQuerySession()
  * </pre>
  * 
  * @author DougLei

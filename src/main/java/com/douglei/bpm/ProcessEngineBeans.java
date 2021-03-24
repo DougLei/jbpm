@@ -21,7 +21,7 @@ public class ProcessEngineBeans {
 	private ProcessEngineConfiguration processEngineConfiguration; // 流程引擎配置
 	
 	@Autowired
-	private ProcessMappingContainer processMappingContainer; // 流程容器
+	private ProcessMappingContainer processContainer; // 流程容器
 	
 	@Autowired
 	private TaskHandleUtil taskHandleUtil; // 任务办理工具
@@ -42,8 +42,8 @@ public class ProcessEngineBeans {
 	public ProcessEngineConfiguration getProcessEngineConfiguration() {
 		return processEngineConfiguration;
 	}
-	public ProcessMappingContainer getProcessMappingContainer() {
-		return processMappingContainer;
+	public ProcessMappingContainer getProcessContainer() {
+		return processContainer;
 	}
 	public TaskHandleUtil getTaskHandleUtil() {
 		return taskHandleUtil;

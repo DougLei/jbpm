@@ -106,7 +106,7 @@ public class AssigneeHandler {
 		// 如果只指派了一个人, 则进行认领操作
 		if(currentTask.getAssignCount() == 1) {
 			assigneeList.get(assigneeList.size()-1).claim(currentDate);
-			currentTask.setAllClaimed();
+			currentTask.setIsAllClaimed(1);
 		}
 		
 		SessionContext.getTableSession().save(assigneeList);

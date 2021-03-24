@@ -14,24 +14,23 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 public class TaskInstance {
+	private Task task;
+	private ProcessMappingContainer container;
 	private ProcessMetadata processMetadata;
 	private TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity;
-	private Task task;
 	
 	TaskInstance(int taskId, ProcessMappingContainer container) {
 		task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where id=?", Arrays.asList(taskId));
 		if(task == null)
 			throw new TaskHandleException("不存在id为["+taskId+"]的任务");
-		processMetadata = container.getProcess(task.getProcdefId());
-		taskMetadataEntity = processMetadata.getTaskMetadataEntity(task.getKey());
+		this.container = container;
 	}
 	
 	TaskInstance(String taskinstId, ProcessMappingContainer container) {
 		task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where taskinst_id=?", Arrays.asList(taskinstId));
 		if(task == null)
 			throw new TaskHandleException("不存在taskinst_id为["+taskinstId+"]的任务");
-		processMetadata = container.getProcess(task.getProcdefId());
-		taskMetadataEntity = processMetadata.getTaskMetadataEntity(task.getKey());
+		this.container = container;
 	}
 
 	/**
@@ -39,6 +38,8 @@ public class TaskInstance {
 	 * @return
 	 */
 	public ProcessMetadata getProcessMetadata() {
+		if(processMetadata == null)
+			processMetadata = container.getProcess(task.getProcdefId());
 		return processMetadata;
 	}
 	/**
@@ -46,6 +47,8 @@ public class TaskInstance {
 	 * @return
 	 */
 	public TaskMetadataEntity<? extends TaskMetadata> getTaskMetadataEntity() {
+		if(taskMetadataEntity == null)
+			taskMetadataEntity = getProcessMetadata().getTaskMetadataEntity(task.getKey());
 		return taskMetadataEntity;
 	}
 	/**
@@ -61,13 +64,13 @@ public class TaskInstance {
 	 * @return
 	 */
 	public String getName() {
-		return taskMetadataEntity.getTaskMetadata().getName();
+		return getTaskMetadataEntity().getTaskMetadata().getName();
 	}
 	/**
 	 * 是否是用户任务
 	 * @return
 	 */
 	public boolean isUserTask() {
-		return taskMetadataEntity.getTaskMetadata().isUserTask();
+		return getTaskMetadataEntity().getTaskMetadata().isUserTask();
 	}
 }

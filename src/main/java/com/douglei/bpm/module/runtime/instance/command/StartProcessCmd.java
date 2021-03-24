@@ -41,7 +41,7 @@ public class StartProcessCmd implements Command {
 		if(processDefinition.getStateInstance() != State.DEPLOY)
 			return new ExecutionResult("启动失败, [%s]流程还未部署", "jbpm.process.start.fail.undeploy", processDefinition.getName());
 		
-		ProcessMetadata processMetadata = processEngineBeans.getProcessMappingContainer().getProcess(processDefinition.getId());
+		ProcessMetadata processMetadata = processEngineBeans.getProcessContainer().getProcess(processDefinition.getId());
 		return processEngineBeans.getTaskHandleUtil().startup(
 				processMetadata.getStartEventMetadataEntity(),
 				new StartEventHandleParameter(processMetadata, parameter, processEngineBeans.getUserBeanFactory()));

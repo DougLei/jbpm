@@ -12,7 +12,6 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
-import com.douglei.bpm.process.mapping.ProcessMappingContainer;
 import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
 import com.douglei.orm.context.RegistrationResult;
@@ -50,7 +49,7 @@ public class ProcessEngine {
 	}
 	
 	@Autowired
-	private ProcessMappingContainer processContainer;
+	private ProcessEngineBeans processEngineBeans;
 	
 	@Autowired
 	private RepositoryModule repositoryModule;
@@ -93,11 +92,11 @@ public class ProcessEngine {
 		return id;
 	}
 	/**
-	 * 获取流程容器实例
+	 * 获取流程(可对外提供)的bean实例
 	 * @return
 	 */
-	public ProcessMappingContainer getProcessContainer() {
-		return processContainer;
+	public ProcessEngineBeans getProcessEngineBeans() {
+		return processEngineBeans;
 	}
 	/**
 	 * 获取RepositoryModule实例

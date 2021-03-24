@@ -172,9 +172,8 @@ public class TaskHandleUtil {
 		List<UserBean> assignableUsers = new ArrayList<UserBean>();
 		
 		AssignableUserExpressionParameter parameter = new AssignableUserExpressionParameter(currentUserTaskMetadata, handleParameter, processEngineBeans);
-		List<UserBean> tempList = null;
 		for(AssignableUserExpressionEntity entity : assignPolicy.getAssignableUserExpressionEntities()) {
-			tempList = processEngineBeans.getAssignableUserExpressionContainer().get(entity.getName()).getAssignUserList(entity.getValue(), parameter);
+			List<UserBean> tempList = processEngineBeans.getAssignableUserExpressionContainer().get(entity.getName()).getAssignUserList(entity.getValue(), parameter);
 			if(tempList != null && !tempList.isEmpty())
 				assignableUsers.addAll(tempList);
 		}
@@ -195,7 +194,7 @@ public class TaskHandleUtil {
 	/**
 	 * 验证指派的用户
 	 * @param assignedUsers 实际指派的用户集合
-	 * @param assignableUsers 具体可指派的所有用户集合
+	 * @param assignableUsers 具体可指派的用户集合
 	 * @param assignNumber
 	 * @throws TaskHandleException
 	 */

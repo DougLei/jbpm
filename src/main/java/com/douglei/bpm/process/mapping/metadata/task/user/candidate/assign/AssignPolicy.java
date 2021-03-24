@@ -1,6 +1,5 @@
 package com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

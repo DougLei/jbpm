@@ -89,12 +89,12 @@ public class DelegationHandler {
 	 * @param chainId
 	 * @param assigneeUserId
 	 * @param reason 记录委托的原因
-	 * @param isStaticAssign 是否是静态指派
+	 * @param isFixedAssign 是否是固定指派
 	 * @param assigneeList
 	 */
-	public void addAssignee(String taskinstId, int groupId, int chainId, String assigneeUserId, String reason, boolean isStaticAssign, List<Assignee> assigneeList) {
+	public void addAssignee(String taskinstId, int groupId, int chainId, String assigneeUserId, String reason, boolean isFixedAssign, List<Assignee> assigneeList) {
 		Assignee assignee = new Assignee(taskinstId, assigneeUserId, groupId, chainId);
-		if(isStaticAssign) {
+		if(isFixedAssign) {
 			assignee.setModeInstance(AssignMode.FIXED);
 		} else if(chainId > 0) {
 			assignee.setReason(reason);

@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.douglei.bpm.module.history.task.Attitude;
 import com.douglei.bpm.module.history.task.HistoryAssignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
+import com.douglei.bpm.process.handler.UserEntity;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -21,26 +21,24 @@ public class AssigneeDispatcher {
 	
 	/**
 	 * 
-	 * @param taskinstId 任务实例id
-	 * @param handleUserId 当前办理的用户id
-	 * @param suggest 当前办理的用户意见
-	 * @param attitude 当前办理的用户态度
-	 * @param currentDate 当前办理的时间
+	 * @param taskinstId 
+	 * @param userEntity 
+	 * @param currentDate 
 	 */
-	public AssigneeDispatcher(String taskinstId, String handleUserId, String suggest, Attitude attitude, Date currentDate) {
+	public AssigneeDispatcher(String taskinstId, UserEntity userEntity, Date currentDate) {
 		this.taskinstId = taskinstId;
 		
 		// 查询当前办理的用户, 在当前任务中认领的指派信息集合
 		List<HistoryAssignee> assigneeList = SessionContext.getSqlSession().query(
 				HistoryAssignee.class, 
 				"select * from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
-				Arrays.asList(taskinstId, handleUserId, HandleState.CLAIMED.name()));
+				Arrays.asList(taskinstId, userEntity.getCurrentHandleUser().getUserId(), HandleState.CLAIMED.name()));
 		
 		// 设置独立的指派信息集合
 		HistoryAssignee historyAssignee = null;
 		for(int i=0;i < assigneeList.size();i++) {
 			historyAssignee = assigneeList.get(i);
-			historyAssignee.finish(attitude, suggest, currentDate);
+			historyAssignee.finish(userEntity.getAttitude(), userEntity.getSuggest(), currentDate);
 			
 			if(historyAssignee.isChainFirst()) {
 				if(chainFirstAssigneeList == null)

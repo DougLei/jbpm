@@ -21,28 +21,18 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 
 	@Override
 	public ExecutionResult startup() {
-		// 验证指派的用户
-		AssigneeHandler assigneeHandler = new AssigneeHandler(
-				handleParameter.getProcessMetadata().getCode(), 
-				handleParameter.getProcessMetadata().getVersion(), 
-				handleParameter.getUserEntity().getAssignedUsers());
-		assigneeHandler.pretreatment(currentTaskMetadataEntity.getTaskMetadata(), handleParameter, processEngineBeans);
-				
 		// 创建当前用户任务
 		Task task = createTask(false);
-		task.setAssignCount(assigneeHandler.getAssignCount());
 		if(currentTaskMetadataEntity.getTaskMetadata().getTimeLimit() != null)
 			task.setExpiryTime(new TimeLimitParser(task.getStartTime(), currentTaskMetadataEntity.getTaskMetadata().getTimeLimit()).getExpiryTime());
 		
-		// 记录指派的用户
-		assigneeHandler.save(
-				handleParameter.getUserEntity().getCurrentHandleUser().getUserId(), 
-				currentTaskMetadataEntity.getTaskMetadata(),
-				task,
-				handleParameter.getCurrentDate());
+		// 处理指派的用户
+		AssigneeHandler assigneeHandler = new AssigneeHandler();
+		assigneeHandler.execute(currentTaskMetadataEntity.getTaskMetadata(), task, handleParameter, processEngineBeans);
 		
 		// 保存当前用户任务
 		SessionContext.getTableSession().save(task);
+		
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	
@@ -53,12 +43,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 		currentTask.addBusinessId(handleParameter.getBusinessId());
 		
 		// 进行指派信息的调度
-		AssigneeDispatcher assigneeDispatcher = new AssigneeDispatcher(
-				currentTask.getTaskinstId(),
-				handleParameter.getUserEntity().getCurrentHandleUser().getUserId(),
-				handleParameter.getUserEntity().getSuggest(), 
-				handleParameter.getUserEntity().getAttitude(), 
-				handleParameter.getCurrentDate());
+		AssigneeDispatcher assigneeDispatcher = new AssigneeDispatcher(currentTask.getTaskinstId(), handleParameter.getUserEntity(), handleParameter.getCurrentDate());
 		assigneeDispatcher.dispatch();
 		
 		// 判断任务是否结束, 以及是否可以调度

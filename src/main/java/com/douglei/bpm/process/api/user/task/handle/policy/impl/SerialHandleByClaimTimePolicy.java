@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.runtime.task.Assignee;
-import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandlePolicy;
 
 /**
@@ -22,12 +21,12 @@ public class SerialHandleByClaimTimePolicy implements SerialHandlePolicy{
 	}
 
 	@Override
-	public int canHandle(UserBean currentHandleUser, List<Assignee> claimedAssigneeList) {
+	public int canHandle(String currentHandleUserId, List<Assignee> claimedAssigneeList) {
 		claimedAssigneeList.sort(byClaimTimeASC);
 
 		int waitForPersonNumber = 0; // 需要等待的人数
 		for (Assignee assignee : claimedAssigneeList) {
-			if(assignee.getUserId().equals(currentHandleUser.getUserId()))
+			if(assignee.getUserId().equals(currentHandleUserId))
 				break;
 			else
 				waitForPersonNumber++;

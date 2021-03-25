@@ -47,10 +47,10 @@ public class GeneralTaskParameter {
 			this.assignedUserIds.addAll(assignedUserIds);
 		
 		if(this.assignedUserIds.size() > 1) {
-			HashSet<String> hashset = new HashSet<String>(this.assignedUserIds);
-			if(hashset.size() < this.assignedUserIds.size()) {
+			HashSet<String> set = new HashSet<String>(this.assignedUserIds);
+			if(set.size() < this.assignedUserIds.size()) {
 				this.assignedUserIds.clear();
-				this.assignedUserIds.addAll(hashset);
+				this.assignedUserIds.addAll(set);
 			}
 		}
 		return this;

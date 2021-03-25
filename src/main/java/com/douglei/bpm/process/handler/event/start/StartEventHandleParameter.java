@@ -3,7 +3,6 @@ package com.douglei.bpm.process.handler.event.start;
 import java.util.UUID;
 
 import com.douglei.bpm.module.runtime.instance.StartParameter;
-import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.UserEntity;
 import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
@@ -15,13 +14,13 @@ import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
 public class StartEventHandleParameter extends GeneralHandleParameter {
 	private String tenantId;
 	
-	public StartEventHandleParameter(ProcessMetadata processMetadata, StartParameter parameter, UserBeanFactory userBeanFactory) {
+	public StartEventHandleParameter(ProcessMetadata processMetadata, StartParameter parameter) {
 		this.processInstanceId = UUID.randomUUID().toString();
 		this.businessId = parameter.getBusinessId();
 		this.processMetadata = processMetadata;
 		this.tenantId = parameter.getTenantId();
 		
-		this.userEntity = new UserEntity(userBeanFactory.create(parameter.getUserId()), userBeanFactory.create(parameter.getAssignedUserIds()));
+		this.userEntity = new UserEntity(parameter.getUserId(), parameter.getAssignedUserIds());
 		this.variableEntities = parameter.getVariableEntities();
 	}
 	

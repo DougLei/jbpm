@@ -10,7 +10,6 @@ import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
 import com.douglei.bpm.module.runtime.task.command.parameter.HandleTaskParameter;
-import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
@@ -34,8 +33,6 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 		if(StringUtil.isEmpty(parameter.getUserId()))
 			throw new TaskHandleException("办理失败, 办理["+taskInstance.getName()+"]任务, 需要提供userId");
 
-		UserBean currentHandleUser = processEngineBeans.getUserBeanFactory().create(parameter.getUserId());
-		
 		if(taskInstance.isUserTask()) {
 			HandlePolicy handlePolicy = ((UserTaskMetadata) taskInstance.getTaskMetadataEntity().getTaskMetadata()).getCandidate().getHandlePolicy();
 			if(handlePolicy.suggestIsRequired() && StringUtil.isEmpty(parameter.getSuggest()))
@@ -48,7 +45,7 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 				throw new TaskHandleException("办理失败, 指定的userId无法办理["+taskInstance.getName()+"]任务");
 			
 			// 根据办理策略, 判断当前的userId能否办理
-			int waitForPersonNumber = canHandle(handlePolicy, currentHandleUser, processEngineBeans);
+			int waitForPersonNumber = canHandle(handlePolicy, parameter.getUserId(), processEngineBeans);
 			if(waitForPersonNumber > 0)
 				return new ExecutionResult("办理失败, 指定的userId暂时不能办理[%s]任务, 需要等待前面%d人完成办理", "jbpm.handle.fail.wait.sequence", taskInstance.getName(), waitForPersonNumber);
 		}
@@ -56,7 +53,7 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 		return processEngineBeans.getTaskHandleUtil().handle(
 				taskInstance.getTaskMetadataEntity(), new GeneralHandleParameter(
 						taskInstance, 
-						currentHandleUser, 
+						parameter.getUserId(), 
 						parameter.getSuggest(), 
 						parameter.getAttitude(), 
 						parameter.getReason(),
@@ -67,11 +64,11 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 	/**
 	 * 是否能办理
 	 * @param handlePolicy
-	 * @param currentHandleUser
+	 * @param currentHandleUserId
 	 * @param processEngineBeans
 	 * @return 需要等待的人数, 返回0表示可以进行办理
 	 */
-	private int canHandle(HandlePolicy handlePolicy, UserBean currentHandleUser, ProcessEngineBeans processEngineBeans) {
+	private int canHandle(HandlePolicy handlePolicy, String currentHandleUserId, ProcessEngineBeans processEngineBeans) {
 		if(taskInstance.getTask().getAssignCount() == 1 || handlePolicy.getSerialHandlePolicyEntity() == null)
 			return 0;
 		
@@ -83,13 +80,13 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 		
 		int count = 0; // 记录是否全部是当前用户的指派信息
 		for (Assignee assignee : claimedAssigneeList) {
-			if(!assignee.getUserId().equals(currentHandleUser.getUserId()))
+			if(!assignee.getUserId().equals(currentHandleUserId))
 				break;
 			count++;
 		}
 		
 		if(count == claimedAssigneeList.size())
 			return 0;
-		return processEngineBeans.getTaskHandlePolicyContainer().getSerialHandlePolicy(handlePolicy.getSerialHandlePolicyEntity().getName()).canHandle(currentHandleUser, claimedAssigneeList);
+		return processEngineBeans.getTaskHandlePolicyContainer().getSerialHandlePolicy(handlePolicy.getSerialHandlePolicyEntity().getName()).canHandle(currentHandleUserId, claimedAssigneeList);
 	}
 }

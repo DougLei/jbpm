@@ -57,10 +57,7 @@ public class JumpTaskCmd extends GeneralTaskHandler implements Command{
 		}
 		
 		// 创建跳转用办理参数实例
-		this.handleParameter = new GeneralHandleParameter(
-				taskInstance, 
-				processEngineBeans.getUserBeanFactory().create(userId), 
-				null, null, null, null, null);
+		this.handleParameter = new GeneralHandleParameter(taskInstance, userId, null, null, null, null, null);
 		
 		// 完成当前任务
 		currentTask.setUserId(userId);
@@ -69,7 +66,7 @@ public class JumpTaskCmd extends GeneralTaskHandler implements Command{
 		
 		// 进行跳转调度
 		new JumpDispatchExecutor(targetTask)
-			.setParameters(taskInstance.getTaskMetadataEntity(), handleParameter, assignedUserIds, processEngineBeans)
+			.initParameters(taskInstance.getTaskMetadataEntity(), handleParameter, assignedUserIds, processEngineBeans)
 			.execute();
 		return ExecutionResult.getDefaultSuccessInstance();
 	}

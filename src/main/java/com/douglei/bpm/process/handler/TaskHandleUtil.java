@@ -10,7 +10,6 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpressionParameter;
-import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.handler.event.end.EndEventHandler;
 import com.douglei.bpm.process.handler.event.start.StartEventHandler;
 import com.douglei.bpm.process.handler.gateway.ExclusiveGatewayHandler;
@@ -20,7 +19,6 @@ import com.douglei.bpm.process.handler.task.user.UserTaskHandler;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadataEntity;
 import com.douglei.bpm.process.mapping.metadata.flow.FlowMetadata;
-import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignNumber;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignPolicy;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignableUserExpressionEntity;
@@ -162,52 +160,53 @@ public class TaskHandleUtil {
 	//---------------------------------------------------------------------------------------------
 	
 	/**
-	 * 获取指定的指派策略下, 具体可指派的所有用户集合
-	 * @param assignPolicy 任务的指派策略; 抄送的指派策略; 委托的指派策略; 转办的指派策略
-	 * @param currentUserTaskMetadata 当前用户任务的元数据实例
-	 * @param handleParameter
+	 * 获取指定的指派策略下, 具体可指派的用户id集合
+	 * @param procinstId 当前操作的流程实例id
+	 * @param taskinstId 当前操作的任务实例id
+	 * @param currentHandleUserId 当前办理的用户id
+	 * @param assignPolicy
 	 * @return
 	 */
-	public List<UserBean> getAssignableUsers(AssignPolicy assignPolicy, UserTaskMetadata currentUserTaskMetadata, HandleParameter handleParameter) {
-		List<UserBean> assignableUsers = new ArrayList<UserBean>();
+	public List<String> getAssignableUserIds(String procinstId, String taskinstId, String currentHandleUserId, AssignPolicy assignPolicy) {
+		List<String> assignableUserIds = new ArrayList<String>();
 		
-		AssignableUserExpressionParameter parameter = new AssignableUserExpressionParameter(currentUserTaskMetadata, handleParameter, processEngineBeans);
+		AssignableUserExpressionParameter parameter = new AssignableUserExpressionParameter(procinstId, taskinstId, currentHandleUserId);
 		for(AssignableUserExpressionEntity entity : assignPolicy.getAssignableUserExpressionEntities()) {
-			List<UserBean> tempList = processEngineBeans.getAssignableUserExpressionContainer().get(entity.getName()).getAssignUserList(entity.getValue(), parameter);
-			if(tempList != null && !tempList.isEmpty())
-				assignableUsers.addAll(tempList);
+			List<String> userIds = processEngineBeans.getAssignableUserExpressionContainer().get(entity.getName()).getAssignUserIds(entity.getValue(), parameter);
+			if(userIds != null && !userIds.isEmpty())
+				assignableUserIds.addAll(userIds);
 		}
 		
-		if(assignableUsers.size() < 2)
-			return assignableUsers;
+		if(assignableUserIds.size() < 2)
+			return assignableUserIds;
 		
 		// 去重
-		HashSet<UserBean> hashset = new HashSet<UserBean>(assignableUsers);
-		if(hashset.size() == assignableUsers.size())
-			return assignableUsers;
+		HashSet<String> set = new HashSet<String>(assignableUserIds);
+		if(set.size() == assignableUserIds.size())
+			return assignableUserIds;
 		
-		assignableUsers.clear();
-		assignableUsers.addAll(hashset);
-		return assignableUsers;
+		assignableUserIds.clear();
+		assignableUserIds.addAll(set);
+		return assignableUserIds;
 	}
 
 	/**
 	 * 验证指派的用户
-	 * @param assignedUsers 实际指派的用户集合
-	 * @param assignableUsers 具体可指派的用户集合
+	 * @param assignedUserIds 实际指派的用户id集合
+	 * @param assignableUserIds 具体可指派的用户id集合
 	 * @param assignNumber
 	 * @throws TaskHandleException
 	 */
-	public void validateAssignedUsers(List<UserBean> assignedUsers, List<UserBean> assignableUsers, AssignNumber assignNumber) throws TaskHandleException{
+	public void validateAssignedUsers(List<String> assignedUserIds, List<String> assignableUserIds, AssignNumber assignNumber) throws TaskHandleException{
 		// 判断实际指派的人, 是否都存在于可指派的用户集合中
-		for (UserBean assignedUser : assignedUsers) {
-			if(!assignableUsers.contains(assignedUser))
+		for (String assignedUserId : assignedUserIds) {
+			if(!assignableUserIds.contains(assignedUserId))
 				throw new TaskHandleException("不能指派配置范围外的人员"); 
 		}
 		
 		// 判断实际指派的人数, 是否超过最多可指派的人数
-		int upperLimit = assignNumber.calcUpperLimit(assignableUsers.size());
-		if(assignedUsers.size() > upperLimit)
-			throw new TaskHandleException("实际指派的人数["+assignedUsers.size()+"]超过配置的上限["+upperLimit+"]");
+		int upperLimit = assignNumber.calcUpperLimit(assignableUserIds.size());
+		if(assignedUserIds.size() > upperLimit)
+			throw new TaskHandleException("实际指派的人数["+assignedUserIds.size()+"]超过配置的上限["+upperLimit+"]");
 	}
 }

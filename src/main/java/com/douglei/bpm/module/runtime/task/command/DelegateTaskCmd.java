@@ -14,9 +14,7 @@ import com.douglei.bpm.module.runtime.task.AssignMode;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
-import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
-import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.task.user.assignee.startup.DelegationHandler;
 import com.douglei.bpm.process.handler.task.user.assignee.startup.SqlCondition;
@@ -73,13 +71,11 @@ public class DelegateTaskCmd implements Command {
 		if(candidate == null)
 			candidate = ((UserTaskMetadata)taskMetadata).getCandidate();
 		
-		List<UserBean> assignableUsers = processEngineBeans.getTaskHandleUtil().getAssignableUsers(
-				candidate.getAssignPolicy(), 
-				(UserTaskMetadata)taskMetadata, 
-				new GeneralHandleParameter(taskInstance, processEngineBeans.getUserBeanFactory().create(userId), null, null, null, null, null));
-		if(assignableUsers.isEmpty())
+		List<String> assignableUserIds = processEngineBeans.getTaskHandleUtil().getAssignableUserIds(
+				taskInstance.getTask().getProcinstId(), taskInstance.getTask().getTaskinstId(), userId, candidate.getAssignPolicy());
+		if(assignableUserIds.isEmpty())
 			throw new TaskHandleException("["+taskMetadata.getName()+"]任务不存在可"+getAssignModeName()+"的人员");
-		if(!assignableUsers.contains(new UserBean(assignedUserId)))
+		if(!assignableUserIds.contains(assignedUserId))
 			throw new TaskHandleException("不能指派配置范围外的人员"); 
 		
 		

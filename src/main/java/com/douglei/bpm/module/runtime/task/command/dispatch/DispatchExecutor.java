@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.runtime.task.command.CarbonCopyTaskCmd;
-import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskDispatchException;
@@ -20,20 +19,20 @@ import com.douglei.bpm.process.mapping.metadata.task.user.option.carboncopy.Carb
  * @author DougLei
  */
 public abstract class DispatchExecutor {
-	protected TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity;
-	protected GeneralHandleParameter handleParameter;
+	protected TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity; // 当前任务的元数据实例
+	protected GeneralHandleParameter handleParameter; // 办理参数
 	protected List<String> assignedUserIds; // 实际指派的用户id集合
 	protected ProcessEngineBeans processEngineBeans;
 	
 	/**
-	 * 设置调度执行器的必要参数
+	 * 初始化调度执行器的必要参数
 	 * @param currentTaskMetadataEntity
 	 * @param handleParameter
 	 * @param assignedUserIds 实际指派的用户id集合
 	 * @param processEngineBeans
 	 * @return
 	 */
-	public final DispatchExecutor setParameters(TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity, GeneralHandleParameter handleParameter, List<String> assignedUserIds, ProcessEngineBeans processEngineBeans) {
+	public final DispatchExecutor initParameters(TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity, GeneralHandleParameter handleParameter, List<String> assignedUserIds, ProcessEngineBeans processEngineBeans) {
 		this.currentTaskMetadataEntity = currentTaskMetadataEntity;
 		this.handleParameter = handleParameter;
 		this.assignedUserIds = assignedUserIds;
@@ -54,19 +53,20 @@ public abstract class DispatchExecutor {
 			return;
 		
 		// 获取具体可抄送的所有人员集合, 并进行抄送
-		List<UserBean> assignableUsers = processEngineBeans.getTaskHandleUtil().getAssignableUsers(
-				((CarbonCopyOption)option).getCandidate().getAssignPolicy(), 
-				userTaskMetadata, 
-				handleParameter);
+		List<String> assignableUserIds = processEngineBeans.getTaskHandleUtil().getAssignableUserIds(
+				handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getProcinstId(), 
+				handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId(), 
+				handleParameter.getUserEntity().getCurrentHandleUserId(), 
+				((CarbonCopyOption)option).getCandidate().getAssignPolicy());
 		
-		if(assignableUsers.isEmpty())
+		if(assignableUserIds.isEmpty())
 			return;
 		
 		new CarbonCopyTaskCmd().execute(
 				handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId(), 
-				handleParameter.getUserEntity().getCurrentHandleUser().getUserId(), 
+				handleParameter.getUserEntity().getCurrentHandleUserId(), 
 				handleParameter.getCurrentDate(), 
-				assignableUsers);
+				assignableUserIds);
 	}
 	
 	/**
@@ -74,9 +74,8 @@ public abstract class DispatchExecutor {
 	 * @param assignedUserIds
 	 */
 	protected void setAssignedUsers(List<String> assignedUserIds) {
-		List<UserBean> assignedUsers = processEngineBeans.getUserBeanFactory().create(assignedUserIds);
-		if(assignedUsers != null && !assignedUsers.isEmpty())
-			handleParameter.getUserEntity().getAssignedUsers().addAll(assignedUsers);
+		if(assignedUserIds != null && !assignedUserIds.isEmpty())
+			handleParameter.getUserEntity().getAssignedUserIds().addAll(assignedUserIds);
 	}
 	
 	/**

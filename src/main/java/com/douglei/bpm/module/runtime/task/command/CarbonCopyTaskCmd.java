@@ -9,9 +9,7 @@ import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.CarbonCopy;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
-import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
-import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
@@ -53,20 +51,16 @@ public class CarbonCopyTaskCmd extends AbstractTaskCmd implements Command {
 		
 		// 获取具体可抄送的所有人员集合
 		AssignPolicy assignPolicy = ((CarbonCopyOption)option).getCandidate().getAssignPolicy();
-		List<UserBean> assignableUsers = processEngineBeans.getTaskHandleUtil().getAssignableUsers(
-				assignPolicy, 
-				(UserTaskMetadata)taskMetadata, 
-				new GeneralHandleParameter(taskInstance, processEngineBeans.getUserBeanFactory().create(userId), null, null, null, null, null));
-		if(assignableUsers.isEmpty())
+		List<String> assignableUserIds = processEngineBeans.getTaskHandleUtil().getAssignableUserIds(
+				taskInstance.getTask().getProcinstId(), taskInstance.getTask().getTaskinstId(), userId, assignPolicy);
+		if(assignableUserIds.isEmpty())
 			throw new TaskHandleException("["+taskMetadata.getName()+"]任务不存在可抄送的人员");
 		
 		// 构建实际抄送的用户集合并进行验证
-		List<UserBean> assignedUsers = new ArrayList<UserBean>(assignedUserIds.size());
-		assignedUserIds.forEach(userId -> assignedUsers.add(new UserBean(userId)));
-		processEngineBeans.getTaskHandleUtil().validateAssignedUsers(assignedUsers, assignableUsers, assignPolicy.getAssignNumber());
+		processEngineBeans.getTaskHandleUtil().validateAssignedUsers(assignedUserIds, assignableUserIds, assignPolicy.getAssignNumber());
 		
 		// 进行抄送
-		execute(taskInstance.getTask().getTaskinstId(), userId, new Date(), assignedUsers);
+		execute(taskInstance.getTask().getTaskinstId(), userId, new Date(), assignedUserIds);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	
@@ -75,18 +69,18 @@ public class CarbonCopyTaskCmd extends AbstractTaskCmd implements Command {
 	 * @param taskinstId 任务实例id
 	 * @param ccUserId 抄送人id
 	 * @param ccTime 抄送时间
-	 * @param assignedUsers 接受的用户集合
+	 * @param assignedUsers 接受的用户id集合
 	 */
-	public void execute(String taskinstId, String ccUserId, Date ccTime, List<UserBean> assignedUsers) {
+	public void execute(String taskinstId, String ccUserId, Date ccTime, List<String> assignedUserIds) {
 		// 判断接受的用户集合中是否包含抄送人, 如果包含则移除
-		for(int i=0; i< assignedUsers.size(); i++) {
-			if(assignedUsers.get(i).getUserId().equals(ccUserId))
-				assignedUsers.remove(i--);
+		for(int i=0; i< assignedUserIds.size(); i++) {
+			if(assignedUserIds.get(i).equals(ccUserId))
+				assignedUserIds.remove(i--);
 		}
 		
-		List<CarbonCopy> carbonCopies = new ArrayList<CarbonCopy>(assignedUsers.size());
-		assignedUsers.forEach(user -> {
-			carbonCopies.add(new CarbonCopy(taskinstId, ccUserId, ccTime, user.getUserId()));
+		List<CarbonCopy> carbonCopies = new ArrayList<CarbonCopy>(assignedUserIds.size());
+		assignedUserIds.forEach(userId -> {
+			carbonCopies.add(new CarbonCopy(taskinstId, ccUserId, ccTime, userId));
 		});
 		SessionContext.getTableSession().save(carbonCopies);
 	}

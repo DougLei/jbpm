@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.douglei.bpm.bean.annotation.MultiInstance;
 import com.douglei.bpm.module.runtime.task.Assignee;
-import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 
 /**
  * 串行办理的策略
@@ -32,9 +31,9 @@ public interface SerialHandlePolicy {
 	
 	/**
 	 * 能否办理
-	 * @param currentHandleUser 当前办理的用户实例
+	 * @param currentHandleUserId 当前办理的用户id
 	 * @param claimedAssigneeList 已认领的指派信息集合, 集合中可能包含多个currentHandleUser的信息
 	 * @return 需要等待的人数, 返回0表示可以进行办理
 	 */
-	int canHandle(UserBean currentHandleUser, List<Assignee> claimedAssigneeList);
+	int canHandle(String currentHandleUserId, List<Assignee> claimedAssigneeList);
 }

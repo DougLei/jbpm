@@ -48,7 +48,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 		
 		// 判断任务是否结束, 以及是否可以调度
 		if(isFinished()) {
-			currentTask.setDispatchRight(handleParameter.getUserEntity().getCurrentHandleUser().getUserId());
+			currentTask.setDispatchRight(handleParameter.getUserEntity().getCurrentHandleUserId());
 			return CAN_DISPATCH;
 		}
 		return CANNOT_DISPATCH;

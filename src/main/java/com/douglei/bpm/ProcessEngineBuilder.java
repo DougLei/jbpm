@@ -5,7 +5,6 @@ import javax.sql.DataSource;
 import com.douglei.bpm.bean.BeanFactory;
 import com.douglei.bpm.configuration.ProcessEngineConfiguration;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpression;
-import com.douglei.bpm.process.api.user.bean.factory.UserBeanFactory;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandlePolicy;
 import com.douglei.orm.context.SessionFactoryContainer;
@@ -32,16 +31,6 @@ public class ProcessEngineBuilder {
 	 */
 	public ProcessEngineBuilder setProcessEngineConfiguration(ProcessEngineConfiguration configuration) {
 		beanFactory.registerCustomBean(ProcessEngineConfiguration.class, configuration);
-		return this;
-	}
-	
-	/**
-	 * 设置用户Bean工厂
-	 * @param factory
-	 * @return
-	 */
-	public ProcessEngineBuilder setUserBeanFactory(UserBeanFactory factory) {
-		beanFactory.registerCustomBean(UserBeanFactory.class, factory);
 		return this;
 	}
 	

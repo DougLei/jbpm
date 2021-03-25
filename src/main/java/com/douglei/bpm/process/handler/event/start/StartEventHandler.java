@@ -62,7 +62,7 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		instance.setTitle(getTitle(processMetadata.getTitle(), handleParameter.getVariableEntities().getVariableMap()));
 		instance.setBusinessId(handleParameter.getBusinessId());
 		instance.setPageId(processMetadata.getPageID());
-		instance.setStartUserId(handleParameter.getUserEntity().getCurrentHandleUser().getUserId());
+		instance.setStartUserId(handleParameter.getUserEntity().getCurrentHandleUserId());
 		instance.setStartTime(handleParameter.getCurrentDate());
 		instance.setTenantId(handleParameter.getTenantId());
 		instance.setStateInstance(State.ACTIVE);

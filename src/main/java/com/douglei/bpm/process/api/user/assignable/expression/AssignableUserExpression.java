@@ -3,7 +3,6 @@ package com.douglei.bpm.process.api.user.assignable.expression;
 import java.util.List;
 
 import com.douglei.bpm.bean.annotation.MultiInstance;
-import com.douglei.bpm.process.api.user.bean.factory.UserBean;
 
 /**
  * 可指派的用户表达式
@@ -14,6 +13,7 @@ import com.douglei.bpm.process.api.user.bean.factory.UserBean;
  * 	SessionContext.getSqlSession()
  * 	SessionContext.getTableSession()
  * 	SessionContext.getSQLSession()
+ *  SessionContext.getSQLQuerySession()
  * </pre>
  * 
  * @author DougLei
@@ -51,10 +51,10 @@ public interface AssignableUserExpression {
 	}
 	
 	/**
-	 * 获取具体指派的用户集合
+	 * 获取具体指派的用户id集合
 	 * @param value  配置的表达式值, 即流程xml配置文件中, userTask -> candidate -> assignPolicy -> expression里的value属性值
 	 * @param parameter 
 	 * @return 
 	 */
-	List<UserBean> getAssignUserList(String value, AssignableUserExpressionParameter parameter);
+	List<String> getAssignUserIds(String value, AssignableUserExpressionParameter parameter);
 }

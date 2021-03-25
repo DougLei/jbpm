@@ -44,6 +44,6 @@ public class StartProcessCmd implements Command {
 		ProcessMetadata processMetadata = processEngineBeans.getProcessContainer().getProcess(processDefinition.getId());
 		return processEngineBeans.getTaskHandleUtil().startup(
 				processMetadata.getStartEventMetadataEntity(),
-				new StartEventHandleParameter(processMetadata, parameter, processEngineBeans.getUserBeanFactory()));
+				new StartEventHandleParameter(processMetadata, parameter));
 	}
 }

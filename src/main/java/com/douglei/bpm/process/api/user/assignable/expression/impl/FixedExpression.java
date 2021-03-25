@@ -25,7 +25,7 @@ public class FixedExpression implements AssignableUserExpression {
 		
 		List<String> list = new ArrayList<String>(userIds.length);
 		for (String userId : userIds) 
-			list.add(userId.trim());
+			list.add(userId);
 		
 		return list;
 	}

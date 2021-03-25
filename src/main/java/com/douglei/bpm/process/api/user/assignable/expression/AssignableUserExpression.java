@@ -51,10 +51,10 @@ public interface AssignableUserExpression {
 	}
 	
 	/**
-	 * 获取具体指派的用户id集合
+	 * 获取可指派的用户id集合
 	 * @param value  配置的表达式值, 即流程xml配置文件中, userTask -> candidate -> assignPolicy -> expression里的value属性值
 	 * @param parameter 
 	 * @return 
 	 */
-	List<String> getAssignUserIds(String value, AssignableUserExpressionParameter parameter);
+	List<String> getUserIds(String value, AssignableUserExpressionParameter parameter);
 }

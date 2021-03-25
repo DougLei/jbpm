@@ -23,7 +23,7 @@ public class VariableExpression implements AssignableUserExpression {
 	}
 
 	@Override
-	public List<String> getAssignUserIds(String value, AssignableUserExpressionParameter parameter) {
+	public List<String> getUserIds(String value, AssignableUserExpressionParameter parameter) {
 		VariableQuerier variableQuerier = new VariableQuerier(parameter.getProcinstId(), parameter.getTaskinstId(), value.split(","));
 		if(variableQuerier.variables.isEmpty())
 			return null;

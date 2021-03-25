@@ -172,7 +172,7 @@ public class TaskHandleUtil {
 		
 		AssignableUserExpressionParameter parameter = new AssignableUserExpressionParameter(procinstId, taskinstId, currentHandleUserId);
 		for(AssignableUserExpressionEntity entity : assignPolicy.getAssignableUserExpressionEntities()) {
-			List<String> userIds = processEngineBeans.getAssignableUserExpressionContainer().get(entity.getName()).getAssignUserIds(entity.getValue(), parameter);
+			List<String> userIds = processEngineBeans.getAssignableUserExpressionContainer().get(entity.getName()).getUserIds(entity.getValue(), parameter);
 			if(userIds != null && !userIds.isEmpty())
 				assignableUserIds.addAll(userIds);
 		}

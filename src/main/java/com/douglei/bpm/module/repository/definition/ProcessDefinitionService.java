@@ -9,7 +9,6 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.repository.RepositoryException;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.process.mapping.ProcessMappingContainer;
-import com.douglei.bpm.process.mapping.parser.ProcessParseException;
 import com.douglei.orm.context.PropagationBehavior;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.Transaction;
@@ -41,10 +40,9 @@ public class ProcessDefinitionService {
 	 * 保存流程定义
 	 * @param builder
 	 * @return
-	 * @throws ProcessParseException
 	 */
 	@Transaction
-	public ExecutionResult insert(ProcessDefinitionEntity entity) throws ProcessParseException{
+	public ExecutionResult insert(ProcessDefinitionEntity entity) {
 		ProcessDefinition processDefinition = entity.getProcessDefinition();
 		ProcessDefinition old = SessionContext.getSQLSession().uniqueQuery(ProcessDefinition.class, "ProcessDefinition", "query4Insert", processDefinition);
 		

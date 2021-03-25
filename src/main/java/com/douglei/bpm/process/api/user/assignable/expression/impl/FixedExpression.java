@@ -20,7 +20,7 @@ public class FixedExpression implements AssignableUserExpression {
 	}
 
 	@Override
-	public List<String> getAssignUserIds(String value, AssignableUserExpressionParameter parameter) {
+	public List<String> getUserIds(String value, AssignableUserExpressionParameter parameter) {
 		String[] userIds = value.split(",");
 		
 		List<String> list = new ArrayList<String>(userIds.length);

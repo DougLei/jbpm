@@ -168,8 +168,8 @@ public class TaskHandleUtil {
 	 * @return
 	 */
 	public List<String> getAssignableUserIds(String procinstId, String taskinstId, String currentHandleUserId, AssignPolicy assignPolicy) {
+		// 获取可指派的用户id集合
 		List<String> assignableUserIds = new ArrayList<String>();
-		
 		AssignableUserExpressionParameter parameter = new AssignableUserExpressionParameter(procinstId, taskinstId, currentHandleUserId);
 		for(AssignableUserExpressionEntity entity : assignPolicy.getAssignableUserExpressionEntities()) {
 			List<String> userIds = processEngineBeans.getAssignableUserExpressionContainer().get(entity.getName()).getUserIds(entity.getValue(), parameter);

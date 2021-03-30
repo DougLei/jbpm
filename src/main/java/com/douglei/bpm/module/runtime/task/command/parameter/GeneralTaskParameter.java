@@ -1,6 +1,5 @@
 package com.douglei.bpm.module.runtime.task.command.parameter;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -10,7 +9,7 @@ import java.util.List;
  */
 public class GeneralTaskParameter {
 	private String userId; // 办理人id
-	private List<String> assignedUserIds; // 下一环节的办理人id集合
+	private HashSet<String> assignedUserIds; // 下一环节的办理人id集合
 	
 	/**
 	 * 设置办理人id
@@ -29,9 +28,8 @@ public class GeneralTaskParameter {
 	 */
 	public GeneralTaskParameter addAssignedUserId(String assignedUserId) {
 		if(assignedUserIds == null)
-			assignedUserIds = new ArrayList<String>();
-		if(assignedUserIds.isEmpty() || !assignedUserIds.contains(assignedUserId))
-			assignedUserIds.add(assignedUserId);
+			assignedUserIds = new HashSet<String>();
+		assignedUserIds.add(assignedUserId);
 		return this;
 	}
 	
@@ -42,17 +40,23 @@ public class GeneralTaskParameter {
 	 */
 	public GeneralTaskParameter addAssignedUserIds(List<String> assignedUserIds) {
 		if(this.assignedUserIds == null) 
+			this.assignedUserIds = new HashSet<String>(assignedUserIds);
+		else 
+			this.assignedUserIds.addAll(assignedUserIds);
+		return this;
+	}
+	
+
+	/**
+	 * 添加下一环节的办理人id集合
+	 * @param assignedUserIds
+	 * @return
+	 */
+	public GeneralTaskParameter addAssignedUserIds(HashSet<String> assignedUserIds) {
+		if(this.assignedUserIds == null) 
 			this.assignedUserIds = assignedUserIds;
 		else 
 			this.assignedUserIds.addAll(assignedUserIds);
-		
-		if(this.assignedUserIds.size() > 1) {
-			HashSet<String> set = new HashSet<String>(this.assignedUserIds);
-			if(set.size() < this.assignedUserIds.size()) {
-				this.assignedUserIds.clear();
-				this.assignedUserIds.addAll(set);
-			}
-		}
 		return this;
 	}
 	
@@ -67,7 +71,7 @@ public class GeneralTaskParameter {
 	 * 获取下一环节的办理人id集合
 	 * @return
 	 */
-	public List<String> getAssignedUserIds() {
+	public HashSet<String> getAssignedUserIds() {
 		return assignedUserIds;
 	}
 }

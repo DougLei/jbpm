@@ -1,5 +1,6 @@
 package com.douglei.bpm.module.runtime.task;
 
+import java.util.HashSet;
 import java.util.List;
 
 import com.douglei.bpm.bean.annotation.Autowired;
@@ -234,7 +235,7 @@ public class TaskService {
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult jump(int taskId, String targetTask, String userId, String reason, List<String> assignedUserIds, boolean strict) {
+	public ExecutionResult jump(int taskId, String targetTask, String userId, String reason, HashSet<String> assignedUserIds, boolean strict) {
 		TaskInstance taskInstance = new TaskInstance(taskId, container);
 		return commandExecutor.execute(new JumpTaskCmd(taskInstance, targetTask, userId, reason, assignedUserIds, strict));
 	}
@@ -249,7 +250,7 @@ public class TaskService {
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult jump(String taskinstId, String targetTask, String userId, String reason, List<String> assignedUserIds, boolean strict) {
+	public ExecutionResult jump(String taskinstId, String targetTask, String userId, String reason, HashSet<String> assignedUserIds, boolean strict) {
 		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
 		return commandExecutor.execute(new JumpTaskCmd(taskInstance, targetTask, userId, reason, assignedUserIds, strict));
 	}

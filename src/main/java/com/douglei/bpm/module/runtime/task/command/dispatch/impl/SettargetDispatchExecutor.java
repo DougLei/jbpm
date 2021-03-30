@@ -1,7 +1,7 @@
 package com.douglei.bpm.module.runtime.task.command.dispatch.impl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import com.douglei.bpm.module.runtime.task.HandleState;
@@ -57,13 +57,11 @@ public class SettargetDispatchExecutor extends DispatchExecutor {
 			List<Object[]> list = SessionContext.getSqlSession().query_("select user_id from bpm_hi_assignee where taskinst_id=? and handle_state=?", Arrays.asList(taskinstId, HandleState.FINISHED.name()));
 			if(list.size() > 0) {
 				if(assignedUserIds==null) {
-					assignedUserIds = new ArrayList<String>(list.size());
+					assignedUserIds = new HashSet<String>();
 				}else if(assignedUserIds.size() > 0) {
 					assignedUserIds.clear();
 				}
-				list.forEach(object -> {
-					assignedUserIds.add(object[0].toString());
-				});
+				list.forEach(array -> assignedUserIds.add(array[0].toString()));
 			}
 		}
 		setAssignedUsers(assignedUserIds);

@@ -1,7 +1,7 @@
 package com.douglei.bpm.module.runtime.task.command;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 
 import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.Command;
@@ -25,11 +25,11 @@ public class JumpTaskCmd extends GeneralTaskHandler implements Command{
 	private String targetTask; // 跳转的目标任务id
 	private String userId; // 进行跳转的用户id
 	private String reason; // 跳转原因
-	private List<String> assignedUserIds; // 指派的用户id集合
+	private HashSet<String> assignedUserIds; // 指派的用户id集合
 	private boolean strict; // 如果存在已经认领的指派信息, 跳转时是否强制删除相关数据; 建议传入false
 	private GeneralHandleParameter handleParameter;
 	
-	public JumpTaskCmd(TaskInstance taskInstance, String targetTask, String userId, String reason, List<String> assignedUserIds, boolean strict) {
+	public JumpTaskCmd(TaskInstance taskInstance, String targetTask, String userId, String reason, HashSet<String> assignedUserIds, boolean strict) {
 		this.taskInstance = taskInstance;
 		this.targetTask = targetTask;
 		this.userId = userId;

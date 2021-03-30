@@ -10,7 +10,6 @@ public class HandleTaskParameter extends GeneralTaskParameter{
 	private String suggest; // 办理人意见
 	private Attitude attitude; // 办理人态度
 	private String reason; // 办理人的办理原因, 即为什么办理; 该值会存储在task表的reason列中; 其和 suggest和attitude是互斥的; 用来表示特殊的任务办理, 例如网关的办理, 结束事件的办理, 流程跳转等
-	
 	private String businessId; // 关联的业务id
 	
 	/**

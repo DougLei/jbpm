@@ -96,6 +96,6 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 	
 	// 进行flow匹配, 返回是否匹配成功, 即是否可以流入该flow
 	private boolean flowMatching(FlowMetadata flow) {
-		return ignoreFlowCondition() || processEngineBeans.getTaskHandleUtil().flowMatching(flow, handleParameter.getVariableEntities().getVariableMap());
+		return ignoreFlowCondition() || processEngineBeans.getTaskHandleUtil().flowMatching(flow, handleParameter);
 	}
 }

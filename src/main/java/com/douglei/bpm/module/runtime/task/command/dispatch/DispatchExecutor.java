@@ -1,5 +1,6 @@
 package com.douglei.bpm.module.runtime.task.command.dispatch;
 
+import java.util.HashSet;
 import java.util.List;
 
 import com.douglei.bpm.ProcessEngineBeans;
@@ -21,7 +22,7 @@ import com.douglei.bpm.process.mapping.metadata.task.user.option.carboncopy.Carb
 public abstract class DispatchExecutor {
 	protected TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity; // 当前任务的元数据实例
 	protected GeneralHandleParameter handleParameter; // 办理参数
-	protected List<String> assignedUserIds; // 实际指派的用户id集合
+	protected HashSet<String> assignedUserIds; // 实际指派的用户id集合
 	protected ProcessEngineBeans processEngineBeans;
 	
 	/**
@@ -32,7 +33,7 @@ public abstract class DispatchExecutor {
 	 * @param processEngineBeans
 	 * @return
 	 */
-	public final DispatchExecutor initParameters(TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity, GeneralHandleParameter handleParameter, List<String> assignedUserIds, ProcessEngineBeans processEngineBeans) {
+	public final DispatchExecutor initParameters(TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity, GeneralHandleParameter handleParameter, HashSet<String> assignedUserIds, ProcessEngineBeans processEngineBeans) {
 		this.currentTaskMetadataEntity = currentTaskMetadataEntity;
 		this.handleParameter = handleParameter;
 		this.assignedUserIds = assignedUserIds;
@@ -73,9 +74,9 @@ public abstract class DispatchExecutor {
 	 * 设置实际指派的用户集合
 	 * @param assignedUserIds
 	 */
-	protected void setAssignedUsers(List<String> assignedUserIds) {
+	protected void setAssignedUsers(HashSet<String> assignedUserIds) {
 		if(assignedUserIds != null && !assignedUserIds.isEmpty())
-			handleParameter.getUserEntity().getAssignedUserIds().addAll(assignedUserIds);
+			handleParameter.getUserEntity().appendAssignedUserIds(assignedUserIds);
 	}
 	
 	/**

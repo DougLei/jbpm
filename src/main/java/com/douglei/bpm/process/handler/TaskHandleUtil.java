@@ -3,7 +3,6 @@ package com.douglei.bpm.process.handler;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.bean.annotation.Autowired;
@@ -70,7 +69,7 @@ public class TaskHandleUtil {
 			default:
 				throw new TaskHandleException("目前还未实现["+taskMetadataEntity.getTaskMetadata().getType().getName()+"]类型的任务办理器");
 		}
-		taskHandler.setParameters(taskMetadataEntity, handleParameter, processEngineBeans);
+		taskHandler.initParameters(taskMetadataEntity, handleParameter, processEngineBeans);
 		return taskHandler;
 	}
 	
@@ -104,7 +103,7 @@ public class TaskHandleUtil {
 	 */
 	public void dispatch(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, HandleParameter parameter) throws TaskDispatchException{
 		for(FlowMetadata flow : taskMetadataEntity.getOutputFlows()) {
-			if(flowMatching(flow, parameter.getVariableEntities().getVariableMap())) {
+			if(flowMatching(flow, parameter)) {
 				dispatchByFlow(flow, parameter);
 				return;
 			}
@@ -121,16 +120,16 @@ public class TaskHandleUtil {
 	 * <p>
 	 * 判断指定的flowMetadata是否满足流转条件
 	 * @param flowMetadata
-	 * @param variableMap
+	 * @param parameter
 	 * @return 
 	 */
-	public boolean flowMatching(FlowMetadata flowMetadata, Map<String, Object> variableMap) {
+	public boolean flowMatching(FlowMetadata flowMetadata, HandleParameter parameter) {
 		String conditionExpression = flowMetadata.getConditionExpression();
 		if(conditionExpression == null)
 			return true;
-		if(variableMap == null) 
+		if(parameter.getVariableEntities().getVariableMap() == null) 
 			return false;
-		return OgnlUtil.getBooleanValue(conditionExpression, variableMap);
+		return OgnlUtil.getBooleanValue(conditionExpression, parameter.getVariableEntities().getVariableMap());
 	}
 	
 	/**
@@ -169,25 +168,14 @@ public class TaskHandleUtil {
 	 */
 	public List<String> getAssignableUserIds(String procinstId, String taskinstId, String currentHandleUserId, AssignPolicy assignPolicy) {
 		// 获取可指派的用户id集合
-		List<String> assignableUserIds = new ArrayList<String>();
+		HashSet<String> assignableUserIds = new HashSet<String>();
 		AssignableUserExpressionParameter parameter = new AssignableUserExpressionParameter(procinstId, taskinstId, currentHandleUserId);
 		for(AssignableUserExpressionEntity entity : assignPolicy.getAssignableUserExpressionEntities()) {
 			List<String> userIds = processEngineBeans.getAssignableUserExpressionContainer().get(entity.getName()).getUserIds(entity.getValue(), parameter);
 			if(userIds != null && !userIds.isEmpty())
 				assignableUserIds.addAll(userIds);
 		}
-		
-		if(assignableUserIds.size() < 2)
-			return assignableUserIds;
-		
-		// 去重
-		HashSet<String> set = new HashSet<String>(assignableUserIds);
-		if(set.size() == assignableUserIds.size())
-			return assignableUserIds;
-		
-		assignableUserIds.clear();
-		assignableUserIds.addAll(set);
-		return assignableUserIds;
+		return new ArrayList<String>(assignableUserIds);
 	}
 
 	/**

@@ -1,6 +1,8 @@
 package com.douglei.bpm.process.api.user.task.handle.policy.impl;
 
+import java.util.Date;
 import java.util.List;
+import java.util.function.Predicate;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
@@ -30,7 +32,15 @@ public class ClaimByNumberPolicy implements ClaimPolicy{
 	public boolean validateValue(String value) {
 		return assignNumberParser.parse(value) != null;
 	}
-
+	
+	@Override
+	public boolean tryAutoClaim(String value, int assignCount, List<Assignee> assigneeList, Date claimTime) {
+		int claimUpperLimit = assignNumberParser.parse(value).calcUpperLimit(assignCount);
+		if(assignCount == claimUpperLimit) 
+			assigneeList.stream().filter(assignee -> assignee.isChainLast()).forEach(assignee -> assignee.claim(claimTime));
+		return false;
+	}
+	
 	@Override
 	public ClaimResult claimValidate(String value, String currentClaimUserId, List<Assignee> currentAssigneeList, List<Assignee> unclaimAssigneeList, List<Assignee> claimedAssigneeList, List<Assignee> finishedAssigneeList) {
 		int claimUpperLimit = calcUpperLimit(assignNumberParser.parse(value), unclaimAssigneeList, claimedAssigneeList, finishedAssigneeList);

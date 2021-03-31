@@ -1,5 +1,6 @@
 package com.douglei.bpm.process.api.user.task.handle.policy.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.douglei.bpm.bean.annotation.Bean;
@@ -22,6 +23,15 @@ public class ClaimBySinglePolicy implements ClaimPolicy{
 	@Override
 	public boolean valueIsRequired() {
 		return false;
+	}
+	
+	@Override
+	public boolean tryAutoClaim(String value, int assignCount, List<Assignee> assigneeList, Date claimTime) {
+		if(assignCount > 1)
+			return false;
+		
+		assigneeList.get(assigneeList.size()-1).claim(claimTime);
+		return true;
 	}
 
 	@Override

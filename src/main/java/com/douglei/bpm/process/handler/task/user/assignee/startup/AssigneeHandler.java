@@ -6,10 +6,12 @@ import java.util.List;
 import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.Task;
+import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.handler.HandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignPolicy;
+import com.douglei.bpm.process.mapping.metadata.task.user.candidate.handle.ClaimPolicyEntity;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -72,12 +74,13 @@ public class AssigneeHandler {
 		// 记录指派的人数
 		currentTask.setAssignCount(assignedUserIds.size());	
 		
-		// 如果只指派了一个人, 则进行认领操作
-		if(currentTask.getAssignCount() == 1) {
-			assigneeList.get(assigneeList.size()-1).claim(handleParameter.getCurrentDate());
+		// 尝试进行自动认领
+		ClaimPolicyEntity entity = currentUserTaskMetadata.getCandidate().getHandlePolicy().getClaimPolicyEntity();
+		ClaimPolicy policy = processEngineBeans.getTaskHandlePolicyContainer().getClaimPolicy(entity.getName());
+		if(policy.tryAutoClaim(entity.getValue(), currentTask.getAssignCount(), assigneeList, handleParameter.getCurrentDate()))
 			currentTask.setIsAllClaimed(1);
-		}
 		
+		// 保存指派信息
 		SessionContext.getTableSession().save(assigneeList);
 	}
 }

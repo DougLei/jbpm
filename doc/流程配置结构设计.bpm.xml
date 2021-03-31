@@ -7,7 +7,6 @@
 			2.1. 手动任务, 需要用户手动处理, 来推动流程流转, 主要是用户任务
 			2.2. 自动任务, 可以自行推动流程流转, 例如开始/结束事件, 网关任务, 子流程任务, SQL脚本任务, 定时任务, 邮件任务等
 			
-			
 		其他说明:
 		1. parallelGateway和inclusiveGateway在join时, 只能join一个父任务的分支任务, 如果配置尝试join多个父任务的分支任务, 会出现重复的网关数据
 		2. endEvent具有join功能, 且逻辑同parallelGateway和inclusiveGatewa相同

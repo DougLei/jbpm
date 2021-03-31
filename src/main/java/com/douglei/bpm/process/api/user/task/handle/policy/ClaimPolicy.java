@@ -1,5 +1,6 @@
 package com.douglei.bpm.process.api.user.task.handle.policy;
 
+import java.util.Date;
 import java.util.List;
 
 import com.douglei.bpm.bean.annotation.MultiInstance;
@@ -49,6 +50,16 @@ public interface ClaimPolicy {
 	default boolean validateValue(String value) {
 		return true;
 	}
+	
+	/**
+	 * 尝试自动认领
+	 * @param value 配置的表达式值, 即流程xml配置文件中, userTask -> candidate -> handlePolicy -> claim里的value属性值
+	 * @param assignCount 实际指派的人数
+	 * @param assigneeList 最终指派的信息集合
+	 * @param claimTime 认领时间
+	 * @return 是否成功
+	 */
+	boolean tryAutoClaim(String value, int assignCount, List<Assignee> assigneeList, Date claimTime);
 	
 	/**
 	 * 认领验证

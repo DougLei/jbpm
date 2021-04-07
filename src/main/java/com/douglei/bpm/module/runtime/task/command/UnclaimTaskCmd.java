@@ -52,9 +52,14 @@ public class UnclaimTaskCmd implements Command {
 		if(existsCC)
 			SessionContext.getSqlSession().executeUpdate("delete bpm_ru_cc where taskinst_id=? and cc_user_id=?", Arrays.asList(taskInstance.getTask().getTaskinstId(), userId));
 		
-		// 取消认领
+		// 取消认领, 并将比自己小的HandleState值从INVALID_UNCLAIM恢复为COMPETITIVE_UNCLAIM
 		SessionContext.getSQLSession().executeUpdate("Assignee", "unclaimTask", assigneeList);
-
+		assigneeList.stream().filter(assignee -> !assignee.isChainFirst()).forEach(assignee -> {
+			SessionContext.getSqlSession().executeUpdate(
+					"update bpm_ru_assignee set handle_state=? where taskinst_id=? and group_id=? and chain_id <? and handle_state=?", 
+					Arrays.asList(HandleState.COMPETITIVE_UNCLAIM.name(), taskInstance.getTask().getTaskinstId(), assignee.getGroupId(), assignee.getChainId(), HandleState.INVALID_UNCLAIM.name()));
+		});
+		
 		// 处理task的isAllClaimed字段值, 改为没有全部认领
 		if(taskInstance.getTask().isAllClaimed())
 			taskInstance.getTask().setNotAllClaimed();

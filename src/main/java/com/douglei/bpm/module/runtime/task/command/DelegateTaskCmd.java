@@ -151,6 +151,6 @@ public class DelegateTaskCmd implements Command {
 	 * @return
 	 */
 	protected HandleState targetHandleState() {
-		return HandleState.COMPETITIVE_UNCLAIM;
+		return HandleState.INVALID_UNCLAIM;
 	}
 }

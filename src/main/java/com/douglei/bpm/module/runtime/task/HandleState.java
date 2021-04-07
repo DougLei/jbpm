@@ -12,68 +12,27 @@ public enum HandleState {
 	INVALID,
 	
 	/**
+	 * 无效的未认领
+	 */
+	INVALID_UNCLAIM,
+	
+	/**
 	 * 可竞争的未认领
 	 */
-	COMPETITIVE_UNCLAIM {
-		@Override
-		public boolean unClaim() {
-			return true;
-		}
-	},
+	COMPETITIVE_UNCLAIM,
 	
 	/**
 	 * 未认领
 	 */
-	UNCLAIM {
-		@Override
-		public boolean unClaim() {
-			return true;
-		}
-	},
+	UNCLAIM,
 	
 	/**
 	 * 已认领
 	 */
-	CLAIMED {
-		@Override
-		public boolean isClaimed() {
-			return true;
-		}
-	},
+	CLAIMED,
 	
 	/**
 	 * 办理完成
 	 */
-	FINISHED {
-		@Override
-		public boolean isClaimed() {
-			return true;
-		}
-		@Override
-		public boolean isFinished() {
-			return true;
-		}
-	};
-	
-	/**
-	 * 是否未认领
-	 * @return
-	 */
-	public boolean unClaim() {
-		return false;
-	}
-	/**
-	 * 是否已认领
-	 * @return
-	 */
-	public boolean isClaimed() {
-		return false;
-	}
-	/**
-	 * 是否已经完成
-	 * @return
-	 */
-	public boolean isFinished() {
-		return false;
-	}
+	FINISHED;
 }

@@ -2,7 +2,6 @@ package com.douglei.bpm.process.api.user.task.handle.policy.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.function.Predicate;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
@@ -13,7 +12,7 @@ import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.Assig
 import com.douglei.bpm.process.mapping.parser.task.user.AssignNumberParser;
 
 /**
- * 指定人数(百分比)的认领策略
+ * 指定人数(/百分比)的认领策略
  * @author DougLei
  */
 @Bean(clazz = ClaimPolicy.class)

@@ -14,7 +14,6 @@ import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.TaskInstance;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimResult;
 import com.douglei.bpm.process.handler.TaskHandleException;
-import com.douglei.bpm.process.handler.task.user.assignee.handle.AssigneeQueryByGroupIdSqlCondition;
 import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.handle.ClaimPolicyEntity;
 import com.douglei.orm.context.SessionContext;
@@ -38,35 +37,16 @@ public class ClaimTaskCmd implements Command{
 		if(taskInstance.getTask().isAllClaimed())
 			return new ExecutionResult("认领失败, [%s]任务的办理权限已被认领完", "jbpm.claim.fail.task.all.claimed", taskInstance.getName());
 		
-		// 查询指定userId, 判断其是否可以认领
-		List<Assignee> assigneeList = SessionContext.getSqlSession()
-				.query(Assignee.class, 
-						SQL_QUERY_CAN_CLAIM_ASSIGNEE_LIST, 
-						Arrays.asList(taskInstance.getTask().getTaskinstId(), currentClaimUserId, HandleState.COMPETITIVE_UNCLAIM.name(), HandleState.UNCLAIM.name()));
-		if(assigneeList.isEmpty())
-			throw new TaskHandleException("认领失败, 指定的userId无法认领["+taskInstance.getName()+"]任务");
-		return claim(assigneeList, processEngineBeans);
+		return claim(processEngineBeans);
 	}
 
 	// 任务认领
-	private synchronized ExecutionResult claim(List<Assignee> assigneeList, ProcessEngineBeans processEngineBeans) {
-		// 查询同组内有没有人已经认领
-		List<Object[]> claimedGroupIdList = SessionContext.getSQLSession().query_("Assignee", "querySameGroupClaimed", new AssigneeQueryByGroupIdSqlCondition(taskInstance.getTask().getTaskinstId(), assigneeList));
-		if(claimedGroupIdList.size() > 0) {
-			if(claimedGroupIdList.size() == assigneeList.size())
-				return new ExecutionResult("认领失败, [%s]任务已被认领", "jbpm.claim.fail.claimed.by.other", taskInstance.getName());
-			
-			int claimedGroupId;
-			for (Object[] claimedGroupIdArr : claimedGroupIdList) {
-				claimedGroupId = Integer.parseInt(claimedGroupIdArr[0].toString());
-				for(int i=0;i<assigneeList.size();i++) {
-					if(assigneeList.get(i).getGroupId() == claimedGroupId) {
-						assigneeList.remove(i--);
-						break;
-					}
-				}
-			}
-		}
+	private synchronized ExecutionResult claim(ProcessEngineBeans processEngineBeans) {
+		// 查询指定userId, 判断其是否可以认领
+		List<Assignee> assigneeList = SessionContext.getSqlSession().query(Assignee.class, 
+						SQL_QUERY_CAN_CLAIM_ASSIGNEE_LIST, Arrays.asList(taskInstance.getTask().getTaskinstId(), currentClaimUserId, HandleState.COMPETITIVE_UNCLAIM.name(), HandleState.UNCLAIM.name()));
+		if(assigneeList.isEmpty())
+			return new ExecutionResult("认领失败, [%s]任务已被认领", "jbpm.claim.fail.claimed.by.other", taskInstance.getName());
 		
 		// 判断当前用户能否认领
 		ClaimResult result = canClaim(assigneeList, processEngineBeans);
@@ -76,10 +56,19 @@ public class ClaimTaskCmd implements Command{
 		// 进行认领
 		Date claimTime = new Date();
 		for (Assignee assignee : assigneeList) {
-			if(!assignee.isChainLast()) // 不是链的最后, 要将比自己大的都删除掉
+			// 不是链的最后, 要将比自己大的都删除掉
+			if(!assignee.isChainLast()) 
 				SessionContext.getSqlSession().executeUpdate(
 						"delete bpm_ru_assignee where taskinst_id=? and group_id=? and chain_id >?", 
 						Arrays.asList(taskInstance.getTask().getTaskinstId(), assignee.getGroupId(), assignee.getChainId()));
+			
+			// 不是链的开始, 要将比自己小的HandleState值从COMPETITIVE_UNCLAIM改为INVALID_UNCLAIM
+			if(!assignee.isChainFirst()) 
+				SessionContext.getSqlSession().executeUpdate(
+						"update bpm_ru_assignee set handle_state=? where taskinst_id=? and group_id=? and chain_id <? and handle_state=?", 
+						Arrays.asList(HandleState.INVALID_UNCLAIM.name(), taskInstance.getTask().getTaskinstId(), assignee.getGroupId(), assignee.getChainId(), HandleState.COMPETITIVE_UNCLAIM.name()));
+			
+			// 进行认领
 			assignee.claim(claimTime);
 		}
 		SessionContext.getTableSession().update(assigneeList);
@@ -115,8 +104,7 @@ public class ClaimTaskCmd implements Command{
 						finishedAssigneeList = new ArrayList<Assignee>();
 					finishedAssigneeList.add(unclaimAssigneeList.remove(i--));
 					break;
-				case INVALID:
-				case COMPETITIVE_UNCLAIM:
+				default:
 					throw new ProcessEngineBugException();
 			}
 		}

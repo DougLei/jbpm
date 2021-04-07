@@ -22,7 +22,7 @@ public class SerialHandleByClaimTimePolicy implements SerialHandlePolicy{
 
 	@Override
 	public int canHandle(String currentHandleUserId, List<Assignee> claimedAssigneeList) {
-		claimedAssigneeList.sort(byClaimTimeASC);
+		claimedAssigneeList.sort(BY_CLAIM_TIME_ASC);
 
 		int waitForPersonNumber = 0; // 需要等待的人数
 		for (Assignee assignee : claimedAssigneeList) {
@@ -35,7 +35,7 @@ public class SerialHandleByClaimTimePolicy implements SerialHandlePolicy{
 	}
 	
 	// Assignee的排序比较器, 根据认领日期正序排列
-	private static final Comparator<Assignee> byClaimTimeASC = new Comparator<Assignee>() {
+	private static final Comparator<Assignee> BY_CLAIM_TIME_ASC = new Comparator<Assignee>() {
 		@Override
 		public int compare(Assignee a1, Assignee a2) {
 			if(a1.getClaimTime_() < a2.getClaimTime_())

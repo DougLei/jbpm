@@ -6,6 +6,7 @@ import com.douglei.bpm.bean.BeanFactory;
 import com.douglei.bpm.configuration.ProcessEngineConfiguration;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpression;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
+import com.douglei.bpm.process.api.user.task.handle.policy.DispatchPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandlePolicy;
 import com.douglei.orm.context.SessionFactoryContainer;
 import com.douglei.orm.sessionfactory.SessionFactory;
@@ -59,8 +60,18 @@ public class ProcessEngineBuilder {
 	 * @param policy
 	 * @return
 	 */
-	public ProcessEngineBuilder addSerialHandleSequencePolicy(SerialHandlePolicy policy) {
+	public ProcessEngineBuilder addSerialHandlePolicy(SerialHandlePolicy policy) {
 		beanFactory.registerCustomBean(SerialHandlePolicy.class, policy);
+		return this;
+	}
+	
+	/**
+	 * 添加任务调度策略
+	 * @param policy
+	 * @return
+	 */
+	public ProcessEngineBuilder addDispatchPolicy(DispatchPolicy policy) {
+		beanFactory.registerCustomBean(DispatchPolicy.class, policy);
 		return this;
 	}
 	

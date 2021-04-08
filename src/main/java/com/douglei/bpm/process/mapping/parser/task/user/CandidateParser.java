@@ -10,6 +10,7 @@ import com.douglei.bpm.process.api.user.task.handle.policy.impl.SerialHandleByCl
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.Candidate;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignPolicy;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.handle.ClaimPolicyEntity;
+import com.douglei.bpm.process.mapping.metadata.task.user.candidate.handle.DispatchPolicyEntity;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.handle.HandlePolicy;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.handle.SerialHandlePolicyEntity;
 import com.douglei.bpm.process.mapping.parser.ProcessParseException;
@@ -56,7 +57,8 @@ public class CandidateParser {
 				"true".equalsIgnoreCase(element.attributeValue("suggest")), 
 				"true".equalsIgnoreCase(element.attributeValue("attitude")), 
 				parseClaimPolicyEntity(id, name, element.element("claim")),
-				parseSerialHandlePolicyEntity(id, name, element.element("serialHandle")));
+				parseSerialHandlePolicyEntity(id, name, element.element("serialHandle")),
+				parseDispatchPolicyEntity(id, name, element.element("dispatch")));
 	}
 	// 解析认领策略
 	private ClaimPolicyEntity parseClaimPolicyEntity(String id, String name, Element element) {
@@ -89,10 +91,24 @@ public class CandidateParser {
 		// 获取串行办理的策略名称, 并对其进行验证
 		String policyName = element.attributeValue("name");
 		if(StringUtil.isEmpty(policyName)) {
-			policyName = SerialHandleByClaimTimePolicy.POLICY_NAME;
+			policyName = SerialHandleByClaimTimePolicy.NAME;
 		}else if(taskHandlePolicyContainer.getSerialHandlePolicy(policyName) == null){
 			throw new ProcessParseException("<userTask id="+id+" name="+name+"><candidate><handlePolicy><serialHandle>的name属性值["+policyName+"]不合法");
 		}
 		return new SerialHandlePolicyEntity(policyName); 
+	}
+	// 解析调度策略
+	private DispatchPolicyEntity parseDispatchPolicyEntity(String id, String name, Element element) {
+		if(element == null)
+			return null; 
+		
+		// 获取调度策略名称, 并对其进行验证
+		String policyName = element.attributeValue("name");
+		if(StringUtil.isEmpty(policyName)) 
+			return null;
+		
+		if(taskHandlePolicyContainer.getDispatchPolicy(policyName) == null)
+			throw new ProcessParseException("<userTask id="+id+" name="+name+"><candidate><handlePolicy><dispatch>的name属性值["+policyName+"]不合法");
+		return new DispatchPolicyEntity(policyName); 
 	}
 }

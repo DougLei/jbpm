@@ -115,6 +115,13 @@
 						** byClaimTimeASC <==> 按照认领时间(正序)办理
 					 -->
 					<serialHandle name="" />
+					
+					<!-- 
+						调度策略
+						* name: 调度策略名称, 区分大小写; 可不配置, 默认为最后办理人进行调度; 如果配置值不合法, 引擎会抛出异常
+						** lastHandleUser <==> 最后办理人进行调度
+					 -->
+					<dispatch name="" />
 				</handlePolicy>
 			</candidate>
 			

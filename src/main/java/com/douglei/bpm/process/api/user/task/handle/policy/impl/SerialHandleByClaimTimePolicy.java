@@ -13,11 +13,11 @@ import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandlePolicy;
  */
 @Bean(clazz = SerialHandlePolicy.class)
 public class SerialHandleByClaimTimePolicy implements SerialHandlePolicy{
-	public static final String POLICY_NAME = "byClaimTimeASC";
+	public static final String NAME = "byClaimTimeASC";
 	
 	@Override
 	public String getName() {
-		return POLICY_NAME;
+		return NAME;
 	}
 
 	@Override

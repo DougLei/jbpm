@@ -9,7 +9,7 @@ import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimResult;
 
 /**
- * 单人认领策略
+ * 单人认领(的策略)
  * @author DougLei
  */
 @Bean(clazz = ClaimPolicy.class)

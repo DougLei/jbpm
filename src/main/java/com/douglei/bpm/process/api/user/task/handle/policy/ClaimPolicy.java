@@ -15,6 +15,7 @@ import com.douglei.bpm.module.runtime.task.Assignee;
  * 	SessionContext.getSqlSession()
  * 	SessionContext.getTableSession()
  * 	SessionContext.getSQLSession()
+ * 	SessionContext.getSQLQuerySession()
  * </pre>
  * 
  * @author DougLei

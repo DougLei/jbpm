@@ -3,10 +3,9 @@ package com.douglei.bpm.process.api.user.task.handle.policy;
 import java.util.List;
 
 import com.douglei.bpm.bean.annotation.MultiInstance;
-import com.douglei.bpm.module.runtime.task.Assignee;
 
 /**
- * 串行办理的策略
+ * 任务调度策略
  * <p>
  * 
  * 如果需要访问数据库, 可直接调用以下方法:
@@ -20,7 +19,7 @@ import com.douglei.bpm.module.runtime.task.Assignee;
  * @author DougLei
  */
 @MultiInstance
-public interface SerialHandlePolicy {
+public interface DispatchPolicy {
 	
 	/**
 	 * 获取策略名称, 必须唯一; 默认值为类名全路径
@@ -31,10 +30,10 @@ public interface SerialHandlePolicy {
 	}
 	
 	/**
-	 * 能否办理
-	 * @param currentHandleUserId 当前办理的用户id
-	 * @param claimedAssigneeList 已认领的指派信息集合, 集合中可能包含多个currentHandleUser的信息
-	 * @return 需要等待的人数, 返回0表示可以进行办理
+	 * 获取可进行任务调度的userId
+	 * @param lastHandleUserId 最后办理的用户id
+	 * @param handledUserIds 办理过当前任务的用户id集合(包含最后办理的用户id)
+	 * @return 
 	 */
-	int canHandle(String currentHandleUserId, List<Assignee> claimedAssigneeList);
+	String getUserId(String lastHandleUserId, List<String> handledUserIds);
 }

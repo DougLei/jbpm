@@ -1,10 +1,13 @@
 package com.douglei.bpm.process.handler.task.user;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.Task;
+import com.douglei.bpm.process.api.user.task.handle.policy.DispatchPolicy;
 import com.douglei.bpm.process.handler.GeneralHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.task.user.assignee.handle.AssigneeDispatcher;
@@ -46,9 +49,18 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 		AssigneeDispatcher assigneeDispatcher = new AssigneeDispatcher(currentTask.getTaskinstId(), handleParameter.getUserEntity(), handleParameter.getCurrentDate());
 		assigneeDispatcher.dispatch();
 		
-		// 判断任务是否结束, 以及是否可以调度
+		// 判断任务办理是否结束
 		if(isFinished()) {
-			currentTask.setDispatchRight(handleParameter.getUserEntity().getCurrentHandleUserId());
+			// TODO 可优化: 判断是否是已经到达认领上限
+			
+			// 获取办理过当前任务的用户id集合
+			List<Object[]> list = SessionContext.getSqlSession().query_("select distinct user_id from bpm_hi_assignee where taskinst_id=? and handle_state = 'FINISHED'", Arrays.asList(currentTask.getTaskinstId()));
+			List<String> handledUserIds = new ArrayList<String>(list.size());
+			list.forEach(array -> handledUserIds.add(array[0].toString()));
+			
+			// 根据调度策略, 获取可进行任务调度的userId
+			DispatchPolicy dispatchPolicy = processEngineBeans.getTaskHandlePolicyContainer().getDispatchPolicy(currentTaskMetadataEntity.getTaskMetadata().getCandidate().getHandlePolicy().getDispatchPolicyEntity().getName());
+			currentTask.setDispatchRight(dispatchPolicy.getUserId(handleParameter.getUserEntity().getCurrentHandleUserId(), handledUserIds));
 			return CAN_DISPATCH;
 		}
 		return CANNOT_DISPATCH;

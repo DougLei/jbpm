@@ -1,8 +1,10 @@
 package com.douglei.bpm.process.mapping.metadata.task.user;
 
 import com.douglei.bpm.process.api.user.task.handle.policy.impl.ClaimByNumberPolicy;
+import com.douglei.bpm.process.api.user.task.handle.policy.impl.LastHandleUserDispatchPolicy;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignNumber;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.handle.ClaimPolicyEntity;
+import com.douglei.bpm.process.mapping.metadata.task.user.candidate.handle.DispatchPolicyEntity;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.handle.HandlePolicy;
 
 /**
@@ -24,10 +26,15 @@ public class DefaultCandidateConfigInstance {
 	/**
 	 * 默认的认领策略实体: byNumber, 100%
 	 */
-	public static final ClaimPolicyEntity DEFAULT_CLAIM_POLICY_ENTITY = new ClaimPolicyEntity(ClaimByNumberPolicy.POLICY_NAME, "100%");
+	public static final ClaimPolicyEntity DEFAULT_CLAIM_POLICY_ENTITY = new ClaimPolicyEntity(ClaimByNumberPolicy.NAME, "100%");
+	
+	/**
+	 * 默认的调度策略实体: 最后办理人进行调度
+	 */
+	public static final DispatchPolicyEntity DEFAULT_DISPATCH_POLICY_ENTITY = new DispatchPolicyEntity(LastHandleUserDispatchPolicy.NAME);
 	
 	/**
 	 * 默认的办理策略
 	 */
-	public static final HandlePolicy DEFAULT_HANDLE_POLICY = new HandlePolicy(false, false, DEFAULT_CLAIM_POLICY_ENTITY, null);
+	public static final HandlePolicy DEFAULT_HANDLE_POLICY = new HandlePolicy(false, false, DEFAULT_CLAIM_POLICY_ENTITY, null, DEFAULT_DISPATCH_POLICY_ENTITY);
 }

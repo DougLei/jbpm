@@ -12,19 +12,19 @@ import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.Assig
 import com.douglei.bpm.process.mapping.parser.task.user.AssignNumberParser;
 
 /**
- * 指定人数(/百分比)的认领策略
+ * 指定人数(/百分比)的认领(的策略)
  * @author DougLei
  */
 @Bean(clazz = ClaimPolicy.class)
 public class ClaimByNumberPolicy implements ClaimPolicy{
-	public static final String POLICY_NAME = "byNumber";
+	public static final String NAME = "byNumber";
 	
 	@Autowired
 	private AssignNumberParser assignNumberParser; // 语法格式同AssignNumber的格式一致, 所以这里直接进行复用
 	
 	@Override
 	public String getName() {
-		return POLICY_NAME;
+		return NAME;
 	}
 	
 	@Override

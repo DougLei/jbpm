@@ -33,9 +33,11 @@ public class ClaimByNumberPolicy implements ClaimPolicy{
 	
 	@Override
 	public boolean tryAutoClaim(String value, int assignCount, List<Assignee> assigneeList, Date claimTime) {
-		if(assignCount == calcUpperLimit(value, assignCount)) 
-			assigneeList.stream().filter(assignee -> assignee.isChainLast()).forEach(assignee -> assignee.claim(claimTime));
-		return false;
+		if(assignCount > calcUpperLimit(value, assignCount)) 
+			return false;
+		
+		assigneeList.stream().filter(assignee -> assignee.isChainLast()).forEach(assignee -> assignee.claim(claimTime));
+		return true;
 	}
 	
 	@Override

@@ -82,11 +82,11 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 		if(claimPolicy.calcUpperLimit(entity.getValue(), currentTask.getAssignCount()) == 1)
 			return new FinishedFlag(true, 1);
 		
-		// 查询当前任务, 已经认领的指派信息数量
-		int claimedAssigneeCount = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(
+		// 查询当前任务, 剩余已经认领的指派信息数量
+		int leftClaimedAssigneeCount = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(
 				"select count(id) from bpm_ru_assignee where taskinst_id=? and handle_state=?", 
 				Arrays.asList(currentTask.getTaskinstId(), HandleState.CLAIMED.name()))[0].toString());
-		return new FinishedFlag(claimedAssigneeCount == 0, -1);
+		return new FinishedFlag(leftClaimedAssigneeCount == 0, -1);
 	}
 	
 	/**

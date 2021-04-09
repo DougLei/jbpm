@@ -205,7 +205,6 @@
 			</option>
 			
 			<listeners></listeners><!-- 参考startEvent中的listeners配置 -->
-			<!-- 流程挂起, 终止, 激活, 重置等功能, 均放到流程实例管理界面, 由流程管理员操作 -->
 		</userTask>
 		
 		<!-- 

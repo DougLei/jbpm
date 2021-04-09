@@ -8,7 +8,6 @@ import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimResult;
-import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignNumber;
 import com.douglei.bpm.process.mapping.parser.task.user.AssignNumberParser;
 
 /**
@@ -34,16 +33,18 @@ public class ClaimByNumberPolicy implements ClaimPolicy{
 	
 	@Override
 	public boolean tryAutoClaim(String value, int assignCount, List<Assignee> assigneeList, Date claimTime) {
-		int claimUpperLimit = assignNumberParser.parse(value).calcUpperLimit(assignCount);
-		if(assignCount == claimUpperLimit) 
+		if(assignCount == calcUpperLimit(value, assignCount)) 
 			assigneeList.stream().filter(assignee -> assignee.isChainLast()).forEach(assignee -> assignee.claim(claimTime));
 		return false;
 	}
 	
 	@Override
+	public int calcUpperLimit(String value, int assignCount) {
+		return assignNumberParser.parse(value).calcUpperLimit(assignCount);
+	}
+	
+	@Override
 	public ClaimResult claimValidate(String value, String currentClaimUserId, List<Assignee> currentAssigneeList, List<Assignee> unclaimAssigneeList, List<Assignee> claimedAssigneeList, List<Assignee> finishedAssigneeList) {
-		int claimUpperLimit = calcUpperLimit(assignNumberParser.parse(value), unclaimAssigneeList, claimedAssigneeList, finishedAssigneeList);
-		
 		// 获得已经认领的数量
 		int claimedCount = 0; 
 		if(claimedAssigneeList != null)
@@ -52,6 +53,7 @@ public class ClaimByNumberPolicy implements ClaimPolicy{
 			claimedCount += finishedAssigneeList.size();
 		
 		// 判断是否认领到上限
+		int claimUpperLimit = calcUpperLimit(value, unclaimAssigneeList.size()+claimedCount);
 		if(claimedCount == claimUpperLimit)
 			return ClaimResult.CAN_NOT_CLAIM;
 		
@@ -73,16 +75,5 @@ public class ClaimByNumberPolicy implements ClaimPolicy{
 				return true;
 		}
 		return false;
-	}
-
-	// 计算可认领的数量上限
-	private int calcUpperLimit(AssignNumber number, List<Assignee> unclaimAssigneeList, List<Assignee> claimedAssigneeList, List<Assignee> finishedAssigneeList) {
-		int total = unclaimAssigneeList.size();
-		if(claimedAssigneeList != null)
-			total += claimedAssigneeList.size();
-		if(finishedAssigneeList != null)
-			total += finishedAssigneeList.size();
-		
-		return number.calcUpperLimit(total);
 	}
 }

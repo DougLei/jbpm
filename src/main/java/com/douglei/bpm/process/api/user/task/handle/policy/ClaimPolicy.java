@@ -63,6 +63,14 @@ public interface ClaimPolicy {
 	boolean tryAutoClaim(String value, int assignCount, List<Assignee> assigneeList, Date claimTime);
 	
 	/**
+	 * 计算可认领的人数上限
+	 * @param value 配置的表达式值, 即流程xml配置文件中, userTask -> candidate -> handlePolicy -> claim里的value属性值
+	 * @param assignCount 实际指派的人数
+	 * @return
+	 */
+	int calcUpperLimit(String value, int assignCount);
+	
+	/**
 	 * 认领验证
 	 * @param value 配置的表达式值, 即流程xml配置文件中, userTask -> candidate -> handlePolicy -> claim里的value属性值
 	 * @param currentClaimUserId 当前进行认领的用户id
@@ -70,7 +78,7 @@ public interface ClaimPolicy {
 	 * @param unclaimAssigneeList 未认领的指派信息集合, HandleState = [UNCLAIM]; 集合中可能包含多个currentClaimUserId的指派信息; 该集合参数不会为null
 	 * @param claimedAssigneeList 已经认领的指派信息集合, HandleState = [CLAIMED]; 该集合参数可能为null
 	 * @param finishedAssigneeList 已办理完成的指派信息集合, HandleState = [FINISHED]; 集合中可能包含多个currentClaimUserId的指派信息; 该集合参数可能为null
-	 * @return 不能认领时, 使用 #{link ClaimResult.CAN_NOT_CLAIM} 常量
+	 * @return 不能认领时, 推荐使用 #{link ClaimResult.CAN_NOT_CLAIM} 常量
 	 */
 	ClaimResult claimValidate(String value, String currentClaimUserId, List<Assignee> currentAssigneeList, List<Assignee> unclaimAssigneeList, List<Assignee> claimedAssigneeList, List<Assignee> finishedAssigneeList);
 }

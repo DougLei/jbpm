@@ -33,6 +33,11 @@ public class ClaimBySinglePolicy implements ClaimPolicy{
 		assigneeList.get(assigneeList.size()-1).claim(claimTime);
 		return true;
 	}
+	
+	@Override
+	public int calcUpperLimit(String value, int assignCount) {
+		return 1;
+	}
 
 	@Override
 	public ClaimResult claimValidate(String value, String currentClaimUserId, List<Assignee> currentAssigneeList, List<Assignee> unclaimAssigneeList, List<Assignee> claimedAssigneeList, List<Assignee> finishedAssigneeList) {

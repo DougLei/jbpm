@@ -3,6 +3,7 @@ package com.douglei.bpm.process.api.user.option;
 import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.MultiInstance;
+import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.option.Option;
 import com.douglei.bpm.process.mapping.parser.ProcessParseException;
 
@@ -33,11 +34,10 @@ public abstract class OptionHandler {
 	 * 解析Option实例
 	 * @param name
 	 * @param order
-	 * @param userTaskId 所属userTask的id
-	 * @param userTaskName 所属userTask的name
+	 * @param metadata
 	 * @param element
 	 * @return
 	 * @throws ProcessParseException
 	 */
-	public abstract Option parse(String name, int order, String userTaskId, String userTaskName, Element element)throws ProcessParseException;
+	public abstract Option parse(String name, int order, UserTaskMetadata metadata, Element element)throws ProcessParseException;
 }

@@ -166,14 +166,14 @@
 				<candidate></candidate>
 			</option>
 			<!-- 
-				流程跳转; 是调度时, 可进行的操作
+				流程跳转; 调度时, 可进行的操作
 			 -->
 			<option type="jump" name="流程跳转" order="">
 				<!-- 
-					* target: 要跳转的目标任务id, 可不配置
-					* suggest: 表示是否需要强制输入意见; 不区分大小写, 默认值为false; 如果配置值不合法, 则引擎会使用默认值
+					* target: 要跳转的目标任务id, 必须配置
+					* suggest: 表示是否需要强制输入意见; 不区分大小写, 不配置时, 会使用当前任务的handlePolicy.suggest值做为默认值; 如果配置值不合法, 则引擎会使用默认值
 					* attitude: 表示是否需要强制表态; 同上 
-					* reason: 是否要输入原因, 同上
+					* reason: 是否要输入原因, 不区分大小写, 可不配置, 默认值为false; 如果配置值不合法, 则引擎会使用默认值
 				 -->
 				<parameter target="" suggest="false" attitude="false" reason="false"/>
 				

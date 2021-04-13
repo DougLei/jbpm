@@ -13,16 +13,14 @@ import com.douglei.bpm.module.runtime.variable.Scope;
 import com.douglei.orm.context.SessionContext;
 
 /**
- * 通用的任务处理器
- * <p>
- * 提供通用方法
+ * 
  * @author DougLei
  */
 public abstract class GeneralTaskHandler {
 	protected final static ExecutionResult CANNOT_DISPATCH = new ExecutionResult(false);
 	
 	/**
-	 * 完成任务
+	 * 完成任务(调度任务数据)
 	 * @param task 任务
 	 * @param completeTime 完成任务的时间
 	 * @param variableEntities 任务相关的流程变量

@@ -19,14 +19,20 @@ public class UserTaskMetadata extends TaskMetadata {
 	private Candidate candidate;
 	private List<Option> options;
 	
-	public UserTaskMetadata(String id, String name, String defaultOutputFlowId, String pageID, TimeLimit timeLimit, Candidate candidate, List<Option> options) {
+	public UserTaskMetadata(String id, String name, String defaultOutputFlowId, String pageID) {
 		super(id, name, defaultOutputFlowId);
 		this.pageID = StringUtil.isEmpty(pageID)?null:pageID;
+	}
+	public void setTimeLimit(TimeLimit timeLimit) {
 		this.timeLimit = timeLimit;
+	}
+	public void setCandidate(Candidate candidate) {
 		this.candidate = candidate;
+	}
+	public void setOptions(List<Option> options) {
 		this.options = options;
 	}
-	
+
 	public Candidate getCandidate() {
 		return candidate;
 	}

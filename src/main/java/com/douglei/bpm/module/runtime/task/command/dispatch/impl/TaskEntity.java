@@ -25,7 +25,7 @@ class TaskEntity {
 	 * @return
 	 */
 	public boolean isStartEvent(ProcessMetadata process) {
-		return process.getStartEventMetadataEntity().getTaskMetadata().getId().equals(key);
+		return process.getStartEventMetadata().getId().equals(key);
 	}
 	
 	public String getTaskinstId() {

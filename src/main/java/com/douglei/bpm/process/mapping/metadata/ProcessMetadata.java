@@ -64,6 +64,13 @@ public class ProcessMetadata implements Metadata {
 	}
 	
 	/**
+	 * 获取StartEvent元数据实例
+	 * @return
+	 */
+	public StartEventMetadata getStartEventMetadata() {
+		return startEvent;
+	}
+	/**
 	 * 获取StartEvent元数据实体实例
 	 * @return
 	 */

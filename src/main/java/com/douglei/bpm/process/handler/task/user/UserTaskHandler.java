@@ -66,7 +66,8 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandle
 				dispatchUserId = dispatchPolicy.getUserId(handleParameter.getUserEntity().getCurrentHandleUserId(), handledUserIds);
 			}
 			currentTask.setDispatchRight(dispatchUserId);
-			return CAN_DISPATCH;
+			if(dispatchUserId.equals(handleParameter.getUserEntity().getCurrentHandleUserId()))
+				return CAN_DISPATCH;
 		}
 		return CANNOT_DISPATCH;
 	}

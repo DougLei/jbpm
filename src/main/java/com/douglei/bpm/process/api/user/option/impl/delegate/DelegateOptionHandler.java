@@ -6,6 +6,7 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.api.user.option.OptionHandler;
 import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
+import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.Candidate;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignPolicy;
 import com.douglei.bpm.process.mapping.metadata.task.user.option.Option;
@@ -28,7 +29,7 @@ public class DelegateOptionHandler extends OptionHandler {
 	}
 	
 	@Override
-	public Option parse(String name, int order, String userTaskId, String userTaskName, Element element) throws ProcessParseException {
+	public Option parse(String name, int order, UserTaskMetadata metadata, Element element) throws ProcessParseException {
 		boolean reasonIsRequired = false;
 		Element parameterElement = element.element("parameter");
 		if(parameterElement != null)
@@ -38,7 +39,7 @@ public class DelegateOptionHandler extends OptionHandler {
 		if(element == null)
 			return createOption(name, order, reasonIsRequired, null);
 		
-		AssignPolicy assignPolicy = assignPolicyParser.parse(userTaskId, userTaskName, getXmlStruct() + "<candidate>", element);
+		AssignPolicy assignPolicy = assignPolicyParser.parse(metadata, getXmlStruct() + "<candidate>", element);
 		return createOption(name, order, reasonIsRequired, new Candidate(assignPolicy, null));
 	}
 

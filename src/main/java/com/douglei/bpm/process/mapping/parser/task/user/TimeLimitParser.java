@@ -3,6 +3,7 @@ package com.douglei.bpm.process.mapping.parser.task.user;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.mapping.metadata.TimeLimit;
 import com.douglei.bpm.process.mapping.metadata.TimeLimitType;
+import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.parser.ProcessParseException;
 import com.douglei.tools.StringUtil;
 import com.douglei.tools.datatype.DataTypeValidateUtil;
@@ -16,23 +17,22 @@ public class TimeLimitParser {
 	
 	/**
 	 * 解析时限配置
-	 * @param id
-	 * @param name
+	 * @param metadata
 	 * @param timeLimit
 	 * @return
 	 * @throws ProcessParseException
 	 */
-	TimeLimit parse(String id, String name, String timeLimit) throws ProcessParseException{
+	TimeLimit parse(UserTaskMetadata metadata, String timeLimit) throws ProcessParseException{
 		if(StringUtil.isEmpty(timeLimit))
 			return null;
 		
-		TimeLimit tl = parse_(id, name, timeLimit);
+		TimeLimit tl = parse_(timeLimit);
 		if(tl == null)
-			throw new ProcessParseException("<userTask id="+id+" name="+name+">的timeLimit属性值["+timeLimit+"]不合法");
+			throw new ProcessParseException("<userTask id="+metadata.getId()+" name="+metadata.getName()+">的timeLimit属性值["+timeLimit+"]不合法");
 		return tl;
 	}
 	// 返回null表示配置的值不合法
-	private TimeLimit parse_(String id, String name, String timeLimit) {
+	private TimeLimit parse_(String timeLimit) {
 		TimeLimit tl = new TimeLimit(); 
 		
 		// 纯数字, 使用默认格式: dn(天/自然日)

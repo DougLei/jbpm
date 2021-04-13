@@ -100,7 +100,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	
 	/**
 	 * 办理任务
-	 * @return 返回对象的success=true时, 其Object属性为boolean类型, 标识是否可以进行调度
+	 * @return 返回对象的success=true时, 其Object属性为boolean类型, 标识当前用户是否可以进行调度操作
 	 */
 	public abstract ExecutionResult handle();
 }

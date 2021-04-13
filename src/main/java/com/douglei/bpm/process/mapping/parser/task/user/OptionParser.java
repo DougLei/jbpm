@@ -9,6 +9,7 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.api.user.option.OptionHandler;
 import com.douglei.bpm.process.api.user.option.OptionHandlerContainer;
+import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.option.Option;
 import com.douglei.bpm.process.mapping.parser.ProcessParseException;
 import com.douglei.tools.StringUtil;
@@ -32,7 +33,7 @@ public class OptionParser {
 	 * @return
 	 * @throws ProcessParseException
 	 */
-	List<Option> parse(String id, String name, List<Element> elements) throws ProcessParseException{
+	List<Option> parse(UserTaskMetadata metadata, List<Element> elements) throws ProcessParseException{
 		if(elements.isEmpty())
 			return null;
 		
@@ -40,7 +41,7 @@ public class OptionParser {
 		for (Element element : elements) {
 			OptionHandler optionHandler = optionHandlerContainer.get(element.attributeValue("type"));
 			if(optionHandler == null)
-				throw new ProcessParseException("<userTask id="+id+" name="+name+"><option>的type属性值["+element.attributeValue("type")+"]不合法");
+				throw new ProcessParseException("<userTask id="+metadata.getId()+" name="+metadata.getName()+"><option>的type属性值["+element.attributeValue("type")+"]不合法");
 			
 			// option的name
 			String optionName = element.attributeValue("name");
@@ -53,11 +54,11 @@ public class OptionParser {
 			if(DataTypeValidateUtil.isInteger(optionOrder))
 				order = Integer.parseInt(optionOrder);
 			
-			Option option = optionHandler.parse(optionName, order, id, name, element);
+			Option option = optionHandler.parse(optionName, order, metadata, element);
 			if(option == null)
-				throw new ProcessParseException("<userTask id="+id+" name="+name+"><option type="+element.attributeValue("type")+">的配置不合法");
+				throw new ProcessParseException("<userTask id="+metadata.getId()+" name="+metadata.getName()+"><option type="+element.attributeValue("type")+">的配置不合法");
 			if(options.size() > 0 && options.contains(option))
-				throw new ProcessParseException("<userTask id="+id+" name="+name+">下配置了重复type("+element.attributeValue("type")+")的<option>");
+				throw new ProcessParseException("<userTask id="+metadata.getId()+" name="+metadata.getName()+">下配置了重复type("+element.attributeValue("type")+")的<option>");
 			options.add(option);
 		}
 		return options;

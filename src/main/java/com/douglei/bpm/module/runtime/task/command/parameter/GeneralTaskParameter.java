@@ -46,20 +46,6 @@ public class GeneralTaskParameter {
 		return this;
 	}
 	
-
-	/**
-	 * 添加下一环节的办理人id集合
-	 * @param assignedUserIds
-	 * @return
-	 */
-	public GeneralTaskParameter addAssignedUserIds(HashSet<String> assignedUserIds) {
-		if(this.assignedUserIds == null) 
-			this.assignedUserIds = assignedUserIds;
-		else 
-			this.assignedUserIds.addAll(assignedUserIds);
-		return this;
-	}
-	
 	/**
 	 * 获取办理人id
 	 * @return

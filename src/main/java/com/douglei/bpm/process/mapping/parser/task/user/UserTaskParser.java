@@ -32,15 +32,14 @@ public class UserTaskParser extends GeneralParser implements Parser<TaskTemporar
 	public UserTaskMetadata parse(TaskTemporaryData temporaryData) throws ProcessParseException {
 		Element element = temporaryData.getElement();
 		
-		String id = temporaryData.getId();
-		String name = element.attributeValue("name");
+		// 构建UserTaskMetadata实例
 		UserTaskMetadata metadata = new UserTaskMetadata(
-				id, name, 
-				element.attributeValue("defaultOutputFlow"), 
-				element.attributeValue("pageID"),
-				timeLimitParser.parse(id, name, element.attributeValue("timeLimit")),
-				candidateParser.parse(id, name, element.element("candidate")),
-				optionParser.parse(id, name, element.elements("option")));
+				temporaryData.getId(), element.attributeValue("name"), element.attributeValue("defaultOutputFlow"), element.attributeValue("pageID"));
+		
+		// 设置相关配置信息
+		metadata.setTimeLimit(timeLimitParser.parse(metadata, element.attributeValue("timeLimit")));
+		metadata.setCandidate(candidateParser.parse(metadata, element.element("candidate")));
+		metadata.setOptions(optionParser.parse(metadata, element.elements("option")));
 		
 		addListener(metadata, element.element("listeners"));
 		return metadata;

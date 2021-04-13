@@ -165,6 +165,7 @@
 				<parameter reason="" />
 				<candidate></candidate>
 			</option>
+			
 			<!-- 
 				流程跳转; 调度时, 可进行的操作
 			 -->
@@ -184,6 +185,7 @@
 					<assignPolicy></assignPolicy>
 				</candidate>
 			</option>
+			
 			<!-- 流程跟踪 -->
 			<option type="tracking" name="流程跟踪" order="" />
 			

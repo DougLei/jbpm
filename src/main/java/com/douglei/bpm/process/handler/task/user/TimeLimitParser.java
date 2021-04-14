@@ -2,7 +2,7 @@ package com.douglei.bpm.process.handler.task.user;
 
 import java.util.Date;
 
-import com.douglei.bpm.process.mapping.metadata.TimeLimit;
+import com.douglei.bpm.process.mapping.metadata.task.user.TimeLimit;
 
 /**
  * 时限解析器

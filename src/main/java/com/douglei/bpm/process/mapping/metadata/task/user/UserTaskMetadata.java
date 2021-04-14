@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
-import com.douglei.bpm.process.mapping.metadata.TimeLimit;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.Candidate;
 import com.douglei.bpm.process.mapping.metadata.task.user.option.Option;
 import com.douglei.tools.StringUtil;

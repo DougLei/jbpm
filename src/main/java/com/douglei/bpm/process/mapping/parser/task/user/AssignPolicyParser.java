@@ -53,16 +53,11 @@ public class AssignPolicyParser {
 		boolean isDynamic = !"false".equalsIgnoreCase(element.attributeValue("isDynamic"));
 		if(isDynamic) 
 			assignNumber = parseAssignNumber(metadata, struct, element);
-		return createInstance(isDynamic, assignNumber);
+		return new AssignPolicy(isDynamic, assignNumber);
 	}
 	
-	// 创建实例
-	protected AssignPolicy createInstance(boolean isDynamic, AssignNumber assignNumber) {
-		return new AssignPolicy(isDynamic, assignNumber); 
-	}
-
 	// 解析指派人数表达式
-	private AssignNumber parseAssignNumber(UserTaskMetadata metadata, String struct, Element element) throws ProcessParseException{
+	protected final AssignNumber parseAssignNumber(UserTaskMetadata metadata, String struct, Element element) throws ProcessParseException{
 		String assignNum = element.attributeValue("assignNum");
 		if(StringUtil.isEmpty(assignNum))
 			return null;

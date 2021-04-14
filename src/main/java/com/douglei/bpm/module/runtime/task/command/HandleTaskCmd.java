@@ -34,6 +34,7 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 		if(StringUtil.isEmpty(parameter.getUserId()))
 			throw new TaskHandleException("办理失败, 办理["+taskInstance.getName()+"]任务, 需要提供userId");
 
+		// 用户任务时, 判断指定的userId能否办理当前任务
 		if(taskInstance.isUserTask()) {
 			HandlePolicy handlePolicy = ((UserTaskMetadata) taskInstance.getTaskMetadataEntity().getTaskMetadata()).getCandidate().getHandlePolicy();
 			if(handlePolicy.suggestIsRequired() && StringUtil.isEmpty(parameter.getSuggest()))

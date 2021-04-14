@@ -1,13 +1,18 @@
 package com.douglei.bpm.module.runtime.task.command.dispatch.impl;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.douglei.bpm.ProcessEngineBugException;
+import com.douglei.bpm.module.runtime.task.HandleState;
+import com.douglei.bpm.module.runtime.task.command.dispatch.DispatchExecutor;
 import com.douglei.bpm.process.handler.TaskDispatchException;
+import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
+import com.douglei.bpm.process.mapping.metadata.TaskMetadataEntity;
 import com.douglei.bpm.process.mapping.metadata.TaskNotExistsException;
 import com.douglei.orm.context.SessionContext;
 
@@ -15,18 +20,11 @@ import com.douglei.orm.context.SessionContext;
  * 回退步数调度
  * @author DougLei
  */
-public class BackstepsDispatchExecutor extends SettargetDispatchExecutor {
+public class BackstepsDispatchExecutor extends DispatchExecutor {
 	private static final Logger logger = LoggerFactory.getLogger(BackstepsDispatchExecutor.class);
-	private int steps; // 回退的步数, 默认值为1; 超过最大步数时使用最大步数
-
-	public BackstepsDispatchExecutor() {
-		this(1, false);
-	}
+	private int steps; // 回退的步数; 超过最大步数时使用最大步数
+	
 	public BackstepsDispatchExecutor(int steps) {
-		this(steps, false);
-	}
-	public BackstepsDispatchExecutor(int steps, boolean executeCC) {
-		super(null, true, executeCC);
 		if(steps < 1)
 			throw new TaskDispatchException("回退步数调度时, 设置的步数值不能小于1");
 		this.steps = steps;
@@ -34,33 +32,53 @@ public class BackstepsDispatchExecutor extends SettargetDispatchExecutor {
 
 	@Override
 	public void execute() throws TaskNotExistsException, TaskDispatchException {
+		TaskEntity targetTask = getTargetTask();
+		
+		TaskMetadataEntity<TaskMetadata> targetTaskMetadataEntity = currentTaskMetadataEntity.getProcessMetadata().getTaskMetadataEntity(targetTask.getKey());
+		setAssignedUsers(targetTask);
+		processEngineBeans.getTaskHandleUtil().dispatchByTask(targetTaskMetadataEntity, handleParameter);
+	}
+
+	// *获取要回退到的目标任务实体
+	private TaskEntity getTargetTask() {
 		List<TaskEntity> historyTasks = SessionContext.getTableSession()
-				.query(TaskEntity.class, "select taskinst_id, source_key, key_ from bpm_hi_task where procinst_id=? order by end_time desc", Arrays.asList(handleParameter.getProcessInstanceId()));
+				.query(TaskEntity.class, "select taskinst_id, parent_taskinst_id, source_key, key_ from bpm_hi_task where procinst_id=? order by end_time desc", Arrays.asList(handleParameter.getProcessInstanceId()));
 		
 		TaskEntity currentTask = new TaskEntity(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask(), null);
-		TaskEntity targetTask = getTargetTask(0, historyTasks, currentTask);
+		TaskEntity targetTask = getTargetTask(0, currentTask, historyTasks);
 		if(targetTask == currentTask)
 			throw new TaskDispatchException("不能回退到当前任务");
-		
-		execute(targetTask.getTaskinstId(), targetTask.getKey());
+		return targetTask;
 	}
 	
 	// 获取目标任务(key/id值)
-	private TaskEntity getTargetTask(int index, List<TaskEntity> historyTasks, TaskEntity previousTask) {
-		TaskEntity currentTask;
+	private TaskEntity getTargetTask(int index, TaskEntity previousTask, List<TaskEntity> historyTasks) {
 		for (; index<historyTasks.size(); index++) {
-			currentTask = historyTasks.get(index);
+			TaskEntity currentTask = historyTasks.get(index);
 			
 			if(currentTask.getKey().equals(previousTask.getSourceKey())) {
 				if(currentTask.isStartEvent(handleParameter.getProcessMetadata()))
 					return previousTask;
 				if(--steps == 0)
 					return currentTask;
-				return getTargetTask(++index, historyTasks, currentTask);
+				return getTargetTask(++index, currentTask, historyTasks);
 			}
 		}
 		
-		logger.error("回退步数调度时, 无法获取目标任务的key值, 相关数据为: taskinstId={}, steps={}", handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId(), steps);
+		logger.error("回退步数调度时, 无法获取目标任务的key值, 相关数据: taskinstId={}, steps={}", handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId(), steps);
 		throw new ProcessEngineBugException("回退步数调度时, 无法获取目标任务的key值");
 	}
+
+	// 设置指派的用户id集合
+	private void setAssignedUsers(TaskEntity targetTask) {
+		List<Object[]> list = SessionContext.getSqlSession().query_("select distinct user_id from bpm_hi_assignee where taskinst_id=? and handle_state=?", Arrays.asList(targetTask.getTaskinstId(), HandleState.FINISHED.name()));
+		if(list.isEmpty())
+			return;
+		
+		this.assignedUserIds = new HashSet<String>();
+		list.forEach(array -> assignedUserIds.add(array[0].toString()));
+		setAssignedUsers(assignedUserIds);
+	}
+	
+	// TODO 回退时涉及到并行, 子流程等怎么处理啊
 }

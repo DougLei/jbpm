@@ -5,6 +5,7 @@ import javax.sql.DataSource;
 import com.douglei.bpm.bean.BeanFactory;
 import com.douglei.bpm.configuration.ProcessEngineConfiguration;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpression;
+import com.douglei.bpm.process.api.user.option.AbstractOptionParser;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.DispatchPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandlePolicy;
@@ -72,6 +73,16 @@ public class ProcessEngineBuilder {
 	 */
 	public ProcessEngineBuilder addDispatchPolicy(DispatchPolicy policy) {
 		beanFactory.registerCustomBean(DispatchPolicy.class, policy);
+		return this;
+	}
+	
+	/**
+	 * 添加(用户任务的)Option解析器
+	 * @param optionParser
+	 * @return
+	 */
+	public ProcessEngineBuilder addOptionParser(AbstractOptionParser optionParser) {
+		beanFactory.registerCustomBean(AbstractOptionParser.class, optionParser);
 		return this;
 	}
 	

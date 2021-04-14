@@ -4,7 +4,7 @@ import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.process.api.user.option.OptionHandler;
+import com.douglei.bpm.process.api.user.option.AbstractOptionParser;
 import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
 import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.Candidate;
@@ -17,8 +17,8 @@ import com.douglei.bpm.process.mapping.parser.ProcessParseException;
  * 
  * @author DougLei
  */
-@Bean(clazz = OptionHandler.class)
-public class CarbonCopyOptionHandler extends OptionHandler{
+@Bean(clazz = AbstractOptionParser.class)
+public class CarbonCopyOptionParser extends AbstractOptionParser{
 	
 	@Autowired
 	private CarbonCopyAssignPolicyParser assignPolicyParser;

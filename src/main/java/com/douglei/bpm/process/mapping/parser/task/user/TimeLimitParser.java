@@ -1,8 +1,8 @@
 package com.douglei.bpm.process.mapping.parser.task.user;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.process.mapping.metadata.TimeLimit;
-import com.douglei.bpm.process.mapping.metadata.TimeLimitType;
+import com.douglei.bpm.process.mapping.metadata.task.user.TimeLimit;
+import com.douglei.bpm.process.mapping.metadata.task.user.TimeLimitType;
 import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.parser.ProcessParseException;
 import com.douglei.tools.StringUtil;

@@ -17,11 +17,6 @@ public abstract class Option implements Serializable{
 		this.order = order;
 	}
 	
-	@Override
-	public final boolean equals(Object obj) {
-		return type.equals(((Option) obj).type);
-	}
-
 	/**
 	 * 获取option的类型
 	 * @return

@@ -1,6 +1,5 @@
 package com.douglei.bpm.module.runtime.task;
 
-import java.util.HashSet;
 import java.util.List;
 
 import com.douglei.bpm.bean.annotation.Autowired;
@@ -12,12 +11,13 @@ import com.douglei.bpm.module.runtime.task.command.ClaimTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.DelegateTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.DispatchTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.HandleTaskCmd;
-import com.douglei.bpm.module.runtime.task.command.JumpTaskCmd;
+import com.douglei.bpm.module.runtime.task.command.KillAndJumpTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.TransferTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.UnclaimTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.ViewCarbonCopyCmd;
 import com.douglei.bpm.module.runtime.task.command.parameter.DispatchTaskParameter;
 import com.douglei.bpm.module.runtime.task.command.parameter.HandleTaskParameter;
+import com.douglei.bpm.module.runtime.task.command.parameter.KillAndJumpTaskParameter;
 import com.douglei.bpm.process.mapping.ProcessMappingContainer;
 import com.douglei.orm.context.Transaction;
 
@@ -83,30 +83,6 @@ public class TaskService {
 	public ExecutionResult unclaim(String taskinstId, String userId, boolean strict){
 		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
 		return commandExecutor.execute(new UnclaimTaskCmd(taskInstance, userId, strict));
-	}
-	
-	/**
-	 * 调度指定id的任务
-	 * @param taskId
-	 * @param parameter
-	 * @return
-	 */
-	@Transaction
-	public ExecutionResult dispatch(int taskId, DispatchTaskParameter parameter) {
-		TaskInstance taskInstance = new TaskInstance(taskId, container);
-		return commandExecutor.execute(new DispatchTaskCmd(taskInstance, parameter));
-	}
-	
-	/**
-	 * 调度指定id的任务
-	 * @param taskinstId
-	 * @param parameter
-	 * @return
-	 */
-	@Transaction
-	public ExecutionResult dispatch(String taskinstId, DispatchTaskParameter parameter) {
-		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
-		return commandExecutor.execute(new DispatchTaskCmd(taskInstance, parameter));
 	}
 	
 	/**
@@ -225,33 +201,48 @@ public class TaskService {
 	}
 	
 	/**
-	 * 从指定id的任务进行跳转
+	 * 调度指定id的任务
 	 * @param taskId
-	 * @param targetTask 跳转的目标任务id
-	 * @param userId 进行跳转的用户id
-	 * @param reason 原因
-	 * @param assignedUserIds 指派的用户id集合
-	 * @param strict 如果存在已经认领的指派信息, 跳转时是否强制删除相关数据; 建议传入false
-	 * @return 
+	 * @param parameter
+	 * @return
 	 */
 	@Transaction
-	public ExecutionResult jump(int taskId, String targetTask, String userId, String reason, HashSet<String> assignedUserIds, boolean strict) {
+	public ExecutionResult dispatch(int taskId, DispatchTaskParameter parameter) {
 		TaskInstance taskInstance = new TaskInstance(taskId, container);
-		return commandExecutor.execute(new JumpTaskCmd(taskInstance, targetTask, userId, reason, assignedUserIds, strict));
+		return commandExecutor.execute(new DispatchTaskCmd(taskInstance, parameter));
 	}
 	/**
-	 * 从指定id的任务进行跳转
+	 * 调度指定id的任务
 	 * @param taskinstId
-	 * @param targetTask 跳转的目标任务id
-	 * @param userId 进行跳转的用户id
-	 * @param reason 原因
-	 * @param assignedUserIds 指派的用户id集合
-	 * @param strict 如果存在已经认领的指派信息, 跳转时是否强制删除相关数据; 建议传入false
+	 * @param parameter
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult dispatch(String taskinstId, DispatchTaskParameter parameter) {
+		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
+		return commandExecutor.execute(new DispatchTaskCmd(taskInstance, parameter));
+	}
+	
+	/**
+	 * 终止指定id的任务并跳转
+	 * @param taskId
+	 * @param parameter
 	 * @return 
 	 */
 	@Transaction
-	public ExecutionResult jump(String taskinstId, String targetTask, String userId, String reason, HashSet<String> assignedUserIds, boolean strict) {
+	public ExecutionResult killAndJump(int taskId, KillAndJumpTaskParameter parameter) {
+		TaskInstance taskInstance = new TaskInstance(taskId, container);
+		return commandExecutor.execute(new KillAndJumpTaskCmd(taskInstance, parameter));
+	}
+	/**
+	 * 终止指定id的任务并跳转
+	 * @param taskinstId
+	 * @param parameter
+	 * @return 
+	 */
+	@Transaction
+	public ExecutionResult killAndJump(String taskinstId, KillAndJumpTaskParameter parameter) {
 		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
-		return commandExecutor.execute(new JumpTaskCmd(taskInstance, targetTask, userId, reason, assignedUserIds, strict));
+		return commandExecutor.execute(new KillAndJumpTaskCmd(taskInstance, parameter));
 	}
 }

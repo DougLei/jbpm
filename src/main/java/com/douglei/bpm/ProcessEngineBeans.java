@@ -4,7 +4,7 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.configuration.ProcessEngineConfiguration;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpressionContainer;
-import com.douglei.bpm.process.api.user.option.OptionHandlerContainer;
+import com.douglei.bpm.process.api.user.option.OptionParsers;
 import com.douglei.bpm.process.api.user.task.handle.policy.TaskHandlePolicyContainer;
 import com.douglei.bpm.process.handler.TaskHandleUtil;
 import com.douglei.bpm.process.mapping.ProcessMappingContainer;
@@ -32,7 +32,7 @@ public class ProcessEngineBeans {
 	private TaskHandlePolicyContainer taskHandlePolicyContainer; // 任务办理策略容器
 	
 	@Autowired
-	private OptionHandlerContainer optionHandlerContainer; // OptionHandler的容器
+	private OptionParsers optionHandlerContainer; // OptionHandler的容器
 	
 	// -------------------------------------------------------------------------------------------------
 	public ProcessEngineConfiguration getProcessEngineConfiguration() {
@@ -50,7 +50,7 @@ public class ProcessEngineBeans {
 	public TaskHandlePolicyContainer getTaskHandlePolicyContainer() {
 		return taskHandlePolicyContainer;
 	}
-	public OptionHandlerContainer getOptionHandlerContainer() {
+	public OptionParsers getOptionHandlerContainer() {
 		return optionHandlerContainer;
 	}
 }

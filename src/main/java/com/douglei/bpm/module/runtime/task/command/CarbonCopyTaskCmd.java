@@ -42,7 +42,7 @@ public class CarbonCopyTaskCmd extends AbstractTaskCmd implements Command {
 			throw new TaskHandleException("抄送失败, ["+taskInstance.getName()+"]任务不支持用户进行抄送操作");
 		
 		Option option = ((UserTaskMetadata)taskMetadata).getOption(OptionTypeConstants.CARBON_COPY);
-		if(option == null || !((CarbonCopyOption)option).getCandidate().getAssignPolicy().isDynamic())
+		if(option == null)
 			throw new TaskHandleException("抄送失败, ["+taskInstance.getName()+"]任务不支持用户进行抄送操作");
 		
 		// 查询指定userId, 判断其是否可以抄送

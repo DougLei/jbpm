@@ -74,7 +74,7 @@ public class TaskMetadataEntity<M extends TaskMetadata> {
 					outputFlows.add(flow);
 			});
 			if(outputFlows.size() > 1)
-				outputFlows.sort(flowSortComparator);
+				outputFlows.sort(FLOW_SORT_COMPARATOR);
 		}
 		return outputFlows;
 	}
@@ -95,14 +95,13 @@ public class TaskMetadataEntity<M extends TaskMetadata> {
 	}
 	
 	// flow的排序比较器
-	private static final Comparator<FlowMetadata> flowSortComparator = new Comparator<FlowMetadata>() {
+	private static final Comparator<FlowMetadata> FLOW_SORT_COMPARATOR = new Comparator<FlowMetadata>() {
 		@Override
 		public int compare(FlowMetadata f1, FlowMetadata f2) {
-			if(f1.getOrder() == f2.getOrder()) {
+			if(f1.getOrder() == f2.getOrder()) 
 				return 0;
-			}else if(f1.getOrder() < f2.getOrder()) {
+			if(f1.getOrder() < f2.getOrder()) 
 				return -1;
-			}
 			return 1;
 		}
 	};

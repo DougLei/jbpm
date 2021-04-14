@@ -7,14 +7,16 @@ import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
  * 
  * @author DougLei
  */
-class TaskEntity {
+public class TaskEntity {
 	private String taskinstId;
+	private String parentTaskinstId;
 	private String sourceKey;
 	private String key;
 	
 	public TaskEntity() {}
 	public TaskEntity(Task task, String key) {
 		this.taskinstId = task.getTaskinstId();
+		this.parentTaskinstId = task.getParentTaskinstId();
 		this.sourceKey = task.getSourceKey();
 		this.key = key;
 	}
@@ -33,6 +35,12 @@ class TaskEntity {
 	}
 	public void setTaskinstId(String taskinstId) {
 		this.taskinstId = taskinstId;
+	}
+	public String getParentTaskinstId() {
+		return parentTaskinstId;
+	}
+	public void setParentTaskinstId(String parentTaskinstId) {
+		this.parentTaskinstId = parentTaskinstId;
 	}
 	public String getSourceKey() {
 		return sourceKey;

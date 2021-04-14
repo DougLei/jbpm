@@ -7,7 +7,7 @@ import com.douglei.bpm.module.runtime.task.command.dispatch.impl.NaturalDispatch
  * 
  * @author DougLei
  */
-public class DispatchTaskParameter extends GeneralTaskParameter{
+public class DispatchTaskParameter extends GeneralTaskParameter {
 	private DispatchExecutor dispatchExecutor;
 	
 	/**

@@ -9,10 +9,9 @@ import com.douglei.bpm.process.mapping.metadata.TaskNotExistsException;
  * @author DougLei
  */
 public class NaturalDispatchExecutor extends DispatchExecutor {
-
+	
 	@Override
 	public void execute() throws TaskNotExistsException, TaskDispatchException {
-		executeCarbonCopy();
 		setAssignedUsers(assignedUserIds);
 		processEngineBeans.getTaskHandleUtil().dispatch(currentTaskMetadataEntity, handleParameter);
 	}

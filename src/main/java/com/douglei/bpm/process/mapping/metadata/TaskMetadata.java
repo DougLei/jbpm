@@ -1,5 +1,6 @@
 package com.douglei.bpm.process.mapping.metadata;
 
+import com.douglei.bpm.process.mapping.metadata.task.user.TimeLimit;
 import com.douglei.tools.StringUtil;
 
 /**

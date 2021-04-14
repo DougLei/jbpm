@@ -20,5 +20,14 @@ public class OptionTypeConstants {
 	 * 转办option
 	 */
 	public static final String TRANSFER = "transfer";
+
+	/**
+	 * 跳转option
+	 */
+	public static final String JUMP = "jump";
 	
+	/**
+	 * 回退option
+	 */
+	public static final String BACK = "back";
 }

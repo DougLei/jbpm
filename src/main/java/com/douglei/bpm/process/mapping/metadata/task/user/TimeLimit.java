@@ -1,4 +1,4 @@
-package com.douglei.bpm.process.mapping.metadata;
+package com.douglei.bpm.process.mapping.metadata.task.user;
 
 import com.douglei.orm.mapping.metadata.Metadata;
 

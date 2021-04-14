@@ -125,24 +125,20 @@
 				</handlePolicy>
 			</candidate>
 			
+			<!-- 这三个操作是办理时, 可进行的操作 -->
 			<!-- 
 				在当前任务时, 可以执行的操作, 可配置多个, 也可不配置(默认为null)
 				* type: 操作的类型名, 必须配置, 区分大小写
 				* name: 操作描述, 可不配置, 默认值为type的值
 				* order: 操作排序, 可不配置, 默认值为0
-				
-				* 如果配置了重复type的option, 引擎会抛出异常
 			 -->
-			<!-- 这几个操作是办理时, 可进行的操作 -->
 			<option type="carbonCopy" name="抄送" order="">
 				<!-- 
 					必须配置; 没有<handlePolicy>配置项
-					* isDynamic: 可不配置, 默认值为true; 值为true, 表示需要用户在办理任务时, 手动指派人员进行抄送; 如果值为false, 表示在任务办理结束后, 引擎会自动抄送到表达式指定的所有人
-					* assignNum: 可指派抄送的人数, 针对isDynamic=true生效; 可不配置, 默认值为100%
-					* 其他配置参考userTask中的配置
+					* assignNum: 可指派抄送的人数; 可不配置, 默认值为100%
 				 -->
 				<candidate>
-					<assignPolicy isDynamic="true/false" assignNum="100%">
+					<assignPolicy assignNum="100%">
 						<expression name="" value="" />
 					</assignPolicy>
 				</candidate>
@@ -166,37 +162,33 @@
 				<candidate></candidate>
 			</option>
 			
-			<!-- 
-				流程跳转; 调度时, 可进行的操作
-			 -->
+			<!-- 这两个操作是调度时, 可进行的操作 -->
 			<option type="jump" name="流程跳转" order="">
 				<!-- 
 					* target: 要跳转的目标任务id, 必须配置
 					* suggest: 表示是否需要强制输入意见; 不区分大小写, 不配置时, 会使用当前任务的handlePolicy.suggest值做为默认值; 如果配置值不合法, 则引擎会使用默认值
 					* attitude: 表示是否需要强制表态; 同上 
-					* reason: 是否要输入原因, 不区分大小写, 可不配置, 默认值为false; 如果配置值不合法, 则引擎会使用默认值
 				 -->
-				<parameter target="" suggest="false" attitude="false" reason="false"/>
+				<parameter target="" suggest="false" attitude="false" />
 				
-				<!-- 
-					可不配置, 默认使用target环节的候选人指派配置, 没有<handlePolicy>配置项
-				 -->
+				<!-- 可不配置, 默认使用target环节的候选人指派配置, 没有<handlePolicy>配置项 -->
 				<candidate>
 					<assignPolicy></assignPolicy>
 				</candidate>
 			</option>
-			
-			<!-- 流程跟踪 -->
-			<option type="tracking" name="流程跟踪" order="" />
+			<option type="back" name="流程回退" order="">
+				<!-- 
+					* steps: 要回退的步数, 必须配置
+					* suggest: 表示是否需要强制输入意见; 不区分大小写, 不配置时, 会使用当前任务的handlePolicy.suggest值做为默认值; 如果配置值不合法, 则引擎会使用默认值
+					* attitude: 表示是否需要强制表态; 同上 
+				 -->
+				<parameter steps="" suggest="false" attitude="false" />
+			</option>
 			
 			<!-- 这两个操作是办理提交后, 可进行的操作 -->
-			<!-- 催办 -->
 			<option type="urging" name="催办" order="">
 				<parameter moment="" /><!-- 催办时机的策略名称, 例如在逾期后催办, 在提交的一天后催办等; 可不配置, 默认是在逾期后可进行催办 -->
 			</option>
-			<!-- 
-				撤回, 当用户提交后, 如果发现提交的有问题, 还可以自主选择撤回, 重新编辑后重新提交
-			 -->
 			<option type="withdraw" name="撤回" order="" >
 				<!-- 
 					* moment: 撤回时机的策略名称, 例如未有人认领时可撤回, 在提交的一小时内可撤回等; 可不配置, 默认是在未有人认领时可撤回; 配置不合法时, 引擎会抛出异常

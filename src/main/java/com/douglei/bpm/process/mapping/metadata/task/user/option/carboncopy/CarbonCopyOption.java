@@ -25,7 +25,7 @@ public class CarbonCopyOption extends Option {
 	}
 
 	@Override
-	public ActiveTime getActiveTime() {
-		return ActiveTime.TASK_HANDLING;
+	public boolean supportActiveTime(ActiveTime target) {
+		return target == ActiveTime.TASK_HANDLING;
 	}
 }

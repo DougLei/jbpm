@@ -33,7 +33,7 @@ public abstract class AbstractDispatchOption extends Option {
 	}
 
 	@Override
-	public ActiveTime getActiveTime() {
-		return ActiveTime.TASK_DISPATCHING;
+	public boolean supportActiveTime(ActiveTime target) {
+		return target == ActiveTime.TASK_DISPATCHING;
 	}
 }

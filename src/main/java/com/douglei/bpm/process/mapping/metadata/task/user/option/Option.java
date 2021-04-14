@@ -39,10 +39,9 @@ public abstract class Option implements Serializable{
 		return order;
 	}
 	/**
-	 * 获取option的活动时间段
-	 * <p>
-	 * 即当前的option在什么时间段内有效
+	 * 是否支持指定的ActiveTime
+	 * @param target
 	 * @return
 	 */
-	public abstract ActiveTime getActiveTime();
+	public abstract boolean supportActiveTime(ActiveTime target);
 }

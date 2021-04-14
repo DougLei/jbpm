@@ -65,7 +65,7 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 		
 		ParallelTaskHolder parallelTaskHolder = new ParallelTaskHolder(parentTaskinstId, !isRecursive);
 		if(parallelTaskHolder.tasks.isEmpty()) { // 所有分支任务均完成
-			completeTask(parentTask, currentDate, null);
+			completeTask(parentTask, null);
 			if(parentTask.getParentTaskinstId() != null) 
 				join(Arrays.asList(parentTask.getParentTaskinstId()), true);
 		}

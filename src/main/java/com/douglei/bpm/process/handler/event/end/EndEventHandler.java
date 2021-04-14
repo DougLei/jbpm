@@ -46,7 +46,7 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParamet
 	 * @param endTask
 	 */
 	private void end(Task endTask) {
-		completeTask(endTask, handleParameter.getCurrentDate(), handleParameter.getVariableEntities());
+		completeTask(endTask, handleParameter.getVariableEntities());
 		
 		if(isAllFinished()) 
 			finishProcessInstance();

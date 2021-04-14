@@ -53,7 +53,7 @@ public class KillAndJumpTaskCmd extends GeneralTaskHandler implements Command{
 		// kill并完成当前任务
 		currentTask.setUserId(parameter.getUserId());
 		currentTask.setReason(parameter.getReason());
-		completeTask(currentTask, handleParameter.getCurrentDate(), handleParameter.getVariableEntities());
+		completeTask(currentTask, handleParameter.getVariableEntities());
 		
 		// 进行跳转调度
 		new SettargetDispatchExecutor(parameter.getTargetTask())

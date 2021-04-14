@@ -22,16 +22,15 @@ public abstract class GeneralTaskHandler {
 	/**
 	 * 完成任务(调度任务数据)
 	 * @param task 任务
-	 * @param completeTime 完成任务的时间
 	 * @param variableEntities 任务相关的流程变量
 	 */
-	protected void completeTask(Task task, Date completeTime, VariableEntities variableEntities) {
+	protected void completeTask(Task task, VariableEntities variableEntities) {
 		// 从运行任务表中删除任务
 		if(task.getId() > 0) // 此判断用于拦截, 同一次处理中, 运行任务到历史任务的转移(同一次处理中, 不需要从运行表删除)
 			SessionContext.getSqlSession().executeUpdate("delete bpm_ru_task where id = ?", Arrays.asList(task.getId()));	
 
 		// 将任务存到历史表	
-		HistoryTask historyTask = new HistoryTask(task, completeTime);
+		HistoryTask historyTask = new HistoryTask(task, new Date());
 		SessionContext.getTableSession().save(historyTask);	
 		
 		// 调度当前任务的变量

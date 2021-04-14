@@ -66,7 +66,7 @@ public class DispatchTaskCmd extends GeneralTaskHandler implements Command {
 		
 		// 完成任务
 		GeneralHandleParameter handleParameter = getGeneralHandleParameter();
-		completeTask(taskInstance.getTask(), handleParameter.getCurrentDate(), handleParameter.getVariableEntities());
+		completeTask(taskInstance.getTask(), handleParameter.getVariableEntities());
 		
 		// 进行调度
 		parameter.getDispatchExecutor()

@@ -7,7 +7,7 @@ import java.util.List;
  * 
  * @author DougLei
  */
-public class GeneralTaskParameter {
+class GeneralTaskParameter {
 	private String userId; // 办理人id
 	private HashSet<String> assignedUserIds; // 下一环节的办理人id集合
 	

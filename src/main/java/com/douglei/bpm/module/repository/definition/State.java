@@ -9,49 +9,97 @@ public enum State {
 	/**
 	 * 初始化
 	 */
-	INITIAL(true, false, true, false), 
+	INITIAL{
+		
+		@Override
+		public boolean supportDeploy() {
+			return true;
+		}
+		
+		@Override
+		public boolean supportDelete() {
+			return true;
+		}
+	}, 
 	
 	/**
 	 * 部署
 	 */
-	DEPLOY(false, true, false, false), 
+	DEPLOY{
+		
+		@Override
+		public boolean supportUnDeploy() {
+			return true;
+		}
+	}, 
 	
 	/**
 	 * 未部署
 	 */
-	UNDEPLOY(true, false, true, false), 
+	UNDEPLOY {
+		
+		@Override
+		public boolean supportDeploy() {
+			return true;
+		}
+		
+		@Override
+		public boolean supportDelete() {
+			return true;
+		}
+	}, 
 	
 	/**
 	 * 无效
 	 */
-	INVALID(false, false, false, true),
+	INVALID {
+		
+		@Override
+		public boolean supportPhysicalDelete() {
+			return true;
+		}
+	},
 	
 	/**
 	 * 删除
 	 */
-	DELETE(false, false, false, true); 
+	DELETE {
+		
+		@Override
+		public boolean supportPhysicalDelete() {
+			return true;
+		}
+	}; 
 
-	private boolean supportDeploy; // 当前状态是是否支持部署
-	private boolean supportUnDeploy; // 当前状态是是否支持取消部署
-	private boolean supportDelete; // 当前状态是是否支持删除
-	private boolean supportPhysicalDelete; // 当前状态是是否支持物理删除
-	private State(boolean supportDeploy, boolean supportUnDeploy, boolean supportDelete, boolean supportPhysicalDelete) {
-		this.supportDeploy = supportDeploy;
-		this.supportUnDeploy = supportUnDeploy;
-		this.supportDelete = supportDelete;
-		this.supportPhysicalDelete = supportPhysicalDelete;
+	/**
+	 * 当前状态是是否支持部署
+	 * @return
+	 */
+	public boolean supportDeploy() {
+		return false;
 	}
 	
-	public boolean supportDeploy() {
-		return supportDeploy;
-	}
+	/**
+	 * 当前状态是是否支持取消部署
+	 * @return
+	 */
 	public boolean supportUnDeploy() {
-		return supportUnDeploy;
+		return false;
 	}
+	
+	/**
+	 * 当前状态是是否支持删除
+	 * @return
+	 */
 	public boolean supportDelete() {
-		return supportDelete;
+		return false;
 	}
+	
+	/**
+	 * 当前状态是是否支持物理删除
+	 * @return
+	 */
 	public boolean supportPhysicalDelete() {
-		return supportPhysicalDelete;
+		return false;
 	}
 }

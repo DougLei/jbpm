@@ -37,12 +37,12 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 		String parentTaskinstId = previousTaskEntity.getTask().getParentTaskinstId();
 		if(parentTaskinstId == null) {
 			Task joinTask = new Task(
+					currentJoinTaskMetadataEntity.getProcessMetadata().getId(),
 					previousTaskEntity.getTask().getProcinstId(), 
 					null, 
 					currentDate, 
 					previousTaskEntity.getTask().getKey(),
-					currentJoinTaskMetadataEntity.getTaskMetadata(), 
-					currentJoinTaskMetadataEntity.getProcessMetadata());
+					currentJoinTaskMetadataEntity.getTaskMetadata());
 			joinTask.setJoinBranchNum(1);
 			
 			if(previousTaskEntity.isCreateBranch()) // 如果上一个任务会创建分支, 则这里要记录上一个任务的实例id, 作为当前任务的父任务, 例如两个并行网关连在一起
@@ -112,12 +112,12 @@ public class ParallelTaskHandler extends GeneralTaskHandler{
 				}
 				if(joinTask == null) {
 					joinTask = new Task(
+							currentJoinTaskMetadataEntity.getProcessMetadata().getId(),
 							previousTaskEntity.getTask().getProcinstId(), 
 							previousTaskEntity.getTask().getParentTaskinstId(), 
 							currentDate,
 							previousTaskEntity.getTask().getKey(),
-							currentJoinTaskMetadataEntity.getTaskMetadata(),
-							currentJoinTaskMetadataEntity.getProcessMetadata());
+							currentJoinTaskMetadataEntity.getTaskMetadata());
 					joinTask.setJoinBranchNum(1);
 				}
 			}

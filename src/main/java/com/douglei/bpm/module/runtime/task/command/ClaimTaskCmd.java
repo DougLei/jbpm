@@ -11,7 +11,7 @@ import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
-import com.douglei.bpm.module.runtime.task.TaskInstance;
+import com.douglei.bpm.module.runtime.task.TaskEntity;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimResult;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
@@ -23,19 +23,19 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 public class ClaimTaskCmd implements Command{
-	private TaskInstance taskInstance;
+	private TaskEntity entity;
 	private String currentClaimUserId; // 要认领的用户id
-	public ClaimTaskCmd(TaskInstance taskInstance, String currentClaimUserId) {
-		this.taskInstance = taskInstance;
+	public ClaimTaskCmd(TaskEntity entity, String currentClaimUserId) {
+		this.entity = entity;
 		this.currentClaimUserId = currentClaimUserId;
 	}
 	
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
-		if(!taskInstance.isUserTask())
-			throw new TaskHandleException("认领失败, ["+taskInstance.getName()+"]任务不支持用户认领");
-		if(taskInstance.getTask().isAllClaimed())
-			return new ExecutionResult("认领失败, [%s]任务的办理权限已被认领完", "jbpm.claim.fail.task.all.claimed", taskInstance.getName());
+		if(!entity.isUserTask())
+			throw new TaskHandleException("认领失败, ["+entity.getName()+"]任务不支持用户认领");
+		if(entity.getTask().isAllClaimed())
+			return new ExecutionResult("认领失败, [%s]任务的办理权限已被认领完", "jbpm.claim.fail.task.all.claimed", entity.getName());
 		
 		return claim(processEngineBeans);
 	}
@@ -44,14 +44,14 @@ public class ClaimTaskCmd implements Command{
 	private synchronized ExecutionResult claim(ProcessEngineBeans processEngineBeans) {
 		// 查询指定userId, 判断其是否可以认领
 		List<Assignee> assigneeList = SessionContext.getSqlSession().query(Assignee.class, 
-						SQL_QUERY_CAN_CLAIM_ASSIGNEE_LIST, Arrays.asList(taskInstance.getTask().getTaskinstId(), currentClaimUserId, HandleState.COMPETITIVE_UNCLAIM.name(), HandleState.UNCLAIM.name()));
+						SQL_QUERY_CAN_CLAIM_ASSIGNEE_LIST, Arrays.asList(entity.getTask().getTaskinstId(), currentClaimUserId, HandleState.COMPETITIVE_UNCLAIM.name(), HandleState.UNCLAIM.name()));
 		if(assigneeList.isEmpty())
-			return new ExecutionResult("认领失败, [%s]任务已被认领", "jbpm.claim.fail.claimed.by.other", taskInstance.getName());
+			return new ExecutionResult("认领失败, [%s]任务已被认领", "jbpm.claim.fail.claimed.by.other", entity.getName());
 		
 		// 判断当前用户能否认领
 		ClaimResult result = canClaim(assigneeList, processEngineBeans);
 		if(!result.canClaim())
-			return new ExecutionResult("认领失败, [%s]任务的办理权限已被认领完", "jbpm.claim.fail.task.all.claimed", taskInstance.getName());
+			return new ExecutionResult("认领失败, [%s]任务的办理权限已被认领完", "jbpm.claim.fail.task.all.claimed", entity.getName());
 		
 		// 进行认领
 		Date claimTime = new Date();
@@ -60,13 +60,13 @@ public class ClaimTaskCmd implements Command{
 			if(!assignee.isChainLast()) 
 				SessionContext.getSqlSession().executeUpdate(
 						"delete bpm_ru_assignee where taskinst_id=? and group_id=? and chain_id >?", 
-						Arrays.asList(taskInstance.getTask().getTaskinstId(), assignee.getGroupId(), assignee.getChainId()));
+						Arrays.asList(entity.getTask().getTaskinstId(), assignee.getGroupId(), assignee.getChainId()));
 			
 			// 不是链的开始, 要将比自己小的HandleState值从COMPETITIVE_UNCLAIM改为INVALID_UNCLAIM
 			if(!assignee.isChainFirst()) 
 				SessionContext.getSqlSession().executeUpdate(
 						"update bpm_ru_assignee set handle_state=? where taskinst_id=? and group_id=? and chain_id <? and handle_state=?", 
-						Arrays.asList(HandleState.INVALID_UNCLAIM.name(), taskInstance.getTask().getTaskinstId(), assignee.getGroupId(), assignee.getChainId(), HandleState.COMPETITIVE_UNCLAIM.name()));
+						Arrays.asList(HandleState.INVALID_UNCLAIM.name(), entity.getTask().getTaskinstId(), assignee.getGroupId(), assignee.getChainId(), HandleState.COMPETITIVE_UNCLAIM.name()));
 			
 			// 进行认领
 			assignee.claim(claimTime);
@@ -75,7 +75,7 @@ public class ClaimTaskCmd implements Command{
 		
 		// 处理task的isAllClaimed字段值, 改为全部认领
 		if(result.getLeftCount() == 0)
-			taskInstance.getTask().setAllClaimed();
+			entity.getTask().setAllClaimed();
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 
@@ -86,7 +86,7 @@ public class ClaimTaskCmd implements Command{
 	 * @return
 	 */
 	private ClaimResult canClaim(List<Assignee> currentAssigneeList, ProcessEngineBeans processEngineBeans) {
-		List<Assignee> unclaimAssigneeList = SessionContext.getSQLSession().query(Assignee.class, "Assignee", "queryAssigneeClaimSituation", taskInstance.getTask().getTaskinstId());
+		List<Assignee> unclaimAssigneeList = SessionContext.getSQLSession().query(Assignee.class, "Assignee", "queryAssigneeClaimSituation", entity.getTask().getTaskinstId());
 		List<Assignee> claimedAssigneeList= null; 
 		List<Assignee> finishedAssigneeList = null;
 		
@@ -109,11 +109,11 @@ public class ClaimTaskCmd implements Command{
 			}
 		}
 		
-		ClaimPolicyEntity entity = ((UserTaskMetadata) taskInstance.getTaskMetadataEntity().getTaskMetadata()).getCandidate().getHandlePolicy().getClaimPolicyEntity();
+		ClaimPolicyEntity claimPolicyEntity = ((UserTaskMetadata) entity.getTaskMetadataEntity().getTaskMetadata()).getCandidate().getHandlePolicy().getClaimPolicyEntity();
 		return processEngineBeans
 				.getTaskHandlePolicyContainer()
-				.getClaimPolicy(entity.getName())
-				.claimValidate(entity.getValue(), currentClaimUserId, currentAssigneeList, unclaimAssigneeList, claimedAssigneeList, finishedAssigneeList);
+				.getClaimPolicy(claimPolicyEntity.getName())
+				.claimValidate(claimPolicyEntity.getValue(), currentClaimUserId, currentAssigneeList, unclaimAssigneeList, claimedAssigneeList, finishedAssigneeList);
 	}
 	
 	//------------------------------------------------------------------------------------------------------------------

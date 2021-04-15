@@ -42,20 +42,18 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	}
 	/**
 	 * 创建任务
-	 * <p>
-	 * 不对创建的任务进行保存, 需要调用方保存
-	 * @param createBranch 当前任务是否需要创建分支
+	 * @param createBranch 当前任务是否会创建分支
 	 * @param parentTaskinstId 当前任务关联的父任务实例id
 	 * @return
 	 */
 	private Task createTask(boolean createBranch, String parentTaskinstId) {
 		Task task = new Task(
+				handleParameter.getProcessMetadata().getId(),
 				handleParameter.getProcessInstanceId(),
 				parentTaskinstId,
 				handleParameter.getCurrentDate(),
 				handleParameter.getTaskEntityHandler().getPreviousTaskKey(),
-				currentTaskMetadataEntity.getTaskMetadata(),
-				handleParameter.getProcessMetadata());
+				currentTaskMetadataEntity.getTaskMetadata());
 		
 		handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(task, createBranch));
 		return task;
@@ -63,8 +61,6 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	
 	/**
 	 * 创建历史任务
-	 * <p>
-	 * 不对创建的任务进行保存, 需要调用方保存
 	 * @return
 	 */
 	protected final HistoryTask createHistoryTask() {
@@ -74,19 +70,17 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandlePara
 	}
 	/**
 	 * 创建历史任务
-	 * <p>
-	 * 不对创建的任务进行保存, 需要调用方保存
 	 * @param parentTaskinstId 当前任务关联的父任务实例id
 	 * @return
 	 */
 	protected final HistoryTask createHistoryTask(String parentTaskinstId) {
 		HistoryTask historyTask = new HistoryTask(
+				handleParameter.getProcessMetadata().getId(),
 				handleParameter.getProcessInstanceId(),
 				parentTaskinstId,
 				handleParameter.getCurrentDate(),
 				handleParameter.getTaskEntityHandler().getPreviousTaskKey(),
-				currentTaskMetadataEntity.getTaskMetadata(),
-				handleParameter.getProcessMetadata());
+				currentTaskMetadataEntity.getTaskMetadata());
 		
 		handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(historyTask));
 		return historyTask;

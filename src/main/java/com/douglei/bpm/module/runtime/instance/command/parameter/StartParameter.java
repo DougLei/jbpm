@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.runtime.instance;
+package com.douglei.bpm.module.runtime.instance.command.parameter;
 
 import java.util.Map;
 

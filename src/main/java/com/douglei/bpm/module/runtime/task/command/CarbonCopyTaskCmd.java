@@ -8,7 +8,7 @@ import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.CarbonCopy;
-import com.douglei.bpm.module.runtime.task.TaskInstance;
+import com.douglei.bpm.module.runtime.task.TaskEntity;
 import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
@@ -29,7 +29,7 @@ public class CarbonCopyTaskCmd extends AbstractTaskCmd implements Command {
 	public CarbonCopyTaskCmd() {
 		super(null);
 	}
-	public CarbonCopyTaskCmd(TaskInstance taskInstance, String userId, List<String> assignedUserIds) {
+	public CarbonCopyTaskCmd(TaskEntity taskInstance, String userId, List<String> assignedUserIds) {
 		super(taskInstance);
 		this.userId = userId;
 		this.assignedUserIds = assignedUserIds;
@@ -37,22 +37,22 @@ public class CarbonCopyTaskCmd extends AbstractTaskCmd implements Command {
 
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
-		TaskMetadata taskMetadata = taskInstance.getTaskMetadataEntity().getTaskMetadata();
-		if(!taskInstance.isUserTask())
-			throw new TaskHandleException("抄送失败, ["+taskInstance.getName()+"]任务不支持用户进行抄送操作");
+		TaskMetadata taskMetadata = entity.getTaskMetadataEntity().getTaskMetadata();
+		if(!entity.isUserTask())
+			throw new TaskHandleException("抄送失败, ["+entity.getName()+"]任务不支持用户进行抄送操作");
 		
 		Option option = ((UserTaskMetadata)taskMetadata).getOption(OptionTypeConstants.CARBON_COPY);
 		if(option == null)
-			throw new TaskHandleException("抄送失败, ["+taskInstance.getName()+"]任务不支持用户进行抄送操作");
+			throw new TaskHandleException("抄送失败, ["+entity.getName()+"]任务不支持用户进行抄送操作");
 		
 		// 查询指定userId, 判断其是否可以抄送
 		if(!isClaimed(userId))
-			throw new TaskHandleException("抄送失败, 指定的userId没有["+taskInstance.getName()+"]任务的抄送操作权限");
+			throw new TaskHandleException("抄送失败, 指定的userId没有["+entity.getName()+"]任务的抄送操作权限");
 		
 		// 获取具体可抄送的所有人员集合
 		AssignPolicy assignPolicy = ((CarbonCopyOption)option).getCandidate().getAssignPolicy();
 		List<String> assignableUserIds = processEngineBeans.getTaskHandleUtil().getAssignableUserIds(
-				taskInstance.getTask().getProcinstId(), taskInstance.getTask().getTaskinstId(), userId, assignPolicy);
+				entity.getTask().getProcinstId(), entity.getTask().getTaskinstId(), userId, assignPolicy);
 		if(assignableUserIds.isEmpty())
 			throw new TaskHandleException("["+taskMetadata.getName()+"]任务不存在可抄送的人员");
 		
@@ -60,7 +60,7 @@ public class CarbonCopyTaskCmd extends AbstractTaskCmd implements Command {
 		processEngineBeans.getTaskHandleUtil().validateAssignedUsers(assignedUserIds, assignableUserIds, assignPolicy.getAssignNumber());
 		
 		// 进行抄送
-		execute(taskInstance.getTask().getTaskinstId(), userId, new Date(), assignedUserIds);
+		execute(entity.getTask().getTaskinstId(), userId, new Date(), assignedUserIds);
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 	

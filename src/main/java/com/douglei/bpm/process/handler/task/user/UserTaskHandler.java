@@ -9,7 +9,7 @@ import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.DispatchPolicy;
-import com.douglei.bpm.process.handler.GeneralHandleParameter;
+import com.douglei.bpm.process.handler.GeneralTaskHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.task.user.assignee.handle.AssigneeDispatcher;
 import com.douglei.bpm.process.handler.task.user.assignee.startup.AssigneeHandler;
@@ -21,7 +21,7 @@ import com.douglei.orm.context.SessionContext;
  * 
  * @author DougLei
  */
-public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralHandleParameter> {
+public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralTaskHandleParameter> {
 	private final static ExecutionResult CAN_DISPATCH = new ExecutionResult(true);
 
 	@Override

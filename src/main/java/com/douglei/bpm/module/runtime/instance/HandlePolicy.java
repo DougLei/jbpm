@@ -4,7 +4,7 @@ package com.douglei.bpm.module.runtime.instance;
  * 流程实例的处理策略
  * @author DougLei
  */
-public enum ProcessInstanceHandlePolicy {
+public enum HandlePolicy {
 	
 	/**
 	 * 激活

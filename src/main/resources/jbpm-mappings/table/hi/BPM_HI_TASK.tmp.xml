@@ -25,6 +25,9 @@
 			<constraint type="PRIMARY_KEY" isAutoIncrement="true">
 				<column name="ID" />
 			</constraint>
+			<constraint type="UNIQUE">
+				<column name="TASKINST_ID" />
+			</constraint>
 		</constraints>
 	</table>
 </mapping-configuration>

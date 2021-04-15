@@ -13,7 +13,7 @@ import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.AssignMode;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
-import com.douglei.bpm.module.runtime.task.TaskInstance;
+import com.douglei.bpm.module.runtime.task.TaskEntity;
 import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.task.user.assignee.startup.DelegationHandler;
@@ -30,13 +30,13 @@ import com.douglei.tools.StringUtil;
  * @author DougLei
  */
 public class DelegateTaskCmd implements Command {
-	private TaskInstance taskInstance;
+	private TaskEntity entity;
 	private String userId; // 发起委托的用户id
 	private String assignedUserId; // 接受委托的用户id
 	private String reason; // 委托原因
 	
-	public DelegateTaskCmd(TaskInstance taskInstance, String userId, String assignedUserId, String reason) {
-		this.taskInstance = taskInstance;
+	public DelegateTaskCmd(TaskEntity entity, String userId, String assignedUserId, String reason) {
+		this.entity = entity;
 		this.userId = userId;
 		this.assignedUserId = assignedUserId;
 		this.reason = reason;
@@ -44,26 +44,26 @@ public class DelegateTaskCmd implements Command {
 
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
-		TaskMetadata taskMetadata = taskInstance.getTaskMetadataEntity().getTaskMetadata();
-		if(!taskInstance.isUserTask())
-			throw new TaskHandleException(getAssignModeName()+"失败, ["+taskInstance.getName()+"]任务不支持用户进行"+getAssignModeName()+"操作");
+		TaskMetadata taskMetadata = entity.getTaskMetadataEntity().getTaskMetadata();
+		if(!entity.isUserTask())
+			throw new TaskHandleException(getAssignMode()+"失败, ["+entity.getName()+"]任务不支持用户进行"+getAssignMode()+"操作");
 		
 		if(userId.equals(assignedUserId))
-			return new ExecutionResult("%s失败, 不能%s给自己", "jbpm.delegate.fail.to.self", getAssignModeName(), getAssignModeName());
+			return new ExecutionResult("%s失败, 不能%s给自己", "jbpm.delegate.fail.to.self", getAssignMode(), getAssignMode());
 		
 		DelegateOption option = (DelegateOption) ((UserTaskMetadata)taskMetadata).getOption(getOptionType());
 		if(option == null)
-			throw new TaskHandleException(getAssignModeName()+"失败, ["+taskInstance.getName()+"]任务不支持用户进行"+getAssignModeName()+"操作");
+			throw new TaskHandleException(getAssignMode()+"失败, ["+entity.getName()+"]任务不支持用户进行"+getAssignMode()+"操作");
 		if(option.reasonIsRequired() && StringUtil.isEmpty(reason))
-			return new ExecutionResult("%s失败, 请输入%s的具体原因", "jbpm.delegate.fail.no.reason", getAssignModeName(), getAssignModeName());
+			return new ExecutionResult("%s失败, 请输入%s的具体原因", "jbpm.delegate.fail.no.reason", getAssignMode(), getAssignMode());
 		
 		// 查询指定userId, 判断其是否可以委托
 		List<Assignee> assigneeList = SessionContext.getSqlSession()
 				.query(Assignee.class, 
 						"select id, group_id, chain_id from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
-						Arrays.asList(taskInstance.getTask().getTaskinstId(), userId, HandleState.CLAIMED.name()));
+						Arrays.asList(entity.getTask().getTaskinstId(), userId, HandleState.CLAIMED.name()));
 		if(assigneeList.isEmpty())
-			throw new TaskHandleException(getAssignModeName()+"失败, 指定的userId没有["+taskInstance.getName()+"]任务的"+getAssignModeName()+"操作权限");
+			throw new TaskHandleException(getAssignMode()+"失败, 指定的userId没有["+entity.getName()+"]任务的"+getAssignMode()+"操作权限");
 		
 		
 		// 获取具体可委托的所有人员集合, 并对本次委托的人员进行验证
@@ -72,9 +72,9 @@ public class DelegateTaskCmd implements Command {
 			candidate = ((UserTaskMetadata)taskMetadata).getCandidate();
 		
 		List<String> assignableUserIds = processEngineBeans.getTaskHandleUtil().getAssignableUserIds(
-				taskInstance.getTask().getProcinstId(), taskInstance.getTask().getTaskinstId(), userId, candidate.getAssignPolicy());
+				entity.getTask().getProcinstId(), entity.getTask().getTaskinstId(), userId, candidate.getAssignPolicy());
 		if(assignableUserIds.isEmpty())
-			throw new TaskHandleException("["+taskMetadata.getName()+"]任务不存在可"+getAssignModeName()+"的人员");
+			throw new TaskHandleException("["+taskMetadata.getName()+"]任务不存在可"+getAssignMode()+"的人员");
 		if(!assignableUserIds.contains(assignedUserId))
 			throw new TaskHandleException("不能指派配置范围外的人员"); 
 		
@@ -91,10 +91,10 @@ public class DelegateTaskCmd implements Command {
 		assignedUserIds.add(assignedUserId);
 		
 		DelegationHandler delegationHandler = new DelegationHandler(
-				taskInstance.getProcessMetadata().getCode(), 
-				taskInstance.getProcessMetadata().getVersion(), 
+				entity.getProcessMetadata().getCode(), 
+				entity.getProcessMetadata().getVersion(), 
 				new SqlCondition(assignedUserIds),
-				taskInstance.getTask().getTaskinstId(),
+				entity.getTask().getTaskinstId(),
 				userId);
 		
 		List<Assignee> delegateAssigneeList = new ArrayList<Assignee>(assigneeList.size() * 3);
@@ -102,7 +102,7 @@ public class DelegateTaskCmd implements Command {
 		int delegateDeep = -1; // 委托人的委托深度
 		for(Assignee assignee : assigneeList) {
 			delegationHandler.addAssignee(
-					taskInstance.getTask().getTaskinstId(), 
+					entity.getTask().getTaskinstId(), 
 					assignee.getGroupId(), 
 					assignee.getChainId()+1, 
 					assignedUserId, 
@@ -136,14 +136,6 @@ public class DelegateTaskCmd implements Command {
 	 */
 	protected AssignMode getAssignMode() {
 		return AssignMode.DELEGATED;
-	}
-	
-	/**
-	 * 获取指派模式的名称
-	 * @return
-	 */
-	protected String getAssignModeName() {
-		return "委托";
 	}
 	
 	/**

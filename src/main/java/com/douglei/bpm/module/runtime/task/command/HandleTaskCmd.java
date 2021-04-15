@@ -8,10 +8,10 @@ import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
-import com.douglei.bpm.module.runtime.task.TaskInstance;
+import com.douglei.bpm.module.runtime.task.TaskEntity;
 import com.douglei.bpm.module.runtime.task.command.parameter.HandleTaskParameter;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
-import com.douglei.bpm.process.handler.GeneralHandleParameter;
+import com.douglei.bpm.process.handler.GeneralTaskHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.handle.HandlePolicy;
@@ -24,7 +24,7 @@ import com.douglei.tools.StringUtil;
  */
 public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 	private HandleTaskParameter parameter;
-	public HandleTaskCmd(TaskInstance taskInstance, HandleTaskParameter parameter) {
+	public HandleTaskCmd(TaskEntity taskInstance, HandleTaskParameter parameter) {
 		super(taskInstance);
 		this.parameter = parameter;
 	}
@@ -32,29 +32,29 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		if(StringUtil.isEmpty(parameter.getUserId()))
-			throw new TaskHandleException("办理失败, 办理["+taskInstance.getName()+"]任务, 需要提供userId");
+			throw new TaskHandleException("办理失败, 办理["+entity.getName()+"]任务, 需要提供userId");
 
 		// 用户任务时, 判断指定的userId能否办理当前任务
-		if(taskInstance.isUserTask()) {
-			HandlePolicy handlePolicy = ((UserTaskMetadata) taskInstance.getTaskMetadataEntity().getTaskMetadata()).getCandidate().getHandlePolicy();
+		if(entity.isUserTask()) {
+			HandlePolicy handlePolicy = ((UserTaskMetadata) entity.getTaskMetadataEntity().getTaskMetadata()).getCandidate().getHandlePolicy();
 			if(handlePolicy.suggestIsRequired() && StringUtil.isEmpty(parameter.getSuggest()))
-				return new ExecutionResult("办理失败, 办理[%s]任务, 需要输入办理意见", "jbpm.handle.fail.no.suggest", taskInstance.getName());
+				return new ExecutionResult("办理失败, 办理[%s]任务, 需要输入办理意见", "jbpm.handle.fail.no.suggest", entity.getName());
 			if(handlePolicy.attitudeIsRequired() && parameter.getAttitude() == null)
-				return new ExecutionResult("办理失败, 办理[%s]任务, 需要进行表态", "jbpm.handle.fail.no.attitude", taskInstance.getName());
+				return new ExecutionResult("办理失败, 办理[%s]任务, 需要进行表态", "jbpm.handle.fail.no.attitude", entity.getName());
 			
 			// 查询指定userId, 判断其是否可以办理任务
 			if(!isClaimed(parameter.getUserId()))
-				throw new TaskHandleException("办理失败, 指定的userId无法办理["+taskInstance.getName()+"]任务");
+				throw new TaskHandleException("办理失败, 指定的userId无法办理["+entity.getName()+"]任务");
 			
 			// 根据办理策略, 判断当前的userId能否办理
 			int waitForPersonNumber = canHandle(handlePolicy, processEngineBeans);
 			if(waitForPersonNumber > 0)
-				return new ExecutionResult("办理失败, 指定的用户暂时不能办理[%s]任务, 需要等待前面%d人完成办理", "jbpm.handle.fail.wait.sequence", taskInstance.getName(), waitForPersonNumber);
+				return new ExecutionResult("办理失败, 指定的用户暂时不能办理[%s]任务, 需要等待前面%d人完成办理", "jbpm.handle.fail.wait.sequence", entity.getName(), waitForPersonNumber);
 		}
 		
 		return processEngineBeans.getTaskHandleUtil().handle(
-				taskInstance.getTaskMetadataEntity(), new GeneralHandleParameter(
-						taskInstance, 
+				entity.getTaskMetadataEntity(), new GeneralTaskHandleParameter(
+						entity, 
 						parameter.getUserId(), 
 						parameter.getSuggest(), 
 						parameter.getAttitude(), 
@@ -76,14 +76,14 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 		
 		// 判断任务的认领人数上限是否为1
 		ClaimPolicy claimPolicy = processEngineBeans.getTaskHandlePolicyContainer().getClaimPolicy(handlePolicy.getClaimPolicyEntity().getName());
-		if(claimPolicy.calcUpperLimit(handlePolicy.getClaimPolicyEntity().getValue(), taskInstance.getTask().getAssignCount()) == 1)
+		if(claimPolicy.calcUpperLimit(handlePolicy.getClaimPolicyEntity().getValue(), entity.getTask().getAssignCount()) == 1)
 			return 0;
 		
 		// 查询当前任务, 所有认领状态的指派信息
 		List<Assignee> claimedAssigneeList = SessionContext.getSqlSession()
 				.query(Assignee.class, 
 						"select user_id, claim_time from bpm_ru_assignee where taskinst_id=? and handle_state=?", 
-						Arrays.asList(taskInstance.getTask().getTaskinstId(), HandleState.CLAIMED.name()));
+						Arrays.asList(entity.getTask().getTaskinstId(), HandleState.CLAIMED.name()));
 		
 		int count = 0; // 记录是否全部是当前用户的指派信息
 		for (Assignee assignee : claimedAssigneeList) {

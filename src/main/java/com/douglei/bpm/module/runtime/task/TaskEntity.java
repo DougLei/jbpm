@@ -13,21 +13,21 @@ import com.douglei.orm.context.SessionContext;
  * 
  * @author DougLei
  */
-public class TaskInstance {
+public class TaskEntity {
 	private Task task;
 	private ProcessMappingContainer container;
 	private ProcessMetadata processMetadata;
 	private TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity;
 	
-	TaskInstance(int taskId, ProcessMappingContainer container) {
-		task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where id=?", Arrays.asList(taskId));
+	TaskEntity(int taskId, ProcessMappingContainer container) {
+		this.task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where id=?", Arrays.asList(taskId));
 		if(task == null)
 			throw new TaskHandleException("不存在id为["+taskId+"]的任务");
 		this.container = container;
 	}
 	
-	TaskInstance(String taskinstId, ProcessMappingContainer container) {
-		task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where taskinst_id=?", Arrays.asList(taskinstId));
+	TaskEntity(String taskinstId, ProcessMappingContainer container) {
+		this.task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where taskinst_id=?", Arrays.asList(taskinstId));
 		if(task == null)
 			throw new TaskHandleException("不存在taskinst_id为["+taskinstId+"]的任务");
 		this.container = container;
@@ -64,7 +64,7 @@ public class TaskInstance {
 	 * @return
 	 */
 	public String getName() {
-		return getTaskMetadataEntity().getTaskMetadata().getName();
+		return task.getName();
 	}
 	/**
 	 * 是否是用户任务

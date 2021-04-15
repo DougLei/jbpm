@@ -22,6 +22,9 @@
 			<constraint type="PRIMARY_KEY" isAutoIncrement="true">
 				<column name="ID" />
 			</constraint>
+			<constraint type="UNIQUE">
+				<column name="PROCINST_ID" />
+			</constraint>
 		</constraints>
 	</table>
 </mapping-configuration>

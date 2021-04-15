@@ -5,27 +5,26 @@ import java.util.Date;
 import java.util.HashSet;
 
 import com.douglei.bpm.module.history.task.Attitude;
-import com.douglei.bpm.module.runtime.task.TaskInstance;
 import com.douglei.bpm.module.runtime.variable.Scope;
 import com.douglei.bpm.module.runtime.variable.Variable;
 import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
 import com.douglei.orm.context.SessionContext;
 
 /**
- * 通用的办理参数
+ * 通用的任务办理参数
  * @author DougLei
  */
-public class GeneralHandleParameter implements HandleParameter {
+public class GeneralTaskHandleParameter implements HandleParameter {
 	private Date currentDate = new Date();
-	private TaskInstance taskInstance;
+	private com.douglei.bpm.module.runtime.task.TaskEntity entity;
 	private String businessId;
 	private UserEntity userEntity; // 办理的用户实体
 	private TaskEntityHandler taskEntityHandler = new TaskEntityHandler(); // 任务实体处理器
 	private VariableEntities variableEntities;
 	
-	public GeneralHandleParameter(TaskInstance taskInstance, String currentHandleUserId, String suggest, Attitude attitude, String reason, String businessId, HashSet<String> assignedUserIds) {
-		this.taskInstance = taskInstance;
-		this.taskEntityHandler.setCurrentTaskEntity(new TaskEntity(taskInstance.getTask()));
+	public GeneralTaskHandleParameter(com.douglei.bpm.module.runtime.task.TaskEntity entity, String currentHandleUserId, String suggest, Attitude attitude, String reason, String businessId, HashSet<String> assignedUserIds) {
+		this.entity = entity;
+		this.taskEntityHandler.setCurrentTaskEntity(new TaskEntity(entity.getTask()));
 		this.businessId = businessId;
 		this.userEntity = new UserEntity(currentHandleUserId, suggest, attitude, reason, assignedUserIds);
 	}
@@ -36,7 +35,7 @@ public class GeneralHandleParameter implements HandleParameter {
 	}
 	@Override
 	public String getProcessInstanceId() {
-		return taskInstance.getTask().getProcinstId();
+		return entity.getTask().getProcinstId();
 	}
 	@Override
 	public String getBusinessId() {
@@ -44,7 +43,7 @@ public class GeneralHandleParameter implements HandleParameter {
 	}
 	@Override
 	public ProcessMetadata getProcessMetadata() {
-		return taskInstance.getProcessMetadata();
+		return entity.getProcessMetadata();
 	}
 	@Override
 	public TaskEntityHandler getTaskEntityHandler() {
@@ -58,8 +57,8 @@ public class GeneralHandleParameter implements HandleParameter {
 	public VariableEntities getVariableEntities() {
 		if(variableEntities == null)
 			this.variableEntities = new VariableEntities(
-					taskInstance.getTask().getTaskinstId(), 
-					SessionContext.getTableSession().query(Variable.class, "select * from bpm_ru_variable where procinst_id=? and (taskinst_id=? or scope =?)", Arrays.asList(taskInstance.getTask().getProcinstId(), taskInstance.getTask().getTaskinstId(), Scope.GLOBAL.name())));
+					entity.getTask().getTaskinstId(), 
+					SessionContext.getTableSession().query(Variable.class, "select * from bpm_ru_variable where procinst_id=? and (taskinst_id=? or scope =?)", Arrays.asList(entity.getTask().getProcinstId(), entity.getTask().getTaskinstId(), Scope.GLOBAL.name())));
 		return variableEntities;
 	}
 }

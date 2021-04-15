@@ -1,13 +1,15 @@
 package com.douglei.bpm.module.runtime.instance;
 
-import java.util.Arrays;
-
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.CommandExecutor;
 import com.douglei.bpm.module.ExecutionResult;
 import com.douglei.bpm.module.runtime.instance.command.StartProcessCmd;
-import com.douglei.orm.context.SessionContext;
+import com.douglei.bpm.module.runtime.instance.command.SuspendProcessCmd;
+import com.douglei.bpm.module.runtime.instance.command.TerminateProcessCmd;
+import com.douglei.bpm.module.runtime.instance.command.WakeProcessCmd;
+import com.douglei.bpm.module.runtime.instance.command.parameter.StartParameter;
+import com.douglei.bpm.module.runtime.instance.command.parameter.TerminateParameter;
 import com.douglei.orm.context.Transaction;
 
 /**
@@ -21,6 +23,207 @@ public class ProcessInstanceService {
 	private CommandExecutor commandExecutor;
 	
 	/**
+	 * 唤醒指定id的流程实例
+	 * @param id
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult wake(int id) {
+		ProcessInstanceEntity entity = new ProcessInstanceEntity(id);
+		return commandExecutor.execute(new WakeProcessCmd(entity));
+	}
+	/**
+	 * 唤醒指定id的流程实例
+	 * @param procinstId
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult wake(String procinstId) {
+		ProcessInstanceEntity entity = new ProcessInstanceEntity(procinstId);
+		return commandExecutor.execute(new WakeProcessCmd(entity));
+	}
+	
+	/**
+	 * 挂起指定id的流程实例
+	 * @param id
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult suspend(int id) {
+		ProcessInstanceEntity entity = new ProcessInstanceEntity(id);
+		return commandExecutor.execute(new SuspendProcessCmd(entity));
+	}
+	/**
+	 * 挂起指定id的流程实例
+	 * @param procinstId
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult suspend(String procinstId) {
+		ProcessInstanceEntity entity = new ProcessInstanceEntity(procinstId);
+		return commandExecutor.execute(new SuspendProcessCmd(entity));
+	}
+	
+	/**
+	 * 终止指定id的流程实例
+	 * @param id
+	 * @param parameter
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult terminate(int id, TerminateParameter parameter) {
+		ProcessInstanceEntity entity = new ProcessInstanceEntity(id);
+		return commandExecutor.execute(new TerminateProcessCmd(entity, parameter));
+	}
+	/**
+	 * 终止指定id的流程实例
+	 * @param procinstId
+	 * @param parameter
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult terminate(String procinstId, TerminateParameter parameter) {
+		ProcessInstanceEntity entity = new ProcessInstanceEntity(procinstId);
+		return commandExecutor.execute(new TerminateProcessCmd(entity, parameter));
+	}
+	
+	/**
+	 * 删除指定id的流程实例
+	 * @param id
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult delete(int id) {
+		// TODO 
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	/**
+	 * 删除指定id的流程实例
+	 * @param procinstId
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult delete(String procinstId) {
+		// TODO 
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	
+	/**
+	 * 撤销删除指定id的流程实例
+	 * @param id
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult undoDelete(int id) {
+		// TODO 
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	/**
+	 * 撤销删除指定id的流程实例
+	 * @param procinstId
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult undoDelete(String procinstId) {
+		// TODO 
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	
+	/**
+	 * 物理删除指定id的流程实例
+	 * @param id
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult delete4Physical(int id) {
+		// TODO 
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	/**
+	 * 物理删除指定id的流程实例
+	 * @param procinstId
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult delete4Physical(String procinstId) {
+		// TODO 
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	
+	/**
+	 * 重置指定id的流程实例
+	 * @param id
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult reset(int id) {
+		// TODO 
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	/**
+	 * 重置指定id的流程实例
+	 * @param procinstId
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult reset(String procinstId) {
+		// TODO 
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	
+	/**
+	 * 恢复指定id的流程实例(从终止状态到运行状态)
+	 * @param id
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult recovery(int id) {
+		// TODO 
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	/**
+	 * 恢复指定id的流程实例(从终止状态到运行状态)
+	 * @param procinstId
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult recovery(String procinstId) {
+		// TODO 
+		return ExecutionResult.getDefaultSuccessInstance();
+	} 
+	
+	/**
+	 * 激活指定id的流程实例(从完成状态到运行状态)
+	 * @param id
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult activate(int id) {
+		// TODO 
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	/**
+	 * 激活指定id的流程实例(从完成状态到运行状态)
+	 * @param procinstId
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult activate(String procinstId) {
+		// TODO 
+		return ExecutionResult.getDefaultSuccessInstance();
+	}
+	
+	/**
+	 * 处理指定id的流程定义, 相关的所有运行实例
+	 * @param procdefId
+	 * @param policy 对实例的处理策略
+	 */
+	@Transaction
+	public void handle(int procdefId, HandlePolicy policy) {
+		// TODO 处理指定id的流程定义, 相关的所有运行实例
+	}
+	
+	/**
 	 * 启动流程
 	 * @param parameter
 	 * @return 返回对象的success=true时, 其Object属性为 {@link ProcessInstance} 类型, 记录启动的流程实例
@@ -28,68 +231,5 @@ public class ProcessInstanceService {
 	@Transaction
 	public ExecutionResult start(StartParameter parameter) {
 		return commandExecutor.execute(new StartProcessCmd(parameter));
-	}
-	
-	/**
-	 * 激活指定id的流程实例
-	 * @param instanceId
-	 * @return
-	 */
-	public int activate(int instanceId) {
-		// TODO 
-		
-		return 1;
-	}
-	
-	/**
-	 * 挂起指定id的流程实例
-	 * @param instanceId
-	 * @return
-	 */
-	public int suspend(int instanceId) {
-		// TODO 
-		
-		return 1;
-	}
-	
-	/**
-	 * 终止指定id的流程实例
-	 * @param instanceId
-	 * @return
-	 */
-	public int terminate(int instanceId) {
-		// TODO 
-		
-		return 1;
-	}
-	
-	/**
-	 * 删除指定id的流程实例
-	 * @param instanceId
-	 * @return
-	 */
-	public int delete(int instanceId) {
-		// TODO 
-		
-		return 1;
-	}
-	
-	/**
-	 * 判断指定的流程定义, 是否存在运行实例
-	 * @param processDefinitionId
-	 * @return
-	 */
-	public boolean exists(int processDefinitionId) {
-		return Integer.parseInt(
-				SessionContext.getSqlSession().uniqueQuery_("select count(id) from bpm_ru_procinst where procdef_id=?", Arrays.asList(processDefinitionId))[0].toString()) > 0;
-	}
-	
-	/**
-	 * 处理指定的流程定义, 相关的所有运行实例
-	 * @param processDefinitionId
-	 * @param policy 对实例的处理策略
-	 */
-	public void handle(int processDefinitionId, ProcessInstanceHandlePolicy policy) {
-		// TODO 处理指定id的流程定义, 相关的所有运行实例
 	}
 }

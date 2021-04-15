@@ -4,7 +4,6 @@ import java.util.Date;
 
 import com.douglei.bpm.bean.PropertyValueCopier;
 import com.douglei.bpm.module.runtime.task.Task;
-import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
 
 /**
@@ -15,8 +14,8 @@ public class HistoryTask extends Task{
 	private Date endTime;
 
 	public HistoryTask() {}
-	public HistoryTask(String procinstId, String parentTaskinstId, Date endTime, String sourceKey, TaskMetadata taskMetadata, ProcessMetadata metadata) {
-		super(procinstId, parentTaskinstId, endTime, sourceKey, taskMetadata, metadata);
+	public HistoryTask(int procdefId, String procinstId, String parentTaskinstId, Date endTime, String sourceKey, TaskMetadata taskMetadata) {
+		super(procdefId, procinstId, parentTaskinstId, endTime, sourceKey, taskMetadata);
 		this.endTime = endTime;
 	}
 	public HistoryTask(Task task, Date endTime) {

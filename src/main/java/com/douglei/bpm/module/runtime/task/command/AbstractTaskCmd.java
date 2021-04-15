@@ -3,7 +3,7 @@ package com.douglei.bpm.module.runtime.task.command;
 import java.util.Arrays;
 
 import com.douglei.bpm.module.runtime.task.HandleState;
-import com.douglei.bpm.module.runtime.task.TaskInstance;
+import com.douglei.bpm.module.runtime.task.TaskEntity;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -11,10 +11,10 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 abstract class AbstractTaskCmd {
-	protected TaskInstance taskInstance;
+	protected TaskEntity entity;
 	
-	public AbstractTaskCmd(TaskInstance taskInstance) {
-		this.taskInstance = taskInstance;
+	public AbstractTaskCmd(TaskEntity entity) {
+		this.entity = entity;
 	}
 
 	/**
@@ -25,7 +25,7 @@ abstract class AbstractTaskCmd {
 	protected final boolean isClaimed(String userId) {
 		int count = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(
 				"select count(id) from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
-				Arrays.asList(taskInstance.getTask().getTaskinstId(), userId, HandleState.CLAIMED.name()))[0].toString());
+				Arrays.asList(entity.getTask().getTaskinstId(), userId, HandleState.CLAIMED.name()))[0].toString());
 		return count > 0;
 	}
 }

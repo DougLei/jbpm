@@ -3,7 +3,7 @@ package com.douglei.bpm.module.runtime.task.command.dispatch;
 import java.util.HashSet;
 
 import com.douglei.bpm.ProcessEngineBeans;
-import com.douglei.bpm.process.handler.GeneralHandleParameter;
+import com.douglei.bpm.process.handler.GeneralTaskHandleParameter;
 import com.douglei.bpm.process.handler.TaskDispatchException;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadataEntity;
@@ -15,7 +15,7 @@ import com.douglei.bpm.process.mapping.metadata.TaskNotExistsException;
  */
 public abstract class DispatchExecutor {
 	protected TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity; // 当前任务的元数据实例
-	protected GeneralHandleParameter handleParameter; // 办理参数
+	protected GeneralTaskHandleParameter handleParameter; // 办理参数
 	protected HashSet<String> assignedUserIds; // 实际指派的用户id集合
 	protected ProcessEngineBeans processEngineBeans;
 	
@@ -27,7 +27,7 @@ public abstract class DispatchExecutor {
 	 * @param processEngineBeans
 	 * @return
 	 */
-	public final DispatchExecutor initParameters(TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity, GeneralHandleParameter handleParameter, HashSet<String> assignedUserIds, ProcessEngineBeans processEngineBeans) {
+	public final DispatchExecutor initParameters(TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity, GeneralTaskHandleParameter handleParameter, HashSet<String> assignedUserIds, ProcessEngineBeans processEngineBeans) {
 		this.currentTaskMetadataEntity = currentTaskMetadataEntity;
 		this.handleParameter = handleParameter;
 		this.assignedUserIds = assignedUserIds;

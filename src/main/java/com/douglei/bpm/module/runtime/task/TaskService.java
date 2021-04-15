@@ -6,12 +6,14 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.CommandExecutor;
 import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.runtime.task.command.WakeTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.CarbonCopyTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.ClaimTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.DelegateTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.DispatchTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.HandleTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.KillAndJumpTaskCmd;
+import com.douglei.bpm.module.runtime.task.command.SuspendTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.TransferTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.UnclaimTaskCmd;
 import com.douglei.bpm.module.runtime.task.command.ViewCarbonCopyCmd;
@@ -45,8 +47,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult claim(int taskId, String userId){
-		TaskInstance taskInstance = new TaskInstance(taskId, container);
-		return commandExecutor.execute(new ClaimTaskCmd(taskInstance, userId));
+		TaskEntity entity = new TaskEntity(taskId, container);
+		return commandExecutor.execute(new ClaimTaskCmd(entity, userId));
 	}
 	/**
 	 * 认领指定id的任务
@@ -56,8 +58,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult claim(String taskinstId, String userId){
-		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
-		return commandExecutor.execute(new ClaimTaskCmd(taskInstance, userId));
+		TaskEntity entity = new TaskEntity(taskinstId, container);
+		return commandExecutor.execute(new ClaimTaskCmd(entity, userId));
 	}
 	
 	/**
@@ -69,8 +71,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult unclaim(int taskId, String userId, boolean strict){
-		TaskInstance taskInstance = new TaskInstance(taskId, container);
-		return commandExecutor.execute(new UnclaimTaskCmd(taskInstance, userId, strict));
+		TaskEntity entity = new TaskEntity(taskId, container);
+		return commandExecutor.execute(new UnclaimTaskCmd(entity, userId, strict));
 	}
 	/**
 	 * 取消认领指定id的任务
@@ -81,8 +83,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult unclaim(String taskinstId, String userId, boolean strict){
-		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
-		return commandExecutor.execute(new UnclaimTaskCmd(taskInstance, userId, strict));
+		TaskEntity entity = new TaskEntity(taskinstId, container);
+		return commandExecutor.execute(new UnclaimTaskCmd(entity, userId, strict));
 	}
 	
 	/**
@@ -95,8 +97,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult delegate(int taskId, String userId, String assignedUserId, String reason) {
-		TaskInstance taskInstance = new TaskInstance(taskId, container);
-		return commandExecutor.execute(new DelegateTaskCmd(taskInstance, userId, assignedUserId, reason));
+		TaskEntity entity = new TaskEntity(taskId, container);
+		return commandExecutor.execute(new DelegateTaskCmd(entity, userId, assignedUserId, reason));
 	}
 	/**
 	 * 委托指定id的任务
@@ -108,8 +110,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult delegate(String taskinstId, String userId, String assignedUserId, String reason) {
-		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
-		return commandExecutor.execute(new DelegateTaskCmd(taskInstance, userId, assignedUserId, reason));
+		TaskEntity entity = new TaskEntity(taskinstId, container);
+		return commandExecutor.execute(new DelegateTaskCmd(entity, userId, assignedUserId, reason));
 	}
 	
 	/**
@@ -122,8 +124,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult transfer(int taskId, String userId, String assignedUserId, String reason) {
-		TaskInstance taskInstance = new TaskInstance(taskId, container);
-		return commandExecutor.execute(new TransferTaskCmd(taskInstance, userId, assignedUserId, reason));
+		TaskEntity entity = new TaskEntity(taskId, container);
+		return commandExecutor.execute(new TransferTaskCmd(entity, userId, assignedUserId, reason));
 	}
 	/**
 	 * 转办指定id的任务
@@ -135,8 +137,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult transfer(String taskinstId, String userId, String assignedUserId, String reason) {
-		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
-		return commandExecutor.execute(new TransferTaskCmd(taskInstance, userId, assignedUserId, reason));
+		TaskEntity entity = new TaskEntity(taskinstId, container);
+		return commandExecutor.execute(new TransferTaskCmd(entity, userId, assignedUserId, reason));
 	}
 	
 	/**
@@ -148,8 +150,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult carbonCopy(int taskId, String userId, List<String> assignedUserIds) {
-		TaskInstance taskInstance = new TaskInstance(taskId, container);
-		return commandExecutor.execute(new CarbonCopyTaskCmd(taskInstance, userId, assignedUserIds));
+		TaskEntity entity = new TaskEntity(taskId, container);
+		return commandExecutor.execute(new CarbonCopyTaskCmd(entity, userId, assignedUserIds));
 	}
 	/**
 	 * 抄送指定id的任务
@@ -160,8 +162,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult carbonCopy(String taskinstId, String userId, List<String> assignedUserIds) {
-		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
-		return commandExecutor.execute(new CarbonCopyTaskCmd(taskInstance, userId, assignedUserIds));
+		TaskEntity entity = new TaskEntity(taskinstId, container);
+		return commandExecutor.execute(new CarbonCopyTaskCmd(entity, userId, assignedUserIds));
 	}
 	/**
 	 * 查看抄送
@@ -178,6 +180,48 @@ public class TaskService {
 	// 针对所有任务的api
 	// ------------------------------------------------------------------------
 	/**
+	 * 唤醒指定id的任务
+	 * @param taskId
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult wake(int taskId) {
+		TaskEntity entity = new TaskEntity(taskId, container);
+		return commandExecutor.execute(new WakeTaskCmd(entity));
+	}
+	/**
+	 * 唤醒指定id的任务
+	 * @param taskinstId
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult wake(String taskinstId) {
+		TaskEntity entity = new TaskEntity(taskinstId, container);
+		return commandExecutor.execute(new WakeTaskCmd(entity));
+	}
+	
+	/**
+	 * 挂起指定id的任务
+	 * @param taskId
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult suspend(int taskId) {
+		TaskEntity entity = new TaskEntity(taskId, container);
+		return commandExecutor.execute(new SuspendTaskCmd(entity));
+	}
+	/**
+	 * 挂起指定id的任务
+	 * @param taskinstId
+	 * @return
+	 */
+	@Transaction
+	public ExecutionResult suspend(String taskinstId) {
+		TaskEntity entity = new TaskEntity(taskinstId, container);
+		return commandExecutor.execute(new SuspendTaskCmd(entity));
+	}
+	
+	/**
 	 * 办理指定id的任务
 	 * @param taskId
 	 * @param parameter
@@ -185,8 +229,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult handle(int taskId, HandleTaskParameter parameter) {
-		TaskInstance taskInstance = new TaskInstance(taskId, container);
-		return commandExecutor.execute(new HandleTaskCmd(taskInstance, parameter));
+		TaskEntity entity = new TaskEntity(taskId, container);
+		return commandExecutor.execute(new HandleTaskCmd(entity, parameter));
 	}
 	/**
 	 * 办理指定id的任务
@@ -196,8 +240,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult handle(String taskinstId, HandleTaskParameter parameter) {
-		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
-		return commandExecutor.execute(new HandleTaskCmd(taskInstance, parameter));
+		TaskEntity entity = new TaskEntity(taskinstId, container);
+		return commandExecutor.execute(new HandleTaskCmd(entity, parameter));
 	}
 	
 	/**
@@ -208,8 +252,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult dispatch(int taskId, DispatchTaskParameter parameter) {
-		TaskInstance taskInstance = new TaskInstance(taskId, container);
-		return commandExecutor.execute(new DispatchTaskCmd(taskInstance, parameter));
+		TaskEntity entity = new TaskEntity(taskId, container);
+		return commandExecutor.execute(new DispatchTaskCmd(entity, parameter));
 	}
 	/**
 	 * 调度指定id的任务
@@ -219,8 +263,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult dispatch(String taskinstId, DispatchTaskParameter parameter) {
-		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
-		return commandExecutor.execute(new DispatchTaskCmd(taskInstance, parameter));
+		TaskEntity entity = new TaskEntity(taskinstId, container);
+		return commandExecutor.execute(new DispatchTaskCmd(entity, parameter));
 	}
 	
 	/**
@@ -231,8 +275,8 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult killAndJump(int taskId, KillAndJumpTaskParameter parameter) {
-		TaskInstance taskInstance = new TaskInstance(taskId, container);
-		return commandExecutor.execute(new KillAndJumpTaskCmd(taskInstance, parameter));
+		TaskEntity entity = new TaskEntity(taskId, container);
+		return commandExecutor.execute(new KillAndJumpTaskCmd(entity, parameter));
 	}
 	/**
 	 * 终止指定id的任务并跳转
@@ -242,7 +286,7 @@ public class TaskService {
 	 */
 	@Transaction
 	public ExecutionResult killAndJump(String taskinstId, KillAndJumpTaskParameter parameter) {
-		TaskInstance taskInstance = new TaskInstance(taskinstId, container);
-		return commandExecutor.execute(new KillAndJumpTaskCmd(taskInstance, parameter));
+		TaskEntity entity = new TaskEntity(taskinstId, container);
+		return commandExecutor.execute(new KillAndJumpTaskCmd(entity, parameter));
 	}
 }

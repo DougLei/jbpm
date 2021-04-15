@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.UUID;
 
 import com.douglei.bpm.bean.annotation.Property;
-import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
 import com.douglei.orm.context.SessionContext;
 
@@ -33,10 +32,11 @@ public class Task {
 	@Property protected String userId;
 	@Property protected String reason;
 	private Integer isAllClaimed;
+	private Integer isActive;
 	
 	public Task() {}
-	public Task(String procinstId, String parentTaskinstId, Date startTime, String sourceKey, TaskMetadata taskMetadata, ProcessMetadata metadata) {
-		this.procdefId = metadata.getId();
+	public Task(int procdefId, String procinstId, String parentTaskinstId, Date startTime, String sourceKey, TaskMetadata taskMetadata) {
+		this.procdefId = procdefId;
 		this.procinstId = procinstId;
 		this.taskinstId = UUID.randomUUID().toString();
 		this.parentTaskinstId = parentTaskinstId;
@@ -46,6 +46,7 @@ public class Task {
 		this.type = taskMetadata.getType().getName();
 		this.startTime = startTime;
 		this.pageId = taskMetadata.getPageID();
+		this.isActive=1;
 	}
 	
 	/**
@@ -99,6 +100,13 @@ public class Task {
 	 */
 	public boolean isAllClaimed() {
 		return isAllClaimed != null && isAllClaimed == 1;
+	}
+	/**
+	 * 是否处于活动状态
+	 * @return
+	 */
+	public boolean isActive() {
+		return isActive != null && isActive == 1;
 	}
 	
 	public int getId() {
@@ -214,5 +222,11 @@ public class Task {
 	}
 	public void setIsAllClaimed(Integer isAllClaimed) {
 		this.isAllClaimed = isAllClaimed;
+	}
+	public Integer getIsActive() {
+		return isActive;
+	}
+	public void setIsActive(Integer isActive) {
+		this.isActive = isActive;
 	}
 }

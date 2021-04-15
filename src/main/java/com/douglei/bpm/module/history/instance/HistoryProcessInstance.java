@@ -16,7 +16,7 @@ public class HistoryProcessInstance extends ProcessInstance{
 	
 	public HistoryProcessInstance(ProcessInstance processInstance, State state, String remark) {
 		PropertyValueCopier.copy(processInstance, this);
-		super.state = state;
+		this.state = state;
 		this.endTime = new Date();
 		this.remark = remark;
 	}

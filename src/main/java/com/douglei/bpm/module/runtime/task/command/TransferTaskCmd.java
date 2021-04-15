@@ -2,7 +2,7 @@ package com.douglei.bpm.module.runtime.task.command;
 
 import com.douglei.bpm.module.runtime.task.AssignMode;
 import com.douglei.bpm.module.runtime.task.HandleState;
-import com.douglei.bpm.module.runtime.task.TaskInstance;
+import com.douglei.bpm.module.runtime.task.TaskEntity;
 import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
 
 /**
@@ -11,7 +11,7 @@ import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
  */
 public class TransferTaskCmd extends DelegateTaskCmd {
 
-	public TransferTaskCmd(TaskInstance taskInstance, String userId, String assignedUserId, String remark) {
+	public TransferTaskCmd(TaskEntity taskInstance, String userId, String assignedUserId, String remark) {
 		super(taskInstance, userId, assignedUserId, remark);
 	}
 
@@ -23,11 +23,6 @@ public class TransferTaskCmd extends DelegateTaskCmd {
 	@Override
 	protected AssignMode getAssignMode() {
 		return AssignMode.TRANSFERRED;
-	}
-
-	@Override
-	protected String getAssignModeName() {
-		return "转办";
 	}
 
 	@Override

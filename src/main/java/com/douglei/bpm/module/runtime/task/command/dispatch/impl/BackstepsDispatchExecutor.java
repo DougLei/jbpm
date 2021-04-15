@@ -23,11 +23,16 @@ import com.douglei.orm.context.SessionContext;
 public class BackstepsDispatchExecutor extends DispatchExecutor {
 	private static final Logger logger = LoggerFactory.getLogger(BackstepsDispatchExecutor.class);
 	private int steps; // 回退的步数; 超过最大步数时使用最大步数
+	private boolean strict; // 是否强制回退
 	
 	public BackstepsDispatchExecutor(int steps) {
+		this(steps, false);
+	}
+	public BackstepsDispatchExecutor(int steps, boolean strict) {
 		if(steps < 1)
 			throw new TaskDispatchException("回退步数调度时, 设置的步数值不能小于1");
 		this.steps = steps;
+		this.strict = strict;
 	}
 
 	@Override
@@ -42,7 +47,7 @@ public class BackstepsDispatchExecutor extends DispatchExecutor {
 	// *获取要回退到的目标任务实体
 	private TaskEntity getTargetTask() {
 		List<TaskEntity> historyTasks = SessionContext.getTableSession()
-				.query(TaskEntity.class, "select taskinst_id, parent_taskinst_id, source_key, key_ from bpm_hi_task where procinst_id=? order by end_time desc", Arrays.asList(handleParameter.getProcessInstanceId()));
+				.limitQuery(TaskEntity.class, 2, -1, "select taskinst_id, parent_taskinst_id, source_key, key_ from bpm_hi_task where procinst_id=? order by end_time desc", Arrays.asList(handleParameter.getProcessInstanceId()));
 		
 		TaskEntity currentTask = new TaskEntity(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask(), null);
 		TaskEntity targetTask = getTargetTask(0, currentTask, historyTasks);
@@ -79,6 +84,4 @@ public class BackstepsDispatchExecutor extends DispatchExecutor {
 		list.forEach(array -> assignedUserIds.add(array[0].toString()));
 		setAssignedUsers(assignedUserIds);
 	}
-	
-	// TODO 回退时涉及到并行, 子流程等怎么处理啊
 }

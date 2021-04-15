@@ -10,8 +10,8 @@ import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.Assig
  */
 public class CarbonCopyAssignPolicy extends AssignPolicy {
 
-	public CarbonCopyAssignPolicy(boolean isDynamic, AssignNumber assignNumber) {
-		super(isDynamic, assignNumber);
+	public CarbonCopyAssignPolicy(AssignNumber assignNumber) {
+		super(true, assignNumber);
 	}
 
 	@Override

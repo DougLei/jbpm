@@ -19,6 +19,6 @@ public class CarbonCopyAssignPolicyParser extends AssignPolicyParser {
 	@Override
 	protected AssignPolicy parseAssignPolicy(UserTaskMetadata metadata, String struct, Element element) {
 		AssignNumber assignNumber = parseAssignNumber(metadata, struct, element);
-		return new CarbonCopyAssignPolicy(true, assignNumber);
+		return new CarbonCopyAssignPolicy(assignNumber);
 	}
 }

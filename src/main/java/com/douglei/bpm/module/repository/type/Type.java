@@ -6,13 +6,13 @@ import java.util.List;
  * 流程类型
  * @author DougLei
  */
-public class ProcessType {
+public class Type {
 	private int id;
 	private int parentId;
 	private String code;
 	private String name;
 	private String tenantId;
-	private List<ProcessType> children;
+	private List<Type> children;
 
 	public int getId() {
 		return id;
@@ -44,10 +44,10 @@ public class ProcessType {
 	public void setTenantId(String tenantId) {
 		this.tenantId = tenantId;
 	}
-	public List<ProcessType> getChildren() {
+	public List<Type> getChildren() {
 		return children;
 	}
-	public void setChildren(List<ProcessType> children) {
+	public void setChildren(List<Type> children) {
 		this.children = children;
 	}
 }

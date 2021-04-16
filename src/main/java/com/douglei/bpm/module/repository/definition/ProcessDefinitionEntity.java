@@ -18,7 +18,7 @@ import com.douglei.tools.file.reader.FileBufferedReader;
  * @author DougLei
  */
 public class ProcessDefinitionEntity {
-	private ProcessDefinition processDefinition;
+	private ProcessDefinition definition;
 	private boolean ignore; // 是否忽略流程实例
 	private boolean strict; // 是否强制保存流程定义
 	
@@ -54,9 +54,9 @@ public class ProcessDefinitionEntity {
 	// 根据流程配置内容构建流程定义实例
 	private void init(String content) {
 		Map<String, String> attributeMap = getProcessAttributeMap(content);
-		this.processDefinition = new ProcessDefinition(attributeMap.get("name"), attributeMap.get("code"), attributeMap.get("version"));
-		this.processDefinition.setContent(content);
-		this.processDefinition.setSignature(DigestUtils.md5Hex(content));
+		this.definition = new ProcessDefinition(attributeMap.get("name"), attributeMap.get("code"), attributeMap.get("version"));
+		this.definition.setContent(content);
+		this.definition.setSignature(DigestUtils.md5Hex(content));
 	}
 	
 	// 获取<process>的基础属性map
@@ -151,7 +151,7 @@ public class ProcessDefinitionEntity {
 	 * @return
 	 */
 	public ProcessDefinitionEntity setTypeId(int typeId) {
-		processDefinition.setTypeId(typeId);
+		definition.setTypeId(typeId);
 		return this;
 	}
 	
@@ -161,7 +161,7 @@ public class ProcessDefinitionEntity {
 	 * @return
 	 */
 	public ProcessDefinitionEntity setDescription(String description) {
-		processDefinition.setDescription(description);
+		definition.setDescription(description);
 		return this;
 	}
 	
@@ -171,7 +171,7 @@ public class ProcessDefinitionEntity {
 	 * @return
 	 */
 	public ProcessDefinitionEntity setTenantId(String tenantId) {
-		processDefinition.setTenantId(tenantId);
+		definition.setTenantId(tenantId);
 		return this;
 	}
 	
@@ -180,7 +180,7 @@ public class ProcessDefinitionEntity {
 	 * @return
 	 */
 	ProcessDefinition getProcessDefinition() {
-		return processDefinition;
+		return definition;
 	}
 	
 	/**

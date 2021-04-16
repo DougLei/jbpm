@@ -7,15 +7,13 @@ package com.douglei.bpm.module.repository.definition;
 public enum State {
 	
 	/**
-	 * 初始化
+	 * 初始化: 1
 	 */
-	INITIAL{
-		
+	INITIAL(1) {
 		@Override
 		public boolean supportDeploy() {
 			return true;
 		}
-		
 		@Override
 		public boolean supportDelete() {
 			return true;
@@ -23,10 +21,9 @@ public enum State {
 	}, 
 	
 	/**
-	 * 部署
+	 * 部署: 2
 	 */
-	DEPLOY{
-		
+	DEPLOY(2) {
 		@Override
 		public boolean supportUnDeploy() {
 			return true;
@@ -34,15 +31,13 @@ public enum State {
 	}, 
 	
 	/**
-	 * 未部署
+	 * 未部署: 3
 	 */
-	UNDEPLOY {
-		
+	UNDEPLOY(3) {
 		@Override
 		public boolean supportDeploy() {
 			return true;
 		}
-		
 		@Override
 		public boolean supportDelete() {
 			return true;
@@ -50,10 +45,9 @@ public enum State {
 	}, 
 	
 	/**
-	 * 无效
+	 * 无效: 4
 	 */
-	INVALID {
-		
+	INVALID(4) {
 		@Override
 		public boolean supportPhysicalDelete() {
 			return true;
@@ -61,16 +55,15 @@ public enum State {
 	},
 	
 	/**
-	 * 删除
+	 * 删除: 5
 	 */
-	DELETE {
-		
+	DELETE(5) {
 		@Override
 		public boolean supportPhysicalDelete() {
 			return true;
 		}
 	}; 
-
+	
 	/**
 	 * 当前状态是是否支持部署
 	 * @return
@@ -101,5 +94,32 @@ public enum State {
 	 */
 	public boolean supportPhysicalDelete() {
 		return false;
+	}
+	
+	// ---------------------------------------------------------------
+	private int value;
+	private State(int value) {
+		this.value = value;
+	}
+	
+	/**
+	 * 获取标识值
+	 * @return
+	 */
+	public int getValue() {
+		return value;
+	}
+	
+	/**
+	 * 根据标识值获取SourceType实例
+	 * @param value
+	 * @return
+	 */
+	public static State valueOf(int value) {
+		for (State state : State.values()) {
+			if(state.value == value)
+				return state;
+		}
+		throw new IllegalArgumentException("不存在value为["+value+"]的State Enum");
 	}
 }

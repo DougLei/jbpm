@@ -6,7 +6,7 @@ import org.junit.Test;
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.repository.type.ProcessType;
+import com.douglei.bpm.module.repository.type.Type;
 
 public class ProcessTypeTest {
 	private ProcessEngine engine;
@@ -42,7 +42,7 @@ public class ProcessTypeTest {
 	
 	@Test
 	public void save() {
-		ProcessType type = new ProcessType();
+		Type type = new Type();
 //		type.setParentId(2);
 		type.setCode("baoxiao");
 		type.setName("报销");
@@ -57,7 +57,7 @@ public class ProcessTypeTest {
 	
 	@Test
 	public void update() {
-		ProcessType type = new ProcessType();
+		Type type = new Type();
 		type.setId(3);
 		type.setParentId(2);
 		type.setCode("chanjia-gai");

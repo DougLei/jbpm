@@ -29,7 +29,7 @@ public class ProcessDefinitionService {
 	 * @param target
 	 */
 	private void updateState_(int id, State target) {
-		SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set state=?, is_major_version=0 where id=?", Arrays.asList(target.name(), id));
+		SessionContext.getSqlSession().executeUpdate("update bpm_re_procdef set state=?, is_major_version=0 where id=?", Arrays.asList(target.getValue(), id));
 	}
 	
 	/**
@@ -80,7 +80,7 @@ public class ProcessDefinitionService {
 			SessionContext.getTableSession().update(processDefinition);
 		} 
 		
-		// 修改了内容, 但旧的流程处于初始化状态, 或忽略流程实例, 或不存在实例, 进行update
+		// 修改了内容, 但旧的流程处于初始化状态, 或忽略流程实例, 或不存在实例, 均进行update
 		else if(old.getStateInstance() == State.INITIAL || entity.isIgnore() || !existsInstance(old.getId())) { 
 			processDefinition.setId(old.getId());
 			processDefinition.setIsMajorVersion(old.getIsMajorVersion());
@@ -112,7 +112,7 @@ public class ProcessDefinitionService {
 	}
 	// 验证类型id值
 	private void validateTypeId(int typeId) {
-		if(typeId != 0 && SessionContext.getSqlSession().uniqueQuery_("select id from bpm_re_proctype where id=?", Arrays.asList(typeId)) == null)
+		if(typeId != 0 && SessionContext.getSqlSession().uniqueQuery_("select id from bpm_re_type where id=?", Arrays.asList(typeId)) == null)
 			throw new RepositoryException("保存失败, 不存在id为["+typeId+"]的流程类型");
 	}
 

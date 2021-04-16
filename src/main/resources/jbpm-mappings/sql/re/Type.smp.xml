@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping-configuration>
-	<sql namespace="ProcessType">
+	<sql namespace="Type">
+	
 		<!-- insert时查询流程类型 -->
 		<content name="query4Insert" type="select">
-			select id, parent_id, code from bpm_re_proctype where 
+			select id, parent_id, code from bpm_re_type where 
 			
 			<switch>
 				<if test="parentId != 0">
@@ -21,7 +22,7 @@
 		
 		<!-- update时查询流程类型 -->
 		<content name="query4Update" type="select">
-			select id from bpm_re_proctype where code=#{code} 
+			select id from bpm_re_type where code=#{code} 
 			<if test="tenantId != null">
 				and tenant_id = #{tenantId}
 			</if>
@@ -29,16 +30,16 @@
 		
 		<!-- delete时查询流程类型 -->
 		<content name="query4Delete" type="select">
-			select count(id) from bpm_re_proctype where parent_id =#{id, dataType=number, length=10}
+			select count(id) from bpm_re_type where parent_id =#{id, dataType=number, length=10}
 			union all
 			select count(id) from bpm_re_procdef where type_id =#{id, dataType=number, length=10}
 			union all
-			select parent_id from bpm_re_proctype where id=#{id, dataType=number, length=10}
+			select parent_id from bpm_re_type where id=#{id, dataType=number, length=10}
 		</content>
 		
 		<!-- 查询子类型的id -->
 		<content name="queryChildrenIds" type="select">
-			select id from bpm_re_proctype where 
+			select id from bpm_re_type where 
 			<foreach collection="typeIds" alias="typeId" open="parent_id in (" separator="," close=")">
 				#{[0], dataType=number, length=10}
 			</foreach> 
@@ -54,7 +55,7 @@
 		
 		<!-- 删除类型 -->
 		<content name="deleteType" type="delete">
-			delete bpm_re_proctype where 
+			delete bpm_re_type where 
 			<foreach collection="ids" alias="typeId" open="id in (" separator="," close=")">
 				#{typeId, dataType=number, length=10}
 			</foreach> 

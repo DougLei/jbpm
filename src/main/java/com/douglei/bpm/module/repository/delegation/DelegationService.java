@@ -15,7 +15,7 @@ import com.douglei.orm.context.Transaction;
  * @author DougLei
  */
 @Bean(isTransaction=true)
-public class ProcessDelegationService {
+public class DelegationService {
 	
 	/*
 	 * 添加
@@ -65,7 +65,7 @@ public class ProcessDelegationService {
 	 */
 	@Transaction
 	public ExecutionResult accept(int delegationId, String assigneeUserId) {
-		ProcessDelegation delegation = SessionContext.getSqlSession().uniqueQuery(ProcessDelegation.class, "select assigned_user_id, end_time, accept_time from bpm_re_delegation where id=?", Arrays.asList(delegationId));
+		Delegation delegation = SessionContext.getSqlSession().uniqueQuery(Delegation.class, "select assigned_user_id, end_time, accept_time from bpm_re_delegation where id=?", Arrays.asList(delegationId));
 		if(delegation == null)
 			throw new RepositoryException("接受委托失败, 不存在id为["+delegationId+"]的委托");
 		if(!delegation.getAssignedUserId().equals(assigneeUserId))
@@ -88,7 +88,7 @@ public class ProcessDelegationService {
 	 */
 	@Transaction
 	public ExecutionResult enabled(int delegationId) {
-		ProcessDelegation delegation = SessionContext.getSqlSession().uniqueQuery(ProcessDelegation.class, "select end_time, accept_time, is_enabled from bpm_re_delegation where id=?", Arrays.asList(delegationId));
+		Delegation delegation = SessionContext.getSqlSession().uniqueQuery(Delegation.class, "select end_time, accept_time, is_enabled from bpm_re_delegation where id=?", Arrays.asList(delegationId));
 		if(delegation == null)
 			throw new RepositoryException("启用委托失败, 不存在id为["+delegationId+"]的委托");
 		if(delegation.isEnabled())

@@ -7,14 +7,20 @@ package com.douglei.bpm.module.history;
 public enum SourceType {
 	
 	/**
-	 * 标准进入, 即正常流转时进入历史表
+	 * 标准进入, 即正常流转时进入历史表: 1
 	 */
 	STANDARD(1),
 	
 	/**
-	 * 因为流程实例被终止而进入历史表
+	 * 因为流程实例被终止而进入历史表: 2
 	 */
 	BY_PROCINST_TERMINATED(2);
+	
+	// ---------------------------------------------------------------
+	private int value;
+	private SourceType(int value) {
+		this.value = value;
+	}
 	
 	/**
 	 * 获取标识值
@@ -35,11 +41,5 @@ public enum SourceType {
 				return st;
 		}
 		throw new IllegalArgumentException("不存在value为["+value+"]的SourceType Enum");
-	}
-	
-	// ---------------------------------------------------------------
-	private int value;
-	private SourceType(int value) {
-		this.value = value;
 	}
 }

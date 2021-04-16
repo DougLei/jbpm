@@ -67,14 +67,6 @@ public enum State {
 	};
 	
 	/**
-	 * 获取标识值
-	 * @return
-	 */
-	public int getValue() {
-		return value;
-	}
-	
-	/**
 	 * 当前状态是是否支持进行终止操作
 	 * @return
 	 */
@@ -98,6 +90,20 @@ public enum State {
 		return false;
 	}
 	
+	// ---------------------------------------------------------------
+	private int value;
+	private State(int value) {
+		this.value = value;
+	}
+	
+	/**
+	 * 获取标识值
+	 * @return
+	 */
+	public int getValue() {
+		return value;
+	}
+	
 	/**
 	 * 根据标识值获取State实例
 	 * @param value
@@ -109,11 +115,5 @@ public enum State {
 				return state;
 		}
 		throw new IllegalArgumentException("不存在value为["+value+"]的State Enum");
-	}
-	
-	// ---------------------------------------------------------------
-	private int value;
-	private State(int value) {
-		this.value = value;
 	}
 }

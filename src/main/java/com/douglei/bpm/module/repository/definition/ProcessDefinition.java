@@ -102,10 +102,10 @@ public class ProcessDefinition {
 	public void setStateInstance(State state) {
 		this.state = state;
 	}
-	public String getState() {
-		return state.name();
+	public int getState() {
+		return state.getValue();
 	}
-	public void setState(String state) {
+	public void setState(int state) {
 		this.state = State.valueOf(state);
 	}
 	public String getDescription() {

@@ -11,7 +11,7 @@ import com.douglei.bpm.process.mapping.metadata.TaskMetadataEntity;
  * 任务处理器
  * @author DougLei
  */
-public abstract class TaskHandler<TM extends TaskMetadata, HP extends HandleParameter> extends GeneralTaskHandler {
+public abstract class TaskHandler<TM extends TaskMetadata, HP extends AbstractHandleParameter> extends AbstractTaskHandler {
 	protected TaskMetadataEntity<TM> currentTaskMetadataEntity; // 当前任务元数据实体实例
 	protected HP handleParameter; // 办理参数
 	protected ProcessEngineBeans processEngineBeans; 

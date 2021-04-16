@@ -2,6 +2,7 @@ package com.douglei.bpm.module.runtime.task;
 
 import java.util.Arrays;
 
+import com.douglei.bpm.ProcessEngineBugException;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.mapping.ProcessMappingContainer;
 import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
@@ -20,7 +21,10 @@ public class TaskEntity {
 	private TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity;
 	
 	TaskEntity(int taskId, ProcessMappingContainer container) {
-		this.task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where id=?", Arrays.asList(taskId));
+		this.task = SessionContext.getTableSession().uniqueQuery(
+				Task.class, 
+				"select task.*, procinst.state procinst_state from bpm_ru_task task left join bpm_ru_procinst procinst on (task.procinst_id = procinst.procinst_id) where task.id=?", 
+				Arrays.asList(taskId));
 		if(task == null)
 			throw new TaskHandleException("不存在id为["+taskId+"]的任务");
 		this.container = container;
@@ -32,7 +36,22 @@ public class TaskEntity {
 			throw new TaskHandleException("不存在taskinst_id为["+taskinstId+"]的任务");
 		this.container = container;
 	}
-
+	
+	/**
+	 * 任务是否处于活动状态
+	 * @return
+	 */
+	boolean isActive() {
+		switch(task.getProcinstState()) {
+			case ACTIVE:
+				return task.isActive();
+			case SUSPENDED:
+				return false;
+			default:
+				throw new ProcessEngineBugException("判断任务是否处于活动状态时, 出现了错误的流程实例状态["+task.getProcinstState()+"]");
+		}
+	}
+	
 	/**
 	 * 获取流程元数据实例
 	 * @return

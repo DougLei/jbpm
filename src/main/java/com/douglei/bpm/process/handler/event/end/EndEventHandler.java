@@ -10,7 +10,7 @@ import com.douglei.bpm.module.history.variable.HistoryVariable;
 import com.douglei.bpm.module.runtime.instance.ProcessInstance;
 import com.douglei.bpm.module.runtime.instance.State;
 import com.douglei.bpm.module.runtime.task.Task;
-import com.douglei.bpm.process.handler.HandleParameter;
+import com.douglei.bpm.process.handler.AbstractHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.VariableEntities;
 import com.douglei.bpm.process.handler.gateway.ParallelTaskHandler;
@@ -21,7 +21,7 @@ import com.douglei.orm.context.SessionContext;
  * 
  * @author DougLei
  */
-public class EndEventHandler extends TaskHandler<EndEventMetadata, HandleParameter> {
+public class EndEventHandler extends TaskHandler<EndEventMetadata, AbstractHandleParameter> {
 	
 	@Override
 	public ExecutionResult startup() {

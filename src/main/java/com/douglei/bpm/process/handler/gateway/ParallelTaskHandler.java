@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.douglei.bpm.module.runtime.task.Task;
-import com.douglei.bpm.process.handler.GeneralTaskHandler;
+import com.douglei.bpm.process.handler.AbstractTaskHandler;
 import com.douglei.bpm.process.handler.TaskEntity;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadataEntity;
@@ -18,7 +18,7 @@ import com.douglei.orm.context.SessionContext;
  * 并行任务处理器
  * @author DougLei
  */
-public class ParallelTaskHandler extends GeneralTaskHandler{
+public class ParallelTaskHandler extends AbstractTaskHandler{
 	private TaskMetadataEntity<? extends TaskMetadata> currentJoinTaskMetadataEntity; // 当前处理join的任务元数据实体实例
 	private TaskEntity previousTaskEntity; // 上一个办理的任务实体实例
 	private Date currentDate; // 当前操作时间

@@ -40,7 +40,7 @@ public class TaskHandleUtil {
 	//---------------------------------------------------------------------------------------------
 	
 	// 创建任务办理器实例
-	private TaskHandler createTaskHandleInstance(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, HandleParameter handleParameter) {
+	private TaskHandler createTaskHandleInstance(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, AbstractHandleParameter handleParameter) {
 		TaskHandler taskHandler = null;
 		switch(taskMetadataEntity.getTaskMetadata().getType()) {
 			// 事件类型
@@ -79,7 +79,7 @@ public class TaskHandleUtil {
 	 * @param parameter
 	 * @return
 	 */
-	public ExecutionResult startup(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, HandleParameter parameter) {
+	public ExecutionResult startup(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, AbstractHandleParameter parameter) {
 		return createTaskHandleInstance(taskMetadataEntity, parameter).startup();
 	}
 	
@@ -89,7 +89,7 @@ public class TaskHandleUtil {
 	 * @param parameter
 	 * @return 返回对象的success=true时, 其Object属性为boolean类型, 标识是否可以进行调度
 	 */
-	public ExecutionResult handle(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, HandleParameter parameter) {
+	public ExecutionResult handle(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, AbstractHandleParameter parameter) {
 		return createTaskHandleInstance(taskMetadataEntity, parameter).handle();
 	}
 	
@@ -101,7 +101,7 @@ public class TaskHandleUtil {
 	 * @param parameter
 	 * @throws TaskDispatchException
 	 */
-	public void dispatch(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, HandleParameter parameter) throws TaskDispatchException{
+	public void dispatch(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, AbstractHandleParameter parameter) throws TaskDispatchException{
 		for(FlowMetadata flow : taskMetadataEntity.getOutputFlows()) {
 			if(flowMatching(flow, parameter)) {
 				dispatchByFlow(flow, parameter);
@@ -123,7 +123,7 @@ public class TaskHandleUtil {
 	 * @param parameter
 	 * @return 
 	 */
-	public boolean flowMatching(FlowMetadata flowMetadata, HandleParameter parameter) {
+	public boolean flowMatching(FlowMetadata flowMetadata, AbstractHandleParameter parameter) {
 		String conditionExpression = flowMetadata.getConditionExpression();
 		if(conditionExpression == null)
 			return true;
@@ -137,7 +137,7 @@ public class TaskHandleUtil {
 	 * @param flowMetadata
 	 * @param parameter
 	 */
-	public void dispatchByFlow(FlowMetadata flowMetadata, HandleParameter parameter) {
+	public void dispatchByFlow(FlowMetadata flowMetadata, AbstractHandleParameter parameter) {
 		parameter.getTaskEntityHandler().dispatch();
 		startup(parameter.getProcessMetadata().getTaskMetadataEntity(flowMetadata.getTarget()), parameter);
 	}
@@ -148,7 +148,7 @@ public class TaskHandleUtil {
 	 * @param parameter
 	 * @throws TaskDispatchException
 	 */
-	public void dispatchByTask(TaskMetadataEntity<TaskMetadata> targetTaskMetadataEntity, HandleParameter parameter) throws TaskDispatchException{
+	public void dispatchByTask(TaskMetadataEntity<TaskMetadata> targetTaskMetadataEntity, AbstractHandleParameter parameter) throws TaskDispatchException{
 		parameter.getTaskEntityHandler().dispatch();
 		startup(targetTaskMetadataEntity, parameter);
 	}

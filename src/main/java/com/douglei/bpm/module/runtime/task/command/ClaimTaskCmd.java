@@ -105,7 +105,7 @@ public class ClaimTaskCmd implements Command{
 					finishedAssigneeList.add(unclaimAssigneeList.remove(i--));
 					break;
 				default:
-					throw new ProcessEngineBugException();
+					throw new ProcessEngineBugException("查询当前认领状态的指派信息集合时, 出现了错误的办理状态["+unclaimAssigneeList.get(i).getHandleStateInstance()+"]");
 			}
 		}
 		

@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.handler.gateway;
 
-import com.douglei.bpm.process.handler.HandleParameter;
+import com.douglei.bpm.process.handler.AbstractHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.mapping.metadata.gateway.AbstractGatewayMetadata;
 
@@ -8,7 +8,7 @@ import com.douglei.bpm.process.mapping.metadata.gateway.AbstractGatewayMetadata;
  * 
  * @author DougLei
  */
-abstract class AbstractGatewayHandler extends TaskHandler<AbstractGatewayMetadata, HandleParameter>{
+abstract class AbstractGatewayHandler extends TaskHandler<AbstractGatewayMetadata, AbstractHandleParameter>{
 	
 	/**
 	 * 移除不继承的流程变量

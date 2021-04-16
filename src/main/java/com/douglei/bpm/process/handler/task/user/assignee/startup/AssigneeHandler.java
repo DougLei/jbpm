@@ -7,7 +7,7 @@ import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.Task;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
-import com.douglei.bpm.process.handler.HandleParameter;
+import com.douglei.bpm.process.handler.AbstractHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignPolicy;
@@ -28,7 +28,7 @@ public class AssigneeHandler {
 	 * @param processEngineBeans
 	 * @throws TaskHandleException
 	 */
-	public void execute(UserTaskMetadata currentUserTaskMetadata, Task currentTask, HandleParameter handleParameter, ProcessEngineBeans processEngineBeans) throws TaskHandleException {
+	public void execute(UserTaskMetadata currentUserTaskMetadata, Task currentTask, AbstractHandleParameter handleParameter, ProcessEngineBeans processEngineBeans) throws TaskHandleException {
 		// 获取实际指派的用户id集合
 		List<String> assignedUserIds = handleParameter.getUserEntity().getAssignedUserIds(); 
 		

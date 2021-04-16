@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import com.douglei.bpm.bean.annotation.Property;
+import com.douglei.bpm.module.runtime.instance.State;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
 import com.douglei.orm.context.SessionContext;
 
@@ -16,6 +17,7 @@ public class Task {
 	protected int id;
 	@Property protected int procdefId;
 	@Property protected String procinstId;
+	private State procinstState; // 流程实例状态
 	@Property protected String taskinstId;
 	@Property protected String parentTaskinstId;
 	@Property protected Integer joinBranchNum;
@@ -126,6 +128,12 @@ public class Task {
 	}
 	public void setProcinstId(String procinstId) {
 		this.procinstId = procinstId;
+	}
+	public State getProcinstState() {
+		return procinstState;
+	}
+	public void setProcinstState(String procinstState) {
+		this.procinstState = State.valueOf(procinstState);
 	}
 	public String getTaskinstId() {
 		return taskinstId;

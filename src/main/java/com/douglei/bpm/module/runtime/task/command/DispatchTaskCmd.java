@@ -11,7 +11,7 @@ import com.douglei.bpm.module.history.task.HistoryDispatch;
 import com.douglei.bpm.module.runtime.task.TaskEntity;
 import com.douglei.bpm.module.runtime.task.command.parameter.DispatchTaskParameter;
 import com.douglei.bpm.process.handler.GeneralTaskHandleParameter;
-import com.douglei.bpm.process.handler.GeneralTaskHandler;
+import com.douglei.bpm.process.handler.AbstractTaskHandler;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.tools.StringUtil;
@@ -20,7 +20,7 @@ import com.douglei.tools.StringUtil;
  * 调度任务
  * @author DougLei
  */
-public class DispatchTaskCmd extends GeneralTaskHandler implements Command {
+public class DispatchTaskCmd extends AbstractTaskHandler implements Command {
 	private TaskEntity entity;
 	private DispatchTaskParameter parameter;
 	private GeneralTaskHandleParameter handleParameter;

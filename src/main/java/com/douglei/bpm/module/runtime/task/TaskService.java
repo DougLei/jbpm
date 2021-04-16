@@ -48,7 +48,9 @@ public class TaskService {
 	@Transaction
 	public ExecutionResult claim(int taskId, String userId){
 		TaskEntity entity = new TaskEntity(taskId, container);
-		return commandExecutor.execute(new ClaimTaskCmd(entity, userId));
+		if(entity.isActive())
+			return commandExecutor.execute(new ClaimTaskCmd(entity, userId));
+		return new ExecutionResult("操作失败, [%s]任务处于挂起状态", "jbpm.op.fail.task.is.suspended", entity.getName());
 	}
 	/**
 	 * 认领指定id的任务
@@ -59,7 +61,9 @@ public class TaskService {
 	@Transaction
 	public ExecutionResult claim(String taskinstId, String userId){
 		TaskEntity entity = new TaskEntity(taskinstId, container);
-		return commandExecutor.execute(new ClaimTaskCmd(entity, userId));
+		if(entity.isActive())
+			return commandExecutor.execute(new ClaimTaskCmd(entity, userId));
+		return new ExecutionResult("操作失败, [%s]任务处于挂起状态", "jbpm.op.fail.task.is.suspended", entity.getName());
 	}
 	
 	/**
@@ -72,7 +76,9 @@ public class TaskService {
 	@Transaction
 	public ExecutionResult unclaim(int taskId, String userId, boolean strict){
 		TaskEntity entity = new TaskEntity(taskId, container);
-		return commandExecutor.execute(new UnclaimTaskCmd(entity, userId, strict));
+		if(entity.isActive())
+			return commandExecutor.execute(new UnclaimTaskCmd(entity, userId, strict));
+		return new ExecutionResult("操作失败, [%s]任务处于挂起状态", "jbpm.op.fail.task.is.suspended", entity.getName());
 	}
 	/**
 	 * 取消认领指定id的任务
@@ -84,7 +90,9 @@ public class TaskService {
 	@Transaction
 	public ExecutionResult unclaim(String taskinstId, String userId, boolean strict){
 		TaskEntity entity = new TaskEntity(taskinstId, container);
-		return commandExecutor.execute(new UnclaimTaskCmd(entity, userId, strict));
+		if(entity.isActive())
+			return commandExecutor.execute(new UnclaimTaskCmd(entity, userId, strict));
+		return new ExecutionResult("操作失败, [%s]任务处于挂起状态", "jbpm.op.fail.task.is.suspended", entity.getName());
 	}
 	
 	/**
@@ -98,7 +106,9 @@ public class TaskService {
 	@Transaction
 	public ExecutionResult delegate(int taskId, String userId, String assignedUserId, String reason) {
 		TaskEntity entity = new TaskEntity(taskId, container);
-		return commandExecutor.execute(new DelegateTaskCmd(entity, userId, assignedUserId, reason));
+		if(entity.isActive())
+			return commandExecutor.execute(new DelegateTaskCmd(entity, userId, assignedUserId, reason));
+		return new ExecutionResult("操作失败, [%s]任务处于挂起状态", "jbpm.op.fail.task.is.suspended", entity.getName());
 	}
 	/**
 	 * 委托指定id的任务
@@ -111,7 +121,9 @@ public class TaskService {
 	@Transaction
 	public ExecutionResult delegate(String taskinstId, String userId, String assignedUserId, String reason) {
 		TaskEntity entity = new TaskEntity(taskinstId, container);
-		return commandExecutor.execute(new DelegateTaskCmd(entity, userId, assignedUserId, reason));
+		if(entity.isActive())
+			return commandExecutor.execute(new DelegateTaskCmd(entity, userId, assignedUserId, reason));
+		return new ExecutionResult("操作失败, [%s]任务处于挂起状态", "jbpm.op.fail.task.is.suspended", entity.getName());
 	}
 	
 	/**
@@ -125,7 +137,9 @@ public class TaskService {
 	@Transaction
 	public ExecutionResult transfer(int taskId, String userId, String assignedUserId, String reason) {
 		TaskEntity entity = new TaskEntity(taskId, container);
-		return commandExecutor.execute(new TransferTaskCmd(entity, userId, assignedUserId, reason));
+		if(entity.isActive())
+			return commandExecutor.execute(new TransferTaskCmd(entity, userId, assignedUserId, reason));
+		return new ExecutionResult("操作失败, [%s]任务处于挂起状态", "jbpm.op.fail.task.is.suspended", entity.getName());
 	}
 	/**
 	 * 转办指定id的任务
@@ -138,7 +152,9 @@ public class TaskService {
 	@Transaction
 	public ExecutionResult transfer(String taskinstId, String userId, String assignedUserId, String reason) {
 		TaskEntity entity = new TaskEntity(taskinstId, container);
-		return commandExecutor.execute(new TransferTaskCmd(entity, userId, assignedUserId, reason));
+		if(entity.isActive())
+			return commandExecutor.execute(new TransferTaskCmd(entity, userId, assignedUserId, reason));
+		return new ExecutionResult("操作失败, [%s]任务处于挂起状态", "jbpm.op.fail.task.is.suspended", entity.getName());
 	}
 	
 	/**
@@ -151,7 +167,9 @@ public class TaskService {
 	@Transaction
 	public ExecutionResult carbonCopy(int taskId, String userId, List<String> assignedUserIds) {
 		TaskEntity entity = new TaskEntity(taskId, container);
-		return commandExecutor.execute(new CarbonCopyTaskCmd(entity, userId, assignedUserIds));
+		if(entity.isActive())
+			return commandExecutor.execute(new CarbonCopyTaskCmd(entity, userId, assignedUserIds));
+		return new ExecutionResult("操作失败, [%s]任务处于挂起状态", "jbpm.op.fail.task.is.suspended", entity.getName());
 	}
 	/**
 	 * 抄送指定id的任务
@@ -163,7 +181,9 @@ public class TaskService {
 	@Transaction
 	public ExecutionResult carbonCopy(String taskinstId, String userId, List<String> assignedUserIds) {
 		TaskEntity entity = new TaskEntity(taskinstId, container);
-		return commandExecutor.execute(new CarbonCopyTaskCmd(entity, userId, assignedUserIds));
+		if(entity.isActive())
+			return commandExecutor.execute(new CarbonCopyTaskCmd(entity, userId, assignedUserIds));
+		return new ExecutionResult("操作失败, [%s]任务处于挂起状态", "jbpm.op.fail.task.is.suspended", entity.getName());
 	}
 	/**
 	 * 查看抄送
@@ -230,7 +250,9 @@ public class TaskService {
 	@Transaction
 	public ExecutionResult handle(int taskId, HandleTaskParameter parameter) {
 		TaskEntity entity = new TaskEntity(taskId, container);
-		return commandExecutor.execute(new HandleTaskCmd(entity, parameter));
+		if(entity.isActive())
+			return commandExecutor.execute(new HandleTaskCmd(entity, parameter));
+		return new ExecutionResult("操作失败, [%s]任务处于挂起状态", "jbpm.op.fail.task.is.suspended", entity.getName());
 	}
 	/**
 	 * 办理指定id的任务
@@ -241,7 +263,9 @@ public class TaskService {
 	@Transaction
 	public ExecutionResult handle(String taskinstId, HandleTaskParameter parameter) {
 		TaskEntity entity = new TaskEntity(taskinstId, container);
-		return commandExecutor.execute(new HandleTaskCmd(entity, parameter));
+		if(entity.isActive())
+			return commandExecutor.execute(new HandleTaskCmd(entity, parameter));
+		return new ExecutionResult("操作失败, [%s]任务处于挂起状态", "jbpm.op.fail.task.is.suspended", entity.getName());
 	}
 	
 	/**
@@ -253,7 +277,9 @@ public class TaskService {
 	@Transaction
 	public ExecutionResult dispatch(int taskId, DispatchTaskParameter parameter) {
 		TaskEntity entity = new TaskEntity(taskId, container);
-		return commandExecutor.execute(new DispatchTaskCmd(entity, parameter));
+		if(entity.isActive())
+			return commandExecutor.execute(new DispatchTaskCmd(entity, parameter));
+		return new ExecutionResult("操作失败, [%s]任务处于挂起状态", "jbpm.op.fail.task.is.suspended", entity.getName());
 	}
 	/**
 	 * 调度指定id的任务
@@ -264,7 +290,9 @@ public class TaskService {
 	@Transaction
 	public ExecutionResult dispatch(String taskinstId, DispatchTaskParameter parameter) {
 		TaskEntity entity = new TaskEntity(taskinstId, container);
-		return commandExecutor.execute(new DispatchTaskCmd(entity, parameter));
+		if(entity.isActive())
+			return commandExecutor.execute(new DispatchTaskCmd(entity, parameter));
+		return new ExecutionResult("操作失败, [%s]任务处于挂起状态", "jbpm.op.fail.task.is.suspended", entity.getName());
 	}
 	
 	/**

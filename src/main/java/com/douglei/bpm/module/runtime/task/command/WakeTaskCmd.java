@@ -19,7 +19,7 @@ public class WakeTaskCmd implements Command {
 	public WakeTaskCmd(TaskEntity entity) {
 		this.task = entity.getTask();
 	}
-
+	
 	@Override
 	public ExecutionResult execute(ProcessEngineBeans processEngineBeans) {
 		if(task.isActive())

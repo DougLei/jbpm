@@ -1,7 +1,6 @@
 package com.douglei.bpm.process.handler;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 
 import com.douglei.bpm.module.history.task.Attitude;
@@ -14,8 +13,7 @@ import com.douglei.orm.context.SessionContext;
  * 通用的任务办理参数
  * @author DougLei
  */
-public class GeneralTaskHandleParameter implements HandleParameter {
-	private Date currentDate = new Date();
+public class GeneralTaskHandleParameter extends AbstractHandleParameter {
 	private com.douglei.bpm.module.runtime.task.TaskEntity entity;
 	private String businessId;
 	private UserEntity userEntity; // 办理的用户实体
@@ -29,10 +27,6 @@ public class GeneralTaskHandleParameter implements HandleParameter {
 		this.userEntity = new UserEntity(currentHandleUserId, suggest, attitude, reason, assignedUserIds);
 	}
 	
-	@Override
-	public Date getCurrentDate() {
-		return currentDate;
-	}
 	@Override
 	public String getProcessInstanceId() {
 		return entity.getTask().getProcinstId();

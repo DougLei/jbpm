@@ -16,7 +16,7 @@ import com.douglei.orm.context.SessionContext;
  * 
  * @author DougLei
  */
-public abstract class GeneralTaskHandler {
+public abstract class AbstractTaskHandler {
 	protected final static ExecutionResult CANNOT_DISPATCH = new ExecutionResult(false);
 	
 	/**

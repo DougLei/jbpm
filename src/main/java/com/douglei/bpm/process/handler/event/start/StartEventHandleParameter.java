@@ -1,10 +1,9 @@
 package com.douglei.bpm.process.handler.event.start;
 
-import java.util.Date;
 import java.util.UUID;
 
 import com.douglei.bpm.module.runtime.instance.command.parameter.StartParameter;
-import com.douglei.bpm.process.handler.HandleParameter;
+import com.douglei.bpm.process.handler.AbstractHandleParameter;
 import com.douglei.bpm.process.handler.TaskEntityHandler;
 import com.douglei.bpm.process.handler.UserEntity;
 import com.douglei.bpm.process.handler.VariableEntities;
@@ -14,8 +13,7 @@ import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
  * 
  * @author DougLei
  */
-public class StartEventHandleParameter implements HandleParameter {
-	private Date currentDate = new Date();
+public class StartEventHandleParameter extends AbstractHandleParameter {
 	private ProcessMetadata processMetadata; 
 	private StartParameter parameter;
 	private String processInstanceId;
@@ -29,10 +27,6 @@ public class StartEventHandleParameter implements HandleParameter {
 		this.userEntity = new UserEntity(parameter.getUserId(), parameter.getAssignedUserIds());
 	}
 	
-	@Override
-	public Date getCurrentDate() {
-		return currentDate;
-	}
 	@Override
 	public String getProcessInstanceId() {
 		return processInstanceId;

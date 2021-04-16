@@ -11,7 +11,7 @@ import com.douglei.bpm.module.runtime.task.TaskEntity;
 import com.douglei.bpm.module.runtime.task.command.dispatch.impl.SettargetDispatchExecutor;
 import com.douglei.bpm.module.runtime.task.command.parameter.KillAndJumpTaskParameter;
 import com.douglei.bpm.process.handler.GeneralTaskHandleParameter;
-import com.douglei.bpm.process.handler.GeneralTaskHandler;
+import com.douglei.bpm.process.handler.AbstractTaskHandler;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.tools.StringUtil;
@@ -20,7 +20,7 @@ import com.douglei.tools.StringUtil;
  * 
  * @author DougLei
  */
-public class KillAndJumpTaskCmd extends GeneralTaskHandler implements Command{
+public class KillAndJumpTaskCmd extends AbstractTaskHandler implements Command{
 	private TaskEntity entity;
 	private KillAndJumpTaskParameter parameter;
 	

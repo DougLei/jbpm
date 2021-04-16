@@ -13,6 +13,10 @@ public class KillAndJumpTaskParameter extends GeneralTaskParameter{
 		this.targetTask = targetTask;
 		this.reason = reason;
 	}
+	/**
+	 * 设置标识: 如果存在已经认领的指派信息, KillAndJump时是否强制删除相关数据
+	 * @param strict
+	 */
 	public void setStrict(boolean strict) {
 		this.strict = strict;
 	}

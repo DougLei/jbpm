@@ -9,7 +9,6 @@ import com.douglei.bpm.module.runtime.instance.command.SuspendProcessCmd;
 import com.douglei.bpm.module.runtime.instance.command.TerminateProcessCmd;
 import com.douglei.bpm.module.runtime.instance.command.WakeProcessCmd;
 import com.douglei.bpm.module.runtime.instance.command.parameter.StartParameter;
-import com.douglei.bpm.module.runtime.instance.command.parameter.TerminateParameter;
 import com.douglei.orm.context.Transaction;
 
 /**
@@ -67,24 +66,26 @@ public class ProcessInstanceService {
 	/**
 	 * 终止指定id的流程实例
 	 * @param id
-	 * @param parameter
+	 * @param userId
+	 * @param reason
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult terminate(int id, TerminateParameter parameter) {
+	public ExecutionResult terminate(int id, String userId, String reason) {
 		ProcessInstanceEntity entity = new ProcessInstanceEntity(id);
-		return commandExecutor.execute(new TerminateProcessCmd(entity, parameter));
+		return commandExecutor.execute(new TerminateProcessCmd(entity, userId, reason));
 	}
 	/**
 	 * 终止指定id的流程实例
 	 * @param procinstId
-	 * @param parameter
+	 * @param userId
+	 * @param reason
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult terminate(String procinstId, TerminateParameter parameter) {
+	public ExecutionResult terminate(String procinstId, String userId, String reason) {
 		ProcessInstanceEntity entity = new ProcessInstanceEntity(procinstId);
-		return commandExecutor.execute(new TerminateProcessCmd(entity, parameter));
+		return commandExecutor.execute(new TerminateProcessCmd(entity, userId, reason));
 	}
 	
 	/**

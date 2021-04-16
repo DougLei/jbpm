@@ -1,7 +1,7 @@
 package com.douglei.bpm.module.runtime.task.command.parameter;
 
 import com.douglei.bpm.module.runtime.task.command.dispatch.DispatchExecutor;
-import com.douglei.bpm.module.runtime.task.command.dispatch.impl.NaturalDispatchExecutor;
+import com.douglei.bpm.module.runtime.task.command.dispatch.impl.StandardDispatchExecutor;
 
 /**
  * 
@@ -25,7 +25,7 @@ public class DispatchTaskParameter extends GeneralTaskParameter {
 	 */
 	public DispatchExecutor getDispatchExecutor() {
 		if(dispatchExecutor == null)
-			dispatchExecutor = new NaturalDispatchExecutor();
+			dispatchExecutor = new StandardDispatchExecutor();
 		return dispatchExecutor;
 	}
 }

@@ -7,9 +7,9 @@ package com.douglei.bpm.module.runtime.instance;
 public enum State {
 	
 	/**
-	 * 活动中
+	 * 活动中: 1
 	 */
-	ACTIVE{
+	ACTIVE(1) {
 		@Override
 		public boolean supportTerminate() {
 			return true;
@@ -17,9 +17,9 @@ public enum State {
 	},
 	
 	/**
-	 * 挂起
+	 * 挂起: 2
 	 */
-	SUSPENDED{
+	SUSPENDED(2) {
 		@Override
 		public boolean supportTerminate() {
 			return true;
@@ -27,9 +27,9 @@ public enum State {
 	},
 	
 	/**
-	 * 终止
+	 * 终止: 3
 	 */
-	TERMINATED {
+	TERMINATED(3) {
 		@Override
 		public boolean supportDelete() {
 			return true;
@@ -37,24 +37,42 @@ public enum State {
 	},
 	
 	/**
-	 * 结束
+	 * 结束: 4
 	 */
-	FINISHED {
+	FINISHED(4) {
 		@Override
 		public boolean supportDelete() {
 			return true;
 		}
 	},
 	
+	// value>6时, 均表示删除状态
 	/**
-	 * 删除
+	 * 终止状态时删除: 7
 	 */
-	DELETE{
+	TERMINATED_DELETE(TERMINATED.value + 4) { 
+		@Override
+		public boolean supportPhysicalDelete() {
+			return true;
+		}
+	},
+	/**
+	 * 结束状态时删除: 8
+	 */
+	FINISHED_DELETE(FINISHED.value + 4) { 
 		@Override
 		public boolean supportPhysicalDelete() {
 			return true;
 		}
 	};
+	
+	/**
+	 * 获取标识值
+	 * @return
+	 */
+	public int getValue() {
+		return value;
+	}
 	
 	/**
 	 * 当前状态是是否支持进行终止操作
@@ -78,5 +96,24 @@ public enum State {
 	 */
 	public boolean supportPhysicalDelete() {
 		return false;
+	}
+	
+	/**
+	 * 根据标识值获取State实例
+	 * @param value
+	 * @return
+	 */
+	public static State valueOf(int value) {
+		for (State state : State.values()) {
+			if(state.value == value)
+				return state;
+		}
+		throw new IllegalArgumentException("不存在value为["+value+"]的State Enum");
+	}
+	
+	// ---------------------------------------------------------------
+	private int value;
+	private State(int value) {
+		this.value = value;
 	}
 }

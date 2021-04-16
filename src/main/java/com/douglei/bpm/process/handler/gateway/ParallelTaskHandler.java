@@ -1,7 +1,6 @@
 package com.douglei.bpm.process.handler.gateway;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,12 +20,10 @@ import com.douglei.orm.context.SessionContext;
 public class ParallelTaskHandler extends AbstractTaskHandler{
 	private TaskMetadataEntity<? extends TaskMetadata> currentJoinTaskMetadataEntity; // 当前处理join的任务元数据实体实例
 	private TaskEntity previousTaskEntity; // 上一个办理的任务实体实例
-	private Date currentDate; // 当前操作时间
 	
-	public ParallelTaskHandler(TaskMetadataEntity<? extends TaskMetadata> currentJoinTaskMetadataEntity, TaskEntity previousTaskEntity, Date currentDate) {
+	public ParallelTaskHandler(TaskMetadataEntity<? extends TaskMetadata> currentJoinTaskMetadataEntity, TaskEntity previousTaskEntity) {
 		this.currentJoinTaskMetadataEntity = currentJoinTaskMetadataEntity;
 		this.previousTaskEntity = previousTaskEntity;
-		this.currentDate = currentDate;
 	}
 
 	/**
@@ -40,7 +37,6 @@ public class ParallelTaskHandler extends AbstractTaskHandler{
 					currentJoinTaskMetadataEntity.getProcessMetadata().getId(),
 					previousTaskEntity.getTask().getProcinstId(), 
 					null, 
-					currentDate, 
 					previousTaskEntity.getTask().getKey(),
 					currentJoinTaskMetadataEntity.getTaskMetadata());
 			joinTask.setJoinBranchNum(1);
@@ -115,7 +111,6 @@ public class ParallelTaskHandler extends AbstractTaskHandler{
 							currentJoinTaskMetadataEntity.getProcessMetadata().getId(),
 							previousTaskEntity.getTask().getProcinstId(), 
 							previousTaskEntity.getTask().getParentTaskinstId(), 
-							currentDate,
 							previousTaskEntity.getTask().getKey(),
 							currentJoinTaskMetadataEntity.getTaskMetadata());
 					joinTask.setJoinBranchNum(1);

@@ -11,26 +11,38 @@ import com.douglei.bpm.module.runtime.instance.State;
  * @author DougLei
  */
 public class HistoryProcessInstance extends ProcessInstance{
+	private String userId;
+	private String reason;
 	private Date endTime;
-	private String remark;
 	
-	public HistoryProcessInstance(ProcessInstance processInstance, State state, String remark) {
+	public HistoryProcessInstance() {}
+	public HistoryProcessInstance(ProcessInstance processInstance, State state) {
+		this(processInstance, state, null, null);
+	}
+	public HistoryProcessInstance(ProcessInstance processInstance, State state, String userId, String reason) {
 		PropertyValueCopier.copy(processInstance, this);
 		this.state = state;
+		this.userId = userId;
+		this.reason = reason;
 		this.endTime = new Date();
-		this.remark = remark;
 	}
 	
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public String getReason() {
+		return reason;
+	}
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 	public Date getEndTime() {
 		return endTime;
 	}
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
-	}
-	public String getRemark() {
-		return remark;
-	}
-	public void setRemark(String remark) {
-		this.remark = remark;
 	}
 }

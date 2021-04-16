@@ -2,7 +2,6 @@ package com.douglei.bpm.process.handler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import com.douglei.bpm.module.ExecutionResult;
@@ -30,7 +29,7 @@ public abstract class AbstractTaskHandler {
 			SessionContext.getSqlSession().executeUpdate("delete bpm_ru_task where id = ?", Arrays.asList(task.getId()));	
 
 		// 将任务存到历史表	
-		HistoryTask historyTask = new HistoryTask(task, new Date());
+		HistoryTask historyTask = new HistoryTask(task);
 		SessionContext.getTableSession().save(historyTask);	
 		
 		// 调度当前任务的变量

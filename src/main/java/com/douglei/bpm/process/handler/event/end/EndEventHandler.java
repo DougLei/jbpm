@@ -25,7 +25,7 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, AbstractHandl
 	
 	@Override
 	public ExecutionResult startup() {
-		Task joinTask = new ParallelTaskHandler(currentTaskMetadataEntity, handleParameter.getTaskEntityHandler().getPreviousTaskEntity(), handleParameter.getCurrentDate()).join();
+		Task joinTask = new ParallelTaskHandler(currentTaskMetadataEntity, handleParameter.getTaskEntityHandler().getPreviousTaskEntity()).join();
 		if(joinTask != null) 
 			end(joinTask);
 		return ExecutionResult.getDefaultSuccessInstance();
@@ -70,7 +70,7 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, AbstractHandl
 		List<Object> procinstId = Arrays.asList(handleParameter.getProcessInstanceId());
 		ProcessInstance processInstance = SessionContext.getTableSession().uniqueQuery(ProcessInstance.class, "select * from bpm_ru_procinst where procinst_id=?", procinstId);
 		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_procinst where procinst_id=?", procinstId);
-		SessionContext.getTableSession().save(new HistoryProcessInstance(processInstance, State.FINISHED, null));
+		SessionContext.getTableSession().save(new HistoryProcessInstance(processInstance, State.FINISHED));
 		
 		// 保存流程变量
 		saveVariables();

@@ -2,6 +2,7 @@ package com.douglei.bpm.module.history.task;
 
 import java.util.Date;
 
+import com.douglei.bpm.module.history.SourceType;
 import com.douglei.bpm.module.runtime.task.Assignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
 
@@ -13,6 +14,7 @@ public class HistoryAssignee extends Assignee{
 	private Attitude attitude;
 	private String suggest;
 	private Date finishTime;
+	private SourceType sourceType;
 	
 	/**
 	 * 完结指派信息
@@ -54,5 +56,17 @@ public class HistoryAssignee extends Assignee{
 	}
 	public void setFinishTime(Date finishTime) {
 		this.finishTime = finishTime;
+	}
+	public int getSourceType() {
+		return sourceType.getValue();
+	}
+	public void setSourceType(int sourceType) {
+		this.sourceType = SourceType.valueOf(sourceType);
+	}
+	public SourceType getSourceTypeInstance() {
+		return sourceType;
+	}
+	public void setSourceTypeInstance(SourceType sourceType) {
+		this.sourceType = sourceType;
 	}
 }

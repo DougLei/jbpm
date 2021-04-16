@@ -13,7 +13,7 @@
 			<column name="START_USER_ID" property="startUserId" dataType="nstring" length="150" />
 			<column name="START_TIME" property="startTime" dataType="datetime" nullable="false" />
 			<column name="TENANT_ID" property="tenantId" dataType="nstring" length="150" />
-			<column name="STATE" property="state" dataType="string" length="10" nullable="false"/>
+			<column name="STATE" property="state" dataType="number" length="1" nullable="false"/>
 		</columns>
 		
 		<constraints>

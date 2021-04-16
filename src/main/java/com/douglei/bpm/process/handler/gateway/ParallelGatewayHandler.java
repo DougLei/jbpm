@@ -28,7 +28,7 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 	public ExecutionResult startup() {
 		removeVariables();
 		
-		Task joinTask = new ParallelTaskHandler(currentTaskMetadataEntity, handleParameter.getTaskEntityHandler().getPreviousTaskEntity(), handleParameter.getCurrentDate()).join();
+		Task joinTask = new ParallelTaskHandler(currentTaskMetadataEntity, handleParameter.getTaskEntityHandler().getPreviousTaskEntity()).join();
 		if(joinTask != null) 
 			fork(joinTask);
 		return ExecutionResult.getDefaultSuccessInstance();

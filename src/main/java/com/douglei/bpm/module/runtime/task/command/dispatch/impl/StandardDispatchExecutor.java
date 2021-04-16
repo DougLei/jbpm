@@ -5,10 +5,10 @@ import com.douglei.bpm.process.handler.TaskDispatchException;
 import com.douglei.bpm.process.mapping.metadata.TaskNotExistsException;
 
 /**
- * 自然调度
+ * 标准调度
  * @author DougLei
  */
-public class NaturalDispatchExecutor extends DispatchExecutor {
+public class StandardDispatchExecutor extends DispatchExecutor {
 	
 	@Override
 	public void execute() throws TaskNotExistsException, TaskDispatchException {

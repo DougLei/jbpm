@@ -13,6 +13,7 @@
 			<column name="NUMBER_VAL" property="numberVal" dataType="number" length="20" precision="4" />
 			<column name="DATE_VAL" property="dateVal" dataType="datetime" />
 			<column name="OBJECT_VAL" property="objectVal" dataType="blob" />
+			<column name="SOURCE_TYPE" property="sourceType" dataType="number" length="1" nullable="false"/>
 		</columns>
 		
 		<constraints>

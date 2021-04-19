@@ -6,7 +6,7 @@
 		<content name="queryHistoryCCList" type="select">
 			select * from bpm_hi_cc where source_type=3 and 
 			<foreach collection="tasks" alias="task" open="taskinst_id in (" separator="," close=")">
-				#{task.taskinst_id}
+				#{task.taskinstId}
 			</foreach>
 		</content>
 		

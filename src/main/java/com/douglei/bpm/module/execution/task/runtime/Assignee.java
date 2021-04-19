@@ -98,7 +98,7 @@ public class Assignee {
 			return null;
 		return mode.getValue();
 	}
-	public void setMode_(int mode) {
+	public void setMode_(Integer mode) {
 		this.mode = AssignMode.valueOf(mode) ;
 	}
 	public HandleState getHandleStateInstance() {
@@ -112,7 +112,7 @@ public class Assignee {
 			return null;
 		return handleState.getValue();
 	}
-	public void setHandleState(int handleState) {
+	public void setHandleState(Integer handleState) {
 		this.handleState = HandleState.valueOf(handleState);
 	}
 	public Date getClaimTime() {

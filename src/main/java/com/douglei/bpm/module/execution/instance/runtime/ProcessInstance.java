@@ -93,7 +93,7 @@ public class ProcessInstance {
 			return null;
 		return state.getValue();
 	}
-	public void setState(int state) {
+	public void setState(Integer state) {
 		this.state = State.valueOf(state);
 	}
 }

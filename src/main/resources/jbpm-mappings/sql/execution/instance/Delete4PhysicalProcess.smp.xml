@@ -5,7 +5,7 @@
 		<sql-content name="taskIdLoop">
 			where 
 			<foreach collection="tasks" alias="task" open="taskinst_id in (" separator="," close=")">
-				#{task.taskinst_id}
+				#{task.taskinstId}
 			</foreach>
 		</sql-content>
 		

@@ -22,7 +22,7 @@ public class HistoryVariable extends Variable{
 			return null;
 		return sourceType.getValue();
 	}
-	public void setSourceType(int sourceType) {
+	public void setSourceType(Integer sourceType) {
 		this.sourceType = SourceType.valueOf(sourceType);
 	}
 	public SourceType getSourceTypeInstance() {

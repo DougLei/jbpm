@@ -99,7 +99,7 @@ public class Variable {
 			return null;
 		return scope.getValue();
 	}
-	public void setScope(int scope) {
+	public void setScope(Integer scope) {
 		this.scope = Scope.valueOf(scope);
 	}
 	public String getName() {
@@ -119,7 +119,7 @@ public class Variable {
 			return null;
 		return dataType.getValue();
 	}
-	public void setDataType(int dataType) {
+	public void setDataType(Integer dataType) {
 		this.dataType = DataType.valueOf(dataType);
 	}
 	public String getStringVal() {

@@ -42,13 +42,13 @@ public class TaskEntity {
 	 * @return
 	 */
 	public boolean isActive() {
-		switch(task.getProcinstState()) {
+		switch(task.getProcssInstanceState()) {
 			case ACTIVE:
 				return task.isActive();
 			case SUSPENDED:
 				return false;
 			default:
-				throw new ProcessEngineBugException("判断任务是否处于活动状态时, 出现了错误的流程实例状态["+task.getProcinstState()+"]");
+				throw new ProcessEngineBugException("判断任务是否处于活动状态时, 出现了错误的流程实例状态["+task.getProcssInstanceState()+"]");
 		}
 	}
 	

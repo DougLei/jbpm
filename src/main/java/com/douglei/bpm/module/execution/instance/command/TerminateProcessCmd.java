@@ -37,11 +37,15 @@ public class TerminateProcessCmd extends WakeProcessCmd {
 		
 		// 将流程实例从运行表转移到历史表
 		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_procinst where id=?", Arrays.asList(processInstance.getId()));
-		SessionContext.getTableSession().save(new HistoryProcessInstance(processInstance, State.TERMINATED, userId, reason));
+		HistoryProcessInstance instance = new HistoryProcessInstance(processInstance, State.TERMINATED, userId, reason);
+		SessionContext.getTableSession().save(instance);
 		
 		// 将任务转移到历史表
 		List<HistoryTask> tasks = SessionContext.getTableSession().query(HistoryTask.class, "select * from bpm_ru_task where procinst_id=?", Arrays.asList(processInstance.getProcinstId()));
-		tasks.forEach(task -> task.setSourceTypeInstance(SourceType.BY_PROCINST_TERMINATED));
+		tasks.forEach(task -> {
+			task.setEndTime(instance.getEndTime());
+			task.setSourceTypeInstance(SourceType.BY_PROCINST_TERMINATED);
+		});
 		SessionContext.getTableSession().save(tasks);
 		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_task where procinst_id=?", Arrays.asList(processInstance.getProcinstId()));
 		

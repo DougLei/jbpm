@@ -8,6 +8,9 @@
 			<column name="PROCINST_ID" property="procinstId" dataType="char" length="36" nullable="false"/>
 			<column name="TASKINST_ID" property="taskinstId" dataType="char" length="36" nullable="false"/>
 			<column name="PARENT_TASKINST_ID" property="parentTaskinstId" dataType="char" length="36" />
+			<column name="JOIN_BRANCH_NUM" property="joinBranchNum" dataType="number" length="3" />
+			<column name="FORK_BRANCH_NUM" property="forkBranchNum" dataType="number" length="3" />
+			<column name="ASSIGN_COUNT" property="assignCount" dataType="number" length="4" />
 			<column name="SOURCE_KEY" property="sourceKey" dataType="string" length="50" />
 			<column name="KEY_" property="key" dataType="string" length="50" nullable="false"/>
 			<column name="NAME_" property="name" dataType="nstring" length="100" nullable="false"/>
@@ -16,9 +19,11 @@
 			<column name="EXPIRY_TIME" property="expiryTime" dataType="datetime" />
 			<column name="BUSINESS_ID" property="businessId" dataType="string" length="100"/>
 			<column name="PAGE_ID" property="pageId" dataType="string" length="500"/>
+			<column name="IS_ALL_CLAIMED" property="isAllClaimed" dataType="number" length="1" />
+			<column name="IS_ACTIVE" property="isActive" dataType="number" length="1" nullable="false"/>
 			<column name="USER_ID" property="userId" dataType="nstring" length="150" />
 			<column name="REASON" property="reason" dataType="nstring" length="300" />
-			<column name="END_TIME" property="endTime" dataType="datetime" />
+			<column name="END_TIME" property="endTime" dataType="datetime" nullable="false"/>
 			<column name="SOURCE_TYPE" property="sourceType" dataType="number" length="1" nullable="false"/>
 		</columns>
 		

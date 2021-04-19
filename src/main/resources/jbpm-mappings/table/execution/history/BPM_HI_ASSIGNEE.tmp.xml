@@ -7,6 +7,7 @@
 			<column name="TASKINST_ID" property="taskinstId" dataType="char" length="36" nullable="false"/>
 			<column name="GROUP_ID" property="groupId" dataType="number" length="4" nullable="false"/>
 			<column name="CHAIN_ID" property="chainId" dataType="number" length="3" nullable="false" />
+			<column name="IS_CHAIN_LAST" property="isChainLast" dataType="number" length="1" />
 			<column name="USER_ID" property="userId" dataType="nstring" length="150" nullable="false" />
 			<column name="REASON" property="reason" dataType="nstring" length="300" />
 			<column name="MODE_" property="mode" dataType="number" length="1" nullable="false" />

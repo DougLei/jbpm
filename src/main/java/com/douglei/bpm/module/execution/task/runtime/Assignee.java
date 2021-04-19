@@ -14,7 +14,7 @@ public class Assignee {
 	protected String taskinstId;
 	protected int groupId;
 	protected int chainId;
-	private Integer isChainLast;
+	protected Integer isChainLast;
 	protected String userId;
 	protected String reason;
 	protected AssignMode mode;

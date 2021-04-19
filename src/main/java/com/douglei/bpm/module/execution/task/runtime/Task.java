@@ -22,7 +22,7 @@ public class Task {
 	@Property protected String parentTaskinstId;
 	@Property protected Integer joinBranchNum;
 	@Property protected Integer forkBranchNum;
-	private Integer assignCount;
+	@Property private Integer assignCount;
 	@Property protected String sourceKey;
 	@Property protected String key;
 	@Property protected String name;
@@ -33,8 +33,8 @@ public class Task {
 	@Property protected String pageId;
 	@Property protected String userId;
 	@Property protected String reason;
-	private Integer isAllClaimed;
-	private Integer isActive;
+	@Property private Integer isAllClaimed;
+	@Property private Integer isActive;
 	
 	public Task() {}
 	public Task(int procdefId, String procinstId, String parentTaskinstId, String sourceKey, TaskMetadata taskMetadata) {
@@ -129,10 +129,10 @@ public class Task {
 	public void setProcinstId(String procinstId) {
 		this.procinstId = procinstId;
 	}
-	public State getProcinstState() {
+	public State getProcssInstanceState() {
 		return procinstState;
 	}
-	public void setProcinstState(String procinstState) {
+	public void setProcinstState(Integer procinstState) {
 		this.procinstState = State.valueOf(procinstState);
 	}
 	public String getTaskinstId() {

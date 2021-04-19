@@ -62,9 +62,9 @@ public class AssignTest {
 	
 	@Test
 	public void test() {
-		Result result = engine.getExecutionModule().getProcessInstanceService().terminate(1, "金石磊", "我要测试终止流程功能");
+		Result result = engine.getExecutionModule().getProcessInstanceService().delete4Physical(3);
 		if(result.isSuccess())
-			System.out.println("终止流程实例id为["+1+"]");
+			System.out.println("成功");
 		else
 			System.out.println(result.getMessage());
 	}

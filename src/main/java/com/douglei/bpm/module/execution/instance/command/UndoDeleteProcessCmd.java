@@ -23,8 +23,8 @@ public class UndoDeleteProcessCmd extends DeleteProcessCmd {
 
 	@Override
 	public Result execute(ProcessEngineBeans processEngineBeans) {
-		if(processInstance.getStateInstance().supportPhysicalDelete()) 
-			return new Result("撤销删除失败, [%s]流程实例处于[%s]状态", "jbpm.procinst.undo.delete.fail.state.error", processInstance.getTitle());
+		if(!processInstance.getStateInstance().supportPhysicalDelete()) 
+			return new Result("撤销删除失败, [%s]流程实例处于[%s]状态", "jbpm.procinst.undo.delete.fail.state.error", processInstance.getTitle(), processInstance.getStateInstance().name());
 			
 		SessionContext.getSqlSession().executeUpdate("update bpm_hi_procinst set state=? where id=?", Arrays.asList(processInstance.getState()-4, processInstance.getId()));
 		

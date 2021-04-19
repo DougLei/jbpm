@@ -181,7 +181,7 @@ public class ProcessInstanceService {
 	public Result recovery(String procinstId, boolean active) {
 		HistoryProcessInstanceEntity entity = new HistoryProcessInstanceEntity(procinstId);
 		return commandExecutor.execute(new RecoveryProcessCmd(entity, active));
-	} 
+	}
 	
 	/**
 	 * 激活指定id的流程实例(从完成状态到运行状态)

@@ -7,6 +7,7 @@ import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.ProcessEngineBugException;
 import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.history.SourceType;
 import com.douglei.bpm.module.history.task.HistoryDispatch;
 import com.douglei.bpm.module.runtime.task.TaskEntity;
 import com.douglei.bpm.module.runtime.task.command.parameter.DispatchTaskParameter;
@@ -59,7 +60,9 @@ public class DispatchTaskCmd extends AbstractTaskHandler implements Command {
 			
 			// 转移调度信息(从运行表到历史表)
 			List<HistoryDispatch> historyDispatchs = SessionContext.getTableSession().query(HistoryDispatch.class, "select * from bpm_ru_dispatch where taskinst_id=? order by is_enabled desc", Arrays.asList(entity.getTask().getTaskinstId()));
+			historyDispatchs.forEach(history -> history.setSourceTypeInstance(SourceType.STANDARD));
 			historyDispatchs.get(0).setDispatchTime(getGeneralHandleParameter().getCurrentDate());
+			
 			SessionContext.getTableSession().save(historyDispatchs);
 			entity.getTask().deleteAllDispatch();
 		}

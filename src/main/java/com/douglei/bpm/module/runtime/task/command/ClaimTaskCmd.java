@@ -43,8 +43,10 @@ public class ClaimTaskCmd implements Command{
 	// 任务认领
 	private synchronized ExecutionResult claim(ProcessEngineBeans processEngineBeans) {
 		// 查询指定userId, 判断其是否可以认领
-		List<Assignee> assigneeList = SessionContext.getSqlSession().query(Assignee.class, 
-						SQL_QUERY_CAN_CLAIM_ASSIGNEE_LIST, Arrays.asList(entity.getTask().getTaskinstId(), currentClaimUserId, HandleState.COMPETITIVE_UNCLAIM.name(), HandleState.UNCLAIM.name()));
+		List<Assignee> assigneeList = SessionContext.getSqlSession().query(
+				Assignee.class, 
+				SQL_QUERY_CAN_CLAIM_ASSIGNEE_LIST, 
+				Arrays.asList(entity.getTask().getTaskinstId(), currentClaimUserId, HandleState.COMPETITIVE_UNCLAIM.getValue(), HandleState.UNCLAIM.getValue()));
 		if(assigneeList.isEmpty())
 			return new ExecutionResult("认领失败, [%s]任务已被认领", "jbpm.claim.fail.claimed.by.other", entity.getName());
 		
@@ -66,7 +68,7 @@ public class ClaimTaskCmd implements Command{
 			if(!assignee.isChainFirst()) 
 				SessionContext.getSqlSession().executeUpdate(
 						"update bpm_ru_assignee set handle_state=? where taskinst_id=? and group_id=? and chain_id <? and handle_state=?", 
-						Arrays.asList(HandleState.INVALID_UNCLAIM.name(), entity.getTask().getTaskinstId(), assignee.getGroupId(), assignee.getChainId(), HandleState.COMPETITIVE_UNCLAIM.name()));
+						Arrays.asList(HandleState.INVALID_UNCLAIM.getValue(), entity.getTask().getTaskinstId(), assignee.getGroupId(), assignee.getChainId(), HandleState.COMPETITIVE_UNCLAIM.getValue()));
 			
 			// 进行认领
 			assignee.claim(claimTime);

@@ -19,7 +19,9 @@ public class HistoryCarbonCopy extends CarbonCopy{
 	public void setViewTime(Date viewTime) {
 		this.viewTime = viewTime;
 	}
-	public int getSourceType() {
+	public Integer getSourceType() {
+		if(sourceType == null)
+			return null;
 		return sourceType.getValue();
 	}
 	public void setSourceType(int sourceType) {

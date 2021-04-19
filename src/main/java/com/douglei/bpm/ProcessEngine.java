@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import com.douglei.bpm.bean.annotation.Autowired;
-import com.douglei.bpm.module.history.HistoryModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
 import com.douglei.bpm.module.runtime.RuntimeModule;
 import com.douglei.orm.configuration.Configuration;
@@ -56,9 +55,6 @@ public class ProcessEngine {
 	
 	@Autowired
 	private RuntimeModule runtimeModule;
-	
-	@Autowired
-	private HistoryModule historyModule;
 	
 	/**
 	 * (多数据源)给引擎添加新的数据源
@@ -111,13 +107,6 @@ public class ProcessEngine {
 	 */
 	public RuntimeModule getRuntimeModule() {
 		return runtimeModule;
-	}
-	/**
-	 * 获取HistoryModule实例
-	 * @return
-	 */
-	public HistoryModule getHistoryModule() {
-		return historyModule;
 	}
 	/**
 	 * 销毁引擎

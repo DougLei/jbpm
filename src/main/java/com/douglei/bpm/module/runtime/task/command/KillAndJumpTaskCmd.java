@@ -39,7 +39,7 @@ public class KillAndJumpTaskCmd extends AbstractTaskHandler implements Command{
 		if(entity.isUserTask()) {
 			int claimedCount = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(
 					"select count(id) from bpm_ru_assignee where taskinst_id=? and handle_state=?", 
-					Arrays.asList(currentTask.getTaskinstId(), HandleState.CLAIMED.name()))[0].toString());
+					Arrays.asList(currentTask.getTaskinstId(), HandleState.CLAIMED.getValue()))[0].toString());
 			if(claimedCount > 0 && !parameter.isStrict())
 				return new ExecutionResult("KillAndJump失败, [%s]任务存在%d条已认领的指派信息, 如确实需要, 请先处理相关数据", "jbpm.kill.jump.fail.claimed.assignee.exists", entity.getName(), claimedCount);
 			

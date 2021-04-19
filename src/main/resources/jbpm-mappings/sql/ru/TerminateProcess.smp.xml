@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping-configuration>
+	<sql namespace="TerminateProcess">
+		
+		<sql-content name="taskIdLoop">
+			where 
+			<foreach collection="tasks" alias="task" open="taskinst_id in (" separator="," close=")">
+				#{task.taskinst_id}
+			</foreach>
+		</sql-content>
+		
+		<!-- 查询所有运行任务的指派信息 -->
+		<content name="queryAssigneeList" type="select">
+			select * from bpm_ru_assignee 
+			<include ref-name="taskIdLoop" />
+		</content>
+		<!-- 终止所有指派信息 -->
+		<content name="deleteAssignee" type="delete">
+			delete bpm_ru_assignee where 
+			<foreach collection="assignees" alias="assignee" open="id in (" separator="," close=")">
+				#{assignee.id, dataType=number}
+			</foreach>
+		</content>
+		
+		<!-- 查询所有运行任务的调度信息 -->
+		<content name="queryDispatchList" type="select">
+			select * from bpm_ru_dispatch  
+			<include ref-name="taskIdLoop" />
+		</content>
+		<!-- 终止所有调度信息 -->
+		<content name="deleteDispatch" type="delete">
+			delete bpm_ru_dispatch where 
+			<foreach collection="dispatches" alias="dispatch" open="id in (" separator="," close=")">
+				#{dispatch.id, dataType=number}
+			</foreach>
+		</content>
+		
+		<!-- 查询所有运行任务的抄送信息 -->
+		<content name="queryCCList" type="select">
+			select * from bpm_ru_cc 
+			<include ref-name="taskIdLoop" />
+		</content>
+		<!-- 终止所有抄送信息 -->
+		<content name="deleteCC" type="delete">
+			delete bpm_ru_cc where 
+			<foreach collection="ccs" alias="cc" open="id in (" separator="," close=")">
+				#{cc.id, dataType=number}
+			</foreach>
+		</content>
+		
+	</sql>
+</mapping-configuration>

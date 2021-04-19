@@ -90,10 +90,12 @@ public class Assignee {
 	public void setModeInstance(AssignMode mode) {
 		this.mode = mode;
 	}
-	public String getMode() {
-		return mode.name();
+	public Integer getMode() {
+		if(mode == null)
+			return null;
+		return mode.getValue();
 	}
-	public void setMode_(String mode) {
+	public void setMode_(int mode) {
 		this.mode = AssignMode.valueOf(mode) ;
 	}
 	public HandleState getHandleStateInstance() {
@@ -102,10 +104,12 @@ public class Assignee {
 	public void setHandleStateInstance(HandleState handleState) {
 		this.handleState = handleState;
 	}
-	public String getHandleState() {
-		return handleState.name();
+	public Integer getHandleState() {
+		if(handleState == null)
+			return null;
+		return handleState.getValue();
 	}
-	public void setHandleState(String handleState) {
+	public void setHandleState(int handleState) {
 		this.handleState = HandleState.valueOf(handleState);
 	}
 	public Date getClaimTime() {
@@ -130,14 +134,5 @@ public class Assignee {
 		this.handleState = HandleState.CLAIMED;
 		this.claimTime = claimTime;
 		this.isChainLast=1;
-	}
-	/**
-	 * 进行委托
-	 * @param targetHandleState
-	 */
-	public void delegate(HandleState targetHandleState) {
-		this.handleState = targetHandleState;
-		this.claimTime = null;
-		this.isChainLast = null;
 	}
 }

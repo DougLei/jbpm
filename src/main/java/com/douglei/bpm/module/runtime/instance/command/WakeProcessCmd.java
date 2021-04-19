@@ -26,7 +26,7 @@ public class WakeProcessCmd implements Command {
 		if(processInstance.getStateInstance() != State.SUSPENDED)
 			return new ExecutionResult("唤醒失败, [%s]流程实例未处于[SUSPENDED]状态", "jbpm.procinst.wake.fail.state.error", processInstance.getTitle());
 		
-		SessionContext.getSqlSession().executeUpdate("update bpm_ru_procinst set state=? where id=?", Arrays.asList(State.ACTIVE.name(), processInstance.getId()));
+		SessionContext.getSqlSession().executeUpdate("update bpm_ru_procinst set state=? where id=?", Arrays.asList(State.ACTIVE.getValue(), processInstance.getId()));
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 }

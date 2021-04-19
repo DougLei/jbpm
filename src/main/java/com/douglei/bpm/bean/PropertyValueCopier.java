@@ -10,14 +10,24 @@ import com.douglei.bpm.bean.annotation.Property;
  */
 public class PropertyValueCopier {
 	
+	/**
+	 * 
+	 * @param source
+	 * @param target
+	 */
 	public static void copy(Object source, Object target) {
 		try {
-			for(Field field : source.getClass().getDeclaredFields()) {
-				if(field.isAnnotationPresent(Property.class)) {
-					field.setAccessible(true);
-					field.set(target, field.get(source));
-					field.setAccessible(false);
+			Class<?> clz = source.getClass();
+			while(clz != Object.class) {
+				for(Field field : clz.getDeclaredFields()) {
+					if(field.isAnnotationPresent(Property.class)) {
+						field.setAccessible(true);
+						field.set(target, field.get(source));
+						field.setAccessible(false);
+					}
 				}
+				
+				clz = clz.getSuperclass();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

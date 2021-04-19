@@ -9,22 +9,12 @@ public enum State {
 	/**
 	 * 活动中: 1
 	 */
-	ACTIVE(1) {
-		@Override
-		public boolean supportTerminate() {
-			return true;
-		}
-	},
+	ACTIVE(1),
 	
 	/**
 	 * 挂起: 2
 	 */
-	SUSPENDED(2) {
-		@Override
-		public boolean supportTerminate() {
-			return true;
-		}
-	},
+	SUSPENDED(2),
 	
 	/**
 	 * 终止: 3
@@ -67,23 +57,15 @@ public enum State {
 	};
 	
 	/**
-	 * 当前状态是是否支持进行终止操作
-	 * @return
-	 */
-	public boolean supportTerminate() {
-		return false;
-	}
-	
-	/**
-	 * 当前状态是是否支持进行删除操作
+	 * 当前状态是否支持进行删除操作
 	 * @return
 	 */
 	public boolean supportDelete() {
 		return false;
 	}
-	
+
 	/**
-	 * 当前状态是是否支持进行物理删除操作
+	 * 当前状态是否支持进行物理删除操作; 如果支持该操作, 也会支持撤销删除操作
 	 * @return
 	 */
 	public boolean supportPhysicalDelete() {

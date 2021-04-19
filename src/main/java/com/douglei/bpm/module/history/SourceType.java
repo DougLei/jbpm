@@ -14,7 +14,12 @@ public enum SourceType {
 	/**
 	 * 因为流程实例被终止而进入历史表: 2
 	 */
-	BY_PROCINST_TERMINATED(2);
+	BY_PROCINST_TERMINATED(2),
+	
+	/**
+	 * 因为流程实例被删除而进入历史表: 3
+	 */
+	BY_PROCINST_DELETED(3);
 	
 	// ---------------------------------------------------------------
 	private int value;

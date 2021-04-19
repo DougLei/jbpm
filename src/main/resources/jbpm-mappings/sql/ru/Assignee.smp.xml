@@ -14,16 +14,16 @@
 		
 		<!-- 在认领任务时, 查询任务指派信息的认领情况 -->
 		<content name="queryAssigneeClaimSituation" type="select">
-			select id, group_id, user_id, handle_state from bpm_ru_assignee where taskinst_id=#{taskinstId} and handle_state = 'UNCLAIM'
+			select id, group_id, user_id, handle_state from bpm_ru_assignee where taskinst_id=#{taskinstId} and handle_state =4
 			union
-			select id, group_id, user_id, handle_state from bpm_ru_assignee where taskinst_id=#{taskinstId} and handle_state = 'CLAIMED'
+			select id, group_id, user_id, handle_state from bpm_ru_assignee where taskinst_id=#{taskinstId} and handle_state =5
 			union
-			select id, group_id, user_id, handle_state from bpm_hi_assignee where taskinst_id=#{taskinstId} and handle_state = 'FINISHED'
+			select id, group_id, user_id, handle_state from bpm_hi_assignee where taskinst_id=#{taskinstId} and handle_state =6
 		</content>
 		
 		<!-- 取消认领任务 -->
 		<content name="unclaimTask" type="update">
-			update bpm_ru_assignee set handle_state='UNCLAIM', claim_time=null where 
+			update bpm_ru_assignee set handle_state=4, claim_time=null where 
 			<foreach collection="assigneeList" alias="assignee" open="id in (" separator="," close=")">
 				#{assignee.id, dataType=number}
 			</foreach>
@@ -31,7 +31,7 @@
 		
 		<!-- 放弃任务(委托或转办) -->
 		<content name="giveupTask" type="update">
-			update bpm_ru_assignee set handle_state=#{handleState}, claim_time=null, is_chain_last=null where 
+			update bpm_ru_assignee set handle_state=#{handleState, dataType=number}, claim_time=null, is_chain_last=null where 
 			<foreach collection="assigneeList" alias="assignee" open="id in (" separator="," close=")">
 				#{assignee.id, dataType=number}
 			</foreach>

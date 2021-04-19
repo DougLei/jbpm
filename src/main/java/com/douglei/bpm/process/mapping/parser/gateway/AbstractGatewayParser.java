@@ -2,7 +2,6 @@ package com.douglei.bpm.process.mapping.parser.gateway;
 
 import org.dom4j.Element;
 
-import com.douglei.bpm.module.runtime.variable.Scope;
 import com.douglei.bpm.process.mapping.metadata.gateway.AbstractGatewayMetadata;
 import com.douglei.bpm.process.mapping.parser.GeneralParser;
 import com.douglei.bpm.process.mapping.parser.Parser;
@@ -22,34 +21,33 @@ public abstract class AbstractGatewayParser extends GeneralParser implements Par
 				temporaryData.getId(), 
 				element.attributeValue("name"), 
 				element.attributeValue("defaultOutputFlow"),  
-				parseVariableExtend(element.element("variableExtend")),
-				element);
+				parseVariableExtend(element.element("variableExtend")));
 		
 		addListener(metadata, element.element("listeners"));
 		return metadata;
 	}
 
 	// 解析流程变量继承配置, 返回不继承的流程变量范围权值和
-	private int parseVariableExtend(Element element) {
+	private boolean[] parseVariableExtend(Element element) {
 		if(element == null)
-			return 4;
+			return new boolean[] {true, true, true};
 		
-		int unextendScopeWeight = 0;
+		boolean[] variableExtend = new boolean[] {true, true, true};
 		String value = element.attributeValue("global");
 		if(value != null && "false".equalsIgnoreCase(value))
-			unextendScopeWeight += Scope.GLOBAL.getWeight();
+			variableExtend[0] = false;
 		
 		value = element.attributeValue("local");
 		if(value != null || "false".equalsIgnoreCase(value))
-			unextendScopeWeight += Scope.LOCAL.getWeight();
+			variableExtend[1] = false;
 		
 		value = element.attributeValue("transient");
 		if(value != null || "false".equalsIgnoreCase(value))
-			unextendScopeWeight += Scope.TRANSIENT.getWeight();
+			variableExtend[2] = false;
 		
-		return unextendScopeWeight;
+		return variableExtend;
 	}
 	
 	// 创建网关元数据实例
-	protected abstract AbstractGatewayMetadata createGatewayMetadata(String id, String name, String defaultOutputFlowId, int unextendScopeWeight, Element element);
+	protected abstract AbstractGatewayMetadata createGatewayMetadata(String id, String name, String defaultOutputFlowId, boolean[] variableExtend);
 }

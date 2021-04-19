@@ -61,7 +61,7 @@ public class DelegateTaskCmd implements Command {
 		List<Assignee> assigneeList = SessionContext.getSqlSession()
 				.query(Assignee.class, 
 						"select id, group_id, chain_id from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
-						Arrays.asList(entity.getTask().getTaskinstId(), userId, HandleState.CLAIMED.name()));
+						Arrays.asList(entity.getTask().getTaskinstId(), userId, HandleState.CLAIMED.getValue()));
 		if(assigneeList.isEmpty())
 			throw new TaskHandleException(getAssignMode()+"失败, 指定的userId没有["+entity.getName()+"]任务的"+getAssignMode()+"操作权限");
 		
@@ -82,7 +82,7 @@ public class DelegateTaskCmd implements Command {
 		// 进行委托操作
 		// 1. 发起委托的用户, 修改必要的列值
 		Map<String, Object> parameterMap = new HashMap<String, Object>(4);
-		parameterMap.put("handleState", targetHandleState().name());
+		parameterMap.put("handleState", targetHandleState().getValue());
 		parameterMap.put("assigneeList", assigneeList);
 		SessionContext.getSQLSession().executeUpdate("Assignee", "giveupTask", parameterMap);
 			

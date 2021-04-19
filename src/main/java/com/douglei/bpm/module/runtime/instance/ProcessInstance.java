@@ -87,7 +87,9 @@ public class ProcessInstance {
 	public void setStateInstance(State state) {
 		this.state = state;
 	}
-	public int getState() {
+	public Integer getState() {
+		if(state == null)
+			return null;
 		return state.getValue();
 	}
 	public void setState(int state) {

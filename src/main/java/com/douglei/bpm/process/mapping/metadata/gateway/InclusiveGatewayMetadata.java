@@ -8,8 +8,8 @@ import com.douglei.bpm.process.Type;
  */
 public class InclusiveGatewayMetadata extends AbstractGatewayMetadata {
 	
-	public InclusiveGatewayMetadata(String id, String name, String defaultOutputFlowId, int unextendScopeWeight) {
-		super(id, name, defaultOutputFlowId, unextendScopeWeight);
+	public InclusiveGatewayMetadata(String id, String name, String defaultOutputFlowId, boolean[] variableExtend) {
+		super(id, name, defaultOutputFlowId, variableExtend);
 	}
 	
 	@Override

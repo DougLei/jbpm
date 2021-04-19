@@ -23,7 +23,7 @@ public class SuspendProcessCmd extends WakeProcessCmd {
 		if(processInstance.getStateInstance() != State.ACTIVE)
 			return new ExecutionResult("挂起失败, [%s]流程实例未处于[ACTIVE]状态", "jbpm.procinst.suspend.fail.state.error", processInstance.getTitle());
 		
-		SessionContext.getSqlSession().executeUpdate("update bpm_ru_procinst set state=? where id=?", Arrays.asList(State.SUSPENDED.name(), processInstance.getId()));
+		SessionContext.getSqlSession().executeUpdate("update bpm_ru_procinst set state=? where id=?", Arrays.asList(State.SUSPENDED.getValue(), processInstance.getId()));
 		return ExecutionResult.getDefaultSuccessInstance();
 	}
 }

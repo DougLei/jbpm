@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.history.instance.HistoryProcessInstance;
 import com.douglei.bpm.module.history.variable.HistoryVariable;
+import com.douglei.bpm.module.runtime.instance.HistoryProcessInstance;
 import com.douglei.bpm.module.runtime.instance.ProcessInstance;
 import com.douglei.bpm.module.runtime.instance.State;
 import com.douglei.bpm.module.runtime.task.Task;
@@ -67,17 +67,16 @@ public class EndEventHandler extends TaskHandler<EndEventMetadata, AbstractHandl
 	// 结束流程实例
 	private void finishProcessInstance() {
 		// 将实例保存到历史
-		List<Object> procinstId = Arrays.asList(handleParameter.getProcessInstanceId());
-		ProcessInstance processInstance = SessionContext.getTableSession().uniqueQuery(ProcessInstance.class, "select * from bpm_ru_procinst where procinst_id=?", procinstId);
-		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_procinst where procinst_id=?", procinstId);
-		SessionContext.getTableSession().save(new HistoryProcessInstance(processInstance, State.FINISHED));
+		ProcessInstance processInstance = SessionContext.getTableSession().uniqueQuery(ProcessInstance.class, "select * from bpm_ru_procinst where procinst_id=?", Arrays.asList(handleParameter.getProcessInstanceId()));
+		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_procinst where id=?", Arrays.asList(processInstance.getId()));
+		SessionContext.getTableSession().save(new HistoryProcessInstance(processInstance, State.FINISHED, null, null));
 		
-		// 保存流程变量
-		saveVariables();
+		// 调度流程变量
+		dispatchVariable();
 	}
 
-	// 保存流程变量
-	private void saveVariables() {
+	// 调度流程变量
+	private void dispatchVariable() {
 		String processInstanceId = handleParameter.getProcessInstanceId();
 		VariableEntities variableEntities = handleParameter.getVariableEntities();
 		

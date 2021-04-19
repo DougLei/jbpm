@@ -8,7 +8,7 @@
 			<column name="CC_USER_ID" property="ccUserId" dataType="nstring" length="150" nullable="false" />
 			<column name="CC_TIME" property="ccTime" dataType="datetime" nullable="false" />
 			<column name="USER_ID" property="userId" dataType="nstring" length="150" nullable="false" />
-			<column name="VIEW_TIME" property="viewTime" dataType="datetime" nullable="false" />
+			<column name="VIEW_TIME" property="viewTime" dataType="datetime" />
 			<column name="SOURCE_TYPE" property="sourceType" dataType="number" length="1" nullable="false"/>
 		</columns>
 		

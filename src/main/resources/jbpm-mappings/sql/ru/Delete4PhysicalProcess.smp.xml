@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping-configuration>
+	<sql namespace="Delete4PhysicalProcess">
+		
+		<sql-content name="taskIdLoop">
+			where 
+			<foreach collection="tasks" alias="task" open="taskinst_id in (" separator="," close=")">
+				#{task.taskinst_id}
+			</foreach>
+		</sql-content>
+		
+		<!-- 删除所有历史指派信息 -->
+		<content name="deleteHistoryAssignee" type="delete">
+			delete bpm_hi_assignee 
+			<include ref-name="taskIdLoop" />
+		</content>
+		
+		<!-- 删除所有历史调度信息 -->
+		<content name="deleteHistoryDispatch" type="delete">
+			delete bpm_hi_dispatch 
+			<include ref-name="taskIdLoop" />
+		</content>
+		
+		<!-- 删除所有历史抄送信息 -->
+		<content name="deleteHistoryCC" type="delete">
+			delete bpm_hi_cc 
+			<include ref-name="taskIdLoop" />
+		</content>
+		
+	</sql>
+</mapping-configuration>

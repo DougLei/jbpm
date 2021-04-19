@@ -7,6 +7,7 @@ import java.util.List;
 import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.history.SourceType;
 import com.douglei.bpm.module.history.task.HistoryCarbonCopy;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.orm.context.SessionContext;
@@ -38,7 +39,10 @@ public class ViewCarbonCopyCmd implements Command {
 		
 		// 添加到历史表
 		Date viewTime = new Date();
-		list.forEach(cc -> cc.setViewTime(viewTime));
+		list.forEach(cc -> {
+			cc.setViewTime(viewTime);
+			cc.setSourceTypeInstance(SourceType.STANDARD);
+		});
 		SessionContext.getTableSession().save(list);
 		
 		return ExecutionResult.getDefaultSuccessInstance();

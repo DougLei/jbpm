@@ -10,8 +10,8 @@
 			<column name="IS_CHAIN_LAST" property="isChainLast" dataType="number" length="1" />
 			<column name="USER_ID" property="userId" dataType="nstring" length="150" nullable="false" />
 			<column name="REASON" property="reason" dataType="nstring" length="300" />
-			<column name="MODE_" property="mode" dataType="string" length="11" nullable="false" />
-			<column name="HANDLE_STATE" property="handleState" dataType="string" length="19" nullable="false" />
+			<column name="MODE_" property="mode" dataType="number" length="1" nullable="false" />
+			<column name="HANDLE_STATE" property="handleState" dataType="number" length="1" nullable="false" />
 			<column name="CLAIM_TIME" property="claimTime" dataType="datetime" />
 		</columns>
 		

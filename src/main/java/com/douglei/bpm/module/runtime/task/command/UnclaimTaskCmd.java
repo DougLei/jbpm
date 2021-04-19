@@ -38,7 +38,7 @@ public class UnclaimTaskCmd implements Command {
 		List<Assignee> assigneeList = SessionContext.getSqlSession()
 				.query(Assignee.class, 
 						"select id from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
-						Arrays.asList(entity.getTask().getTaskinstId(), userId, HandleState.CLAIMED.name()));
+						Arrays.asList(entity.getTask().getTaskinstId(), userId, HandleState.CLAIMED.getValue()));
 		if(assigneeList.isEmpty())
 			throw new TaskHandleException("取消认领失败, 指定的userId无法取消认领["+entity.getName()+"]任务");
 		
@@ -56,7 +56,7 @@ public class UnclaimTaskCmd implements Command {
 		assigneeList.stream().filter(assignee -> !assignee.isChainFirst()).forEach(assignee -> {
 			SessionContext.getSqlSession().executeUpdate(
 					"update bpm_ru_assignee set handle_state=? where taskinst_id=? and group_id=? and chain_id <? and handle_state=?", 
-					Arrays.asList(HandleState.COMPETITIVE_UNCLAIM.name(), entity.getTask().getTaskinstId(), assignee.getGroupId(), assignee.getChainId(), HandleState.INVALID_UNCLAIM.name()));
+					Arrays.asList(HandleState.COMPETITIVE_UNCLAIM.getValue(), entity.getTask().getTaskinstId(), assignee.getGroupId(), assignee.getChainId(), HandleState.INVALID_UNCLAIM.getValue()));
 		});
 		
 		// 处理task的isAllClaimed字段值, 改为没有全部认领

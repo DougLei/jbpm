@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.douglei.bpm.module.history.SourceType;
 import com.douglei.bpm.module.history.task.HistoryAssignee;
 import com.douglei.bpm.module.runtime.task.HandleState;
 import com.douglei.bpm.process.handler.UserEntity;
@@ -32,13 +33,14 @@ public class AssigneeDispatcher {
 		List<HistoryAssignee> assigneeList = SessionContext.getSqlSession().query(
 				HistoryAssignee.class, 
 				"select * from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
-				Arrays.asList(taskinstId, userEntity.getCurrentHandleUserId(), HandleState.CLAIMED.name()));
+				Arrays.asList(taskinstId, userEntity.getCurrentHandleUserId(), HandleState.CLAIMED.getValue()));
 		
 		// 设置独立的指派信息集合
 		HistoryAssignee historyAssignee = null;
 		for(int i=0;i < assigneeList.size();i++) {
 			historyAssignee = assigneeList.get(i);
 			historyAssignee.finish(userEntity.getAttitude(), userEntity.getSuggest(), currentDate);
+			historyAssignee.setSourceTypeInstance(SourceType.STANDARD);
 			
 			if(historyAssignee.isChainFirst()) {
 				if(chainFirstAssigneeList == null)
@@ -68,7 +70,13 @@ public class AssigneeDispatcher {
 		for (HistoryAssignee assignee : assigneeList) {
 			sqlParameters.set(1, assignee.getGroupId());
 			sqlParameters.set(2, assignee.getChainId());
-			tempList.addAll(SessionContext.getSqlSession().query(HistoryAssignee.class, SQL_QUERY_PARENT_ASSIGNEE_LIST, sqlParameters));
+			
+			List<HistoryAssignee> parents = SessionContext.getSqlSession().query(HistoryAssignee.class, SQL_QUERY_PARENT_ASSIGNEE_LIST, sqlParameters);
+			if(parents.isEmpty())
+				continue;
+			
+			parents.forEach(parent -> parent.setSourceTypeInstance(SourceType.STANDARD));
+			tempList.addAll(parents);
 		}
 		assigneeList.addAll(tempList);
 	}

@@ -5,20 +5,34 @@ package com.douglei.bpm.module.runtime.variable;
  * @author DougLei
  */
 public enum Scope {
-	GLOBAL(5),
-	LOCAL(3),
-	TRANSIENT(1);
+	GLOBAL(1),
+	LOCAL(2),
+	TRANSIENT(3);
 	
-	private int weight; // 权值
-	private String prefix; // 前缀
-	private Scope(int weight) {
-		this.weight = weight;
-		this.prefix = name().toLowerCase()+".";
+	// ---------------------------------------------------------------
+	private int value; // 
+	private Scope(int value) {
+		this.value = value;
 	}
-	public int getWeight() {
-		return weight;
+	
+	/**
+	 * 获取标识值
+	 * @return
+	 */
+	public int getValue() {
+		return value;
 	}
-	public String getPrefix() {
-		return prefix;
+	
+	/**
+	 * 根据标识值获取Scope实例
+	 * @param value
+	 * @return
+	 */
+	public static Scope valueOf(int value) {
+		for (Scope scope : Scope.values()) {
+			if(scope.value == value)
+				return scope;
+		}
+		throw new IllegalArgumentException("不存在value为["+value+"]的Scope Enum");
 	}
 }

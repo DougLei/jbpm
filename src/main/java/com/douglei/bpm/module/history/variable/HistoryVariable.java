@@ -14,9 +14,12 @@ public class HistoryVariable extends Variable{
 	public HistoryVariable() {}
 	public HistoryVariable(String procinstId, String taskinstId, VariableEntity variableEntity) {
 		super(procinstId, taskinstId, variableEntity);
+		this.sourceType = SourceType.STANDARD;
 	}
 	
-	public int getSourceType() {
+	public Integer getSourceType() {
+		if(sourceType == null)
+			return null;
 		return sourceType.getValue();
 	}
 	public void setSourceType(int sourceType) {

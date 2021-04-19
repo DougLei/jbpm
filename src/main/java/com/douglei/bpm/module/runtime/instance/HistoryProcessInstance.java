@@ -1,4 +1,4 @@
-package com.douglei.bpm.module.history.instance;
+package com.douglei.bpm.module.runtime.instance;
 
 import java.util.Date;
 
@@ -16,9 +16,6 @@ public class HistoryProcessInstance extends ProcessInstance{
 	private Date endTime;
 	
 	public HistoryProcessInstance() {}
-	public HistoryProcessInstance(ProcessInstance processInstance, State state) {
-		this(processInstance, state, null, null);
-	}
 	public HistoryProcessInstance(ProcessInstance processInstance, State state, String userId, String reason) {
 		PropertyValueCopier.copy(processInstance, this);
 		this.state = state;

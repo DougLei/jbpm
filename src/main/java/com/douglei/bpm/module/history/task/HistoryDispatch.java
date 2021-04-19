@@ -19,7 +19,9 @@ public class HistoryDispatch extends Dispatch{
 	public void setDispatchTime(Date dispatchTime) {
 		this.dispatchTime = dispatchTime;
 	}
-	public int getSourceType() {
+	public Integer getSourceType() {
+		if(sourceType == null)
+			return null;
 		return sourceType.getValue();
 	}
 	public void setSourceType(int sourceType) {

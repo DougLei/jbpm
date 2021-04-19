@@ -91,10 +91,12 @@ public class Variable {
 	public void setScopeInstance(Scope scope) {
 		this.scope = scope;
 	}
-	public String getScope() {
-		return scope.name();
+	public Integer getScope() {
+		if(scope == null)
+			return null;
+		return scope.getValue();
 	}
-	public void setScope(String scope) {
+	public void setScope(int scope) {
 		this.scope = Scope.valueOf(scope);
 	}
 	public String getName() {
@@ -109,10 +111,12 @@ public class Variable {
 	public void setDataTypeInstance(DataType dataType) {
 		this.dataType = dataType;
 	}
-	public String getDataType() {
-		return dataType.name();
+	public Integer getDataType() {
+		if(dataType == null)
+			return null;
+		return dataType.getValue();
 	}
-	public void setDataType(String dataType) {
+	public void setDataType(int dataType) {
 		this.dataType = DataType.valueOf(dataType);
 	}
 	public String getStringVal() {

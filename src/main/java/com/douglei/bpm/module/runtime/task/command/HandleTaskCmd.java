@@ -83,7 +83,7 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 		List<Assignee> claimedAssigneeList = SessionContext.getSqlSession()
 				.query(Assignee.class, 
 						"select user_id, claim_time from bpm_ru_assignee where taskinst_id=? and handle_state=?", 
-						Arrays.asList(entity.getTask().getTaskinstId(), HandleState.CLAIMED.name()));
+						Arrays.asList(entity.getTask().getTaskinstId(), HandleState.CLAIMED.getValue()));
 		
 		int count = 0; // 记录是否全部是当前用户的指派信息
 		for (Assignee assignee : claimedAssigneeList) {

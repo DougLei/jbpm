@@ -10,7 +10,7 @@ import com.douglei.bpm.module.runtime.task.HandleState;
  * 
  * @author DougLei
  */
-public class HistoryAssignee extends Assignee{
+public class HistoryAssignee extends Assignee {
 	private Attitude attitude;
 	private String suggest;
 	private Date finishTime;
@@ -26,7 +26,7 @@ public class HistoryAssignee extends Assignee{
 		this.attitude = attitude;
 		this.suggest = suggest;
 		this.finishTime = finishTime;
-		super.handleState = HandleState.FINISHED;
+		this.handleState = HandleState.FINISHED;
 	}
 	
 	public Attitude getAttitudeInstance() {
@@ -57,7 +57,9 @@ public class HistoryAssignee extends Assignee{
 	public void setFinishTime(Date finishTime) {
 		this.finishTime = finishTime;
 	}
-	public int getSourceType() {
+	public Integer getSourceType() {
+		if(sourceType == null)
+			return null;
 		return sourceType.getValue();
 	}
 	public void setSourceType(int sourceType) {

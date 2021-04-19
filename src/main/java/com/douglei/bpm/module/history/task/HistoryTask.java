@@ -19,10 +19,12 @@ public class HistoryTask extends Task{
 	public HistoryTask(int procdefId, String procinstId, String parentTaskinstId, String sourceKey, TaskMetadata taskMetadata) {
 		super(procdefId, procinstId, parentTaskinstId, sourceKey, taskMetadata);
 		this.endTime = this.startTime;
+		this.sourceType = SourceType.STANDARD;
 	}
 	public HistoryTask(Task task) {
 		PropertyValueCopier.copy(task, this);
 		this.endTime = new Date();
+		this.sourceType = SourceType.STANDARD;
 	}
 	
 	public Date getEndTime() {
@@ -31,7 +33,9 @@ public class HistoryTask extends Task{
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
-	public int getSourceType() {
+	public Integer getSourceType() {
+		if(sourceType == null)
+			return null;
 		return sourceType.getValue();
 	}
 	public void setSourceType(int sourceType) {

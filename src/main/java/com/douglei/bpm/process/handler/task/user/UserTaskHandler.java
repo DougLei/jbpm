@@ -86,7 +86,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralTaskHa
 		// 查询当前任务, 剩余已经认领的指派信息数量
 		int leftClaimedAssigneeCount = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(
 				"select count(id) from bpm_ru_assignee where taskinst_id=? and handle_state=?", 
-				Arrays.asList(currentTask.getTaskinstId(), HandleState.CLAIMED.name()))[0].toString());
+				Arrays.asList(currentTask.getTaskinstId(), HandleState.CLAIMED.getValue()))[0].toString());
 		return new FinishedFlag(leftClaimedAssigneeCount == 0, -1);
 	}
 	

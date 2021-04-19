@@ -4,10 +4,16 @@ import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.CommandExecutor;
 import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.runtime.instance.command.ActivateProcessCmd;
+import com.douglei.bpm.module.runtime.instance.command.Delete4PhysicalProcessCmd;
+import com.douglei.bpm.module.runtime.instance.command.DeleteProcessCmd;
+import com.douglei.bpm.module.runtime.instance.command.RecoveryProcessCmd;
 import com.douglei.bpm.module.runtime.instance.command.StartProcessCmd;
 import com.douglei.bpm.module.runtime.instance.command.SuspendProcessCmd;
 import com.douglei.bpm.module.runtime.instance.command.TerminateProcessCmd;
+import com.douglei.bpm.module.runtime.instance.command.UndoDeleteProcessCmd;
 import com.douglei.bpm.module.runtime.instance.command.WakeProcessCmd;
+import com.douglei.bpm.module.runtime.instance.command.parameter.ActivateParameter;
 import com.douglei.bpm.module.runtime.instance.command.parameter.StartParameter;
 import com.douglei.orm.context.Transaction;
 
@@ -95,8 +101,8 @@ public class ProcessInstanceService {
 	 */
 	@Transaction
 	public ExecutionResult delete(int id) {
-		// TODO 
-		return ExecutionResult.getDefaultSuccessInstance();
+		HistoryProcessInstanceEntity entity = new HistoryProcessInstanceEntity(id);
+		return commandExecutor.execute(new DeleteProcessCmd(entity));
 	}
 	/**
 	 * 删除指定id的流程实例
@@ -105,8 +111,8 @@ public class ProcessInstanceService {
 	 */
 	@Transaction
 	public ExecutionResult delete(String procinstId) {
-		// TODO 
-		return ExecutionResult.getDefaultSuccessInstance();
+		HistoryProcessInstanceEntity entity = new HistoryProcessInstanceEntity(procinstId);
+		return commandExecutor.execute(new DeleteProcessCmd(entity));
 	}
 	
 	/**
@@ -116,8 +122,8 @@ public class ProcessInstanceService {
 	 */
 	@Transaction
 	public ExecutionResult undoDelete(int id) {
-		// TODO 
-		return ExecutionResult.getDefaultSuccessInstance();
+		HistoryProcessInstanceEntity entity = new HistoryProcessInstanceEntity(id);
+		return commandExecutor.execute(new UndoDeleteProcessCmd(entity));
 	}
 	/**
 	 * 撤销删除指定id的流程实例
@@ -126,8 +132,8 @@ public class ProcessInstanceService {
 	 */
 	@Transaction
 	public ExecutionResult undoDelete(String procinstId) {
-		// TODO 
-		return ExecutionResult.getDefaultSuccessInstance();
+		HistoryProcessInstanceEntity entity = new HistoryProcessInstanceEntity(procinstId);
+		return commandExecutor.execute(new UndoDeleteProcessCmd(entity));
 	}
 	
 	/**
@@ -137,8 +143,8 @@ public class ProcessInstanceService {
 	 */
 	@Transaction
 	public ExecutionResult delete4Physical(int id) {
-		// TODO 
-		return ExecutionResult.getDefaultSuccessInstance();
+		HistoryProcessInstanceEntity entity = new HistoryProcessInstanceEntity(id);
+		return commandExecutor.execute(new Delete4PhysicalProcessCmd(entity));
 	}
 	/**
 	 * 物理删除指定id的流程实例
@@ -147,72 +153,57 @@ public class ProcessInstanceService {
 	 */
 	@Transaction
 	public ExecutionResult delete4Physical(String procinstId) {
-		// TODO 
-		return ExecutionResult.getDefaultSuccessInstance();
-	}
-	
-	/**
-	 * 重置指定id的流程实例
-	 * @param id
-	 * @return
-	 */
-	@Transaction
-	public ExecutionResult reset(int id) {
-		// TODO 
-		return ExecutionResult.getDefaultSuccessInstance();
-	}
-	/**
-	 * 重置指定id的流程实例
-	 * @param procinstId
-	 * @return
-	 */
-	@Transaction
-	public ExecutionResult reset(String procinstId) {
-		// TODO 
-		return ExecutionResult.getDefaultSuccessInstance();
+		HistoryProcessInstanceEntity entity = new HistoryProcessInstanceEntity(procinstId);
+		return commandExecutor.execute(new Delete4PhysicalProcessCmd(entity));
 	}
 	
 	/**
 	 * 恢复指定id的流程实例(从终止状态到运行状态)
 	 * @param id
+	 * @param active 是否直接恢复为活动状态
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult recovery(int id) {
-		// TODO 
-		return ExecutionResult.getDefaultSuccessInstance();
+	public ExecutionResult recovery(int id, boolean active) {
+		HistoryProcessInstanceEntity entity = new HistoryProcessInstanceEntity(id);
+		return commandExecutor.execute(new RecoveryProcessCmd(entity, active));
 	}
 	/**
 	 * 恢复指定id的流程实例(从终止状态到运行状态)
 	 * @param procinstId
+	 * @param active 是否直接恢复为活动状态
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult recovery(String procinstId) {
-		// TODO 
-		return ExecutionResult.getDefaultSuccessInstance();
+	public ExecutionResult recovery(String procinstId, boolean active) {
+		HistoryProcessInstanceEntity entity = new HistoryProcessInstanceEntity(procinstId);
+		return commandExecutor.execute(new RecoveryProcessCmd(entity, active));
 	} 
 	
 	/**
 	 * 激活指定id的流程实例(从完成状态到运行状态)
 	 * @param id
+	 * @param parameter
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult activate(int id) {
-		// TODO 
-		return ExecutionResult.getDefaultSuccessInstance();
+	public ExecutionResult activate(int id, ActivateParameter parameter) {
+		HistoryProcessInstanceEntity entity = new HistoryProcessInstanceEntity(id);
+		return commandExecutor.execute(new ActivateProcessCmd(entity, parameter));
 	}
 	/**
 	 * 激活指定id的流程实例(从完成状态到运行状态)
 	 * @param procinstId
+	 * @param parameter
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult activate(String procinstId) {
-		// TODO 
-		return ExecutionResult.getDefaultSuccessInstance();
+	public ExecutionResult activate(String procinstId, ActivateParameter parameter) {
+		HistoryProcessInstanceEntity entity = new HistoryProcessInstanceEntity(procinstId);
+		return commandExecutor.execute(new ActivateProcessCmd(entity, parameter));
 	}
+	
+	
 	
 	/**
 	 * 处理指定id的流程定义, 相关的所有运行实例

@@ -7,14 +7,14 @@ import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
  * @author DougLei
  */
 public abstract class AbstractGatewayMetadata extends TaskMetadata {
-	private int unextendScopeWeight; // 不继承的流程变量范围权值和
+	private boolean[] variableExtend; // 流程变量继承范围
 	
-	protected AbstractGatewayMetadata(String id, String name, String defaultOutputFlowId, int unextendScopeWeight) {
+	protected AbstractGatewayMetadata(String id, String name, String defaultOutputFlowId, boolean[] variableExtend) {
 		super(id, name, defaultOutputFlowId);
-		this.unextendScopeWeight = unextendScopeWeight;
+		this.variableExtend = variableExtend;
 	}
-	
-	public final int getUnextendScopeWeight() {
-		return unextendScopeWeight;
+
+	public boolean[] getVariableExtend() {
+		return variableExtend;
 	}
 }

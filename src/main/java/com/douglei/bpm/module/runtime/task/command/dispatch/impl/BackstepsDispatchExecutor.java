@@ -71,7 +71,7 @@ public class BackstepsDispatchExecutor extends DispatchExecutor {
 
 	// 设置指派的用户id集合
 	private void setAssignedUsers(TaskEntity targetTask) {
-		List<Object[]> list = SessionContext.getSqlSession().query_("select distinct user_id from bpm_hi_assignee where taskinst_id=? and handle_state=?", Arrays.asList(targetTask.getTaskinstId(), HandleState.FINISHED.name()));
+		List<Object[]> list = SessionContext.getSqlSession().query_("select distinct user_id from bpm_hi_assignee where taskinst_id=? and handle_state=?", Arrays.asList(targetTask.getTaskinstId(), HandleState.FINISHED.getValue()));
 		if(list.isEmpty())
 			return;
 		

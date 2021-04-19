@@ -2,22 +2,46 @@ package com.douglei.bpm.module.runtime.variable;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * 变量的数据类型
  * @author DougLei
  */
 public enum DataType {
-	STRING(String.class, StringBuilder.class, char.class, StringBuffer.class, Character.class),
-	NUMBER(byte.class, short.class, int.class, long.class, double.class, float.class, Byte.class, Short.class, Integer.class, Long.class, Double.class, Float.class, BigDecimal.class),
-	DATETIME(Date.class, java.sql.Date.class, Timestamp.class),
-	OBJECT;
+	STRING(1, String.class, StringBuilder.class, char.class, StringBuffer.class, Character.class),
+	NUMBER(2, byte.class, short.class, int.class, long.class, double.class, float.class, Byte.class, Short.class, Integer.class, Long.class, Double.class, Float.class, BigDecimal.class),
+	DATETIME(3, Date.class, java.sql.Date.class, Timestamp.class),
+	OBJECT(4);
 	
+	// ---------------------------------------------------------------
+	private int value;
 	private Class<?>[] supportClasses;
-	private DataType(Class<?>... supportClasses) {
+	private DataType(int value, Class<?>... supportClasses) {
+		this.value = value;
 		this.supportClasses = supportClasses;
+	}
+	
+	/**
+	 * 获取标识值
+	 * @return
+	 */
+	public int getValue() {
+		return value;
+	}
+	
+	/**
+	 * 根据标识值获取DataType实例
+	 * @param value
+	 * @return
+	 */
+	public static DataType valueOf(int value) {
+		for (DataType dt : DataType.values()) {
+			if(dt.value == value)
+				return dt;
+		}
+		throw new IllegalArgumentException("不存在value为["+value+"]的DataType Enum");
 	}
 	
 	/**

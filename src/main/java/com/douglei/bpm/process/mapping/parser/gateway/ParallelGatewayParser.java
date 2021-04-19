@@ -1,7 +1,5 @@
 package com.douglei.bpm.process.mapping.parser.gateway;
 
-import org.dom4j.Element;
-
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.mapping.metadata.gateway.ParallelGatewayMetadata;
@@ -15,8 +13,8 @@ import com.douglei.bpm.process.mapping.parser.Parser;
 public class ParallelGatewayParser extends AbstractGatewayParser {
 
 	@Override
-	protected ParallelGatewayMetadata createGatewayMetadata(String id, String name, String defaultOutputFlowId, int unextendScopeWeight, Element element) {
-		return new ParallelGatewayMetadata(id, name, defaultOutputFlowId, unextendScopeWeight);
+	protected ParallelGatewayMetadata createGatewayMetadata(String id, String name, String defaultOutputFlowId, boolean[] variableExtend) {
+		return new ParallelGatewayMetadata(id, name, defaultOutputFlowId, variableExtend);
 	}
 
 	@Override

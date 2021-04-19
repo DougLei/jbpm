@@ -1,7 +1,7 @@
 package com.douglei.bpm.process.handler;
 
-import com.douglei.bpm.module.runtime.variable.DataType;
-import com.douglei.bpm.module.runtime.variable.Scope;
+import com.douglei.bpm.module.execution.variable.DataType;
+import com.douglei.bpm.module.execution.variable.Scope;
 
 /**
  * 流程变量

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.runtime.task.HandleState;
-import com.douglei.bpm.module.runtime.task.Task;
+import com.douglei.bpm.module.Result;
+import com.douglei.bpm.module.execution.task.HandleState;
+import com.douglei.bpm.module.execution.task.runtime.Task;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.DispatchPolicy;
 import com.douglei.bpm.process.handler.GeneralTaskHandleParameter;
@@ -22,10 +22,10 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralTaskHandleParameter> {
-	private final static ExecutionResult CAN_DISPATCH = new ExecutionResult(true);
+	private final static Result CAN_DISPATCH = new Result(true);
 
 	@Override
-	public ExecutionResult startup() {
+	public Result startup() {
 		// 创建当前用户任务
 		Task task = createTask(false);
 		if(currentTaskMetadataEntity.getTaskMetadata().getTimeLimit() != null)
@@ -38,11 +38,11 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralTaskHa
 		// 保存当前用户任务
 		SessionContext.getTableSession().save(task);
 		
-		return ExecutionResult.getDefaultSuccessInstance();
+		return Result.getDefaultSuccessInstance();
 	}
 	
 	@Override
-	public ExecutionResult handle() {
+	public Result handle() {
 		// 更新businessId
 		Task currentTask = handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask();
 		currentTask.addBusinessId(handleParameter.getBusinessId());

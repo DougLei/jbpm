@@ -3,7 +3,7 @@ package com.douglei.bpm.module.repository.suggest;
 import java.util.Arrays;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.Result;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.Transaction;
 
@@ -20,9 +20,9 @@ public class SuggestService {
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult insert(Suggest suggest) {
+	public Result insert(Suggest suggest) {
 		SessionContext.getTableSession().save(suggest);
-		return ExecutionResult.getDefaultSuccessInstance();
+		return Result.getDefaultSuccessInstance();
 	}
 	
 	/**
@@ -31,9 +31,9 @@ public class SuggestService {
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult update(Suggest suggest) {
+	public Result update(Suggest suggest) {
 		SessionContext.getTableSession().update(suggest);
-		return ExecutionResult.getDefaultSuccessInstance();
+		return Result.getDefaultSuccessInstance();
 	}
 	
 	/**
@@ -42,9 +42,9 @@ public class SuggestService {
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult delete(int suggestId) {
+	public Result delete(int suggestId) {
 		SessionContext.getSqlSession().executeUpdate("delete bpm_re_suggest where id=?", Arrays.asList(suggestId));
-		return ExecutionResult.getDefaultSuccessInstance();
+		return Result.getDefaultSuccessInstance();
 	}
 	
 	/**
@@ -54,13 +54,13 @@ public class SuggestService {
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult deleteByUserId(String userId, String tenantId) {
+	public Result deleteByUserId(String userId, String tenantId) {
 		if(tenantId == null)
 			SessionContext.getSqlSession().executeUpdate("delete bpm_re_suggest where user_id=?", Arrays.asList(userId));
 		else
 			SessionContext.getSqlSession().executeUpdate("delete bpm_re_suggest where user_id=? and tenant_id=?", Arrays.asList(userId, tenantId));
 		
-		return ExecutionResult.getDefaultSuccessInstance();
+		return Result.getDefaultSuccessInstance();
 	}
 	
 
@@ -70,8 +70,8 @@ public class SuggestService {
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult deleteByTenantId(String tenantId) {
+	public Result deleteByTenantId(String tenantId) {
 		SessionContext.getSqlSession().executeUpdate("delete bpm_re_suggest where tenant_id=?", Arrays.asList(tenantId));
-		return ExecutionResult.getDefaultSuccessInstance();
+		return Result.getDefaultSuccessInstance();
 	}
 }

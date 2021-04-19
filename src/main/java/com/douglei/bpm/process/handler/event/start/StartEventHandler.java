@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
-import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.history.task.HistoryTask;
-import com.douglei.bpm.module.history.variable.HistoryVariable;
-import com.douglei.bpm.module.runtime.instance.ProcessInstance;
-import com.douglei.bpm.module.runtime.instance.State;
-import com.douglei.bpm.module.runtime.variable.Variable;
+import com.douglei.bpm.module.Result;
+import com.douglei.bpm.module.execution.instance.State;
+import com.douglei.bpm.module.execution.instance.runtime.ProcessInstance;
+import com.douglei.bpm.module.execution.task.history.HistoryTask;
+import com.douglei.bpm.module.execution.variable.history.HistoryVariable;
+import com.douglei.bpm.module.execution.variable.runtime.Variable;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.VariableEntities;
 import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
@@ -25,18 +25,18 @@ import com.douglei.tools.OgnlUtil;
 public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEventHandleParameter> {
 
 	@Override
-	public ExecutionResult startup() {
+	public Result startup() {
 		String conditionExpression = currentTaskMetadataEntity.getTaskMetadata().getConditionExpression();
 		if(conditionExpression != null) {
 			Map<String, Object> variableMap = handleParameter.getVariableEntities().getVariableMap();
 			if(variableMap == null || !OgnlUtil.getBooleanValue(conditionExpression, variableMap))
-				return new ExecutionResult("启动失败, 当前参数不满足[%s]流程的启动条件", "jbpm.process.start.fail.condition.mismatch", handleParameter.getProcessMetadata().getName());
+				return new Result("启动失败, 当前参数不满足[%s]流程的启动条件", "jbpm.process.start.fail.condition.mismatch", handleParameter.getProcessMetadata().getName());
 		}
 		return handle();
 	}
 	
 	@Override
-	public ExecutionResult handle() {
+	public Result handle() {
 		// 创建流程实例
 		ProcessInstance processInstance = createProcessInstance();
 		
@@ -49,7 +49,7 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		
 		// 进行任务调度
 		processEngineBeans.getTaskHandleUtil().dispatch(currentTaskMetadataEntity, handleParameter);
-		return new ExecutionResult(processInstance);
+		return new Result(processInstance);
 	}
 	
 	// 创建流程实例

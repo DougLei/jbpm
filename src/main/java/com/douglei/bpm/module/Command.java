@@ -13,5 +13,5 @@ public interface Command {
 	 * @param processEngineBeans
 	 * @return
 	 */
-	ExecutionResult execute(ProcessEngineBeans processEngineBeans);
+	Result execute(ProcessEngineBeans processEngineBeans);
 }

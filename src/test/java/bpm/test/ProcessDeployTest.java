@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
-import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.Result;
 import com.douglei.bpm.module.repository.definition.ClasspathFile;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
 import com.douglei.bpm.module.repository.definition.ProcessDefinitionEntity;
@@ -23,7 +23,7 @@ public class ProcessDeployTest {
 	public void insert() throws ProcessParseException {
 		ProcessDefinitionEntity builder = new ProcessDefinitionEntity(new ClasspathFile("test.bpm.xml"));
 		builder.setTypeId(2);
-		ExecutionResult result = engine.getRepositoryModule().getDefinitionService().insert(builder);
+		Result result = engine.getRepositoryModule().getDefinitionService().insert(builder);
 		if(result.isSuccess())
 			System.out.println("插入成功一条流程定义信息, 其id为: "+ ((ProcessDefinition)result.getObject()).getId());
 		else
@@ -33,7 +33,7 @@ public class ProcessDeployTest {
 	@Test
 	public void deploy() throws ProcessParseException {
 		int processDefinitionId= 1;
-		ExecutionResult result = engine.getRepositoryModule().getDefinitionService().deploy(processDefinitionId);
+		Result result = engine.getRepositoryModule().getDefinitionService().deploy(processDefinitionId);
 		if(result.isSuccess())
 			System.out.println("id为["+processDefinitionId+"]的流程定义信息部署成功");
 		else

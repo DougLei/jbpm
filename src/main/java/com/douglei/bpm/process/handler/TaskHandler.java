@@ -1,9 +1,9 @@
 package com.douglei.bpm.process.handler;
 
 import com.douglei.bpm.ProcessEngineBeans;
-import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.history.task.HistoryTask;
-import com.douglei.bpm.module.runtime.task.Task;
+import com.douglei.bpm.module.Result;
+import com.douglei.bpm.module.execution.task.history.HistoryTask;
+import com.douglei.bpm.module.execution.task.runtime.Task;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadataEntity;
 
@@ -88,11 +88,11 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends AbstractHa
 	 * 启动任务
 	 * @return 
 	 */
-	public abstract ExecutionResult startup();
+	public abstract Result startup();
 	
 	/**
 	 * 办理任务
 	 * @return 返回对象的success=true时, 其Object属性为boolean类型, 标识当前用户是否可以进行调度操作
 	 */
-	public abstract ExecutionResult handle();
+	public abstract Result handle();
 }

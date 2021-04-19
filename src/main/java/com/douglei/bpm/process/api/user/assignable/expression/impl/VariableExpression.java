@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.runtime.variable.Scope;
-import com.douglei.bpm.module.runtime.variable.Variable;
+import com.douglei.bpm.module.execution.variable.Scope;
+import com.douglei.bpm.module.execution.variable.runtime.Variable;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpression;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpressionParameter;
 import com.douglei.orm.context.SessionContext;

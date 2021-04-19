@@ -3,7 +3,7 @@ package com.douglei.bpm.process.api.user.task.handle.policy;
 import java.util.List;
 
 import com.douglei.bpm.bean.annotation.MultiInstance;
-import com.douglei.bpm.module.runtime.task.Assignee;
+import com.douglei.bpm.module.execution.task.runtime.Assignee;
 
 /**
  * 串行办理的策略

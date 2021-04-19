@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.douglei.bpm.bean.annotation.MultiInstance;
-import com.douglei.bpm.module.runtime.task.Assignee;
+import com.douglei.bpm.module.execution.task.runtime.Assignee;
 
 /**
  * 任务认领策略

@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.douglei.bpm.module.history.SourceType;
-import com.douglei.bpm.module.history.task.HistoryAssignee;
-import com.douglei.bpm.module.runtime.task.HandleState;
+import com.douglei.bpm.module.execution.SourceType;
+import com.douglei.bpm.module.execution.task.HandleState;
+import com.douglei.bpm.module.execution.task.history.HistoryAssignee;
 import com.douglei.bpm.process.handler.UserEntity;
 import com.douglei.orm.context.SessionContext;
 

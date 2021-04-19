@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.history.variable.HistoryVariable;
-import com.douglei.bpm.module.runtime.instance.HistoryProcessInstance;
-import com.douglei.bpm.module.runtime.instance.ProcessInstance;
-import com.douglei.bpm.module.runtime.instance.State;
-import com.douglei.bpm.module.runtime.task.Task;
+import com.douglei.bpm.module.Result;
+import com.douglei.bpm.module.execution.instance.State;
+import com.douglei.bpm.module.execution.instance.history.HistoryProcessInstance;
+import com.douglei.bpm.module.execution.instance.runtime.ProcessInstance;
+import com.douglei.bpm.module.execution.task.runtime.Task;
+import com.douglei.bpm.module.execution.variable.history.HistoryVariable;
 import com.douglei.bpm.process.handler.AbstractHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.VariableEntities;
@@ -24,15 +24,15 @@ import com.douglei.orm.context.SessionContext;
 public class EndEventHandler extends TaskHandler<EndEventMetadata, AbstractHandleParameter> {
 	
 	@Override
-	public ExecutionResult startup() {
+	public Result startup() {
 		Task joinTask = new ParallelTaskHandler(currentTaskMetadataEntity, handleParameter.getTaskEntityHandler().getPreviousTaskEntity()).join();
 		if(joinTask != null) 
 			end(joinTask);
-		return ExecutionResult.getDefaultSuccessInstance();
+		return Result.getDefaultSuccessInstance();
 	}
 	
 	@Override
-	public ExecutionResult handle() {
+	public Result handle() {
 		Task task = handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask();
 		task.setUserId(handleParameter.getUserEntity().getCurrentHandleUserId());
 		task.setReason(handleParameter.getUserEntity().getReason());

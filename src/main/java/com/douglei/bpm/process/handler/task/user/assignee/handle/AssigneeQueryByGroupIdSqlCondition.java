@@ -3,7 +3,7 @@ package com.douglei.bpm.process.handler.task.user.assignee.handle;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.douglei.bpm.module.runtime.task.Assignee;
+import com.douglei.bpm.module.execution.task.runtime.Assignee;
 
 /**
  * 根据groupId查询指派信息的sql条件类

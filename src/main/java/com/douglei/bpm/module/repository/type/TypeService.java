@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.Result;
 import com.douglei.bpm.module.repository.RepositoryException;
 import com.douglei.orm.context.SessionContext;
 import com.douglei.orm.context.Transaction;
@@ -26,11 +26,11 @@ public class TypeService {
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult insert(Type type) {
+	public Result insert(Type type) {
 		boolean parentIdExists = type.getParentId()==0; // 是否存在parentId
 		for (Type pt : SessionContext.getSQLSession().query(Type.class, "Type", "query4Insert", type)) {
 			if(pt.getCode().equals(type.getCode()))
-				return new ExecutionResult("已存在编码为[%s]的流程类型", "jbpm.type.fail.code.exists", type.getCode());
+				return new Result("已存在编码为[%s]的流程类型", "jbpm.type.fail.code.exists", type.getCode());
 			
 			if(pt.getId() == type.getParentId())
 				parentIdExists = true;
@@ -39,7 +39,7 @@ public class TypeService {
 			throw new RepositoryException("保存失败, 不存在id为["+type.getParentId()+"]的父流程类型");
 		
 		SessionContext.getTableSession().save(type);
-		return ExecutionResult.getDefaultSuccessInstance();
+		return Result.getDefaultSuccessInstance();
 	}
 	
 	
@@ -49,13 +49,13 @@ public class TypeService {
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult update(Type type) {
+	public Result update(Type type) {
 		Type old = SessionContext.getSqlSession().uniqueQuery(Type.class, "select id, parent_id, code from bpm_re_proctype where id=?", Arrays.asList(type.getId()));
 		if(old == null)
 			throw new RepositoryException("修改失败, 不存在id为["+type.getId()+"]的流程类型");
 		
 		if(!type.getCode().equals(old.getCode()) && SessionContext.getSQLSession().uniqueQuery_("Type", "query4Update", type) != null)
-			return new ExecutionResult("已存在编码为[%s]的流程类型", "jbpm.type.fail.code.exists", type.getCode());
+			return new Result("已存在编码为[%s]的流程类型", "jbpm.type.fail.code.exists", type.getCode());
 		
 		// 验证parentId是否合法
 		if(type.getParentId() != 0 && type.getParentId() != old.getParentId()) {
@@ -65,7 +65,7 @@ public class TypeService {
 		}
 		
 		SessionContext.getTableSession().update(type);
-		return ExecutionResult.getDefaultSuccessInstance();
+		return Result.getDefaultSuccessInstance();
 	}
 	// 递归验证父流程类型
 	private void recursiveValidateParent(int parentId, HashSet<Integer> counter) {
@@ -89,18 +89,18 @@ public class TypeService {
 	 * @return
 	 */
 	@Transaction
-	public ExecutionResult delete(int typeId, boolean strict) {
+	public Result delete(int typeId, boolean strict) {
 		List<Object[]> list = SessionContext.getSQLSession().query_("Type", "query4Delete", typeId);
 		if(list.size() == 2)
 			throw new RepositoryException("删除失败, 不存在id为["+typeId+"]的流程类型");
 		
 		int childrenCount = Integer.parseInt(list.get(0)[0].toString());
 		if(childrenCount > 0 && !strict)
-			return new ExecutionResult("该流程类型下存在子类型, 无法删除", "jbpm.type.fail.children.exists");
+			return new Result("该流程类型下存在子类型, 无法删除", "jbpm.type.fail.children.exists");
 		
 		int refProessCount = Integer.parseInt(list.get(1)[0].toString());
 		if(refProessCount > 0 && !strict)
-			return new ExecutionResult("该流程类型关联了[%d]条流程定义, 无法删除", "jbpm.type.fail.ref.procdef", refProessCount);
+			return new Result("该流程类型关联了[%d]条流程定义, 无法删除", "jbpm.type.fail.ref.procdef", refProessCount);
 		
 		List<Object> ids = new ArrayList<Object>();
 		ids.add(typeId);
@@ -119,7 +119,7 @@ public class TypeService {
 		
 		// 删除类型
 		SessionContext.getSQLSession().executeUpdate("Type", "deleteType", ids); 
-		return ExecutionResult.getDefaultSuccessInstance();
+		return Result.getDefaultSuccessInstance();
 	}
 	// 递归查询子类型的id
 	private void recursiveQueryChildrenIds(List<Object[]> childrenIds, List<Object> ids) {

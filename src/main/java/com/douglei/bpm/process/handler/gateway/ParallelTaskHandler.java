@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.douglei.bpm.module.runtime.task.Task;
+import com.douglei.bpm.module.execution.task.runtime.Task;
 import com.douglei.bpm.process.handler.AbstractTaskHandler;
 import com.douglei.bpm.process.handler.TaskEntity;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;

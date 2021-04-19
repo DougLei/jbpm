@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.douglei.bpm.module.runtime.task.AssignMode;
-import com.douglei.bpm.module.runtime.task.Assignee;
-import com.douglei.bpm.module.runtime.task.HandleState;
+import com.douglei.bpm.module.execution.task.AssignMode;
+import com.douglei.bpm.module.execution.task.HandleState;
+import com.douglei.bpm.module.execution.task.runtime.Assignee;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.orm.context.SessionContext;
 

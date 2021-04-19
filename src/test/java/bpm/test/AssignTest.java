@@ -5,14 +5,14 @@ import org.junit.Test;
 
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
-import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.history.task.Attitude;
+import com.douglei.bpm.module.Result;
+import com.douglei.bpm.module.execution.instance.command.parameter.StartParameter;
+import com.douglei.bpm.module.execution.instance.runtime.ProcessInstance;
+import com.douglei.bpm.module.execution.task.command.parameter.HandleTaskParameter;
+import com.douglei.bpm.module.execution.task.history.Attitude;
 import com.douglei.bpm.module.repository.definition.ClasspathFile;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
 import com.douglei.bpm.module.repository.definition.ProcessDefinitionEntity;
-import com.douglei.bpm.module.runtime.instance.ProcessInstance;
-import com.douglei.bpm.module.runtime.instance.command.parameter.StartParameter;
-import com.douglei.bpm.module.runtime.task.command.parameter.HandleTaskParameter;
 import com.douglei.bpm.process.mapping.parser.ProcessParseException;
 
 public class AssignTest {
@@ -26,7 +26,7 @@ public class AssignTest {
 	@Test
 	public void insert() throws ProcessParseException {
 		ProcessDefinitionEntity builder = new ProcessDefinitionEntity(new ClasspathFile("bpm/Assign.bpm.xml"));
-		ExecutionResult result = engine.getRepositoryModule().getDefinitionService().insert(builder);
+		Result result = engine.getRepositoryModule().getDefinitionService().insert(builder);
 		if(result.isSuccess())
 			System.out.println("插入成功一条流程定义信息, 其id为: "+ ((ProcessDefinition)result.getObject()).getId());
 		else
@@ -36,7 +36,7 @@ public class AssignTest {
 	@Test
 	public void deploy() throws ProcessParseException {
 		int processDefinitionId= 1;
-		ExecutionResult result = engine.getRepositoryModule().getDefinitionService().deploy(processDefinitionId);
+		Result result = engine.getRepositoryModule().getDefinitionService().deploy(processDefinitionId);
 		if(result.isSuccess())
 			System.out.println("id为["+processDefinitionId+"]的流程定义信息部署成功");
 		else
@@ -53,7 +53,7 @@ public class AssignTest {
 		parameter.addAssignedUserId("douglei");
 		
 		
-		ExecutionResult result = engine.getRuntimeModule().getProcessInstanceService().start(parameter);
+		Result result = engine.getExecutionModule().getProcessInstanceService().start(parameter);
 		if(result.isSuccess())
 			System.out.println("成功启动的流程实例id为["+result.getObject(ProcessInstance.class).getId()+"]");
 		else
@@ -65,7 +65,7 @@ public class AssignTest {
 	
 	@Test
 	public void claim() {
-		ExecutionResult result = engine.getRuntimeModule().getTaskService().claim(taskId, userId);
+		Result result = engine.getExecutionModule().getTaskService().claim(taskId, userId);
 		if(result.isSuccess())
 			System.out.println("成功认领id为["+taskId+"]的任务");
 		else
@@ -74,7 +74,7 @@ public class AssignTest {
 	
 	@Test
 	public void delegate() {
-		ExecutionResult result = engine.getRuntimeModule().getTaskService().delegate(taskId, userId, "haha", "测试委托功能");
+		Result result = engine.getExecutionModule().getTaskService().delegate(taskId, userId, "haha", "测试委托功能");
 		if(result.isSuccess())
 			System.out.println("成功委托id为["+taskId+"]的任务");
 		else
@@ -83,7 +83,7 @@ public class AssignTest {
 	
 	@Test
 	public void transfer() {
-		ExecutionResult result = engine.getRuntimeModule().getTaskService().transfer(taskId, userId, "douglei", "测试转办功能");
+		Result result = engine.getExecutionModule().getTaskService().transfer(taskId, userId, "douglei", "测试转办功能");
 		if(result.isSuccess())
 			System.out.println("成功转办id为["+taskId+"]的任务");
 		else
@@ -92,7 +92,7 @@ public class AssignTest {
 	
 	@Test
 	public void unclaim() {
-		ExecutionResult result = engine.getRuntimeModule().getTaskService().unclaim(taskId, userId, false);
+		Result result = engine.getExecutionModule().getTaskService().unclaim(taskId, userId, false);
 		if(result.isSuccess())
 			System.out.println("成功取消认领id为["+taskId+"]的任务");
 		else
@@ -105,7 +105,7 @@ public class AssignTest {
 		parameter.addAssignedUserId("test");
 		parameter.setSuggest("同意了").setAttitude(Attitude.AGREE).setUserId(userId);
 		
-		ExecutionResult result = engine.getRuntimeModule().getTaskService().handle(taskId, parameter);
+		Result result = engine.getExecutionModule().getTaskService().handle(taskId, parameter);
 		if(result.isSuccess())
 			System.out.println("成功完成id为["+taskId+"]的任务");
 		else

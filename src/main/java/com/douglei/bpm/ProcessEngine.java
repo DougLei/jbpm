@@ -9,8 +9,8 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import com.douglei.bpm.bean.annotation.Autowired;
+import com.douglei.bpm.module.execution.ExecutionModule;
 import com.douglei.bpm.module.repository.RepositoryModule;
-import com.douglei.bpm.module.runtime.RuntimeModule;
 import com.douglei.orm.configuration.Configuration;
 import com.douglei.orm.configuration.ExternalDataSource;
 import com.douglei.orm.context.RegistrationResult;
@@ -54,7 +54,7 @@ public class ProcessEngine {
 	private RepositoryModule repositoryModule;
 	
 	@Autowired
-	private RuntimeModule runtimeModule;
+	private ExecutionModule executionModule;
 	
 	/**
 	 * (多数据源)给引擎添加新的数据源
@@ -102,11 +102,11 @@ public class ProcessEngine {
 		return repositoryModule;
 	}
 	/**
-	 * 获取RuntimeModule实例
+	 * 获取ExecutionModule实例
 	 * @return
 	 */
-	public RuntimeModule getRuntimeModule() {
-		return runtimeModule;
+	public ExecutionModule getExecutionModule() {
+		return executionModule;
 	}
 	/**
 	 * 销毁引擎

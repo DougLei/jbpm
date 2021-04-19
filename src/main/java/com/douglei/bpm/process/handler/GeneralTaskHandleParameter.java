@@ -3,9 +3,9 @@ package com.douglei.bpm.process.handler;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import com.douglei.bpm.module.history.task.Attitude;
-import com.douglei.bpm.module.runtime.variable.Scope;
-import com.douglei.bpm.module.runtime.variable.Variable;
+import com.douglei.bpm.module.execution.task.history.Attitude;
+import com.douglei.bpm.module.execution.variable.Scope;
+import com.douglei.bpm.module.execution.variable.runtime.Variable;
 import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
 import com.douglei.orm.context.SessionContext;
 
@@ -14,13 +14,13 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 public class GeneralTaskHandleParameter extends AbstractHandleParameter {
-	private com.douglei.bpm.module.runtime.task.TaskEntity entity;
+	private com.douglei.bpm.module.execution.task.runtime.TaskEntity entity;
 	private String businessId;
 	private UserEntity userEntity; // 办理的用户实体
 	private TaskEntityHandler taskEntityHandler = new TaskEntityHandler(); // 任务实体处理器
 	private VariableEntities variableEntities;
 	
-	public GeneralTaskHandleParameter(com.douglei.bpm.module.runtime.task.TaskEntity entity, String currentHandleUserId, String suggest, Attitude attitude, String reason, String businessId, HashSet<String> assignedUserIds) {
+	public GeneralTaskHandleParameter(com.douglei.bpm.module.execution.task.runtime.TaskEntity entity, String currentHandleUserId, String suggest, Attitude attitude, String reason, String businessId, HashSet<String> assignedUserIds) {
 		this.entity = entity;
 		this.taskEntityHandler.setCurrentTaskEntity(new TaskEntity(entity.getTask()));
 		this.businessId = businessId;

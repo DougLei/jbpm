@@ -7,12 +7,12 @@ import org.junit.Test;
 
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
-import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.history.task.Attitude;
-import com.douglei.bpm.module.runtime.instance.ProcessInstance;
-import com.douglei.bpm.module.runtime.instance.command.parameter.StartParameter;
-import com.douglei.bpm.module.runtime.task.command.parameter.HandleTaskParameter;
-import com.douglei.bpm.module.runtime.variable.Scope;
+import com.douglei.bpm.module.Result;
+import com.douglei.bpm.module.execution.instance.command.parameter.StartParameter;
+import com.douglei.bpm.module.execution.instance.runtime.ProcessInstance;
+import com.douglei.bpm.module.execution.task.command.parameter.HandleTaskParameter;
+import com.douglei.bpm.module.execution.task.history.Attitude;
+import com.douglei.bpm.module.execution.variable.Scope;
 
 public class ProcessRuntimeTest {
 	private ProcessEngine engine;
@@ -33,7 +33,7 @@ public class ProcessRuntimeTest {
 		parameter.addAssignedUserId("douglei");
 		
 		
-		ExecutionResult result = engine.getRuntimeModule().getProcessInstanceService().start(parameter);
+		Result result = engine.getExecutionModule().getProcessInstanceService().start(parameter);
 		if(result.isSuccess())
 			System.out.println("成功启动的流程实例id为["+result.getObject(ProcessInstance.class).getId()+"]");
 		else
@@ -44,7 +44,7 @@ public class ProcessRuntimeTest {
 	public void claim() {
 		int taskId = 6;
 		String userId = "张三";
-		ExecutionResult result = engine.getRuntimeModule().getTaskService().claim(taskId, userId);
+		Result result = engine.getExecutionModule().getTaskService().claim(taskId, userId);
 		if(result.isSuccess())
 			System.out.println("成功认领id为["+taskId+"]的任务");
 		else
@@ -60,7 +60,7 @@ public class ProcessRuntimeTest {
 		parameter.addAssignedUserId("张三");
 		parameter.setSuggest("同意了").setAttitude(Attitude.AGREE).setUserId(userId);
 		
-		ExecutionResult result = engine.getRuntimeModule().getTaskService().handle(taskId, parameter);
+		Result result = engine.getExecutionModule().getTaskService().handle(taskId, parameter);
 		if(result.isSuccess())
 			System.out.println("成功完成id为["+taskId+"]的任务");
 		else

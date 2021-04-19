@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.douglei.bpm.module.runtime.variable.Scope;
+import com.douglei.bpm.module.execution.variable.Scope;
 
 /**
  * 

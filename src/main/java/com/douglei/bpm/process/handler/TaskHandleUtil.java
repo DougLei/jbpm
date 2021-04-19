@@ -7,7 +7,7 @@ import java.util.List;
 import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.Result;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpressionParameter;
 import com.douglei.bpm.process.handler.event.end.EndEventHandler;
 import com.douglei.bpm.process.handler.event.start.StartEventHandler;
@@ -79,7 +79,7 @@ public class TaskHandleUtil {
 	 * @param parameter
 	 * @return
 	 */
-	public ExecutionResult startup(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, AbstractHandleParameter parameter) {
+	public Result startup(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, AbstractHandleParameter parameter) {
 		return createTaskHandleInstance(taskMetadataEntity, parameter).startup();
 	}
 	
@@ -89,7 +89,7 @@ public class TaskHandleUtil {
 	 * @param parameter
 	 * @return 返回对象的success=true时, 其Object属性为boolean类型, 标识是否可以进行调度
 	 */
-	public ExecutionResult handle(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, AbstractHandleParameter parameter) {
+	public Result handle(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, AbstractHandleParameter parameter) {
 		return createTaskHandleInstance(taskMetadataEntity, parameter).handle();
 	}
 	

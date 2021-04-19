@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.history.SourceType;
-import com.douglei.bpm.module.history.task.HistoryTask;
-import com.douglei.bpm.module.history.variable.HistoryVariable;
-import com.douglei.bpm.module.runtime.task.Task;
-import com.douglei.bpm.module.runtime.variable.Scope;
+import com.douglei.bpm.module.Result;
+import com.douglei.bpm.module.execution.SourceType;
+import com.douglei.bpm.module.execution.task.history.HistoryTask;
+import com.douglei.bpm.module.execution.task.runtime.Task;
+import com.douglei.bpm.module.execution.variable.Scope;
+import com.douglei.bpm.module.execution.variable.history.HistoryVariable;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -17,7 +17,7 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 public abstract class AbstractTaskHandler {
-	protected final static ExecutionResult CANNOT_DISPATCH = new ExecutionResult(false);
+	protected final static Result CANNOT_DISPATCH = new Result(false);
 	
 	/**
 	 * 完成任务(调度任务数据)

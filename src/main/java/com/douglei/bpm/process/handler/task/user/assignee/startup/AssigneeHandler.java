@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.douglei.bpm.ProcessEngineBeans;
-import com.douglei.bpm.module.runtime.task.Assignee;
-import com.douglei.bpm.module.runtime.task.Task;
+import com.douglei.bpm.module.execution.task.runtime.Assignee;
+import com.douglei.bpm.module.execution.task.runtime.Task;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.handler.AbstractHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;

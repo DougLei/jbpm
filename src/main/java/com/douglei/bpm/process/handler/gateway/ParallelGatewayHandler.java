@@ -3,8 +3,8 @@ package com.douglei.bpm.process.handler.gateway;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.douglei.bpm.module.ExecutionResult;
-import com.douglei.bpm.module.runtime.task.Task;
+import com.douglei.bpm.module.Result;
+import com.douglei.bpm.module.execution.task.runtime.Task;
 import com.douglei.bpm.process.handler.TaskDispatchException;
 import com.douglei.bpm.process.handler.TaskEntity;
 import com.douglei.bpm.process.mapping.metadata.flow.FlowMetadata;
@@ -25,17 +25,17 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 	}
 	
 	@Override
-	public ExecutionResult startup() {
+	public Result startup() {
 		removeVariables();
 		
 		Task joinTask = new ParallelTaskHandler(currentTaskMetadataEntity, handleParameter.getTaskEntityHandler().getPreviousTaskEntity()).join();
 		if(joinTask != null) 
 			fork(joinTask);
-		return ExecutionResult.getDefaultSuccessInstance();
+		return Result.getDefaultSuccessInstance();
 	}
 	
 	@Override
-	public ExecutionResult handle() {
+	public Result handle() {
 		Task task = handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask();
 		task.setUserId(handleParameter.getUserEntity().getCurrentHandleUserId());
 		task.setReason(handleParameter.getUserEntity().getReason());

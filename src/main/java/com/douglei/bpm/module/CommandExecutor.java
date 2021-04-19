@@ -19,7 +19,7 @@ public class CommandExecutor {
 	 * @param command
 	 * @return
 	 */
-	public ExecutionResult execute(Command command) {
+	public Result execute(Command command) {
 		return command.execute(processEngineBeans);
 	}
 }

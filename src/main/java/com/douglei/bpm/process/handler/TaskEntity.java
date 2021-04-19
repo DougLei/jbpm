@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.handler;
 
-import com.douglei.bpm.module.runtime.task.Task;
+import com.douglei.bpm.module.execution.task.runtime.Task;
 
 /**
  * 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import com.douglei.bpm.module.history.task.Attitude;
+import com.douglei.bpm.module.execution.task.history.Attitude;
 
 /**
  * 

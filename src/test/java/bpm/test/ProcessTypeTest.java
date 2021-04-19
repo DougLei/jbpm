@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.douglei.bpm.ProcessEngine;
 import com.douglei.bpm.ProcessEngineBuilder;
-import com.douglei.bpm.module.ExecutionResult;
+import com.douglei.bpm.module.Result;
 import com.douglei.bpm.module.repository.type.Type;
 
 public class ProcessTypeTest {
@@ -47,7 +47,7 @@ public class ProcessTypeTest {
 		type.setCode("baoxiao");
 		type.setName("报销");
 		type.setTenantId("douglei");
-		ExecutionResult result = engine.getRepositoryModule().getTypeService().insert(type);
+		Result result = engine.getRepositoryModule().getTypeService().insert(type);
 		
 		if(result.isSuccess())
 			System.out.println("流程类型插入成功: id=" + type.getId());
@@ -62,7 +62,7 @@ public class ProcessTypeTest {
 		type.setParentId(2);
 		type.setCode("chanjia-gai");
 		type.setName("产假-改111");
-		ExecutionResult result = engine.getRepositoryModule().getTypeService().update(type);
+		Result result = engine.getRepositoryModule().getTypeService().update(type);
 		
 		if(result.isSuccess())
 			System.out.println("流程类型修改成功: id=" + type.getId());
@@ -73,7 +73,7 @@ public class ProcessTypeTest {
 	@Test
 	public void delete() {
 		int typeId = 2;
-		ExecutionResult result = engine.getRepositoryModule().getTypeService().delete(typeId, true);
+		Result result = engine.getRepositoryModule().getTypeService().delete(typeId, true);
 		
 		if(result.isSuccess())
 			System.out.println("流程类型删除成功: id=" + typeId);

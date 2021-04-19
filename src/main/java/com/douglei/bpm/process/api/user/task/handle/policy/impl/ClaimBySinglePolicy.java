@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.module.runtime.task.Assignee;
+import com.douglei.bpm.module.execution.task.runtime.Assignee;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimResult;
 

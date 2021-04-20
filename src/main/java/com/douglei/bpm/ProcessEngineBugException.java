@@ -6,6 +6,9 @@ package com.douglei.bpm;
  */
 public class ProcessEngineBugException extends ProcessEngineException{
 
+	public ProcessEngineBugException() {
+		super("BUG");
+	}
 	public ProcessEngineBugException(String message) {
 		super("BUG: " + message);
 	}

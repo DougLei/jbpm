@@ -36,20 +36,10 @@ public enum State {
 		}
 	},
 	
-	// value>6时, 均表示删除状态
 	/**
-	 * 终止状态时删除: 7
+	 * 删除: 5
 	 */
-	TERMINATED_DELETE(TERMINATED.value + 4) { 
-		@Override
-		public boolean supportPhysicalDelete() {
-			return true;
-		}
-	},
-	/**
-	 * 结束状态时删除: 8
-	 */
-	FINISHED_DELETE(FINISHED.value + 4) { 
+	DELETE(5) { 
 		@Override
 		public boolean supportPhysicalDelete() {
 			return true;

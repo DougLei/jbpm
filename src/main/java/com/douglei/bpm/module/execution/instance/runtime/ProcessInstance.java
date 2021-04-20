@@ -19,6 +19,7 @@ public class ProcessInstance {
 	@Property protected String pageId;
 	@Property protected String startUserId;
 	@Property protected Date startTime;
+	@Property protected Date suspendTime;
 	@Property protected String tenantId;
 	protected State state;
 	
@@ -75,6 +76,12 @@ public class ProcessInstance {
 	}
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
+	}
+	public Date getSuspendTime() {
+		return suspendTime;
+	}
+	public void setSuspendTime(Date suspendTime) {
+		this.suspendTime = suspendTime;
 	}
 	public String getTenantId() {
 		return tenantId;

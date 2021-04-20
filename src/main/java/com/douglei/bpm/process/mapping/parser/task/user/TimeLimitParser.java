@@ -90,7 +90,7 @@ public class TimeLimitParser {
 					break;
 			}
 		}
-		if(sb.length() > 0 || index < timeLimit.length() || tl.getTime() == 0)
+		if(sb.length() > 0 || index < timeLimit.length() || tl.getTimes() == 0)
 			return null;
 		return tl;
 	}

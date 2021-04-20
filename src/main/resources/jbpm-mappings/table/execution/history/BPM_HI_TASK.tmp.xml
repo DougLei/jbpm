@@ -17,6 +17,7 @@
 			<column name="TYPE_" property="type" dataType="string" length="20" nullable="false"/>
 			<column name="START_TIME" property="startTime" dataType="datetime" nullable="false" />
 			<column name="EXPIRY_TIME" property="expiryTime" dataType="datetime" />
+			<column name="SUSPEND_TIME" property="suspendTime" dataType="datetime" />
 			<column name="BUSINESS_ID" property="businessId" dataType="string" length="100"/>
 			<column name="PAGE_ID" property="pageId" dataType="string" length="500"/>
 			<column name="IS_ALL_CLAIMED" property="isAllClaimed" dataType="number" length="1" />

@@ -30,7 +30,7 @@ public class DeleteProcessCmd implements Command {
 		if(!processInstance.getStateInstance().supportDelete()) 
 			return new Result("删除失败, [%s]流程实例处于[%s]状态", "jbpm.procinst.delete.fail.state.error", processInstance.getTitle());
 		
-		SessionContext.getSqlSession().executeUpdate("update bpm_hi_procinst set state=? where id=?", Arrays.asList(processInstance.getState()+4, processInstance.getId()));
+		SessionContext.getSqlSession().executeUpdate("update bpm_hi_procinst set state=? where id=?", Arrays.asList(State.DELETE.getValue(), processInstance.getId()));
 		
 		// finished状态的流程实例, 可能会有抄送信息在运行表, 要对其也进行删除
 		if(processInstance.getStateInstance() == State.FINISHED) {

@@ -17,7 +17,6 @@ import com.douglei.orm.context.SessionContext;
  */
 public class TaskEntity {
 	private Task task;
-	private State processInstanceState; // 流程实例状态
 	private ProcessMappingContainer container;
 	private ProcessMetadata processMetadata;
 	private TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity;
@@ -26,7 +25,6 @@ public class TaskEntity {
 		this.task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where id=?", Arrays.asList(taskId));
 		if(task == null)
 			throw new TaskHandleException("不存在id为["+taskId+"]的任务");
-		setProcessInstanceState();
 		this.container = container;
 	}
 	
@@ -34,13 +32,7 @@ public class TaskEntity {
 		this.task = SessionContext.getTableSession().uniqueQuery(Task.class, "select * from bpm_ru_task where taskinst_id=?", Arrays.asList(taskinstId));
 		if(task == null)
 			throw new TaskHandleException("不存在taskinst_id为["+taskinstId+"]的任务");
-		setProcessInstanceState();
 		this.container = container;
-	}
-	private void setProcessInstanceState() {
-		this.processInstanceState = State.valueOf(Integer.parseInt(
-				SessionContext.getSqlSession().uniqueQuery_(
-						"select state from bpm_ru_procinst where procinst_id=?", Arrays.asList(task.getProcinstId()))[0].toString()));
 	}
 	
 	/**
@@ -48,6 +40,10 @@ public class TaskEntity {
 	 * @return
 	 */
 	public boolean isActive() {
+		State processInstanceState = State.valueOf(Integer.parseInt(
+				SessionContext.getSqlSession().uniqueQuery_(
+						"select state from bpm_ru_procinst where procinst_id=?", Arrays.asList(task.getProcinstId()))[0].toString()));
+		
 		switch(processInstanceState) {
 			case ACTIVE:
 				return task.isActive();

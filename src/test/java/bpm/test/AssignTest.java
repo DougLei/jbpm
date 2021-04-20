@@ -64,10 +64,10 @@ public class AssignTest {
 	
 	@Test
 	public void test() {
-		Result result = engine.getExecutionModule().getProcessInstanceService().wake(3);
-//		Result result = engine.getExecutionModule().getProcessInstanceService().suspend(2);
-//		Result result = engine.getExecutionModule().getProcessInstanceService().terminate(2, "金石磊", "测试流程终止");
-//		Result result = engine.getExecutionModule().getProcessInstanceService().recovery(2, false);
+		Result result = engine.getExecutionModule().getProcessInstanceService().wake(2);
+//		Result result = engine.getExecutionModule().getProcessInstanceService().suspend(1);
+//		Result result = engine.getExecutionModule().getProcessInstanceService().terminate(1, "金石磊", "测试流程终止");
+//		Result result = engine.getExecutionModule().getProcessInstanceService().recovery(1, false);
 		if(result.isSuccess())
 			System.out.println("成功");
 		else
@@ -118,8 +118,7 @@ public class AssignTest {
 	@Test
 	public void handle() {
 		HandleTaskParameter parameter = new HandleTaskParameter();
-		parameter.addAssignedUserId("test");
-		parameter.setSuggest("意见内容: 同意").setAttitude(Attitude.AGREE).setUserId("douglei");
+		parameter.setSuggest("意见内容: 同意").setAttitude(Attitude.AGREE).setUserId("wangwu");
 		
 		Result result = engine.getExecutionModule().getTaskService().handle(3, parameter);
 		if(result.isSuccess())
@@ -131,8 +130,8 @@ public class AssignTest {
 	@Test
 	public void dispatch() {
 		DispatchTaskParameter parameter = new DispatchTaskParameter();
-		parameter.setUserId("douglei");
-		parameter.setDispatchExecutor(new SettargetDispatchExecutor("userTask2"));
+		parameter.setUserId("wangwu");
+		parameter.setDispatchExecutor(new SettargetDispatchExecutor("endEvent1"));
 		
 		engine.getExecutionModule().getTaskService().dispatch(3, parameter );
 		

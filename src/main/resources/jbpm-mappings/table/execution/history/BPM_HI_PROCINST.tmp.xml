@@ -12,6 +12,7 @@
 			<column name="PAGE_ID" property="pageId" dataType="string" length="500"/>
 			<column name="START_USER_ID" property="startUserId" dataType="nstring" length="150" />
 			<column name="START_TIME" property="startTime" dataType="datetime" nullable="false" />
+			<column name="SUSPEND_TIME" property="suspendTime" dataType="datetime" />
 			<column name="TENANT_ID" property="tenantId" dataType="nstring" length="150" />
 			<column name="STATE" property="state" dataType="number" length="2" nullable="false"/>
 			<column name="USER_ID" property="userId" dataType="nstring" length="150" />

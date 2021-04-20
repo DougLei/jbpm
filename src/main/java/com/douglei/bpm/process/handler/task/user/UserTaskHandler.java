@@ -13,6 +13,9 @@ import com.douglei.bpm.process.handler.GeneralTaskHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.task.user.assignee.handle.AssigneeDispatcher;
 import com.douglei.bpm.process.handler.task.user.assignee.startup.AssigneeHandler;
+import com.douglei.bpm.process.handler.task.user.timelimit.TimeLimitCalculator;
+import com.douglei.bpm.process.handler.task.user.timelimit.TimeLimitCalculatorFactory;
+import com.douglei.bpm.process.mapping.metadata.task.user.TimeLimit;
 import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.handle.ClaimPolicyEntity;
 import com.douglei.orm.context.SessionContext;
@@ -28,8 +31,11 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralTaskHa
 	public Result startup() {
 		// 创建当前用户任务
 		Task task = createTask(false);
-		if(currentTaskMetadataEntity.getTaskMetadata().getTimeLimit() != null)
-			task.setExpiryTime(new TimeLimitParser(task.getStartTime(), currentTaskMetadataEntity.getTaskMetadata().getTimeLimit()).getExpiryTime());
+		if(currentTaskMetadataEntity.getTaskMetadata().getTimeLimit() != null) {
+			TimeLimit timeLimit = currentTaskMetadataEntity.getTaskMetadata().getTimeLimit();
+			TimeLimitCalculator calc = TimeLimitCalculatorFactory.build(timeLimit.getType());
+			task.setExpiryTime(calc.getExpiryTime(task.getStartTime(), timeLimit.getTimes()));
+		}
 		
 		// 处理指派的用户
 		AssigneeHandler assigneeHandler = new AssigneeHandler();
@@ -57,7 +63,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralTaskHa
 			String dispatchUserId = handleParameter.getUserEntity().getCurrentHandleUserId(); // 可进行调度的用户id
 			if(flag.claimUpperLimit == -1) {
 				// 获取办理过当前任务的用户id集合
-				List<Object[]> list = SessionContext.getSqlSession().query_("select distinct user_id from bpm_hi_assignee where taskinst_id=? and handle_state = 'FINISHED'", Arrays.asList(currentTask.getTaskinstId()));
+				List<Object[]> list = SessionContext.getSqlSession().query_("select distinct user_id from bpm_hi_assignee where taskinst_id=? and handle_state = 6", Arrays.asList(currentTask.getTaskinstId()));
 				List<String> handledUserIds = new ArrayList<String>(list.size());
 				list.forEach(array -> handledUserIds.add(array[0].toString()));
 				

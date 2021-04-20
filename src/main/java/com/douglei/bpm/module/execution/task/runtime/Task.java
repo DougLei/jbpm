@@ -27,12 +27,13 @@ public class Task {
 	@Property protected String type;
 	@Property protected Date startTime;
 	@Property protected Date expiryTime;
+	@Property protected Date suspendTime;
 	@Property protected String businessId;
 	@Property protected String pageId;
 	@Property protected String userId;
 	@Property protected String reason;
 	@Property private Integer isAllClaimed;
-	@Property private Integer isActive;
+	@Property private int isActive;
 	
 	public Task() {}
 	public Task(int procdefId, String procinstId, String parentTaskinstId, String sourceKey, TaskMetadata taskMetadata) {
@@ -106,7 +107,7 @@ public class Task {
 	 * @return
 	 */
 	public boolean isActive() {
-		return isActive != null && isActive == 1;
+		return isActive == 1;
 	}
 	
 	public int getId() {
@@ -192,6 +193,12 @@ public class Task {
 	}
 	public void setExpiryTime(Date expiryTime) {
 		this.expiryTime = expiryTime;
+	}
+	public Date getSuspendTime() {
+		return suspendTime;
+	}
+	public void setSuspendTime(Date suspendTime) {
+		this.suspendTime = suspendTime;
 	}
 	public String getBusinessId() {
 		return businessId;

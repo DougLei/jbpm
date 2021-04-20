@@ -7,24 +7,24 @@ import com.douglei.orm.mapping.metadata.Metadata;
  * @author DougLei
  */
 public class TimeLimit implements Metadata{
-	private long time; // 限制的时间, 用毫秒存储
+	private long times; // 时限(毫秒)
 	private TimeLimitType type; // 时限类型
 	
 	public void addDays(int days) {
-		time += days*24*60*60*1000;
+		times += days*24*60*60*1000;
 	}
 	public void addHours(int hours) {
-		time += hours*60*60*1000;
+		times += hours*60*60*1000;
 	}
 	public void addMinutes(int minutes) {
-		time += minutes*60*1000;
+		times += minutes*60*1000;
 	}
 	public void setType(TimeLimitType type) {
 		this.type = type;
 	}
 	
-	public long getTime() {
-		return time;
+	public long getTimes() {
+		return times;
 	}
 	public TimeLimitType getType() {
 		if(type == null)
@@ -34,6 +34,6 @@ public class TimeLimit implements Metadata{
 	
 	@Override
 	public String toString() {
-		return "TimeLimit [time=" + time + ", type=" + getType() + "]";
+		return "TimeLimit [times=" + times + ", type=" + getType() + "]";
 	} 
 }

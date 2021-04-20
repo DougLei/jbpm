@@ -25,11 +25,13 @@ public class UndoDeleteProcessCmd extends DeleteProcessCmd {
 	public Result execute(ProcessEngineBeans processEngineBeans) {
 		if(!processInstance.getStateInstance().supportPhysicalDelete()) 
 			return new Result("撤销删除失败, [%s]流程实例处于[%s]状态", "jbpm.procinst.undo.delete.fail.state.error", processInstance.getTitle(), processInstance.getStateInstance().name());
-			
-		SessionContext.getSqlSession().executeUpdate("update bpm_hi_procinst set state=? where id=?", Arrays.asList(processInstance.getState()-4, processInstance.getId()));
 		
-		// finished_delete状态的流程实例, 可能会有抄送信息在历史表, 要对其也进行撤销
-		if(processInstance.getStateInstance() == State.FINISHED_DELETE) {
+		State targetState = processInstance.getSuspendTime()==null?State.FINISHED:State.TERMINATED;
+		SessionContext.getSqlSession().executeUpdate(
+				"update bpm_hi_procinst set state=? where id=?", Arrays.asList(targetState.getValue(), processInstance.getId()));
+		
+		// FINISHED状态的流程实例, 可能会有抄送信息在历史表, 要对其也进行撤销(恢复到运行表)
+		if(targetState == State.FINISHED) {
 			List<HistoryTask> tasks = SessionContext.getSqlSession().query(HistoryTask.class, "select taskinst_id from bpm_hi_task where procinst_id=? and type_='userTask'", Arrays.asList(processInstance.getProcinstId()));
 			if(!tasks.isEmpty()) {
 				List<CarbonCopy> ccs = SessionContext.getSQLSession().query(CarbonCopy.class, "UndoDeleteProcess", "queryHistoryCCList", tasks);

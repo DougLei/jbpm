@@ -129,7 +129,7 @@ public class ProcessDefinitionService {
 		if(!processDefinition.isMajorSubversion())
 			return new Result("部署失败, [%s]流程不是主要子版本", "jbpm.procdef.deploy.fail.not.major.subversion", processDefinition.getName());
 		if(!processDefinition.getStateInstance().supportDeploy())
-			return new Result("部署失败, [%s]流程处于[%s]状态", "jbpm.procdef.deploy.fail.state.error", processDefinition.getName(), processDefinition.getState());
+			return new Result("部署失败, [%s]流程处于[%s]状态", "jbpm.procdef.deploy.fail.state.error", processDefinition.getName(), processDefinition.getStateInstance());
 		
 		updateState_(id, State.DEPLOY);
 		container.addProcess(processDefinition);

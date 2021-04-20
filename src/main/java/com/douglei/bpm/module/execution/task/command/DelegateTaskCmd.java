@@ -3,9 +3,7 @@ package com.douglei.bpm.module.execution.task.command;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.Command;
@@ -60,12 +58,12 @@ public class DelegateTaskCmd implements Command {
 		// 查询指定userId, 判断其是否可以委托
 		List<Assignee> assigneeList = SessionContext.getSqlSession()
 				.query(Assignee.class, 
-						"select id, group_id, chain_id from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
+						"select id, taskinst_id, group_id, chain_id from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
 						Arrays.asList(entity.getTask().getTaskinstId(), userId, HandleState.CLAIMED.getValue()));
 		if(assigneeList.isEmpty())
 			throw new TaskHandleException(getAssignMode()+"失败, 指定的userId没有["+entity.getName()+"]任务的"+getAssignMode()+"操作权限");
 		
-		
+	
 		// 获取具体可委托的所有人员集合, 并对本次委托的人员进行验证
 		Candidate candidate = option.getCandidate();
 		if(candidate == null)
@@ -80,11 +78,8 @@ public class DelegateTaskCmd implements Command {
 		
 		
 		// 进行委托操作
-		// 1. 发起委托的用户, 修改必要的列值
-		Map<String, Object> parameterMap = new HashMap<String, Object>(4);
-		parameterMap.put("handleState", targetHandleState().getValue());
-		parameterMap.put("assigneeList", assigneeList);
-		SessionContext.getSQLSession().executeUpdate("Assignee", "giveupTask", parameterMap);
+		// 1. 发起委托的用户, 修改必要的列值, 放弃任务的办理权
+		giveupTask(assigneeList);
 			
 		// 2. 查询委托人的委托信息, 组装成指派信息集合, 保存到指派表
 		List<String> assignedUserIds = new ArrayList<String>(1);
@@ -139,10 +134,10 @@ public class DelegateTaskCmd implements Command {
 	}
 	
 	/**
-	 * 当前用户操作成功后的HandleState
-	 * @return
+	 * 放弃任务办理权
+	 * @param assigneeList
 	 */
-	protected HandleState targetHandleState() {
-		return HandleState.INVALID_UNCLAIM;
+	protected void giveupTask(List<Assignee> assigneeList) {
+		SessionContext.getSQLSession().executeUpdate("Assignee", "giveupTask4Delegate", assigneeList);
 	}
 }

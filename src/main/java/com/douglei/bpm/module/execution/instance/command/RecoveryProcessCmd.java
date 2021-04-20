@@ -56,22 +56,22 @@ public class RecoveryProcessCmd extends DeleteProcessCmd {
 		// 将指派信息转移到历史表
 		List<Assignee> assignees = SessionContext.getSQLSession().query(Assignee.class, "RecoveryProcess", "queryAssigneeList", tasks);
 		if(!assignees.isEmpty()) {
-			SessionContext.getTableSession().save(assignees);
 			SessionContext.getSQLSession().executeUpdate("RecoveryProcess", "deleteAssignee", assignees);
+			SessionContext.getTableSession().save(assignees);
 		}
 		
 		// 将调度信息转移到历史表
 		List<Dispatch> dispatches = SessionContext.getSQLSession().query(Dispatch.class, "RecoveryProcess", "queryDispatchList", tasks);
 		if(!dispatches.isEmpty()) {
-			SessionContext.getTableSession().save(dispatches);
 			SessionContext.getSQLSession().executeUpdate("RecoveryProcess", "deleteDispatch", dispatches);
+			SessionContext.getTableSession().save(dispatches);
 		}
 		
 		// 将抄送信息转移到历史表
 		List<CarbonCopy> ccs = SessionContext.getSQLSession().query(CarbonCopy.class, "RecoveryProcess", "queryCCList", tasks);
 		if(!ccs.isEmpty()) {
-			SessionContext.getTableSession().save(ccs);
 			SessionContext.getSQLSession().executeUpdate("RecoveryProcess", "deleteCC", ccs);
+			SessionContext.getTableSession().save(ccs);
 		}
 		
 		

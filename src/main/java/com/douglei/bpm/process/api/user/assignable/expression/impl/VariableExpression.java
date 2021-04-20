@@ -32,7 +32,7 @@ public class VariableExpression implements AssignableUserExpression {
 		List<Object> parameters = new ArrayList<Object>(3+variableNames.length);
 		parameters.add(parameter.getProcinstId());
 		parameters.add(parameter.getTaskinstId());
-		parameters.add(Scope.GLOBAL.name());
+		parameters.add(Scope.GLOBAL.getValue());
 		
 		// 动态装配条件
 		if(variableNames.length == 1) {

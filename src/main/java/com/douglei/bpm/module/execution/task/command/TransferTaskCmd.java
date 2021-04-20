@@ -1,9 +1,12 @@
 package com.douglei.bpm.module.execution.task.command;
 
+import java.util.List;
+
 import com.douglei.bpm.module.execution.task.AssignMode;
-import com.douglei.bpm.module.execution.task.HandleState;
+import com.douglei.bpm.module.execution.task.runtime.Assignee;
 import com.douglei.bpm.module.execution.task.runtime.TaskEntity;
 import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
+import com.douglei.orm.context.SessionContext;
 
 /**
  * 转办任务
@@ -26,7 +29,9 @@ public class TransferTaskCmd extends DelegateTaskCmd {
 	}
 
 	@Override
-	protected HandleState targetHandleState() {
-		return HandleState.INVALID;
+	protected void giveupTask(List<Assignee> assigneeList) {
+		for (Assignee assignee : assigneeList) {
+			SessionContext.getSQLSession().executeUpdate("Assignee", "giveupTask4Transfer", assignee);
+		}
 	}
 }

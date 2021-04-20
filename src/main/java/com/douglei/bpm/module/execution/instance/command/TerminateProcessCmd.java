@@ -60,25 +60,25 @@ public class TerminateProcessCmd extends WakeProcessCmd {
 		// 将指派信息转移到历史表
 		List<HistoryAssignee> assignees = SessionContext.getSQLSession().query(HistoryAssignee.class, "TerminateProcess", "queryAssigneeList", tasks);
 		if(!assignees.isEmpty()) {
+			SessionContext.getSQLSession().executeUpdate("TerminateProcess", "deleteAssignee", assignees);
 			assignees.forEach(assignee -> assignee.setSourceTypeInstance(SourceType.BY_PROCINST_TERMINATED));
 			SessionContext.getTableSession().save(assignees);
-			SessionContext.getSQLSession().executeUpdate("TerminateProcess", "deleteAssignee", assignees);
 		}
 		
 		// 将调度信息转移到历史表
 		List<HistoryDispatch> dispatches = SessionContext.getSQLSession().query(HistoryDispatch.class, "TerminateProcess", "queryDispatchList", tasks);
 		if(!dispatches.isEmpty()) {
+			SessionContext.getSQLSession().executeUpdate("TerminateProcess", "deleteDispatch", dispatches);
 			dispatches.forEach(dispatch -> dispatch.setSourceTypeInstance(SourceType.BY_PROCINST_TERMINATED));
 			SessionContext.getTableSession().save(dispatches);
-			SessionContext.getSQLSession().executeUpdate("TerminateProcess", "deleteDispatch", dispatches);
 		}
 		
 		// 将抄送信息转移到历史表
 		List<HistoryCarbonCopy> ccs = SessionContext.getSQLSession().query(HistoryCarbonCopy.class, "TerminateProcess", "queryCCList", tasks);
 		if(!ccs.isEmpty()) {
+			SessionContext.getSQLSession().executeUpdate("TerminateProcess", "deleteCC", ccs);
 			ccs.forEach(cc -> cc.setSourceTypeInstance(SourceType.BY_PROCINST_TERMINATED));
 			SessionContext.getTableSession().save(ccs);
-			SessionContext.getSQLSession().executeUpdate("TerminateProcess", "deleteCC", ccs);
 		}
 		
 		return Result.getDefaultSuccessInstance();

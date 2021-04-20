@@ -8,6 +8,8 @@ import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.Result;
 import com.douglei.bpm.module.execution.instance.command.parameter.StartParameter;
 import com.douglei.bpm.module.execution.instance.runtime.ProcessInstance;
+import com.douglei.bpm.module.execution.task.command.dispatch.impl.SettargetDispatchExecutor;
+import com.douglei.bpm.module.execution.task.command.parameter.DispatchTaskParameter;
 import com.douglei.bpm.module.execution.task.command.parameter.HandleTaskParameter;
 import com.douglei.bpm.module.execution.task.history.Attitude;
 import com.douglei.bpm.module.repository.definition.ClasspathFile;
@@ -62,7 +64,10 @@ public class AssignTest {
 	
 	@Test
 	public void test() {
-		Result result = engine.getExecutionModule().getProcessInstanceService().delete4Physical(3);
+		Result result = engine.getExecutionModule().getProcessInstanceService().wake(3);
+//		Result result = engine.getExecutionModule().getProcessInstanceService().suspend(2);
+//		Result result = engine.getExecutionModule().getProcessInstanceService().terminate(2, "金石磊", "测试流程终止");
+//		Result result = engine.getExecutionModule().getProcessInstanceService().recovery(2, false);
 		if(result.isSuccess())
 			System.out.println("成功");
 		else
@@ -114,12 +119,22 @@ public class AssignTest {
 	public void handle() {
 		HandleTaskParameter parameter = new HandleTaskParameter();
 		parameter.addAssignedUserId("test");
-		parameter.setSuggest("同意了").setAttitude(Attitude.AGREE).setUserId(userId);
+		parameter.setSuggest("意见内容: 同意").setAttitude(Attitude.AGREE).setUserId("douglei");
 		
-		Result result = engine.getExecutionModule().getTaskService().handle(taskId, parameter);
+		Result result = engine.getExecutionModule().getTaskService().handle(3, parameter);
 		if(result.isSuccess())
 			System.out.println("成功完成id为["+taskId+"]的任务");
 		else
 			System.out.println(result.getMessage());
+	}
+	
+	@Test
+	public void dispatch() {
+		DispatchTaskParameter parameter = new DispatchTaskParameter();
+		parameter.setUserId("douglei");
+		parameter.setDispatchExecutor(new SettargetDispatchExecutor("userTask2"));
+		
+		engine.getExecutionModule().getTaskService().dispatch(3, parameter );
+		
 	}
 }

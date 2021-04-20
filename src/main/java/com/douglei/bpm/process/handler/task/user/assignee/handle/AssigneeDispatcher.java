@@ -36,9 +36,8 @@ public class AssigneeDispatcher {
 				Arrays.asList(taskinstId, userEntity.getCurrentHandleUserId(), HandleState.CLAIMED.getValue()));
 		
 		// 设置独立的指派信息集合
-		HistoryAssignee historyAssignee = null;
 		for(int i=0;i < assigneeList.size();i++) {
-			historyAssignee = assigneeList.get(i);
+			HistoryAssignee historyAssignee = assigneeList.get(i);
 			historyAssignee.finish(userEntity.getAttitude(), userEntity.getSuggest(), currentDate);
 			historyAssignee.setSourceTypeInstance(SourceType.STANDARD);
 			

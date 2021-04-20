@@ -52,7 +52,7 @@ public class GeneralTaskHandleParameter extends AbstractHandleParameter {
 		if(variableEntities == null)
 			this.variableEntities = new VariableEntities(
 					entity.getTask().getTaskinstId(), 
-					SessionContext.getTableSession().query(Variable.class, "select * from bpm_ru_variable where procinst_id=? and (taskinst_id=? or scope =?)", Arrays.asList(entity.getTask().getProcinstId(), entity.getTask().getTaskinstId(), Scope.GLOBAL.name())));
+					SessionContext.getTableSession().query(Variable.class, "select * from bpm_ru_variable where procinst_id=? and (taskinst_id=? or scope =?)", Arrays.asList(entity.getTask().getProcinstId(), entity.getTask().getTaskinstId(), Scope.GLOBAL.getValue())));
 		return variableEntities;
 	}
 }

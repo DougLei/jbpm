@@ -14,7 +14,7 @@ public class Assignee {
 	protected String taskinstId;
 	protected int groupId;
 	protected int chainId;
-	protected Integer isChainLast;
+	protected int isChainLast;
 	protected String userId;
 	protected String reason;
 	protected AssignMode mode;
@@ -67,12 +67,12 @@ public class Assignee {
 	 * @return
 	 */
 	public boolean isChainLast() {
-		return isChainLast !=null && isChainLast == 1;
+		return isChainLast == 1;
 	}
-	public Integer getIsChainLast() {
+	public int getIsChainLast() {
 		return isChainLast;
 	}
-	public void setIsChainLast(Integer isChainLast) {
+	public void setIsChainLast(int isChainLast) {
 		this.isChainLast = isChainLast;
 	}
 	public String getUserId() {

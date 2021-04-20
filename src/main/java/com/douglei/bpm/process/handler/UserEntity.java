@@ -75,6 +75,8 @@ public class UserEntity {
 	 * @return
 	 */
 	public List<String> getAssignedUserIds() {
+		if(assignedUserIds == null)
+			return new ArrayList<String>();
 		return new ArrayList<String>(assignedUserIds);
 	}
 }

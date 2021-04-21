@@ -17,7 +17,7 @@ import com.douglei.tools.file.reader.FileBufferedReader;
  * 
  * @author DougLei
  */
-public class ProcessDefinitionEntity {
+public class ProcessDefinitionBuilder {
 	private ProcessDefinition definition;
 	private boolean ignore; // 是否忽略流程实例
 	private boolean strict; // 是否强制保存流程定义
@@ -27,7 +27,7 @@ public class ProcessDefinitionEntity {
 	 * @param file
 	 * @throws FileNotFoundException
 	 */
-	public ProcessDefinitionEntity(File file) throws FileNotFoundException {
+	public ProcessDefinitionBuilder(File file) throws FileNotFoundException {
 		try(FileBufferedReader reader = new FileBufferedReader(new FileInputStream(file))){
 			init(reader.readAll(1000));
 		}
@@ -37,7 +37,7 @@ public class ProcessDefinitionEntity {
 	 * 根据classpath下的资源文件构建流程定义实例
 	 * @param file
 	 */
-	public ProcessDefinitionEntity(ClasspathFile file) {
+	public ProcessDefinitionBuilder(ClasspathFile file) {
 		try(FileBufferedReader reader = new FileBufferedReader(file.getPath())){
 			init(reader.readAll(1000));
 		}
@@ -47,7 +47,7 @@ public class ProcessDefinitionEntity {
 	 * 根据流程配置内容构建流程定义实例
 	 * @param content
 	 */
-	public ProcessDefinitionEntity(String content) {
+	public ProcessDefinitionBuilder(String content) {
 		init(content);
 	}
 	
@@ -150,7 +150,7 @@ public class ProcessDefinitionEntity {
 	 * @param typeId
 	 * @return
 	 */
-	public ProcessDefinitionEntity setTypeId(int typeId) {
+	public ProcessDefinitionBuilder setTypeId(int typeId) {
 		definition.setTypeId(typeId);
 		return this;
 	}
@@ -160,7 +160,7 @@ public class ProcessDefinitionEntity {
 	 * @param description
 	 * @return
 	 */
-	public ProcessDefinitionEntity setDescription(String description) {
+	public ProcessDefinitionBuilder setDescription(String description) {
 		definition.setDescription(description);
 		return this;
 	}
@@ -170,16 +170,16 @@ public class ProcessDefinitionEntity {
 	 * @param description
 	 * @return
 	 */
-	public ProcessDefinitionEntity setTenantId(String tenantId) {
+	public ProcessDefinitionBuilder setTenantId(String tenantId) {
 		definition.setTenantId(tenantId);
 		return this;
 	}
 	
 	/**
-	 * 获取流程定义实例
+	 * 构建流程定义实例
 	 * @return
 	 */
-	ProcessDefinition getProcessDefinition() {
+	ProcessDefinition build() {
 		return definition;
 	}
 	

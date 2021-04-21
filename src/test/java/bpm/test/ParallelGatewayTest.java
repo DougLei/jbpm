@@ -12,7 +12,7 @@ import com.douglei.bpm.module.execution.task.command.parameter.HandleTaskParamet
 import com.douglei.bpm.module.execution.task.history.Attitude;
 import com.douglei.bpm.module.repository.definition.ClasspathFile;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
-import com.douglei.bpm.module.repository.definition.ProcessDefinitionEntity;
+import com.douglei.bpm.module.repository.definition.ProcessDefinitionBuilder;
 import com.douglei.bpm.process.mapping.parser.ProcessParseException;
 
 public class ParallelGatewayTest {
@@ -25,7 +25,7 @@ public class ParallelGatewayTest {
 	
 	@Test
 	public void insert() throws ProcessParseException {
-		ProcessDefinitionEntity builder = new ProcessDefinitionEntity(new ClasspathFile("bpm/ParallelGateway.bpm.xml"));
+		ProcessDefinitionBuilder builder = new ProcessDefinitionBuilder(new ClasspathFile("bpm/ParallelGateway.bpm.xml"));
 		Result result = engine.getRepositoryModule().getDefinitionService().insert(builder);
 		if(result.isSuccess())
 			System.out.println("插入成功一条流程定义信息, 其id为: "+ ((ProcessDefinition)result.getObject()).getId());

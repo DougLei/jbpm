@@ -8,7 +8,7 @@ import com.douglei.bpm.ProcessEngineBuilder;
 import com.douglei.bpm.module.Result;
 import com.douglei.bpm.module.repository.definition.ClasspathFile;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
-import com.douglei.bpm.module.repository.definition.ProcessDefinitionEntity;
+import com.douglei.bpm.module.repository.definition.ProcessDefinitionBuilder;
 import com.douglei.bpm.process.mapping.parser.ProcessParseException;
 
 public class ProcessDeployTest {
@@ -21,7 +21,7 @@ public class ProcessDeployTest {
 	
 	@Test
 	public void insert() throws ProcessParseException {
-		ProcessDefinitionEntity builder = new ProcessDefinitionEntity(new ClasspathFile("test.bpm.xml"));
+		ProcessDefinitionBuilder builder = new ProcessDefinitionBuilder(new ClasspathFile("test.bpm.xml"));
 //		builder.setTypeId(2);
 		Result result = engine.getRepositoryModule().getDefinitionService().insert(builder);
 		if(result.isSuccess())

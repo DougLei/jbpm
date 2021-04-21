@@ -14,7 +14,7 @@ import com.douglei.bpm.module.execution.task.command.parameter.HandleTaskParamet
 import com.douglei.bpm.module.execution.task.history.Attitude;
 import com.douglei.bpm.module.repository.definition.ClasspathFile;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
-import com.douglei.bpm.module.repository.definition.ProcessDefinitionEntity;
+import com.douglei.bpm.module.repository.definition.ProcessDefinitionBuilder;
 import com.douglei.bpm.process.mapping.parser.ProcessParseException;
 
 public class AssignTest {
@@ -27,7 +27,9 @@ public class AssignTest {
 	
 	@Test
 	public void insert() throws ProcessParseException {
-		ProcessDefinitionEntity builder = new ProcessDefinitionEntity(new ClasspathFile("bpm/Assign.bpm.xml"));
+		ProcessDefinitionBuilder builder = new ProcessDefinitionBuilder(new ClasspathFile("bpm/Assign.bpm.xml"));
+		builder.setTypeId(3);
+		builder.setStrict(true);
 		Result result = engine.getRepositoryModule().getDefinitionService().insert(builder);
 		if(result.isSuccess())
 			System.out.println("插入成功一条流程定义信息, 其id为: "+ ((ProcessDefinition)result.getObject()).getId());
@@ -37,7 +39,7 @@ public class AssignTest {
 	
 	@Test
 	public void deploy() throws ProcessParseException {
-		int processDefinitionId= 1;
+		int processDefinitionId= 2;
 		Result result = engine.getRepositoryModule().getDefinitionService().deploy(processDefinitionId);
 		if(result.isSuccess())
 			System.out.println("id为["+processDefinitionId+"]的流程定义信息部署成功");
@@ -47,7 +49,7 @@ public class AssignTest {
 	
 	@Test
 	public void start() {
-		int processDefinitionId = 1;
+		int processDefinitionId =5;
 		StartParameter parameter = new StartParameter(processDefinitionId);
 		parameter.addVariable("name", "金石磊");
 		parameter.addVariable("day", 15);

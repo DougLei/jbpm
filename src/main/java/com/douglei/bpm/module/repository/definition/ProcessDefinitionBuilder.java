@@ -179,7 +179,7 @@ public class ProcessDefinitionBuilder {
 	 * 构建流程定义实例
 	 * @return
 	 */
-	ProcessDefinition build() {
+	public ProcessDefinition build() {
 		return definition;
 	}
 	

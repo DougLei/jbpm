@@ -6,7 +6,6 @@ package com.douglei.bpm.module;
  */
 @SuppressWarnings("unchecked")
 public class Result {
-	
 	private String message; // 记录执行失败时的消息
 	private String code; // 记录执行失败时的国际化编码
 	private Object[] params; // 记录执行失败时的国际化编码需要的参数

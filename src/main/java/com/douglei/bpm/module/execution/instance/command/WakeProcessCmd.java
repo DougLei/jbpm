@@ -79,7 +79,7 @@ public class WakeProcessCmd implements Command {
 	 * 
 	 * @author DougLei
 	 */
-	class TaskEntity {
+	private class TaskEntity {
 		long times;
 		TimeLimitCalculator calc;
 		

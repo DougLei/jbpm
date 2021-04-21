@@ -6,6 +6,7 @@ import java.util.Date;
 import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.Result;
+import com.douglei.bpm.module.execution.instance.State;
 import com.douglei.bpm.module.execution.task.runtime.Task;
 import com.douglei.bpm.module.execution.task.runtime.TaskEntity;
 import com.douglei.bpm.process.handler.task.user.timelimit.TimeLimitCalculator;
@@ -30,6 +31,9 @@ public class WakeTaskCmd implements Command {
 		if(task.isActive())
 			return new Result("唤醒失败, [%s]任务已处于活动状态", "jbpm.taskinst.wake.fail.state.error", task.getName());
 		
+		if(entity.getProcessInstanceState() == State.SUSPENDED)
+			return new Result("唤醒失败, [%s]任务所在的流程实例处于挂起状态", "jbpm.taskinst.wake.fail.procinst.is.suspended", task.getName());
+		
 		// 如果任务的截止日期不为空, 需要重新计算截止日期
 		Date expiryTime = task.getExpiryTime();
 		if(expiryTime != null) { 
@@ -38,7 +42,9 @@ public class WakeTaskCmd implements Command {
 			expiryTime = calc.getExpiryTime(expiryTime, task.getStartTime(), task.getSuspendTime(), new Date(), timeLimit.getTimes());
 		}
 		
-		SessionContext.getSqlSession().executeUpdate("update bpm_ru_task set is_active=1, expiry_time=?, suspend_time=null where id=?", Arrays.asList(expiryTime, task.getId()));
+		SessionContext.getSqlSession().executeUpdate(
+				"update bpm_ru_task set expiry_time=?, suspend_time=null where id=?", 
+				Arrays.asList(expiryTime, task.getId()));
 		return Result.getDefaultSuccessInstance();
 	}
 }

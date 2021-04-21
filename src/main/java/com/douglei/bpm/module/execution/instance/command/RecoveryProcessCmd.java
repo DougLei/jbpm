@@ -1,5 +1,6 @@
 package com.douglei.bpm.module.execution.instance.command;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,16 +34,27 @@ public class RecoveryProcessCmd extends DeleteProcessCmd {
 	public Result execute(ProcessEngineBeans processEngineBeans) {
 		if(processInstance.getStateInstance() != State.TERMINATED) 
 			return new Result("恢复失败, [%s]流程实例未处于[TERMINATED]状态", "jbpm.procinst.recovery.fail.state.error", processInstance.getTitle());
-			
+		
 		// 将流程实例从历史表转移到运行表
 		SessionContext.getSqlSession().executeUpdate("delete bpm_hi_procinst where id=?", Arrays.asList(processInstance.getId()));
 		ProcessInstance instance = new ProcessInstance();
 		PropertyValueCopier.copy(processInstance, instance);
+		instance.setSuspendTime(active?null:processInstance.getSuspendTime());
 		instance.setStateInstance(active?State.ACTIVE:State.SUSPENDED);
 		SessionContext.getTableSession().save(instance);
 		
 		// 将任务转移到运行表
 		List<Task> tasks = SessionContext.getTableSession().query(Task.class, "select * from bpm_hi_task where procinst_id=? and source_type=?", Arrays.asList(processInstance.getProcinstId(), SourceType.BY_PROCINST_TERMINATED.getValue()));
+		if(active) {
+			// 批量计算任务的截止日期
+			List<Task> tasks_ = new ArrayList<Task>(tasks.size());
+			tasks.stream()
+				.filter(task -> task.getSuspendTime()==null && task.getExpiryTime() != null)
+				.forEach(task -> tasks_.add(task));
+			
+			if(!tasks_.isEmpty())
+				new WakeProcessCmd().updateExpiryTimes(processInstance.getProcdefId(), processInstance.getSuspendTime(), tasks_, processEngineBeans);
+		}
 		SessionContext.getTableSession().save(tasks);
 		SessionContext.getSqlSession().executeUpdate("delete bpm_hi_task where procinst_id=? and source_type=?", Arrays.asList(processInstance.getProcinstId(), SourceType.BY_PROCINST_TERMINATED.getValue()));
 		
@@ -73,8 +85,6 @@ public class RecoveryProcessCmd extends DeleteProcessCmd {
 			SessionContext.getSQLSession().executeUpdate("RecoveryProcess", "deleteCC", ccs);
 			SessionContext.getTableSession().save(ccs);
 		}
-		
-		
 		
 		return Result.getDefaultSuccessInstance();
 	}

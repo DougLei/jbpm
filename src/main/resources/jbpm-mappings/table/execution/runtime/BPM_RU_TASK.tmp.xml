@@ -21,7 +21,6 @@
 			<column name="BUSINESS_ID" property="businessId" dataType="string" length="100"/>
 			<column name="PAGE_ID" property="pageId" dataType="string" length="500"/>
 			<column name="IS_ALL_CLAIMED" property="isAllClaimed" dataType="number" length="1" />
-			<column name="IS_ACTIVE" property="isActive" dataType="number" length="1" nullable="false"/>
 		</columns>
 		
 		<constraints>

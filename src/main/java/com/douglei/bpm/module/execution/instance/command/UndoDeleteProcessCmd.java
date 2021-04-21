@@ -36,8 +36,8 @@ public class UndoDeleteProcessCmd extends DeleteProcessCmd {
 			if(!tasks.isEmpty()) {
 				List<CarbonCopy> ccs = SessionContext.getSQLSession().query(CarbonCopy.class, "UndoDeleteProcess", "queryHistoryCCList", tasks);
 				if(!ccs.isEmpty()) {
-					SessionContext.getTableSession().save(ccs);
 					SessionContext.getSQLSession().executeUpdate("UndoDeleteProcess", "deleteHistoryCC", ccs);
+					SessionContext.getTableSession().save(ccs);
 				}
 			}
 		}

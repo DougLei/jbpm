@@ -36,14 +36,21 @@ public class TaskEntity {
 	}
 	
 	/**
+	 * 获取流程实例状态
+	 * @return
+	 */
+	public State getProcessInstanceState() {
+		return State.valueOf(Integer.parseInt(
+				SessionContext.getSqlSession().uniqueQuery_(
+						"select state from bpm_ru_procinst where procinst_id=?", Arrays.asList(task.getProcinstId()))[0].toString()));
+	}
+	
+	/**
 	 * 任务是否处于活动状态
 	 * @return
 	 */
 	public boolean isActive() {
-		State processInstanceState = State.valueOf(Integer.parseInt(
-				SessionContext.getSqlSession().uniqueQuery_(
-						"select state from bpm_ru_procinst where procinst_id=?", Arrays.asList(task.getProcinstId()))[0].toString()));
-		
+		State processInstanceState = getProcessInstanceState();
 		switch(processInstanceState) {
 			case ACTIVE:
 				return task.isActive();

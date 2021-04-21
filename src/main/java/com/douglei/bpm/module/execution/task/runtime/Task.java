@@ -33,7 +33,6 @@ public class Task {
 	@Property protected String userId;
 	@Property protected String reason;
 	@Property private Integer isAllClaimed;
-	@Property private int isActive;
 	
 	public Task() {}
 	public Task(int procdefId, String procinstId, String parentTaskinstId, String sourceKey, TaskMetadata taskMetadata) {
@@ -47,7 +46,6 @@ public class Task {
 		this.type = taskMetadata.getType().getName();
 		this.startTime = new Date();
 		this.pageId = taskMetadata.getPageID();
-		this.isActive=1;
 	}
 	
 	/**
@@ -107,7 +105,7 @@ public class Task {
 	 * @return
 	 */
 	public boolean isActive() {
-		return isActive == 1;
+		return suspendTime == null;
 	}
 	
 	public int getId() {
@@ -229,11 +227,5 @@ public class Task {
 	}
 	public void setIsAllClaimed(Integer isAllClaimed) {
 		this.isAllClaimed = isAllClaimed;
-	}
-	public Integer getIsActive() {
-		return isActive;
-	}
-	public void setIsActive(Integer isActive) {
-		this.isActive = isActive;
 	}
 }

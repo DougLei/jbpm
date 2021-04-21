@@ -38,9 +38,9 @@ public class DeleteProcessCmd implements Command {
 			if(!tasks.isEmpty()) {
 				List<HistoryCarbonCopy> ccs = SessionContext.getSQLSession().query(HistoryCarbonCopy.class, "TerminateProcess", "queryCCList", tasks);
 				if(!ccs.isEmpty()) {
+					SessionContext.getSQLSession().executeUpdate("TerminateProcess", "deleteCC", ccs);
 					ccs.forEach(cc -> cc.setSourceTypeInstance(SourceType.BY_PROCINST_DELETED));
 					SessionContext.getTableSession().save(ccs);
-					SessionContext.getSQLSession().executeUpdate("TerminateProcess", "deleteCC", ccs);
 				}
 			}
 		}

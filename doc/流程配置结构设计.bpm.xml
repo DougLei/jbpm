@@ -172,9 +172,9 @@
 				<parameter target="" suggest="false" attitude="false" />
 				
 				<!-- 可不配置, 默认使用target环节的候选人指派配置, 没有<handlePolicy>配置项 -->
-				<candidate>
-					<assignPolicy></assignPolicy>
-				</candidate>
+				<assignPolicy isDynamic="true/false" assignNum="1">
+					<expression name="" value="" />
+				</assignPolicy>
 			</option>
 			<option type="back" name="流程回退" order="">
 				<!-- 

@@ -211,17 +211,17 @@ public class ProcessDefinitionService {
 		if(existsInstance(id))
 			return new Result("删除失败, [%s]流程存在实例, 如确实需要删除, 请先处理相关实例", "jbpm.procdef.physical.delete.fail.instance.exists", processDefinition.getName());
 		
-		// 直接删除
+		// 进行删除操作
 		SessionContext.getSqlSession().executeUpdate("delete bpm_re_procdef where id=?", Arrays.asList(id));
 		
 		// 如果被删除的流程是主要子版本, 且子版本值不为0, 需要尝试将上一个子版本的流程设置为主要子版本
 		if(processDefinition.isMajorSubversion() && processDefinition.getSubversion() > 0) { 
 			List<ProcessDefinition> beforeList = SessionContext.getSQLSession().limitQuery(ProcessDefinition.class, 1, 1, "ProcessDefinition", "querySubversions", processDefinition);
 			if(beforeList.size() > 0) {
-				ProcessDefinition beforeProcessDefinition = beforeList.get(0);
-				beforeProcessDefinition.setIsMajorSubversion(1);
-				beforeProcessDefinition.setStateInstance(processDefinition.getStateInstance());
-				SessionContext.getTableSession().update(beforeProcessDefinition);
+				ProcessDefinition before = beforeList.get(0);
+				before.setIsMajorSubversion(1);
+				before.setStateInstance(processDefinition.getStateInstance());
+				SessionContext.getTableSession().update(before);
 			}
 		}
 		return Result.getDefaultSuccessInstance();

@@ -3,12 +3,6 @@ package com.douglei.bpm;
 import javax.sql.DataSource;
 
 import com.douglei.bpm.bean.BeanFactory;
-import com.douglei.bpm.configuration.ProcessEngineConfiguration;
-import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpression;
-import com.douglei.bpm.process.api.user.option.AbstractOptionParser;
-import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
-import com.douglei.bpm.process.api.user.task.handle.policy.DispatchPolicy;
-import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandlePolicy;
 import com.douglei.orm.context.SessionFactoryContainer;
 import com.douglei.orm.sessionfactory.SessionFactory;
 
@@ -26,66 +20,6 @@ public class ProcessEngineBuilder {
 		this.engineId = engineId;
 	}
 
-	/**
-	 * 设置流程的配置
-	 * @param configuration
-	 * @return
-	 */
-	public ProcessEngineBuilder setProcessEngineConfiguration(ProcessEngineConfiguration configuration) {
-		beanFactory.registerCustomBean(ProcessEngineConfiguration.class, configuration);
-		return this;
-	}
-	
-	/**
-	 * 添加可指派的用户表达式
-	 * @param expression
-	 * @return
-	 */
-	public ProcessEngineBuilder addAssignableUserExpression(AssignableUserExpression expression) {
-		beanFactory.registerCustomBean(AssignableUserExpression.class, expression);
-		return this;
-	}
-	
-	/**
-	 * 添加任务认领策略
-	 * @param policy
-	 * @return
-	 */
-	public ProcessEngineBuilder addClaimPolicy(ClaimPolicy policy) {
-		beanFactory.registerCustomBean(ClaimPolicy.class, policy);
-		return this;
-	}
-	
-	/**
-	 * 添加串行办理任务时, 办理顺序的策略
-	 * @param policy
-	 * @return
-	 */
-	public ProcessEngineBuilder addSerialHandlePolicy(SerialHandlePolicy policy) {
-		beanFactory.registerCustomBean(SerialHandlePolicy.class, policy);
-		return this;
-	}
-	
-	/**
-	 * 添加任务调度策略
-	 * @param policy
-	 * @return
-	 */
-	public ProcessEngineBuilder addDispatchPolicy(DispatchPolicy policy) {
-		beanFactory.registerCustomBean(DispatchPolicy.class, policy);
-		return this;
-	}
-	
-	/**
-	 * 添加(用户任务的)Option解析器
-	 * @param optionParser
-	 * @return
-	 */
-	public ProcessEngineBuilder addOptionParser(AbstractOptionParser optionParser) {
-		beanFactory.registerCustomBean(AbstractOptionParser.class, optionParser);
-		return this;
-	}
-	
 	/**
 	 * 使用默认filepath的jbpm.conf.xml配置文件(基于java resource), 构建引擎
 	 * @return

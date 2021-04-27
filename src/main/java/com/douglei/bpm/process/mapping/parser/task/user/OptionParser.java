@@ -8,8 +8,8 @@ import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.process.api.APIContainer;
 import com.douglei.bpm.process.api.user.option.AbstractOptionParser;
-import com.douglei.bpm.process.api.user.option.OptionParsers;
 import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.option.Option;
 import com.douglei.bpm.process.mapping.parser.ProcessParseException;
@@ -24,7 +24,7 @@ import com.douglei.tools.datatype.DataTypeValidateUtil;
 public class OptionParser {
 	
 	@Autowired
-	private OptionParsers parsers;
+	private APIContainer apiContainer;
 	
 	/**
 	 * 解析options
@@ -39,7 +39,7 @@ public class OptionParser {
 		
 		List<Option> options = new ArrayList<Option>(elements.size());
 		for (Element element : elements) {
-			AbstractOptionParser parser = parsers.get(element.attributeValue("type"));
+			AbstractOptionParser parser = apiContainer.getOptionParser(element.attributeValue("type"));
 			if(parser == null)
 				throw new ProcessParseException("<userTask id="+metadata.getId()+" name="+metadata.getName()+"><option>的type属性值["+element.attributeValue("type")+"]不合法");
 			

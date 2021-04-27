@@ -131,64 +131,64 @@ public class ProcessEngine {
 		});
 		factory.getMappingHandler().execute(entities);
 	}
-}
-
-/**
- * 
- * @author DougLei
- */
-class SessionFactoryMapper {
-	private Map<String, SessionFactoryType> map = new HashMap<String, SessionFactoryType>(); // key=SessionFactory的id, value为SessionFactory的类型
-	private List<String> mappingFiles;
+	
 	
 	/**
 	 * 
-	 * @param factory
-	 * @param type
-	 * @param parser
+	 * @author DougLei
 	 */
-	public void put(SessionFactory factory, SessionFactoryType type) {
-		map.put(factory.getId(), type);
+	private class SessionFactoryMapper {
+		private Map<String, SessionFactoryType> map = new HashMap<String, SessionFactoryType>(); // key=SessionFactory的id, value为SessionFactory的类型
+		private List<String> mappingFiles;
 		
-		if(type != SessionFactoryType.BUILTIN) {
-			// 加载工作流相关mapping文件
-			if(this.mappingFiles == null)
-				this.mappingFiles = new ResourceScanner(MappingTypeContainer.getFileSuffixes()).scan("jbpm-mappings");
+		/**
+		 * 
+		 * @param factory
+		 * @param type
+		 * @param parser
+		 */
+		public void put(SessionFactory factory, SessionFactoryType type) {
+			map.put(factory.getId(), type);
 			
-			List<MappingEntity> mappingEntities = new ArrayList<MappingEntity>(mappingFiles.size());
-			this.mappingFiles.forEach(mappingFile -> mappingEntities.add(new AddOrCoverMappingEntity(mappingFile)));
-			factory.getMappingHandler().execute(mappingEntities);
+			if(type != SessionFactoryType.BUILTIN) {
+				// 加载工作流相关mapping文件
+				if(this.mappingFiles == null)
+					this.mappingFiles = new ResourceScanner(MappingTypeContainer.getFileSuffixes()).scan("jbpm-mappings");
+				
+				List<MappingEntity> mappingEntities = new ArrayList<MappingEntity>(mappingFiles.size());
+				this.mappingFiles.forEach(mappingFile -> mappingEntities.add(new AddOrCoverMappingEntity(mappingFile)));
+				factory.getMappingHandler().execute(mappingEntities);
+			}
+		}
+		
+		/**
+		 * 
+		 * @param dataSourceId
+		 * @return
+		 */
+		public SessionFactoryType get(String dataSourceId) {
+			SessionFactoryType type = map.get(dataSourceId);
+			if(type == null)
+				throw new ProcessEngineException("流程引擎中不存在id为"+dataSourceId+"的数据源");
+			return type;
+		}
+
+		/**
+		 * 
+		 * @return
+		 */
+		public List<String> getMappingFiles() {
+			return mappingFiles;
 		}
 	}
-	
-	/**
-	 * 
-	 * @param dataSourceId
-	 * @return
-	 */
-	public SessionFactoryType get(String dataSourceId) {
-		SessionFactoryType type = map.get(dataSourceId);
-		if(type == null)
-			throw new ProcessEngineException("流程引擎中不存在id为"+dataSourceId+"的数据源");
-		return type;
-	}
 
 	/**
 	 * 
-	 * @return
+	 * @author DougLei
 	 */
-	public List<String> getMappingFiles() {
-		return mappingFiles;
+	private enum SessionFactoryType {
+		BUILTIN, 
+		EXTERNAL,
+		HALF;
 	}
 }
-
-/**
- * 
- * @author DougLei
- */
-enum SessionFactoryType {
-	BUILTIN, 
-	EXTERNAL,
-	HALF;
-}
-

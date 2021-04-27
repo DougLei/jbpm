@@ -6,8 +6,8 @@ import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.process.api.APIContainer;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpression;
-import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpressionContainer;
 import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignNumber;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignPolicy;
@@ -26,7 +26,7 @@ public class AssignPolicyParser {
 	private AssignNumberParser assignNumberParser;
 	
 	@Autowired
-	private AssignableUserExpressionContainer assignUserExpressionContainer;
+	private APIContainer apiContainer;
 	
 	/**
 	 * 解析指派策略
@@ -84,7 +84,7 @@ public class AssignPolicyParser {
 		if(StringUtil.isEmpty(expressionName))
 			throw new ProcessParseException(String.format("<userTask id=%s name=%s>%s<assignPolicy><expression>的name属性值不能为空", metadata.getId(), metadata.getName(), struct));
 		
-		AssignableUserExpression assignUserExpression = assignUserExpressionContainer.get(expressionName);
+		AssignableUserExpression assignUserExpression = apiContainer.getAssignableUserExpression(expressionName);
 		if(assignUserExpression == null)
 			throw new ProcessParseException(String.format("<userTask id=%s name=%s>%s<assignPolicy><expression>的name属性值[%s]不合法", metadata.getId(), metadata.getName(), struct, expressionName));
 		

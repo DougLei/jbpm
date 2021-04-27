@@ -76,7 +76,7 @@ public class AssigneeHandler {
 		
 		// 尝试进行自动认领
 		ClaimPolicyEntity entity = currentUserTaskMetadata.getCandidate().getHandlePolicy().getClaimPolicyEntity();
-		ClaimPolicy policy = processEngineBeans.getTaskHandlePolicyContainer().getClaimPolicy(entity.getName());
+		ClaimPolicy policy = processEngineBeans.getAPIContainer().getClaimPolicy(entity.getName());
 		if(policy.tryAutoClaim(entity.getValue(), currentTask.getAssignCount(), assigneeList, handleParameter.getCurrentDate()))
 			currentTask.setIsAllClaimed(1);
 		

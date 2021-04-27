@@ -4,8 +4,8 @@ import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
+import com.douglei.bpm.process.api.APIContainer;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
-import com.douglei.bpm.process.api.user.task.handle.policy.TaskHandlePolicyContainer;
 import com.douglei.bpm.process.api.user.task.handle.policy.impl.SerialHandleByClaimTimePolicy;
 import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.Candidate;
@@ -25,7 +25,7 @@ import com.douglei.tools.StringUtil;
 public class CandidateParser {
 	
 	@Autowired
-	private TaskHandlePolicyContainer taskHandlePolicyContainer;
+	private APIContainer apiContainer;
 	
 	@Autowired
 	private AssignPolicyParser assignPolicyParser;
@@ -69,7 +69,7 @@ public class CandidateParser {
 		if(StringUtil.isEmpty(policyName))
 			throw new ProcessParseException("<userTask id="+metadata.getId()+" name="+metadata.getName()+"><candidate><handlePolicy><claim>的name属性值不能为空");
 		
-		ClaimPolicy claimPolicy = taskHandlePolicyContainer.getClaimPolicy(policyName);
+		ClaimPolicy claimPolicy = apiContainer.getClaimPolicy(policyName);
 		if(claimPolicy == null)
 			throw new ProcessParseException("<userTask id="+metadata.getId()+" name="+metadata.getName()+"><candidate><handlePolicy><claim>的name属性值["+policyName+"]不合法");
 		
@@ -92,7 +92,7 @@ public class CandidateParser {
 		String policyName = element.attributeValue("name");
 		if(StringUtil.isEmpty(policyName)) {
 			policyName = SerialHandleByClaimTimePolicy.NAME;
-		}else if(taskHandlePolicyContainer.getSerialHandlePolicy(policyName) == null){
+		}else if(apiContainer.getSerialHandlePolicy(policyName) == null){
 			throw new ProcessParseException("<userTask id="+metadata.getId()+" name="+metadata.getName()+"><candidate><handlePolicy><serialHandle>的name属性值["+policyName+"]不合法");
 		}
 		return new SerialHandlePolicyEntity(policyName); 
@@ -107,7 +107,7 @@ public class CandidateParser {
 		if(StringUtil.isEmpty(policyName)) 
 			return null;
 		
-		if(taskHandlePolicyContainer.getDispatchPolicy(policyName) == null)
+		if(apiContainer.getDispatchPolicy(policyName) == null)
 			throw new ProcessParseException("<userTask id="+metadata.getId()+" name="+metadata.getName()+"><candidate><handlePolicy><dispatch>的name属性值["+policyName+"]不合法");
 		return new DispatchPolicyEntity(policyName); 
 	}

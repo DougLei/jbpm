@@ -113,7 +113,7 @@ public class ClaimTaskCmd implements Command{
 		
 		ClaimPolicyEntity claimPolicyEntity = ((UserTaskMetadata) entity.getTaskMetadataEntity().getTaskMetadata()).getCandidate().getHandlePolicy().getClaimPolicyEntity();
 		return processEngineBeans
-				.getTaskHandlePolicyContainer()
+				.getAPIContainer()
 				.getClaimPolicy(claimPolicyEntity.getName())
 				.claimValidate(claimPolicyEntity.getValue(), currentClaimUserId, currentAssigneeList, unclaimAssigneeList, claimedAssigneeList, finishedAssigneeList);
 	}

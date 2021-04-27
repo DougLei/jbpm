@@ -61,14 +61,14 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralTaskHa
 		FinishedFlag flag = isFinished();
 		if(flag.isFinished) {
 			String dispatchUserId = handleParameter.getUserEntity().getCurrentHandleUserId(); // 可进行调度的用户id
-			if(flag.claimUpperLimit == -1) {
+			if(flag.supportMultipleClaim) {
 				// 获取办理过当前任务的用户id集合
 				List<Object[]> list = SessionContext.getSqlSession().query_("select distinct user_id from bpm_hi_assignee where taskinst_id=? and handle_state = 6", Arrays.asList(currentTask.getTaskinstId()));
 				List<String> handledUserIds = new ArrayList<String>(list.size());
 				list.forEach(array -> handledUserIds.add(array[0].toString()));
 				
 				// 根据调度策略, 获取可进行任务调度的userId
-				DispatchPolicy dispatchPolicy = processEngineBeans.getTaskHandlePolicyContainer().getDispatchPolicy(currentTaskMetadataEntity.getTaskMetadata().getCandidate().getHandlePolicy().getDispatchPolicyEntity().getName());
+				DispatchPolicy dispatchPolicy = processEngineBeans.getAPIContainer().getDispatchPolicy(currentTaskMetadataEntity.getTaskMetadata().getCandidate().getHandlePolicy().getDispatchPolicyEntity().getName());
 				dispatchUserId = dispatchPolicy.getUserId(handleParameter.getUserEntity().getCurrentHandleUserId(), handledUserIds);
 			}
 			currentTask.setDispatchRight(dispatchUserId);
@@ -82,18 +82,18 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralTaskHa
 	private FinishedFlag isFinished() {
 		Task currentTask = handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask();
 		if(!currentTask.isAllClaimed())
-			return new FinishedFlag(false, -1);
+			return new FinishedFlag(true, false);
 		
 		ClaimPolicyEntity entity = currentTaskMetadataEntity.getTaskMetadata().getCandidate().getHandlePolicy().getClaimPolicyEntity();
-		ClaimPolicy claimPolicy = processEngineBeans.getTaskHandlePolicyContainer().getClaimPolicy(entity.getName());
+		ClaimPolicy claimPolicy = processEngineBeans.getAPIContainer().getClaimPolicy(entity.getName());
 		if(claimPolicy.calcUpperLimit(entity.getValue(), currentTask.getAssignCount()) == 1)
-			return new FinishedFlag(true, 1);
+			return new FinishedFlag(false, true);
 		
 		// 查询当前任务, 剩余已经认领的指派信息数量
 		int leftClaimedAssigneeCount = Integer.parseInt(SessionContext.getSqlSession().uniqueQuery_(
 				"select count(id) from bpm_ru_assignee where taskinst_id=? and handle_state=?", 
 				Arrays.asList(currentTask.getTaskinstId(), HandleState.CLAIMED.getValue()))[0].toString());
-		return new FinishedFlag(leftClaimedAssigneeCount == 0, -1);
+		return new FinishedFlag(true, leftClaimedAssigneeCount == 0);
 	}
 	
 	/**
@@ -101,12 +101,12 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralTaskHa
 	 * @author DougLei
 	 */
 	class FinishedFlag {
+		boolean supportMultipleClaim; // 任务是否支持多人认领
 		boolean isFinished; // 任务是否完成
-		int claimUpperLimit; // 可认领的人数上限
 		
-		public FinishedFlag(boolean isFinished, int claimUpperLimit) {
+		public FinishedFlag(boolean supportMultipleClaim, boolean isFinished) {
+			this.supportMultipleClaim = supportMultipleClaim;
 			this.isFinished = isFinished;
-			this.claimUpperLimit = claimUpperLimit;
 		}
 	}
 }

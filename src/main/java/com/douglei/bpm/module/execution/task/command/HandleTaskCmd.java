@@ -75,7 +75,7 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 			return 0;
 		
 		// 判断任务的认领人数上限是否为1
-		ClaimPolicy claimPolicy = processEngineBeans.getTaskHandlePolicyContainer().getClaimPolicy(handlePolicy.getClaimPolicyEntity().getName());
+		ClaimPolicy claimPolicy = processEngineBeans.getAPIContainer().getClaimPolicy(handlePolicy.getClaimPolicyEntity().getName());
 		if(claimPolicy.calcUpperLimit(handlePolicy.getClaimPolicyEntity().getValue(), entity.getTask().getAssignCount()) == 1)
 			return 0;
 		
@@ -94,6 +94,6 @@ public class HandleTaskCmd extends AbstractTaskCmd implements Command {
 		
 		if(count == claimedAssigneeList.size())
 			return 0;
-		return processEngineBeans.getTaskHandlePolicyContainer().getSerialHandlePolicy(handlePolicy.getSerialHandlePolicyEntity().getName()).canHandle(parameter.getUserId(), claimedAssigneeList);
+		return processEngineBeans.getAPIContainer().getSerialHandlePolicy(handlePolicy.getSerialHandlePolicyEntity().getName()).canHandle(parameter.getUserId(), claimedAssigneeList);
 	}
 }

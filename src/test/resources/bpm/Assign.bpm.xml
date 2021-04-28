@@ -4,7 +4,7 @@
 		
 		<startEvent id="startEvent" name="开始">
 			<listeners>
-				<listener value="完整的类路径" /><!-- 按照配置的顺序依次执行, 可配置多个 -->
+				<listener class="完整的类路径" /><!-- 按照配置的顺序依次执行, 可配置多个 -->
 			</listeners>
 		</startEvent>
 		<flow id="flow1" source="startEvent" target="userTask1" />

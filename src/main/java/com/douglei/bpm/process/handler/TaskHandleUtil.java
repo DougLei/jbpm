@@ -8,6 +8,8 @@ import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.module.Result;
+import com.douglei.bpm.process.api.listener.ActiveTime;
+import com.douglei.bpm.process.api.listener.Listener;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpressionParameter;
 import com.douglei.bpm.process.handler.event.end.EndEventHandler;
 import com.douglei.bpm.process.handler.event.start.StartEventHandler;
@@ -15,6 +17,7 @@ import com.douglei.bpm.process.handler.gateway.ExclusiveGatewayHandler;
 import com.douglei.bpm.process.handler.gateway.InclusiveGatewayHandler;
 import com.douglei.bpm.process.handler.gateway.ParallelGatewayHandler;
 import com.douglei.bpm.process.handler.task.user.UserTaskHandler;
+import com.douglei.bpm.process.mapping.metadata.ProcessNodeMetadata;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadataEntity;
 import com.douglei.bpm.process.mapping.metadata.flow.FlowMetadata;
@@ -153,6 +156,22 @@ public class TaskHandleUtil {
 		startup(targetTaskMetadataEntity, parameter);
 	}
 	
+	/**
+	 * 通知监听
+	 * @param metadata
+	 * @param target
+	 */
+	public void notifyListners(ProcessNodeMetadata metadata, AbstractHandleParameter handleParameter, ActiveTime target) {
+		List<String> listeners =metadata.getListeners();
+		if(listeners == null)
+			return;
+		
+		listeners.forEach(listener -> {
+			Listener currentListener = processEngineBeans.getAPIContainer().getListener(listener);
+			if(currentListener.getActiveTime() == target)
+				currentListener.notify(handleParameter);
+		});
+	}
 	
 	//---------------------------------------------------------------------------------------------
 	// 关于用户指派的api

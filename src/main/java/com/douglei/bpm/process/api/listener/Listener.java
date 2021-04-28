@@ -1,5 +1,7 @@
 package com.douglei.bpm.process.api.listener;
 
+import com.douglei.bpm.process.handler.AbstractHandleParameter;
+
 /**
  * 流程监听器
  * <p>
@@ -26,17 +28,9 @@ public interface Listener {
 	
 	/**
 	 * 
-	 * @return
+	 * @param handleParameter
 	 */
-	default Scope getScope() {
-		return Scope.SINGLETON;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	Executor getExecutor();
+	void notify(AbstractHandleParameter handleParameter);
 	
 	/**
 	 * 

@@ -72,6 +72,27 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
+		
+		
+		
+		
+		
+		<dependency>
+             <groupId>org.activiti</groupId>
+             <artifactId>activiti-engine</artifactId>
+             <version>6.0.0</version>
+        </dependency>
+        <dependency>
+	        <groupId>org.activiti</groupId>
+	        <artifactId>activiti-bpmn-converter</artifactId>
+	        <version>7.1.0.M6</version>
+	    </dependency>
+	    <dependency>
+			<groupId>org.ow2.petals.activiti</groupId>
+			<artifactId>activiti-bpmn-model</artifactId>
+			<version>5.18.0-PETALS-1</version>    
+        </dependency>
+		
 	</dependencies>
 	
 	<distributionManagement>

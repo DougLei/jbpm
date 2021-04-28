@@ -36,7 +36,7 @@
 			
 			<!-- 监听器, 按照配置的顺序依次执行, 可不配置, 默认为null -->
 			<listeners>
-				<listener value="完整的类路径" /><!-- 按照配置的顺序依次执行, 可配置多个 -->
+				<listener class="完整的类路径" /><!-- 按照配置的顺序依次执行, 可配置多个 -->
 			</listeners>
 		</startEvent>
 		

@@ -50,7 +50,7 @@ public abstract class GeneralParser {
 		
 		List<String> listeners = new ArrayList<String>(elements.size());
 		elements.forEach(elem -> {
-			Listener listener = apiContainer.getListener(elem.attributeValue("value"));
+			Listener listener = apiContainer.getListener(elem.attributeValue("class"));
 			if(listener == null)
 				throw new ProcessParseException(String.format("<%s id=%s name=%s><listeners><listener>的value属性值[%s]不合法", metadata.getType().getName(), metadata.getId(), metadata.getName(), elem.attributeValue("value")));
 			listeners.add(listener.getName());

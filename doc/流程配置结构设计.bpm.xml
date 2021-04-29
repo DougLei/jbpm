@@ -39,7 +39,8 @@
 				<!-- 
 					按照配置的顺序依次执行, 可配置多个
 					* class: 监听解析器类的全路径, 必须配置, 没有默认值
-					* activeTime: 激活该listener的时机, 必须配置, 没有默认值; 目前包括的值(不区分大小写): TASK_DISPATCH(任务调度时)
+					* activeTime: 激活该listener的时机, 必须配置, 没有默认值; 目前包括的值(不区分大小写): 
+					** TASK_DISPATCH(任务调度时)
 				 -->
 				<listener class="" activeTime="">
 					<!-- 其他配置, 可扩展 -->

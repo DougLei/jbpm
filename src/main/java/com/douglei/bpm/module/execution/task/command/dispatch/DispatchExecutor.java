@@ -8,6 +8,7 @@ import com.douglei.bpm.process.handler.TaskDispatchException;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadataEntity;
 import com.douglei.bpm.process.mapping.metadata.TaskNotExistsException;
+import com.douglei.bpm.process.mapping.metadata.listener.ActiveTime;
 
 /**
  * 调度执行器
@@ -42,6 +43,8 @@ public abstract class DispatchExecutor {
 	protected final void setAssignedUsers(HashSet<String> assignedUserIds) {
 		if(assignedUserIds != null && !assignedUserIds.isEmpty())
 			handleParameter.getUserEntity().appendAssignedUserIds(assignedUserIds);
+		
+		processEngineBeans.getTaskHandleUtil().notifyListners(currentTaskMetadataEntity.getTaskMetadata(), handleParameter, ActiveTime.TASK_DISPATCH);
 	}
 	
 	/**

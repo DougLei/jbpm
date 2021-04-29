@@ -97,31 +97,7 @@ public class TaskHandleUtil {
 	}
 	
 	/**
-	 * task调度
-	 * <p>
-	 *  对task中的flows进行调度, 选择第一条匹配的flow执行
-	 * @param taskMetadataEntity
-	 * @param parameter
-	 * @throws TaskDispatchException
-	 */
-	public void dispatch(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, AbstractHandleParameter parameter) throws TaskDispatchException{
-		for(FlowMetadata flow : taskMetadataEntity.getOutputFlows()) {
-			if(flowMatching(flow, parameter)) {
-				dispatchByFlow(flow, parameter);
-				return;
-			}
-		}
-		
-		FlowMetadata defaultOutputFlow = taskMetadataEntity.getDefaultOutputFlow();
-		if(defaultOutputFlow == null)
-			throw new TaskDispatchException("执行"+taskMetadataEntity.getTaskMetadata()+"任务时, 未能匹配到满足条件的OutputFlow");
-		dispatchByFlow(defaultOutputFlow, parameter);
-	}
-	
-	/**
-	 * flow匹配
-	 * <p>
-	 * 判断指定的flowMetadata是否满足流转条件
+	 * 匹配flow; 判断指定的flow是否满足流转条件
 	 * @param flowMetadata
 	 * @param parameter
 	 * @return 
@@ -131,27 +107,6 @@ public class TaskHandleUtil {
 		if(conditionExpression == null)
 			return true;
 		return OgnlUtil.getBooleanValue(conditionExpression, parameter.getVariableEntities().getVariableMap());
-	}
-	
-	/**
-	 * flow调度, 属于直接调度
-	 * @param flowMetadata
-	 * @param parameter
-	 */
-	public void dispatchByFlow(FlowMetadata flowMetadata, AbstractHandleParameter parameter) {
-		parameter.getTaskEntityHandler().dispatch();
-		startup(parameter.getProcessMetadata().getTaskMetadataEntity(flowMetadata.getTarget()), parameter);
-	}
-	
-	/**
-	 * task调度, 属于直接调度
-	 * @param targetTaskMetadataEntity
-	 * @param parameter
-	 * @throws TaskDispatchException
-	 */
-	public void dispatchByTask(TaskMetadataEntity<TaskMetadata> targetTaskMetadataEntity, AbstractHandleParameter parameter) throws TaskDispatchException{
-		parameter.getTaskEntityHandler().dispatch();
-		startup(targetTaskMetadataEntity, parameter);
 	}
 	
 	/**

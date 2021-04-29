@@ -1,5 +1,7 @@
 package com.douglei.bpm.process.handler.gateway;
 
+import com.douglei.bpm.process.mapping.metadata.flow.FlowMetadata;
+
 /**
  * 
  * @author DougLei
@@ -7,7 +9,7 @@ package com.douglei.bpm.process.handler.gateway;
 public class InclusiveGatewayHandler extends ParallelGatewayHandler{
 
 	@Override
-	protected boolean ignoreFlowCondition() {
-		return false;
+	protected boolean flowMatching(FlowMetadata flow) {
+		return processEngineBeans.getTaskHandleUtil().flowMatching(flow, handleParameter);
 	}
 }

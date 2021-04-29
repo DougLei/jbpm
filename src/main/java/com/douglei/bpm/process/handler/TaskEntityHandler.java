@@ -68,7 +68,7 @@ public class TaskEntityHandler {
 	 * <p>
 	 * 将当前办理的任务实体实例, 转移到历史任务实体实例集合中, 并置空当前办理任务
 	 */
-	void dispatch() {
+	public void dispatch() {
 		if(historyTaskEntities == null)
 			historyTaskEntities = new LinkedList<TaskEntity>();
 		historyTaskEntities.add(currentTaskEntity);

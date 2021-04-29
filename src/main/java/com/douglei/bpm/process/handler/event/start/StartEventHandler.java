@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import com.douglei.bpm.module.Result;
 import com.douglei.bpm.module.execution.instance.State;
 import com.douglei.bpm.module.execution.instance.runtime.ProcessInstance;
+import com.douglei.bpm.module.execution.task.command.dispatch.impl.StandardDispatchExecutor;
 import com.douglei.bpm.module.execution.task.history.HistoryTask;
 import com.douglei.bpm.module.execution.variable.history.HistoryVariable;
 import com.douglei.bpm.module.execution.variable.runtime.Variable;
@@ -46,7 +47,7 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		saveVariables(historyTask);
 		
 		// 进行任务调度
-		processEngineBeans.getTaskHandleUtil().dispatch(currentTaskMetadataEntity, handleParameter);
+		new StandardDispatchExecutor().initParameters(currentTaskMetadataEntity, handleParameter, null, processEngineBeans).execute();
 		return new Result(processInstance);
 	}
 	

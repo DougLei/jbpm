@@ -5,6 +5,7 @@ import com.douglei.bpm.process.handler.TaskDispatchException;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadataEntity;
 import com.douglei.bpm.process.mapping.metadata.TaskNotExistsException;
+import com.douglei.bpm.process.mapping.metadata.listener.ActiveTime;
 
 /**
  * 设置目标调度
@@ -21,6 +22,10 @@ public class SettargetDispatchExecutor extends DispatchExecutor {
 	public void execute() throws TaskNotExistsException, TaskDispatchException {
 		TaskMetadataEntity<TaskMetadata> targetTaskMetadataEntity = currentTaskMetadataEntity.getProcessMetadata().getTaskMetadataEntity(targetTask);
 		setAssignedUsers(assignedUserIds);
-		processEngineBeans.getTaskHandleUtil().dispatchByTask(targetTaskMetadataEntity, handleParameter);
+		
+		// 直接调度到指定的任务
+		processEngineBeans.getTaskHandleUtil().notifyListners(currentTaskMetadataEntity.getTaskMetadata(), handleParameter, ActiveTime.TASK_DISPATCH);
+		handleParameter.getTaskEntityHandler().dispatch();
+		processEngineBeans.getTaskHandleUtil().startup(targetTaskMetadataEntity, handleParameter);
 	}
 }

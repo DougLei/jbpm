@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.douglei.bpm.module.Result;
+import com.douglei.bpm.module.execution.task.command.dispatch.impl.SettargetDispatchExecutor;
 import com.douglei.bpm.module.execution.task.runtime.Task;
 import com.douglei.bpm.process.handler.TaskDispatchException;
 import com.douglei.bpm.process.handler.TaskEntity;
@@ -15,14 +16,6 @@ import com.douglei.orm.context.SessionContext;
  * @author DougLei
  */
 public class ParallelGatewayHandler extends AbstractGatewayHandler{
-	
-	/**
-	 * 是否忽略flow的条件
-	 * @return
-	 */
-	protected boolean ignoreFlowCondition() {
-		return true;
-	}
 	
 	@Override
 	public Result startup() {
@@ -59,7 +52,10 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 			gatewayTask.setForkBranchNum(1);
 			completeTask(gatewayTask, handleParameter.getVariableEntities());
 			handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(gatewayTask, false));
-			processEngineBeans.getTaskHandleUtil().dispatchByFlow(outputFlows.get(0), handleParameter);
+			
+			new SettargetDispatchExecutor(outputFlows.get(0).getTarget())
+				.initParameters(currentTaskMetadataEntity, handleParameter, null, processEngineBeans)
+				.execute();
 			return;
 		}
 		
@@ -87,7 +83,9 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 		LinkedList<TaskEntity> historyTaskEntities = handleParameter.getTaskEntityHandler().getHistoryTaskEntities(); // 历史办理的任务实体实例集合
 		int mark = historyTaskEntities.size(); // 标记初始位置
 		for (FlowMetadata flow : outputFlows) {
-			processEngineBeans.getTaskHandleUtil().dispatchByFlow(flow, handleParameter);
+			new SettargetDispatchExecutor(flow.getTarget())
+				.initParameters(currentTaskMetadataEntity, handleParameter, null, processEngineBeans)
+				.execute();
 			
 			while(historyTaskEntities.size() > mark) 
 				handleParameter.getTaskEntityHandler().setCurrentTaskEntity(historyTaskEntities.removeLast());
@@ -95,7 +93,7 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 	}
 	
 	// 进行flow匹配, 返回是否匹配成功, 即是否可以流入该flow
-	private boolean flowMatching(FlowMetadata flow) {
-		return ignoreFlowCondition() || processEngineBeans.getTaskHandleUtil().flowMatching(flow, handleParameter);
+	protected boolean flowMatching(FlowMetadata flow) {
+		return true;
 	}
 }

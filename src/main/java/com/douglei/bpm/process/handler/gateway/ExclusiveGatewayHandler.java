@@ -1,6 +1,7 @@
 package com.douglei.bpm.process.handler.gateway;
 
 import com.douglei.bpm.module.Result;
+import com.douglei.bpm.module.execution.task.command.dispatch.impl.StandardDispatchExecutor;
 import com.douglei.bpm.module.execution.task.history.HistoryTask;
 import com.douglei.orm.context.SessionContext;
 
@@ -22,7 +23,9 @@ public class ExclusiveGatewayHandler extends AbstractGatewayHandler{
 		HistoryTask historyTask = createHistoryTask();
 		SessionContext.getTableSession().save(historyTask);
 		
-		processEngineBeans.getTaskHandleUtil().dispatch(currentTaskMetadataEntity, handleParameter);
+		new StandardDispatchExecutor()
+			.initParameters(currentTaskMetadataEntity, handleParameter, null, processEngineBeans)
+			.execute();
 		return CANNOT_DISPATCH;
 	}
 }

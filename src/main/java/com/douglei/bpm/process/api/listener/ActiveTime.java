@@ -12,7 +12,17 @@ public enum ActiveTime {
 	TASK_START,
 	
 	/**
+	 * 任务创建时
+	 */
+	TASK_CREATE,
+	
+	/**
+	 * 任务办理时
+	 */
+	TASK_HANDLE,
+	
+	/**
 	 * 任务完成时
 	 */
-	TASK_COMPLETED;
+	TASK_FINISH;
 }

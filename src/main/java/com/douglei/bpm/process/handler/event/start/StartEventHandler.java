@@ -27,11 +27,9 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 	@Override
 	public Result startup() {
 		String conditionExpression = currentTaskMetadataEntity.getTaskMetadata().getConditionExpression();
-		if(conditionExpression != null) {
-			Map<String, Object> variableMap = handleParameter.getVariableEntities().getVariableMap();
-			if(variableMap == null || !OgnlUtil.getBooleanValue(conditionExpression, variableMap))
-				return new Result("启动失败, 当前参数不满足[%s]流程的启动条件", "jbpm.process.start.fail.condition.mismatch", handleParameter.getProcessMetadata().getName());
-		}
+		if(conditionExpression != null && !OgnlUtil.getBooleanValue(conditionExpression, handleParameter.getVariableEntities().getVariableMap())) 
+			return new Result("启动失败, 当前参数不满足[%s]流程的启动条件", "jbpm.process.start.fail.condition.mismatch", handleParameter.getProcessMetadata().getName());
+		
 		return handle();
 	}
 	
@@ -73,7 +71,7 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 	
 	// 获取标题
 	private String getTitle(String title, Map<String, Object> variableMap) {
-		if(variableMap == null || title.indexOf(TitleVariableConstant.PREFIX) == -1)
+		if(variableMap.isEmpty() || title.indexOf(TitleVariableConstant.PREFIX) == -1)
 			return title;
 		
 		List<String> variableNames = null; // 存储标题中的变量名

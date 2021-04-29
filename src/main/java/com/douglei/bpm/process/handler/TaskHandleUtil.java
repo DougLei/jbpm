@@ -130,8 +130,6 @@ public class TaskHandleUtil {
 		String conditionExpression = flowMetadata.getConditionExpression();
 		if(conditionExpression == null)
 			return true;
-		if(parameter.getVariableEntities().getVariableMap() == null) 
-			return false;
 		return OgnlUtil.getBooleanValue(conditionExpression, parameter.getVariableEntities().getVariableMap());
 	}
 	

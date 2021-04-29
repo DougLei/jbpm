@@ -7,8 +7,10 @@ import org.dom4j.Element;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.process.api.APIContainer;
-import com.douglei.bpm.process.api.listener.Listener;
+import com.douglei.bpm.process.api.listener.ListenParser;
 import com.douglei.bpm.process.mapping.metadata.ProcessNodeMetadata;
+import com.douglei.bpm.process.mapping.metadata.listener.ActiveTime;
+import com.douglei.bpm.process.mapping.metadata.listener.Listener;
 
 /**
  * 
@@ -48,12 +50,14 @@ public abstract class GeneralParser {
 		if(elements.isEmpty())
 			return;
 		
-		List<String> listeners = new ArrayList<String>(elements.size());
+		List<Listener> listeners = new ArrayList<Listener>(elements.size());
 		elements.forEach(elem -> {
-			Listener listener = apiContainer.getListener(elem.attributeValue("class"));
-			if(listener == null)
-				throw new ProcessParseException(String.format("<%s id=%s name=%s><listeners><listener>的value属性值[%s]不合法", metadata.getType().getName(), metadata.getId(), metadata.getName(), elem.attributeValue("value")));
-			listeners.add(listener.getName());
+			ListenParser listenParser = apiContainer.getListenParser(elem.attributeValue("class"));
+			if(listenParser == null)
+				throw new ProcessParseException(String.format("<%s id=%s name=%s><listeners><listener>的class属性值[%s]不合法", metadata.getType().getName(), metadata.getId(), metadata.getName(), elem.attributeValue("class")));
+			
+			ActiveTime activeTime = ActiveTime.valueOf(elem.attributeValue("activeTime").toUpperCase());
+			listeners.add(listenParser.parse(activeTime, element));
 		});
 		metadata.setListeners(listeners);
 	}

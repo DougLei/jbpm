@@ -3,6 +3,7 @@ package com.douglei.bpm.process.mapping.metadata;
 import java.util.List;
 
 import com.douglei.bpm.process.Type;
+import com.douglei.bpm.process.mapping.metadata.listener.Listener;
 import com.douglei.orm.mapping.metadata.Metadata;
 import com.douglei.tools.StringUtil;
 
@@ -13,13 +14,13 @@ import com.douglei.tools.StringUtil;
 public abstract class ProcessNodeMetadata implements Metadata {
 	private String id;
 	private String name;
-	private List<String> listeners;
+	private List<Listener> listeners;
 	
 	public ProcessNodeMetadata(String id, String name) {
 		this.id = id;
 		this.name = StringUtil.isEmpty(name)?id:name;
 	}
-	public void setListeners(List<String> listeners) {
+	public void setListeners(List<Listener> listeners) {
 		this.listeners = listeners;
 	}
 
@@ -29,7 +30,7 @@ public abstract class ProcessNodeMetadata implements Metadata {
 	public final String getName() {
 		return name;
 	}
-	public final List<String> getListeners() {
+	public final List<Listener> getListeners() {
 		return listeners;
 	}
 	

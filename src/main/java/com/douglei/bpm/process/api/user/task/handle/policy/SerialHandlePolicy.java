@@ -8,7 +8,6 @@ import com.douglei.bpm.module.execution.task.runtime.Assignee;
 /**
  * 串行办理的策略
  * <p>
- * 
  * 如果需要访问数据库, 可直接调用以下方法:
  * <pre>
  * 	SessionContext.getSqlSession()

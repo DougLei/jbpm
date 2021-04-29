@@ -37,14 +37,14 @@ public class DelegateOptionParser extends AbstractOptionParser {
 		
 		element = element.element("candidate");
 		if(element == null)
-			return createOption(name, order, reasonIsRequired, null);
+			return newInstance(name, order, reasonIsRequired, null);
 		
 		AssignPolicy assignPolicy = assignPolicyParser.parse(metadata, getXmlStruct() + "<candidate>", element);
-		return createOption(name, order, reasonIsRequired, new Candidate(assignPolicy, null));
+		return newInstance(name, order, reasonIsRequired, new Candidate(assignPolicy, null));
 	}
 
 	// 创建option实例
-	protected Option createOption(String name, int order, boolean reasonIsRequired, Candidate candidate) {
+	protected Option newInstance(String name, int order, boolean reasonIsRequired, Candidate candidate) {
 		return new DelegateOption(OptionTypeConstants.DELEGATE, name, order, reasonIsRequired, candidate);
 	}
 }

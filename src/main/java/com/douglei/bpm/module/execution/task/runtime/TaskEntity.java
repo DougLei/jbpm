@@ -88,7 +88,7 @@ public class TaskEntity {
 	}
 	
 	/**
-	 * 获取配置的任务name
+	 * 获取任务name
 	 * @return
 	 */
 	public String getName() {

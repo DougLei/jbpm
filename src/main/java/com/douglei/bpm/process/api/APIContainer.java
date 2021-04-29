@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.douglei.bpm.bean.CustomAutowired;
 import com.douglei.bpm.bean.annotation.Bean;
-import com.douglei.bpm.process.api.listener.Listener;
+import com.douglei.bpm.process.api.listener.ListenParser;
 import com.douglei.bpm.process.api.user.assignable.expression.AssignableUserExpression;
 import com.douglei.bpm.process.api.user.option.AbstractOptionParser;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
@@ -24,7 +24,7 @@ public class APIContainer implements CustomAutowired {
 	private Map<String, SerialHandlePolicy> serialHandlePolicyMap = new HashMap<String, SerialHandlePolicy>();
 	private Map<String, DispatchPolicy> dispatchPolicyMap = new HashMap<String, DispatchPolicy>();
 	private Map<String, AbstractOptionParser> optionParserMap = new HashMap<String, AbstractOptionParser>(); 
-	private Map<String, Listener> listenerMap = new HashMap<String, Listener>();
+	private Map<String, ListenParser> listenParserMap = new HashMap<String, ListenParser>();
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -109,13 +109,12 @@ public class APIContainer implements CustomAutowired {
 		return (AbstractOptionParser) get(type, optionParserMap);
 	}
 	
-
 	/**
-	 * 获取指定name的Listener
-	 * @param name
+	 * 获取指定class的监听解析器
+	 * @param clazz
 	 * @return
 	 */
-	public Listener getListener(String name) {
-		return (Listener) get(name, listenerMap);
+	public ListenParser getListenParser(String clazz) {
+		return (ListenParser) get(clazz, listenParserMap);
 	}
 }

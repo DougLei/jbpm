@@ -7,7 +7,6 @@ import com.douglei.bpm.bean.annotation.MultiInstance;
 /**
  * 任务调度策略
  * <p>
- * 
  * 如果需要访问数据库, 可直接调用以下方法:
  * <pre>
  * 	SessionContext.getSqlSession()

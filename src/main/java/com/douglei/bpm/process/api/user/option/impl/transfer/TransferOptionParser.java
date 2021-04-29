@@ -21,7 +21,7 @@ public class TransferOptionParser extends DelegateOptionParser {
 	}
 
 	@Override
-	protected Option createOption(String name, int order, boolean reasonIsRequired, Candidate candidate) {
+	protected Option newInstance(String name, int order, boolean reasonIsRequired, Candidate candidate) {
 		return new TransferOption(OptionTypeConstants.TRANSFER, name, order, reasonIsRequired, candidate);
 	}
 }

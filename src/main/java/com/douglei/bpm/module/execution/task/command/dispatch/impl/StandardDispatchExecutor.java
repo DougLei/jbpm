@@ -5,7 +5,6 @@ import com.douglei.bpm.process.handler.AbstractHandleParameter;
 import com.douglei.bpm.process.handler.TaskDispatchException;
 import com.douglei.bpm.process.mapping.metadata.TaskNotExistsException;
 import com.douglei.bpm.process.mapping.metadata.flow.FlowMetadata;
-import com.douglei.bpm.process.mapping.metadata.listener.ActiveTime;
 
 /**
  * 标准调度
@@ -18,7 +17,6 @@ public class StandardDispatchExecutor extends DispatchExecutor {
 		setAssignedUsers(assignedUserIds);
 		
 		// 对task中的flows进行判断, 选择第一条匹配的flow进行调度
-		processEngineBeans.getTaskHandleUtil().notifyListners(currentTaskMetadataEntity.getTaskMetadata(), handleParameter, ActiveTime.TASK_DISPATCH);
 		for(FlowMetadata flow : currentTaskMetadataEntity.getOutputFlows()) {
 			if(processEngineBeans.getTaskHandleUtil().flowMatching(flow, handleParameter)) {
 				dispatchByFlow(flow, handleParameter);

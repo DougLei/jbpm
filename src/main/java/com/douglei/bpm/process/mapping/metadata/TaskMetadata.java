@@ -51,11 +51,4 @@ public abstract class TaskMetadata extends ProcessNodeMetadata{
 	public TimeLimit getTimeLimit() {
 		return null;
 	}
-	/**
-	 * 是否是用户任务, 默认值为false
-	 * @return
-	 */
-	public boolean isUserTask() {
-		return false;
-	}
 }

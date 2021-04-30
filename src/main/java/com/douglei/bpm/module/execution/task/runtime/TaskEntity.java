@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import com.douglei.bpm.ProcessEngineBugException;
 import com.douglei.bpm.module.execution.instance.State;
+import com.douglei.bpm.process.Type;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.mapping.ProcessMappingContainer;
 import com.douglei.bpm.process.mapping.metadata.ProcessMetadata;
@@ -99,6 +100,6 @@ public class TaskEntity {
 	 * @return
 	 */
 	public boolean isUserTask() {
-		return getTaskMetadataEntity().getTaskMetadata().isUserTask();
+		return getTaskMetadataEntity().getTaskMetadata().getType() == Type.USER_TASK;
 	}
 }

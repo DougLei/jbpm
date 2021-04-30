@@ -58,10 +58,6 @@ public class UserTaskMetadata extends TaskMetadata {
 		return timeLimit;
 	}
 	@Override
-	public boolean isUserTask() {
-		return true;
-	}
-	@Override
 	public Type getType() {
 		return Type.USER_TASK;
 	}

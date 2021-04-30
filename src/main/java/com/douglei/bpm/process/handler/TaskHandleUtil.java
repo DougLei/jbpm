@@ -120,6 +120,7 @@ public class TaskHandleUtil {
 			return;
 		
 		listeners.forEach(listener -> {
+			System.out.println(listener.getActiveTime());
 			if(listener.getActiveTime() == target)
 				listener.notify(handleParameter);
 		});

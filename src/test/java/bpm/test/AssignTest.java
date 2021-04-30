@@ -28,7 +28,7 @@ public class AssignTest {
 	@Test
 	public void insert() throws ProcessParseException {
 		ProcessDefinitionBuilder builder = new ProcessDefinitionBuilder(new ClasspathFile("bpm/Assign.bpm.xml"));
-		builder.setTypeId(3);
+		builder.setTypeId(4);
 		builder.setStrict(true);
 		Result result = engine.getRepositoryModule().getDefinitionService().insert(builder);
 		if(result.isSuccess())
@@ -39,7 +39,7 @@ public class AssignTest {
 	
 	@Test
 	public void deploy() throws ProcessParseException {
-		int processDefinitionId= 2;
+		int processDefinitionId= 1;
 		Result result = engine.getRepositoryModule().getDefinitionService().deploy(processDefinitionId);
 		if(result.isSuccess())
 			System.out.println("id为["+processDefinitionId+"]的流程定义信息部署成功");
@@ -49,7 +49,7 @@ public class AssignTest {
 	
 	@Test
 	public void start() {
-		int processDefinitionId =5;
+		int processDefinitionId =1;
 		StartParameter parameter = new StartParameter(processDefinitionId);
 		parameter.addVariable("name", "金石磊");
 		parameter.addVariable("day", 15);
@@ -78,8 +78,8 @@ public class AssignTest {
 	
 	
 	
-	private int taskId = 4;
-	private String userId = "jinshilei";
+	private int taskId = 1;
+	private String userId = "douglei";
 	
 	@Test
 	public void claim() {

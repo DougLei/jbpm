@@ -11,6 +11,14 @@ public class DispatchTaskParameter extends GeneralTaskParameter {
 	private DispatchExecutor dispatchExecutor;
 	
 	/**
+	 * 
+	 * @param userId 调度人id
+	 */
+	public DispatchTaskParameter(String userId) {
+		setUserId(userId);
+	}
+
+	/**
 	 * 设置调度执行器
 	 * @param dispatchExecutor
 	 */

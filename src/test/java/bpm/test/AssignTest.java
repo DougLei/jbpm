@@ -131,8 +131,7 @@ public class AssignTest {
 	
 	@Test
 	public void dispatch() {
-		DispatchTaskParameter parameter = new DispatchTaskParameter();
-		parameter.setUserId("wangwu");
+		DispatchTaskParameter parameter = new DispatchTaskParameter("wangwu");
 		parameter.setDispatchExecutor(new SettargetDispatchExecutor("endEvent1"));
 		
 		engine.getExecutionModule().getTaskService().dispatch(3, parameter);

@@ -36,7 +36,7 @@ public abstract class DispatchExecutor {
 	}
 	
 	/**
-	 * 设置实际指派的用户集合
+	 * 设置指派的用户集合
 	 * @param assignedUserIds
 	 */
 	protected final void setAssignedUsers(HashSet<String> assignedUserIds) {

@@ -135,7 +135,7 @@ public class AssignTest {
 		parameter.setUserId("wangwu");
 		parameter.setDispatchExecutor(new SettargetDispatchExecutor("endEvent1"));
 		
-		engine.getExecutionModule().getTaskService().dispatch(3, parameter );
+		engine.getExecutionModule().getTaskService().dispatch(3, parameter);
 		
 	}
 }

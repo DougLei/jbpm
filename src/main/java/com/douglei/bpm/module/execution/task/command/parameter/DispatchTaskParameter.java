@@ -12,7 +12,7 @@ public class DispatchTaskParameter extends GeneralTaskParameter {
 	
 	/**
 	 * 
-	 * @param userId 调度人id
+	 * @param userId 调度用户id
 	 */
 	public DispatchTaskParameter(String userId) {
 		setUserId(userId);

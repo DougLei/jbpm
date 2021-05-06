@@ -110,7 +110,7 @@ public class AssignTest {
 	
 	@Test
 	public void unclaim() {
-		Result result = engine.getExecutionModule().getTaskService().unclaim(taskId, userId, false);
+		Result result = engine.getExecutionModule().getTaskService().unclaim(taskId, userId);
 		if(result.isSuccess())
 			System.out.println("成功取消认领id为["+taskId+"]的任务");
 		else

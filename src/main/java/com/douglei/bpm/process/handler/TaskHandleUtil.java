@@ -41,7 +41,6 @@ public class TaskHandleUtil {
 	//---------------------------------------------------------------------------------------------
 	// 关于任务流转的api
 	//---------------------------------------------------------------------------------------------
-	
 	// 创建任务办理器实例
 	private TaskHandler createTaskHandleInstance(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, AbstractHandleParameter handleParameter) {
 		TaskHandler taskHandler = null;
@@ -129,7 +128,6 @@ public class TaskHandleUtil {
 	//---------------------------------------------------------------------------------------------
 	// 关于用户指派的api
 	//---------------------------------------------------------------------------------------------
-	
 	/**
 	 * 获取指定的指派策略下, 具体可指派的用户id集合
 	 * @param procinstId 当前操作的流程实例id

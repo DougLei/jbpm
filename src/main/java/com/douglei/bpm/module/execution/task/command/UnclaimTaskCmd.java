@@ -22,11 +22,9 @@ import com.douglei.orm.context.SessionContext;
 public class UnclaimTaskCmd implements Command {
 	private TaskEntity entity;
 	private String userId; // 要取消认领的用户id
-	private boolean strict; // 如果进行过抄送操作, 且抄送被查看, 取消认领时是否强制删除相关数据; 建议传入false
-	public UnclaimTaskCmd(TaskEntity entity, String userId, boolean strict) {
+	public UnclaimTaskCmd(TaskEntity entity, String userId) {
 		this.entity = entity;
 		this.userId = userId;
-		this.strict = strict;
 	}
 
 	@Override
@@ -43,11 +41,9 @@ public class UnclaimTaskCmd implements Command {
 			throw new TaskHandleException("取消认领失败, 指定的userId无法取消认领["+entity.getName()+"]任务");
 		
 		// 处理抄送信息
-		if(ccBeViewed()) {
-			if(!strict)
-				return new Result("取消认领失败, 指定的userId抄送了[%s]任务, 且已被相关人员查看, 如确实需要取消认领, 请联系流程管理员", "jbpm.unclaim.fail.cc.be.viewed", entity.getName());
-			SessionContext.getSqlSession().executeUpdate("delete bpm_hi_cc where taskinst_id=? and cc_user_id=?", Arrays.asList(entity.getTask().getTaskinstId(), userId));
-		}
+		if(ccBeViewed()) 
+			return new Result("取消认领失败, 指定的userId抄送了[%s]任务, 且已被相关人员查看, 如确实需要取消认领, 请联系流程管理员", "jbpm.unclaim.fail.cc.be.viewed", entity.getName());
+			
 		if(existsCC)
 			SessionContext.getSqlSession().executeUpdate("delete bpm_ru_cc where taskinst_id=? and cc_user_id=?", Arrays.asList(entity.getTask().getTaskinstId(), userId));
 		

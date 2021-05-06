@@ -73,7 +73,7 @@ public class DispatchTaskCmd extends AbstractTaskHandler implements Command {
 		
 		// 进行调度
 		parameter.getDispatchExecutor()
-			.initParameters(entity.getTaskMetadataEntity(), handleParameter, parameter.getAssignedUserIds(), processEngineBeans)
+			.setParameters(entity.getTaskMetadataEntity(), handleParameter, parameter.getAssignedUserIds(), processEngineBeans)
 			.execute();
 		return Result.getDefaultSuccessInstance();
 	}

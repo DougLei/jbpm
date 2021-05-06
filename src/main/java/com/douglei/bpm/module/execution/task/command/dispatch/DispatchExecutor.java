@@ -20,14 +20,14 @@ public abstract class DispatchExecutor {
 	protected ProcessEngineBeans processEngineBeans;
 	
 	/**
-	 * 初始化调度执行器
+	 * 设置调度执行器参数
 	 * @param currentTaskMetadataEntity
 	 * @param handleParameter
 	 * @param assignedUserIds 实际指派的用户id集合
 	 * @param processEngineBeans
 	 * @return
 	 */
-	public final DispatchExecutor initParameters(TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity, AbstractHandleParameter handleParameter, HashSet<String> assignedUserIds, ProcessEngineBeans processEngineBeans) {
+	public final DispatchExecutor setParameters(TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity, AbstractHandleParameter handleParameter, HashSet<String> assignedUserIds, ProcessEngineBeans processEngineBeans) {
 		this.currentTaskMetadataEntity = currentTaskMetadataEntity;
 		this.handleParameter = handleParameter;
 		this.assignedUserIds = assignedUserIds;
@@ -36,18 +36,40 @@ public abstract class DispatchExecutor {
 	}
 	
 	/**
-	 * 设置指派的用户集合
-	 * @param assignedUserIds
+	 * 解析调度结果
+	 * @return
 	 */
-	protected final void setAssignedUsers(HashSet<String> assignedUserIds) {
-		if(assignedUserIds != null && !assignedUserIds.isEmpty())
-			handleParameter.getUserEntity().appendAssignedUserIds(assignedUserIds);
-	}
+	protected abstract DispatchResult parse();
 	
 	/**
 	 * 进行调度
 	 * @throws TaskNotExistsException
 	 * @throws TaskDispatchException
 	 */
-	public abstract void execute() throws TaskNotExistsException, TaskDispatchException;
+	public final void execute() throws TaskNotExistsException, TaskDispatchException {
+		DispatchResult result = parse();
+		
+		// 设置指派的用户id集合
+		if(result.assignedUserIds != null && !result.assignedUserIds.isEmpty())
+			handleParameter.getUserEntity().appendAssignedUserIds(result.assignedUserIds);
+		
+		// 进行任务调度
+		handleParameter.getTaskEntityHandler().dispatch();
+		processEngineBeans.getTaskHandleUtil().startup(
+				handleParameter.getProcessMetadata().getTaskMetadataEntity(result.target), handleParameter);
+	}
+	
+	/**
+	 * 调度结果
+	 * @author DougLei
+	 */
+	protected class DispatchResult {
+		private String target; // 目标任务
+		private HashSet<String> assignedUserIds; // 实际指派的用户id集合
+		
+		public DispatchResult(String target, HashSet<String> assignedUserIds) {
+			this.target = target;
+			this.assignedUserIds = assignedUserIds;
+		}
+	}
 }

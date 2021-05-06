@@ -54,7 +54,7 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 			handleParameter.getTaskEntityHandler().setCurrentTaskEntity(new TaskEntity(gatewayTask, false));
 			
 			new SettargetDispatchExecutor(outputFlows.get(0).getTarget())
-				.initParameters(currentTaskMetadataEntity, handleParameter, null, processEngineBeans)
+				.setParameters(currentTaskMetadataEntity, handleParameter, null, processEngineBeans)
 				.execute();
 			return;
 		}
@@ -84,7 +84,7 @@ public class ParallelGatewayHandler extends AbstractGatewayHandler{
 		int mark = historyTaskEntities.size(); // 标记初始位置
 		for (FlowMetadata flow : outputFlows) {
 			new SettargetDispatchExecutor(flow.getTarget())
-				.initParameters(currentTaskMetadataEntity, handleParameter, null, processEngineBeans)
+				.setParameters(currentTaskMetadataEntity, handleParameter, null, processEngineBeans)
 				.execute();
 			
 			while(historyTaskEntities.size() > mark) 

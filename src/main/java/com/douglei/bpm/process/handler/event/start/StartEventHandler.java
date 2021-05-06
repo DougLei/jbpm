@@ -47,7 +47,9 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		saveVariables(historyTask);
 		
 		// 进行任务调度
-		new StandardDispatchExecutor().initParameters(currentTaskMetadataEntity, handleParameter, null, processEngineBeans).execute();
+		new StandardDispatchExecutor()
+			.setParameters(currentTaskMetadataEntity, handleParameter, null, processEngineBeans)
+			.execute();
 		return new Result(processInstance);
 	}
 	

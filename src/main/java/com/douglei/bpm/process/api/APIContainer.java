@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.douglei.bpm.bean.CustomAutowired;
 import com.douglei.bpm.bean.annotation.Bean;
 import com.douglei.bpm.process.api.listener.ListenParser;
@@ -12,6 +15,7 @@ import com.douglei.bpm.process.api.user.option.AbstractOptionParser;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.DispatchPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandlePolicy;
+import com.douglei.tools.ExceptionUtil;
 
 /**
  * 
@@ -19,6 +23,7 @@ import com.douglei.bpm.process.api.user.task.handle.policy.SerialHandlePolicy;
  */
 @Bean
 public class APIContainer implements CustomAutowired {
+	private static final Logger logger= LoggerFactory.getLogger(APIContainer.class);
 	private Map<String, AssignableUserExpression> assignableUserExpressionMap = new HashMap<String, AssignableUserExpression>();
 	private Map<String, ClaimPolicy> claimPolicyMap = new HashMap<String, ClaimPolicy>();
 	private Map<String, SerialHandlePolicy> serialHandlePolicyMap = new HashMap<String, SerialHandlePolicy>();
@@ -59,7 +64,9 @@ public class APIContainer implements CustomAutowired {
 			try {
 				instance = Class.forName(name).newInstance();
 				map.put(name, instance);
-			} catch (Exception e) {}
+			} catch (Exception e) {
+				logger.error("获取name={}的实例时出现异常: {}", name, ExceptionUtil.getStackTrace(e));
+			}
 		}
 		return instance;
 	}

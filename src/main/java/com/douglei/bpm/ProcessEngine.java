@@ -39,7 +39,7 @@ public class ProcessEngine {
 	}
 	ProcessEngine(String id, SessionFactory factory) {
 		RegistrationResult result = SessionFactoryContainer.getSingleton().register(factory);
-		mapper.put(factory, (result==RegistrationResult.SUCCESS)?SessionFactoryType.HALF:SessionFactoryType.EXTERNAL);
+		this.mapper.put(factory, (result==RegistrationResult.SUCCESS)?SessionFactoryType.HALF:SessionFactoryType.EXTERNAL);
 		this.id = id;
 	}
 	ProcessEngine(String id, String dataSourceId, DataSource dataSource, String closeName) {

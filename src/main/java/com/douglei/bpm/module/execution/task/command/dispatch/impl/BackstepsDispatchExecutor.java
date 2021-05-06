@@ -11,9 +11,6 @@ import com.douglei.bpm.ProcessEngineBugException;
 import com.douglei.bpm.module.execution.task.HandleState;
 import com.douglei.bpm.module.execution.task.command.dispatch.DispatchExecutor;
 import com.douglei.bpm.process.handler.TaskDispatchException;
-import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
-import com.douglei.bpm.process.mapping.metadata.TaskMetadataEntity;
-import com.douglei.bpm.process.mapping.metadata.TaskNotExistsException;
 import com.douglei.orm.context.SessionContext;
 
 /**
@@ -29,18 +26,13 @@ public class BackstepsDispatchExecutor extends DispatchExecutor {
 			throw new TaskDispatchException("回退步数调度时, 设置的步数值不能小于1");
 		this.steps = steps;
 	}
-
+	
 	@Override
-	public void execute() throws TaskNotExistsException, TaskDispatchException {
+	protected DispatchResult parse() {
 		TaskEntity targetTask = getTargetTask();
-		TaskMetadataEntity<TaskMetadata> targetTaskMetadataEntity = currentTaskMetadataEntity.getProcessMetadata().getTaskMetadataEntity(targetTask.getKey());
-		setAssignedUsers(targetTask);
-		
-		// 直接调度到指定的任务
-		handleParameter.getTaskEntityHandler().dispatch();
-		processEngineBeans.getTaskHandleUtil().startup(targetTaskMetadataEntity, handleParameter);
+		return new DispatchResult(targetTask.getKey(), getAssignedUsers(targetTask));
 	}
-
+	
 	// *获取要回退到的目标任务实体
 	private TaskEntity getTargetTask() {
 		List<TaskEntity> historyTasks = SessionContext.getTableSession()
@@ -70,18 +62,18 @@ public class BackstepsDispatchExecutor extends DispatchExecutor {
 		logger.error("回退步数调度时, 无法获取目标任务的key值, 相关数据: taskinstId={}, steps={}", handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId(), steps);
 		throw new ProcessEngineBugException("回退步数调度时, 无法获取目标任务的key值");
 	}
-
-	// 设置指派的用户id集合
-	private void setAssignedUsers(TaskEntity targetTask) {
+	
+	// 获取指派的用户id集合
+	private HashSet<String> getAssignedUsers(TaskEntity targetTask) {
 		List<Object[]> list = SessionContext.getSqlSession().query_("select distinct user_id from bpm_hi_assignee where taskinst_id=? and handle_state=?", Arrays.asList(targetTask.getTaskinstId(), HandleState.FINISHED.getValue()));
 		if(list.isEmpty())
-			return;
+			return null;
 		
 		if(assignedUserIds == null)
 			assignedUserIds = new HashSet<String>();
 		else
 			assignedUserIds.clear();
 		list.forEach(array -> assignedUserIds.add(array[0].toString()));
-		setAssignedUsers(assignedUserIds);
+		return assignedUserIds;
 	}
 }

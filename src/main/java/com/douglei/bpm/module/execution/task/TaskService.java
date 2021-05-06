@@ -71,28 +71,26 @@ public class TaskService {
 	 * 取消认领指定id的任务
 	 * @param taskId
 	 * @param userId
-	 * @param strict 如果进行过抄送操作, 且抄送被查看, 取消认领时是否强制删除相关数据; 建议传入false
 	 * @return
 	 */
 	@Transaction
-	public Result unclaim(int taskId, String userId, boolean strict){
+	public Result unclaim(int taskId, String userId){
 		TaskEntity entity = new TaskEntity(taskId, container);
 		if(entity.isActive())
-			return commandExecutor.execute(new UnclaimTaskCmd(entity, userId, strict));
+			return commandExecutor.execute(new UnclaimTaskCmd(entity, userId));
 		return new Result("操作失败, [%s]任务处于挂起状态", "jbpm.op.fail.task.is.suspended", entity.getName());
 	}
 	/**
 	 * 取消认领指定id的任务
 	 * @param taskinstId
 	 * @param userId
-	 * @param strict 如果进行过抄送操作, 且抄送被查看, 取消认领时是否强制删除相关数据; 建议传入false
 	 * @return
 	 */
 	@Transaction
-	public Result unclaim(String taskinstId, String userId, boolean strict){
+	public Result unclaim(String taskinstId, String userId){
 		TaskEntity entity = new TaskEntity(taskinstId, container);
 		if(entity.isActive())
-			return commandExecutor.execute(new UnclaimTaskCmd(entity, userId, strict));
+			return commandExecutor.execute(new UnclaimTaskCmd(entity, userId));
 		return new Result("操作失败, [%s]任务处于挂起状态", "jbpm.op.fail.task.is.suspended", entity.getName());
 	}
 	

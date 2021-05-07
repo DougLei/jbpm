@@ -35,7 +35,7 @@ public class BackstepsDispatchExecutor extends DispatchExecutor {
 	
 	// *获取要回退到的目标任务实体
 	private TaskEntity getTargetTask() {
-		List<TaskEntity> historyTasks = SessionContext.getTableSession()
+		List<TaskEntity> historyTasks = SessionContext.getSqlSession()
 				.limitQuery(TaskEntity.class, 2, -1, "select taskinst_id, parent_taskinst_id, source_key, key_ from bpm_hi_task where procinst_id=? order by end_time desc", Arrays.asList(handleParameter.getProcessInstanceId()));
 		
 		TaskEntity currentTask = new TaskEntity(handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask(), null);

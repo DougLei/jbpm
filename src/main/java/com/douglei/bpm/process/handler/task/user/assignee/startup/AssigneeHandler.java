@@ -128,6 +128,7 @@ public class AssigneeHandler {
 		
 		// 获取指派信息集合
 		List<Assignee> assigneeList = getAssigneeList(getAssignPolicy(), assignedUserIds);
+		
 		// 尝试进行自动认领
 		boolean isAllClaimed = tryAutoClaim(assignedUserIds, assigneeList);
 		

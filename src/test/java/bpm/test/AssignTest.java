@@ -16,6 +16,8 @@ import com.douglei.bpm.module.execution.variable.Scope;
 import com.douglei.bpm.module.repository.definition.ClasspathFile;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
 import com.douglei.bpm.module.repository.definition.ProcessDefinitionBuilder;
+import com.douglei.bpm.process.handler.task.user.assignee.startup.AssigneeHandler4Jump;
+import com.douglei.bpm.process.mapping.metadata.task.user.option.dispatch.JumpOption;
 import com.douglei.bpm.process.mapping.parser.ProcessParseException;
 
 public class AssignTest {
@@ -121,7 +123,7 @@ public class AssignTest {
 	@Test
 	public void handle() {
 		HandleTaskParameter parameter = new HandleTaskParameter();
-		parameter.setSuggest("意见内容: 同意").setAttitude(Attitude.AGREE).setUserId("wangwu");
+		parameter.setSuggest("意见内容: 同意").setAttitude(Attitude.AGREE).setUserId("zhangsan");
 		
 		Result result = engine.getExecutionModule().getTaskService().handle(3, parameter);
 		if(result.isSuccess())
@@ -132,8 +134,10 @@ public class AssignTest {
 	
 	@Test
 	public void dispatch() {
-		DispatchTaskParameter parameter = new DispatchTaskParameter("wangwu");
-		parameter.setDispatchExecutor(new SettargetDispatchExecutor("endEvent1"));
+		DispatchTaskParameter parameter = new DispatchTaskParameter("zhangsan");
+		parameter.setDispatchExecutor(new SettargetDispatchExecutor("userTask2"));
+		parameter.getAssignEntity().addAssignedUserId("指派了也是无效的, 因为是固定的, 而且jumpOption没有配置候选人指派策略");
+		parameter.getAssignEntity().setAssigneeHandler(new AssigneeHandler4Jump(new JumpOption(null, null, 0, null, true, true, null)));
 		
 		engine.getExecutionModule().getTaskService().dispatch(3, parameter);
 		

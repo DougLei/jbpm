@@ -1,6 +1,6 @@
 package com.douglei.bpm.process.handler.task.user.assignee.startup;
 
-import java.util.List;
+import java.util.HashSet;
 
 /**
  * 指派人委托查询条件
@@ -8,9 +8,9 @@ import java.util.List;
  */
 public class SqlCondition {
 	private long currentTime;
-	private List<String> userIds;
+	private HashSet<String> userIds;
 	
-	public SqlCondition(List<String> assignedUserIds) {
+	public SqlCondition(HashSet<String> assignedUserIds) {
 		this.currentTime = System.currentTimeMillis();
 		this.userIds = assignedUserIds;
 	}
@@ -18,10 +18,10 @@ public class SqlCondition {
 	public long getCurrentTime() {
 		return currentTime;
 	}
-	public List<String> getUserIds() {
+	public HashSet<String> getUserIds() {
 		return userIds;
 	}
-	public void updateUserIds(List<String> userIds) {
+	public void updateUserIds(HashSet<String> userIds) {
 		this.userIds = userIds;
 	}
 }

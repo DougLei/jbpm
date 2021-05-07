@@ -1,5 +1,7 @@
 package com.douglei.bpm.module.execution.task.command.dispatch.impl;
 
+import java.util.HashSet;
+
 import com.douglei.bpm.module.execution.task.command.dispatch.DispatchExecutor;
 
 /**
@@ -14,7 +16,7 @@ public class SettargetDispatchExecutor extends DispatchExecutor {
 	}
 	
 	@Override
-	protected DispatchResult parse() {
+	protected DispatchResult parse(HashSet<String> assignedUserIds) {
 		return new DispatchResult(target, assignedUserIds);
 	}
 }

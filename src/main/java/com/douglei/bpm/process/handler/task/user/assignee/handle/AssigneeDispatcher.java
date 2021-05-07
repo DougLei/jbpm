@@ -33,7 +33,7 @@ public class AssigneeDispatcher {
 		List<HistoryAssignee> assigneeList = SessionContext.getSqlSession().query(
 				HistoryAssignee.class, 
 				"select * from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
-				Arrays.asList(taskinstId, userEntity.getCurrentHandleUserId(), HandleState.CLAIMED.getValue()));
+				Arrays.asList(taskinstId, userEntity.getUserId(), HandleState.CLAIMED.getValue()));
 		
 		// 设置独立的指派信息集合
 		for(int i=0;i < assigneeList.size();i++) {

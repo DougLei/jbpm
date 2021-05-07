@@ -10,6 +10,7 @@ import com.douglei.bpm.module.execution.instance.command.parameter.StartParamete
 import com.douglei.bpm.module.execution.instance.runtime.ProcessInstance;
 import com.douglei.bpm.module.execution.task.command.parameter.HandleTaskParameter;
 import com.douglei.bpm.module.execution.task.history.Attitude;
+import com.douglei.bpm.module.execution.variable.Scope;
 import com.douglei.bpm.module.repository.definition.ClasspathFile;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
 import com.douglei.bpm.module.repository.definition.ProcessDefinitionBuilder;
@@ -47,10 +48,10 @@ public class ParallelGatewayTest {
 	public void start() {
 		int processDefinitionId = 1;
 		StartParameter parameter = new StartParameter(processDefinitionId);
-		parameter.addVariable("name", "金石磊");
-		parameter.addVariable("day", 15);
+		parameter.getVariableEntities().addVariable("name", Scope.GLOBAL, "金石磊");
+		parameter.getVariableEntities().addVariable("day", Scope.GLOBAL, 15);
 		parameter.setUserId("金石磊");
-		parameter.addAssignedUserId("douglei");
+		parameter.getAssignEntity().addAssignedUserId("douglei");
 		
 		
 		Result result = engine.getExecutionModule().getProcessInstanceService().start(parameter);
@@ -76,7 +77,6 @@ public class ParallelGatewayTest {
 		String userId = "douglei";
 		
 		HandleTaskParameter parameter = new HandleTaskParameter();
-		parameter.addAssignedUserId("douglei");
 		parameter.setSuggest("同意了").setAttitude(Attitude.AGREE).setUserId(userId);
 		
 		Result result = engine.getExecutionModule().getTaskService().handle(taskId, parameter);

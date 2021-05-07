@@ -22,7 +22,7 @@ public abstract class TaskHandler<TM extends TaskMetadata, HP extends AbstractHa
 	 * @param handleParameter
 	 * @param processEngineBeans
 	 */
-	final void initParameters(TaskMetadataEntity<TM> currentTaskMetadataEntity, HP handleParameter, ProcessEngineBeans processEngineBeans) {
+	final void setParameters(TaskMetadataEntity<TM> currentTaskMetadataEntity, HP handleParameter, ProcessEngineBeans processEngineBeans) {
 		this.currentTaskMetadataEntity = currentTaskMetadataEntity;
 		this.handleParameter = handleParameter;
 		this.processEngineBeans = processEngineBeans;

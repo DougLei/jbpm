@@ -37,7 +37,7 @@ public class DispatchTaskCmd extends AbstractTaskHandler implements Command {
 	 */
 	private GeneralTaskHandleParameter getGeneralHandleParameter() {
 		if(handleParameter == null)
-			handleParameter = new GeneralTaskHandleParameter(entity, parameter.getUserId(), null, null, null, null, null);
+			handleParameter = new GeneralTaskHandleParameter(entity, parameter.getUserId(), null, null, null, null, parameter.getAssignEntity());
 		return handleParameter;
 	}
 
@@ -73,7 +73,7 @@ public class DispatchTaskCmd extends AbstractTaskHandler implements Command {
 		
 		// 进行调度
 		parameter.getDispatchExecutor()
-			.setParameters(entity.getTaskMetadataEntity(), handleParameter, parameter.getAssignedUserIds(), processEngineBeans)
+			.setParameters(entity.getTaskMetadataEntity(), handleParameter, processEngineBeans)
 			.execute();
 		return Result.getDefaultSuccessInstance();
 	}

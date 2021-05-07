@@ -33,12 +33,13 @@ public class KillAndJumpTaskCmd extends AbstractTaskHandler implements Command{
 		// 如果是用户任务, 要判断是否存在已经认领的情况, 并根据strict参数值, 决定是返回执行失败的信息, 或进行删除
 		Task currentTask = entity.getTask();
 		if(entity.isUserTask()) {
+			currentTask.deleteAllCC();
 			currentTask.deleteAllAssignee();
 			currentTask.deleteAllDispatch();
 		}
 		
 		// 创建KillAndJump用办理参数实例
-		GeneralTaskHandleParameter handleParameter = new GeneralTaskHandleParameter(entity, parameter.getUserId(), null, null, null, null, null);
+		GeneralTaskHandleParameter handleParameter = new GeneralTaskHandleParameter(entity, parameter.getUserId(), null, null, null, null, parameter.getAssignEntity());
 		
 		// kill并完成当前任务
 		currentTask.setUserId(parameter.getUserId());
@@ -47,7 +48,7 @@ public class KillAndJumpTaskCmd extends AbstractTaskHandler implements Command{
 		
 		// 进行跳转调度
 		new SettargetDispatchExecutor(parameter.getTarget())
-			.setParameters(entity.getTaskMetadataEntity(), handleParameter, parameter.getAssignedUserIds(), processEngineBeans)
+			.setParameters(entity.getTaskMetadataEntity(), handleParameter, processEngineBeans)
 			.execute();
 		return Result.getDefaultSuccessInstance();
 	}

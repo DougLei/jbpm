@@ -24,7 +24,7 @@ public class ExclusiveGatewayHandler extends AbstractGatewayHandler{
 		SessionContext.getTableSession().save(historyTask);
 		
 		new StandardDispatchExecutor()
-			.setParameters(currentTaskMetadataEntity, handleParameter, null, processEngineBeans)
+			.setParameters(currentTaskMetadataEntity, handleParameter, processEngineBeans)
 			.execute();
 		return CANNOT_DISPATCH;
 	}

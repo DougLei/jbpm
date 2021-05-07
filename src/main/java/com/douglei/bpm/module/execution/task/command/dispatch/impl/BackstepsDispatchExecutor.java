@@ -28,7 +28,7 @@ public class BackstepsDispatchExecutor extends DispatchExecutor {
 	}
 	
 	@Override
-	protected DispatchResult parse() {
+	protected DispatchResult parse(HashSet<String> assignedUserIds) {
 		TaskEntity targetTask = getTargetTask();
 		return new DispatchResult(targetTask.getKey(), getAssignedUsers(targetTask));
 	}
@@ -69,10 +69,7 @@ public class BackstepsDispatchExecutor extends DispatchExecutor {
 		if(list.isEmpty())
 			return null;
 		
-		if(assignedUserIds == null)
-			assignedUserIds = new HashSet<String>();
-		else
-			assignedUserIds.clear();
+		HashSet<String> assignedUserIds = new HashSet<String>();
 		list.forEach(array -> assignedUserIds.add(array[0].toString()));
 		return assignedUserIds;
 	}

@@ -6,12 +6,22 @@ import com.douglei.bpm.module.execution.task.history.Attitude;
  * 
  * @author DougLei
  */
-public class HandleTaskParameter extends GeneralTaskParameter{
+public class HandleTaskParameter {
+	private String userId; // 办理人id
 	private String suggest; // 办理人意见
 	private Attitude attitude; // 办理人态度
 	private String reason; // 办理人的办理原因, 即为什么办理; 该值会存储在task表的reason列中; 其和 suggest和attitude是互斥的; 用来表示特殊的任务办理, 例如网关的办理, 结束事件的办理, 流程跳转等
 	private String businessId; // 关联的业务id
 	
+	/**
+	 * 设置办理人id
+	 * @param userId
+	 * @return
+	 */
+	public HandleTaskParameter setUserId(String userId) {
+		this.userId = userId;
+		return this;
+	}
 	/**
 	 * 设置办理人意见
 	 * @param suggest
@@ -49,6 +59,13 @@ public class HandleTaskParameter extends GeneralTaskParameter{
 		return this;
 	}
 	
+	/**
+	 * 获取办理人id
+	 * @return
+	 */
+	public String getUserId() {
+		return userId;
+	}
 	/**
 	 * 获取办理人意见
 	 * @return

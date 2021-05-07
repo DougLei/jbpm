@@ -4,6 +4,7 @@ import java.util.HashSet;
 
 import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.process.handler.AbstractHandleParameter;
+import com.douglei.bpm.process.handler.AssignEntity;
 import com.douglei.bpm.process.handler.TaskDispatchException;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadataEntity;
@@ -16,30 +17,29 @@ import com.douglei.bpm.process.mapping.metadata.TaskNotExistsException;
 public abstract class DispatchExecutor {
 	protected TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity; // 当前任务的元数据实例
 	protected AbstractHandleParameter handleParameter; // 办理参数
-	protected HashSet<String> assignedUserIds; // 实际指派的用户id集合
 	protected ProcessEngineBeans processEngineBeans;
 	
 	/**
 	 * 设置调度执行器参数
-	 * @param currentTaskMetadataEntity
-	 * @param handleParameter
 	 * @param assignedUserIds 实际指派的用户id集合
+	 * @param currentTaskMetadataEntity 当前任务的元数据实例
+	 * @param handleParameter 办理参数
 	 * @param processEngineBeans
 	 * @return
 	 */
-	public final DispatchExecutor setParameters(TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity, AbstractHandleParameter handleParameter, HashSet<String> assignedUserIds, ProcessEngineBeans processEngineBeans) {
+	public final DispatchExecutor setParameters(TaskMetadataEntity<? extends TaskMetadata> currentTaskMetadataEntity, AbstractHandleParameter handleParameter, ProcessEngineBeans processEngineBeans) {
 		this.currentTaskMetadataEntity = currentTaskMetadataEntity;
 		this.handleParameter = handleParameter;
-		this.assignedUserIds = assignedUserIds;
 		this.processEngineBeans = processEngineBeans;
 		return this;
 	}
 	
 	/**
 	 * 解析调度结果
+	 * @param assignedUserIds 实际指派的用户id集合
 	 * @return
 	 */
-	protected abstract DispatchResult parse();
+	protected abstract DispatchResult parse(HashSet<String> assignedUserIds);
 	
 	/**
 	 * 进行调度
@@ -47,11 +47,12 @@ public abstract class DispatchExecutor {
 	 * @throws TaskDispatchException
 	 */
 	public final void execute() throws TaskNotExistsException, TaskDispatchException {
-		DispatchResult result = parse();
+		AssignEntity assignEntity = handleParameter.getUserEntity().getAssignEntity();
+		DispatchResult result = parse(assignEntity.getAssignedUserIds());
 		
-		// 设置指派的用户id集合
-		if(result.assignedUserIds != null && !result.assignedUserIds.isEmpty())
-			handleParameter.getUserEntity().appendAssignedUserIds(result.assignedUserIds);
+		// 调整指派的用户id集合
+		if(result.assignedUserIds != assignEntity.getAssignedUserIds())
+			assignEntity.setAssignedUserIds(result.assignedUserIds);
 		
 		// 进行任务调度
 		handleParameter.getTaskEntityHandler().dispatch();
@@ -60,13 +61,18 @@ public abstract class DispatchExecutor {
 	}
 	
 	/**
-	 * 调度结果
+	 * 
 	 * @author DougLei
 	 */
-	protected class DispatchResult {
-		private String target; // 目标任务
-		private HashSet<String> assignedUserIds; // 实际指派的用户id集合
+	protected final class DispatchResult {
+		private String target;
+		private HashSet<String> assignedUserIds;
 		
+		/**
+		 * 
+		 * @param target 目标任务
+		 * @param assignedUserIds 指派的用户id集合
+		 */
 		public DispatchResult(String target, HashSet<String> assignedUserIds) {
 			this.target = target;
 			this.assignedUserIds = assignedUserIds;

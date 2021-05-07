@@ -1,6 +1,6 @@
 package com.douglei.bpm.module.execution.task;
 
-import java.util.List;
+import java.util.HashSet;
 
 import com.douglei.bpm.bean.annotation.Autowired;
 import com.douglei.bpm.bean.annotation.Bean;
@@ -164,7 +164,7 @@ public class TaskService {
 	 * @return 
 	 */
 	@Transaction
-	public Result carbonCopy(int taskId, String userId, List<String> assignedUserIds) {
+	public Result carbonCopy(int taskId, String userId, HashSet<String> assignedUserIds) {
 		TaskEntity entity = new TaskEntity(taskId, container);
 		if(entity.isActive())
 			return commandExecutor.execute(new CarbonCopyTaskCmd(entity, userId, assignedUserIds));
@@ -178,7 +178,7 @@ public class TaskService {
 	 * @return 
 	 */
 	@Transaction
-	public Result carbonCopy(String taskinstId, String userId, List<String> assignedUserIds) {
+	public Result carbonCopy(String taskinstId, String userId, HashSet<String> assignedUserIds) {
 		TaskEntity entity = new TaskEntity(taskinstId, container);
 		if(entity.isActive())
 			return commandExecutor.execute(new CarbonCopyTaskCmd(entity, userId, assignedUserIds));

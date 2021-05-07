@@ -60,7 +60,7 @@ public class DelegationHandler {
 		}
 		
 		// 筛选出需要委托的数据, 并进行递归操作
-		List<String> assigneeUserIds = null;
+		HashSet<String> assigneeUserIds = null;
 		Delegation delegation = null;
 		for(Entry<String, MultiDelegation> entry : delegationInfoMap.entrySet()) {
 			delegation = entry.getValue().isDelegate(processCode, processVersion);
@@ -70,7 +70,7 @@ public class DelegationHandler {
 				this.resultMap.put(entry.getKey(), delegation);
 				
 				if(assigneeUserIds == null) 
-					assigneeUserIds = new ArrayList<String>(delegationInfoMap.size());
+					assigneeUserIds = new HashSet<String>(delegationInfoMap.size());
 				assigneeUserIds.add(delegation.getUserId());
 			}
 		}

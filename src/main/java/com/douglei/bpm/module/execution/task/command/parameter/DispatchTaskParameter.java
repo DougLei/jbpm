@@ -7,7 +7,7 @@ import com.douglei.bpm.module.execution.task.command.dispatch.impl.StandardDispa
  * 
  * @author DougLei
  */
-public class DispatchTaskParameter extends GeneralTaskParameter {
+public class DispatchTaskParameter extends AbstractDispatchTaskParameter {
 	private DispatchExecutor dispatchExecutor;
 	
 	/**
@@ -15,7 +15,7 @@ public class DispatchTaskParameter extends GeneralTaskParameter {
 	 * @param userId 调度用户id
 	 */
 	public DispatchTaskParameter(String userId) {
-		setUserId(userId);
+		super(userId);
 	}
 
 	/**
@@ -26,7 +26,7 @@ public class DispatchTaskParameter extends GeneralTaskParameter {
 		this.dispatchExecutor = dispatchExecutor;
 		return this;
 	}
-	
+
 	/**
 	 * 获取调度执行器
 	 * @return

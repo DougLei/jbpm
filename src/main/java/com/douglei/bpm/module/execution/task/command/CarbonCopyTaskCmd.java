@@ -2,6 +2,7 @@ package com.douglei.bpm.module.execution.task.command;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import com.douglei.bpm.ProcessEngineBeans;
@@ -24,12 +25,12 @@ import com.douglei.orm.context.SessionContext;
  */
 public class CarbonCopyTaskCmd extends AbstractTaskCmd implements Command {
 	private String userId; // 发起抄送的用户id
-	private List<String> assignedUserIds; // 接受抄送的用户id集合
+	private HashSet<String> assignedUserIds; // 接受抄送的用户id集合
 	
 	public CarbonCopyTaskCmd() {
 		super(null);
 	}
-	public CarbonCopyTaskCmd(TaskEntity taskInstance, String userId, List<String> assignedUserIds) {
+	public CarbonCopyTaskCmd(TaskEntity taskInstance, String userId, HashSet<String> assignedUserIds) {
 		super(taskInstance);
 		this.userId = userId;
 		this.assignedUserIds = assignedUserIds;
@@ -51,7 +52,7 @@ public class CarbonCopyTaskCmd extends AbstractTaskCmd implements Command {
 		
 		// 获取具体可抄送的所有人员集合
 		AssignPolicy assignPolicy = ((CarbonCopyOption)option).getCandidate().getAssignPolicy();
-		List<String> assignableUserIds = processEngineBeans.getTaskHandleUtil().getAssignableUserIds(
+		HashSet<String> assignableUserIds = processEngineBeans.getTaskHandleUtil().getAssignableUserIds(
 				entity.getTask().getProcinstId(), entity.getTask().getTaskinstId(), userId, assignPolicy);
 		if(assignableUserIds.isEmpty())
 			throw new TaskHandleException("["+taskMetadata.getName()+"]任务不存在可抄送的人员");
@@ -71,16 +72,12 @@ public class CarbonCopyTaskCmd extends AbstractTaskCmd implements Command {
 	 * @param ccTime 抄送时间
 	 * @param assignedUsers 接受的用户id集合
 	 */
-	public void execute(String taskinstId, String ccUserId, Date ccTime, List<String> assignedUserIds) {
-		// 判断接受的用户集合中是否包含抄送人, 如果包含则移除
-		for(int i=0; i< assignedUserIds.size(); i++) {
-			if(assignedUserIds.get(i).equals(ccUserId))
-				assignedUserIds.remove(i--);
-		}
-		
+	public void execute(String taskinstId, String ccUserId, Date ccTime, HashSet<String> assignedUserIds) {
 		List<CarbonCopy> carbonCopies = new ArrayList<CarbonCopy>(assignedUserIds.size());
-		assignedUserIds.forEach(userId -> {
-			carbonCopies.add(new CarbonCopy(taskinstId, ccUserId, ccTime, userId));
+		assignedUserIds.forEach(assignedUserId -> {
+			// 判断接受的用户集合中是否包含抄送人, 如果包含则忽略
+			if(!assignedUserId.equals(ccUserId)) 
+				carbonCopies.add(new CarbonCopy(taskinstId, ccUserId, ccTime, assignedUserId));
 		});
 		SessionContext.getTableSession().save(carbonCopies);
 	}

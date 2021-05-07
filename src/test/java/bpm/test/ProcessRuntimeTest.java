@@ -26,12 +26,11 @@ public class ProcessRuntimeTest {
 	public void start() {
 		int processDefinitionId = 1;
 		StartParameter parameter = new StartParameter(processDefinitionId);
-		parameter.addVariable("name", "金石磊");
-		parameter.addVariable("day", 15);
-		parameter.addVariable("user", Scope.LOCAL, new User("douglei 4 user"));
+		parameter.getVariableEntities().addVariable("name", Scope.GLOBAL, "金石磊");
+		parameter.getVariableEntities().addVariable("day", Scope.GLOBAL, 15);
+		parameter.getVariableEntities().addVariable("user", Scope.LOCAL, new User("douglei 4 user"));
 		parameter.setUserId("金石磊");
-		parameter.addAssignedUserId("douglei");
-		
+		parameter.getAssignEntity().addAssignedUserId("douglei");
 		
 		Result result = engine.getExecutionModule().getProcessInstanceService().start(parameter);
 		if(result.isSuccess())
@@ -57,7 +56,6 @@ public class ProcessRuntimeTest {
 		String userId = "张三";
 		
 		HandleTaskParameter parameter = new HandleTaskParameter();
-		parameter.addAssignedUserId("张三");
 		parameter.setSuggest("同意了").setAttitude(Attitude.AGREE).setUserId(userId);
 		
 		Result result = engine.getExecutionModule().getTaskService().handle(taskId, parameter);

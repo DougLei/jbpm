@@ -18,7 +18,7 @@ public class SendMessageListenParser implements ListenParser {
 		return new Listener(activeTime) {
 			@Override
 			public void notify(AbstractHandleParameter handleParameter) {
-				handleParameter.getUserEntity().getAssignedUserIds().forEach(userId -> {
+				handleParameter.getUserEntity().getAssignEntity().getAssignedUserIds().forEach(userId -> {
 					System.out.println("给userId=["+userId+"]的用户推送消息");
 				});
 			}

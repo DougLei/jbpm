@@ -65,20 +65,27 @@ public class Task {
 		Dispatch dispatch = new Dispatch();
 		dispatch.setTaskinstId(taskinstId);
 		dispatch.setUserId(userId);
+		dispatch.setIsEnabled(1);
 		SessionContext.getTableSession().save(dispatch);
+	}
+	
+	/**
+	 * 删除所有(运行)抄送信息
+	 */
+	public void deleteAllCC() {
+		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_cc where taskinst_id=?", Arrays.asList(taskinstId));
+	}
+	/**
+	 * 删除所有(运行)指派信息
+	 */
+	public void deleteAllAssignee() {
+		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_assignee where taskinst_id=?", Arrays.asList(taskinstId));
 	}
 	/**
 	 * 删除所有(运行)调度权限
 	 */
 	public int deleteAllDispatch() {
 		return SessionContext.getSqlSession().executeUpdate("delete bpm_ru_dispatch where taskinst_id=?", Arrays.asList(taskinstId));
-	}
-	
-	/**
-	 * 删除所有(运行)指派信息
-	 */
-	public void deleteAllAssignee() {
-		SessionContext.getSqlSession().executeUpdate("delete bpm_ru_assignee where taskinst_id=?", Arrays.asList(taskinstId));
 	}
 	
 	/**

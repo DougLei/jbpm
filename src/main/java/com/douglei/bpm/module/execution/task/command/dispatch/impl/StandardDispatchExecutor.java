@@ -1,5 +1,7 @@
 package com.douglei.bpm.module.execution.task.command.dispatch.impl;
 
+import java.util.HashSet;
+
 import com.douglei.bpm.module.execution.task.command.dispatch.DispatchExecutor;
 import com.douglei.bpm.process.handler.TaskDispatchException;
 import com.douglei.bpm.process.mapping.metadata.flow.FlowMetadata;
@@ -11,7 +13,7 @@ import com.douglei.bpm.process.mapping.metadata.flow.FlowMetadata;
 public class StandardDispatchExecutor extends DispatchExecutor {
 	
 	@Override
-	protected DispatchResult parse() {
+	protected DispatchResult parse(HashSet<String> assignedUserIds) {
 		// 对task中的flows进行判断, 选择第一条匹配的flow进行调度
 		for(FlowMetadata flow : currentTaskMetadataEntity.getOutputFlows()) {
 			if(processEngineBeans.getTaskHandleUtil().flowMatching(flow, handleParameter)) 

@@ -4,12 +4,12 @@ package com.douglei.bpm.module.execution.task.command.parameter;
  * 
  * @author DougLei
  */
-public class KillAndJumpTaskParameter extends GeneralTaskParameter{
+public class KillAndJumpTaskParameter extends AbstractDispatchTaskParameter{
 	private String target; // 跳转的目标任务id
 	private String reason; // KillAndJump原因
 	
 	public KillAndJumpTaskParameter(String userId, String target, String reason) {
-		setUserId(userId);
+		super(userId);
 		this.target = target;
 		this.reason = reason;
 	}

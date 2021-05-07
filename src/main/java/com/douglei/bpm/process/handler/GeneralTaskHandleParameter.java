@@ -1,7 +1,6 @@
 package com.douglei.bpm.process.handler;
 
 import java.util.Arrays;
-import java.util.HashSet;
 
 import com.douglei.bpm.module.execution.task.history.Attitude;
 import com.douglei.bpm.module.execution.variable.Scope;
@@ -20,11 +19,11 @@ public class GeneralTaskHandleParameter extends AbstractHandleParameter {
 	private TaskEntityHandler taskEntityHandler = new TaskEntityHandler(); // 任务实体处理器
 	private VariableEntities variableEntities;
 	
-	public GeneralTaskHandleParameter(com.douglei.bpm.module.execution.task.runtime.TaskEntity entity, String currentHandleUserId, String suggest, Attitude attitude, String reason, String businessId, HashSet<String> assignedUserIds) {
+	public GeneralTaskHandleParameter(com.douglei.bpm.module.execution.task.runtime.TaskEntity entity, String userId, String suggest, Attitude attitude, String reason, String businessId, AssignEntity assignEntity) {
 		this.entity = entity;
 		this.taskEntityHandler.setCurrentTaskEntity(new TaskEntity(entity.getTask()));
 		this.businessId = businessId;
-		this.userEntity = new UserEntity(currentHandleUserId, suggest, attitude, reason, assignedUserIds);
+		this.userEntity = new UserEntity(userId, suggest, attitude, reason, assignEntity);
 	}
 	
 	@Override

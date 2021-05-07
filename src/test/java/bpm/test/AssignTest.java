@@ -12,6 +12,7 @@ import com.douglei.bpm.module.execution.task.command.dispatch.impl.SettargetDisp
 import com.douglei.bpm.module.execution.task.command.parameter.DispatchTaskParameter;
 import com.douglei.bpm.module.execution.task.command.parameter.HandleTaskParameter;
 import com.douglei.bpm.module.execution.task.history.Attitude;
+import com.douglei.bpm.module.execution.variable.Scope;
 import com.douglei.bpm.module.repository.definition.ClasspathFile;
 import com.douglei.bpm.module.repository.definition.ProcessDefinition;
 import com.douglei.bpm.module.repository.definition.ProcessDefinitionBuilder;
@@ -51,10 +52,10 @@ public class AssignTest {
 	public void start() {
 		int processDefinitionId =1;
 		StartParameter parameter = new StartParameter(processDefinitionId);
-		parameter.addVariable("name", "金石磊");
-		parameter.addVariable("day", 15);
+		parameter.getVariableEntities().addVariable("name", Scope.GLOBAL, "金石磊");
+		parameter.getVariableEntities().addVariable("day", Scope.GLOBAL, 15);
 		parameter.setUserId("金石磊");
-		parameter.addAssignedUserId("douglei");
+		parameter.getAssignEntity().addAssignedUserId("zhangsan");
 		
 		
 		Result result = engine.getExecutionModule().getProcessInstanceService().start(parameter);

@@ -9,10 +9,10 @@ import com.douglei.bpm.module.execution.task.HandleState;
 import com.douglei.bpm.module.execution.task.runtime.Task;
 import com.douglei.bpm.process.api.user.task.handle.policy.ClaimPolicy;
 import com.douglei.bpm.process.api.user.task.handle.policy.DispatchPolicy;
-import com.douglei.bpm.process.handler.GeneralTaskHandleParameter;
+import com.douglei.bpm.process.handler.AbstractHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandler;
 import com.douglei.bpm.process.handler.task.user.assignee.handle.AssigneeDispatcher;
-import com.douglei.bpm.process.handler.task.user.assignee.startup.AssigneeHandler;
+import com.douglei.bpm.process.handler.task.user.assignee.startup.AssigneeResult;
 import com.douglei.bpm.process.handler.task.user.timelimit.TimeLimitCalculator;
 import com.douglei.bpm.process.handler.task.user.timelimit.TimeLimitCalculatorFactory;
 import com.douglei.bpm.process.mapping.metadata.task.user.TimeLimit;
@@ -24,7 +24,7 @@ import com.douglei.orm.context.SessionContext;
  * 
  * @author DougLei
  */
-public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralTaskHandleParameter> {
+public class UserTaskHandler extends TaskHandler<UserTaskMetadata, AbstractHandleParameter> {
 	private final static Result CAN_DISPATCH = new Result(true);
 
 	@Override
@@ -37,11 +37,14 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralTaskHa
 			task.setExpiryTime(calc.getExpiryTime(task.getStartTime(), timeLimit.getTimes()));
 		}
 		
-		// 处理指派的用户
-		AssigneeHandler assigneeHandler = new AssigneeHandler();
-		assigneeHandler.execute(currentTaskMetadataEntity.getTaskMetadata(), task, handleParameter, processEngineBeans);
+		// 进行指派信息处理
+		AssigneeResult result = handleParameter.getUserEntity().getAssignEntity().getAssigneeHandler()
+				.setParameters(currentTaskMetadataEntity.getTaskMetadata(), handleParameter, processEngineBeans)
+				.execute();
 		
 		// 保存当前用户任务
+		task.setAssignCount(result.getAssignCount());
+		task.setIsAllClaimed(result.isAllClaimed()?1:0);
 		SessionContext.getTableSession().save(task);
 		
 		return Result.getDefaultSuccessInstance();
@@ -60,7 +63,7 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralTaskHa
 		// 判断任务办理是否结束
 		FinishedFlag flag = isFinished();
 		if(flag.isFinished) {
-			String dispatchUserId = handleParameter.getUserEntity().getCurrentHandleUserId(); // 可进行调度的用户id
+			String dispatchUserId = handleParameter.getUserEntity().getUserId(); // 可进行调度的用户id
 			if(flag.supportMultipleClaim) {
 				// 获取办理过当前任务的用户id集合
 				List<Object[]> list = SessionContext.getSqlSession().query_("select distinct user_id from bpm_hi_assignee where taskinst_id=? and handle_state = 6", Arrays.asList(currentTask.getTaskinstId()));
@@ -69,10 +72,10 @@ public class UserTaskHandler extends TaskHandler<UserTaskMetadata, GeneralTaskHa
 				
 				// 根据调度策略, 获取可进行任务调度的userId
 				DispatchPolicy dispatchPolicy = processEngineBeans.getAPIContainer().getDispatchPolicy(currentTaskMetadataEntity.getTaskMetadata().getCandidate().getHandlePolicy().getDispatchPolicyEntity().getName());
-				dispatchUserId = dispatchPolicy.getUserId(handleParameter.getUserEntity().getCurrentHandleUserId(), handledUserIds);
+				dispatchUserId = dispatchPolicy.getUserId(handleParameter.getUserEntity().getUserId(), handledUserIds);
 			}
 			currentTask.setDispatchRight(dispatchUserId);
-			if(dispatchUserId.equals(handleParameter.getUserEntity().getCurrentHandleUserId()))
+			if(dispatchUserId.equals(handleParameter.getUserEntity().getUserId()))
 				return CAN_DISPATCH;
 		}
 		return CANNOT_DISPATCH;

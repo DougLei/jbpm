@@ -3,9 +3,6 @@
 	<process code="AssignTest" version="v20210108" name="指派信息测试" title="#{name}的指派信息测试">
 		
 		<startEvent id="startEvent" name="开始">
-			<listeners>
-				<listener class="bpm.test.listener.SendMessageListenParser" activeTime="TASK_DISPATCH" />
-			</listeners>
 		</startEvent>
 		<flow id="flow1" source="startEvent" target="userTask1" />
 		
@@ -33,6 +30,10 @@
 			</option>
 			<option type="transfer" name="转办" order="">
 			</option>
+			
+			<listeners>
+				<listener class="bpm.test.listener.SendMessageListenParser" activeTime="TASK_ASSIGNED" />
+			</listeners>
 		</userTask>
 		<flow id="flow2" source="userTask1" target="userTask2" />
 		

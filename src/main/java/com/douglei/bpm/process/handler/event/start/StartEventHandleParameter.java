@@ -24,7 +24,7 @@ public class StartEventHandleParameter extends AbstractHandleParameter {
 		this.processMetadata = processMetadata;
 		this.parameter = parameter;
 		this.processInstanceId = UUID.randomUUID().toString();
-		this.userEntity = new UserEntity(parameter.getUserId(), parameter.getAssignedUserIds());
+		this.userEntity = new UserEntity(parameter.getUserId(), null, null, null, parameter.getAssignEntity());
 	}
 	
 	@Override

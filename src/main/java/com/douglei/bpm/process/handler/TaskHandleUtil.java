@@ -1,6 +1,5 @@
 package com.douglei.bpm.process.handler;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class TaskHandleUtil {
 	private TaskHandler createTaskHandleInstance(TaskMetadataEntity<? extends TaskMetadata> taskMetadataEntity, AbstractHandleParameter handleParameter) {
 		TaskHandler taskHandler = null;
 		switch(taskMetadataEntity.getTaskMetadata().getType()) {
-			// 事件类型
+			// 事件
 			case START_EVENT:
 				taskHandler = new StartEventHandler();
 				break;
@@ -53,12 +52,12 @@ public class TaskHandleUtil {
 				taskHandler = new EndEventHandler();
 				break;
 			
-			// 任务类型
+			// 任务
 			case USER_TASK:
 				taskHandler = new UserTaskHandler();
 				break;
 			
-			// 网关类型
+			// 网关
 			case EXCLUSIVE_GATEWAY:
 				taskHandler = new ExclusiveGatewayHandler();
 				break;
@@ -71,7 +70,7 @@ public class TaskHandleUtil {
 			default:
 				throw new TaskHandleException("目前还未实现["+taskMetadataEntity.getTaskMetadata().getType().getName()+"]类型的任务办理器");
 		}
-		taskHandler.initParameters(taskMetadataEntity, handleParameter, processEngineBeans);
+		taskHandler.setParameters(taskMetadataEntity, handleParameter, processEngineBeans);
 		return taskHandler;
 	}
 	
@@ -118,25 +117,21 @@ public class TaskHandleUtil {
 		if(listeners == null)
 			return;
 		
-		listeners.forEach(listener -> {
-			System.out.println(listener.getActiveTime());
-			if(listener.getActiveTime() == target)
-				listener.notify(handleParameter);
-		});
+		listeners.stream().filter(listener -> listener.getActiveTime() == target).forEach(listener -> listener.notify(handleParameter));
 	}
 	
 	//---------------------------------------------------------------------------------------------
 	// 关于用户指派的api
 	//---------------------------------------------------------------------------------------------
 	/**
-	 * 获取指定的指派策略下, 具体可指派的用户id集合
+	 * 获取指定的指派策略下, 可指派的用户id集合
 	 * @param procinstId 当前操作的流程实例id
 	 * @param taskinstId 当前操作的任务实例id
 	 * @param currentHandleUserId 当前办理的用户id
 	 * @param assignPolicy
 	 * @return
 	 */
-	public List<String> getAssignableUserIds(String procinstId, String taskinstId, String currentHandleUserId, AssignPolicy assignPolicy) {
+	public HashSet<String> getAssignableUserIds(String procinstId, String taskinstId, String currentHandleUserId, AssignPolicy assignPolicy) {
 		// 获取可指派的用户id集合
 		HashSet<String> assignableUserIds = new HashSet<String>();
 		AssignableUserExpressionParameter parameter = new AssignableUserExpressionParameter(procinstId, taskinstId, currentHandleUserId);
@@ -145,17 +140,17 @@ public class TaskHandleUtil {
 			if(userIds != null && !userIds.isEmpty())
 				assignableUserIds.addAll(userIds);
 		}
-		return new ArrayList<String>(assignableUserIds);
+		return assignableUserIds;
 	}
 
 	/**
 	 * 验证指派的用户
 	 * @param assignedUserIds 实际指派的用户id集合
-	 * @param assignableUserIds 具体可指派的用户id集合
+	 * @param assignableUserIds 可指派的用户id集合
 	 * @param assignNumber
 	 * @throws TaskHandleException
 	 */
-	public void validateAssignedUsers(List<String> assignedUserIds, List<String> assignableUserIds, AssignNumber assignNumber) throws TaskHandleException{
+	public void validateAssignedUsers(HashSet<String> assignedUserIds, HashSet<String> assignableUserIds, AssignNumber assignNumber) throws TaskHandleException{
 		// 判断实际指派的人, 是否都存在于可指派的用户集合中
 		for (String assignedUserId : assignedUserIds) {
 			if(!assignableUserIds.contains(assignedUserId))

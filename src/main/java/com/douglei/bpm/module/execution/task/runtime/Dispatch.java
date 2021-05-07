@@ -10,7 +10,7 @@ public class Dispatch {
 	protected int chainId;
 	protected String userId;
 	protected String reason;
-	protected int isEnabled=1;
+	protected int isEnabled;
 	
 	/**
 	 * 是否有效

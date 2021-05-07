@@ -3,6 +3,7 @@ package com.douglei.bpm.module.execution.task.command;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import com.douglei.bpm.ProcessEngineBeans;
@@ -69,7 +70,7 @@ public class DelegateTaskCmd implements Command {
 		if(candidate == null)
 			candidate = ((UserTaskMetadata)taskMetadata).getCandidate();
 		
-		List<String> assignableUserIds = processEngineBeans.getTaskHandleUtil().getAssignableUserIds(
+		HashSet<String> assignableUserIds = processEngineBeans.getTaskHandleUtil().getAssignableUserIds(
 				entity.getTask().getProcinstId(), entity.getTask().getTaskinstId(), userId, candidate.getAssignPolicy());
 		if(assignableUserIds.isEmpty())
 			throw new TaskHandleException("["+taskMetadata.getName()+"]任务不存在可"+getAssignMode()+"的人员");
@@ -82,7 +83,7 @@ public class DelegateTaskCmd implements Command {
 		giveupTask(assigneeList);
 			
 		// 2. 查询委托人的委托信息, 组装成指派信息集合, 保存到指派表
-		List<String> assignedUserIds = new ArrayList<String>(1);
+		HashSet<String> assignedUserIds = new HashSet<String>(2);
 		assignedUserIds.add(assignedUserId);
 		
 		DelegationHandler delegationHandler = new DelegationHandler(

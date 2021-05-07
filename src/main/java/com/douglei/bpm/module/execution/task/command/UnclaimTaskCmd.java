@@ -38,7 +38,7 @@ public class UnclaimTaskCmd implements Command {
 						"select id from bpm_ru_assignee where taskinst_id=? and user_id=? and handle_state=?", 
 						Arrays.asList(entity.getTask().getTaskinstId(), userId, HandleState.CLAIMED.getValue()));
 		if(assigneeList.isEmpty())
-			throw new TaskHandleException("取消认领失败, 指定的userId无法取消认领["+entity.getName()+"]任务");
+			throw new TaskHandleException("取消认领失败, 指定的userId无权取消认领["+entity.getName()+"]任务");
 		
 		// 处理抄送信息
 		if(ccBeViewed()) 

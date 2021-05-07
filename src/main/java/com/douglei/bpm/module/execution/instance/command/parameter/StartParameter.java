@@ -1,9 +1,6 @@
 package com.douglei.bpm.module.execution.instance.command.parameter;
 
-import java.util.Map;
-
-import com.douglei.bpm.module.execution.task.command.parameter.HandleTaskParameter;
-import com.douglei.bpm.module.execution.variable.Scope;
+import com.douglei.bpm.process.handler.AssignEntity;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.VariableEntities;
 
@@ -11,7 +8,7 @@ import com.douglei.bpm.process.handler.VariableEntities;
  * 流程的启动参数
  * @author DougLei
  */
-public class StartParameter extends HandleTaskParameter{
+public class StartParameter {
 	public static final byte BY_ID= 1; // 使用流程定义的id启动流程
 	public static final byte BY_CODE= 2; // 使用流程定义的code启动主版本的流程
 	public static final byte BY_CODE_VERSION = 3; // 使用流程定义的code和version启动主要子版本的流程
@@ -20,7 +17,9 @@ public class StartParameter extends HandleTaskParameter{
 	private String code; // 流程定义code
 	private String version; // 流程定义version
 	private String tenantId; // 租户id
-	
+	private String userId; // 发起人id
+	private String businessId; // 关联的业务id
+	private AssignEntity assignEntity = new AssignEntity(); // 指派实体 
 	private VariableEntities variableEntities = new VariableEntities(); // 流程变量
 	
 	public StartParameter(Integer id) {
@@ -44,52 +43,22 @@ public class StartParameter extends HandleTaskParameter{
 		this.version = version;
 		this.tenantId = tenantId;
 	}
-	
 	/**
-	 * 添加变量, 默认是global范围
-	 * @param name
-	 * @param value
+	 * 设置启动人id
+	 * @param userId
 	 * @return
 	 */
-	public HandleTaskParameter addVariable(String name, Object value) {
-		return addVariable(name, Scope.GLOBAL, value);
-	}
-	/**
-	 * 添加变量
-	 * @param name
-	 * @param scope
-	 * @param value
-	 * @return
-	 */
-	public HandleTaskParameter addVariable(String name, Scope scope, Object value) {
-		variableEntities.addVariable(name, scope, value);
+	public StartParameter setUserId(String userId) {
+		this.userId = userId;
 		return this;
 	}
 	/**
-	 * 批量添加变量, 默认是global范围
-	 * @param variables
+	 * 设置关联的业务id
+	 * @param businessId
 	 * @return
 	 */
-	public HandleTaskParameter addVariables(Map<String, Object> variables) {
-		return addVariables(Scope.GLOBAL, variables);
-	}
-	/**
-	 * 批量添加变量
-	 * @param scope
-	 * @param variables
-	 * @return
-	 */
-	public HandleTaskParameter addVariables(Scope scope, Map<String, Object> variables) {
-		variableEntities.addVariables(scope, variables);
-		return this;
-	}
-	/**
-	 * 批量添加变量
-	 * @param object
-	 * @return
-	 */
-	public HandleTaskParameter addVariables(Object object) {
-		variableEntities.addVariables(object);
+	public StartParameter setBusinessId(String businessId) {
+		this.businessId = businessId;
 		return this;
 	}
 	
@@ -131,6 +100,27 @@ public class StartParameter extends HandleTaskParameter{
 	 */
 	public String getTenantId() {
 		return tenantId;
+	}
+	/**
+	 * 获取启动人id
+	 * @return
+	 */
+	public String getUserId() {
+		return userId;
+	}
+	/**
+	 * 获取关联的业务id
+	 * @return
+	 */
+	public String getBusinessId() {
+		return businessId;
+	}
+	/**
+	 * 获取指派实体
+	 * @return
+	 */
+	public AssignEntity getAssignEntity() {
+		return assignEntity;
 	}
 	/**
 	 * 获取VariableEntities实例

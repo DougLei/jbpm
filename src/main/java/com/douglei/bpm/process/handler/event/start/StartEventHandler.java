@@ -48,7 +48,7 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		
 		// 进行任务调度
 		new StandardDispatchExecutor()
-			.setParameters(currentTaskMetadataEntity, handleParameter, null, processEngineBeans)
+			.setParameters(currentTaskMetadataEntity, handleParameter, processEngineBeans)
 			.execute();
 		return new Result(processInstance);
 	}
@@ -63,7 +63,7 @@ public class StartEventHandler extends TaskHandler<StartEventMetadata, StartEven
 		instance.setTitle(getTitle(processMetadata.getTitle(), handleParameter.getVariableEntities().getVariableMap()));
 		instance.setBusinessId(handleParameter.getBusinessId());
 		instance.setPageId(processMetadata.getPageID());
-		instance.setStartUserId(handleParameter.getUserEntity().getCurrentHandleUserId());
+		instance.setStartUserId(handleParameter.getUserEntity().getUserId());
 		instance.setStartTime(handleParameter.getCurrentDate());
 		instance.setTenantId(handleParameter.getTenantId());
 		instance.setStateInstance(State.ACTIVE);

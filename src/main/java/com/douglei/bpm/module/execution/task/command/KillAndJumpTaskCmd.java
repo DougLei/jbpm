@@ -1,5 +1,7 @@
 package com.douglei.bpm.module.execution.task.command;
 
+import java.util.HashSet;
+
 import com.douglei.bpm.ProcessEngineBeans;
 import com.douglei.bpm.module.Command;
 import com.douglei.bpm.module.Result;
@@ -10,6 +12,8 @@ import com.douglei.bpm.module.execution.task.runtime.TaskEntity;
 import com.douglei.bpm.process.handler.AbstractTaskHandler;
 import com.douglei.bpm.process.handler.GeneralTaskHandleParameter;
 import com.douglei.bpm.process.handler.TaskHandleException;
+import com.douglei.bpm.process.handler.task.user.assignee.startup.AssigneeHandler;
+import com.douglei.bpm.process.mapping.metadata.task.user.candidate.assign.AssignPolicy;
 import com.douglei.tools.StringUtil;
 
 /**
@@ -39,6 +43,12 @@ public class KillAndJumpTaskCmd extends AbstractTaskHandler implements Command{
 		}
 		
 		// 创建KillAndJump用办理参数实例
+		parameter.getAssignEntity().setAssigneeHandler(new AssigneeHandler() {
+			@Override
+			protected HashSet<String> validate(AssignPolicy assignPolicy) {
+				return handleParameter.getUserEntity().getAssignEntity().getAssignedUserIds();
+			}
+		});
 		GeneralTaskHandleParameter handleParameter = new GeneralTaskHandleParameter(entity, parameter.getUserId(), null, null, null, null, parameter.getAssignEntity());
 		
 		// kill并完成当前任务

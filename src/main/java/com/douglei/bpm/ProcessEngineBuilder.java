@@ -19,6 +19,15 @@ public class ProcessEngineBuilder {
 	public ProcessEngineBuilder(String engineId) {
 		this.engineId = engineId;
 	}
+	
+	/**
+	 * 注册自定义的接口Bean
+	 * @param clazz
+	 * @param instance
+	 */
+	public void registerCustomAPIBean(Class<?> clazz, Object instance) {
+		beanFactory.registerCustomBean(clazz, instance);
+	}
 
 	/**
 	 * 使用默认filepath的jbpm.conf.xml配置文件(基于java resource), 构建引擎

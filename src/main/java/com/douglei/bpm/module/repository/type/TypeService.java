@@ -50,7 +50,7 @@ public class TypeService {
 	 */
 	@Transaction
 	public Result update(Type type) {
-		Type old = SessionContext.getSqlSession().uniqueQuery(Type.class, "select id, parent_id, code from bpm_re_proctype where id=?", Arrays.asList(type.getId()));
+		Type old = SessionContext.getSqlSession().uniqueQuery(Type.class, "select id, parent_id, code from bpm_re_type where id=?", Arrays.asList(type.getId()));
 		if(old == null)
 			throw new RepositoryException("修改失败, 不存在id为["+type.getId()+"]的流程类型");
 		
@@ -76,7 +76,7 @@ public class TypeService {
 			throw new RepositoryException("修改失败, id为["+parentId+"]的流程类型重复作为父级出现");
 		counter.add(parentId);
 		
-		Object[] array = SessionContext.getSqlSession().uniqueQuery_("select parent_id from bpm_re_proctype where id=?", Arrays.asList(parentId));
+		Object[] array = SessionContext.getSqlSession().uniqueQuery_("select parent_id from bpm_re_type where id=?", Arrays.asList(parentId));
 		if(array == null)
 			throw new RepositoryException("修改失败, 不存在id为["+parentId+"]的父流程类型");
 		recursiveValidateParent(Integer.parseInt(array[0].toString()), counter);
@@ -107,7 +107,7 @@ public class TypeService {
 		
 		// 获取子类型的id集合
 		if(childrenCount> 0) 
-			recursiveQueryChildrenIds(SessionContext.getSqlSession().query_("select id from bpm_re_proctype where parent_id=?", ids), ids);
+			recursiveQueryChildrenIds(SessionContext.getSqlSession().query_("select id from bpm_re_type where parent_id=?", ids), ids);
 		
 		// 有子类型, 或有关联流程定义; 更新流程定义关联的类型
 		if(childrenCount> 0 || refProessCount> 0) { 

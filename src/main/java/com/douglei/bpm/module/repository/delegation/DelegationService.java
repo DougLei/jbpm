@@ -20,9 +20,7 @@ public class DelegationService {
 	/*
 	 * 添加
 	 * 修改
-	 * 
 	 * 查看详细委托冲突
-	 * 
 	 * 
 	 * 主要验证的内容
 	 * 1.在同一个时间内相互委托, 特别是有时间差的这种情况
@@ -55,6 +53,55 @@ public class DelegationService {
 		
 		return Result.getDefaultSuccessInstance();
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	/**

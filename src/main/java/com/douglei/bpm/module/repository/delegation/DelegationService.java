@@ -17,40 +17,60 @@ import com.douglei.orm.context.Transaction;
 @Bean(isTransaction=true)
 public class DelegationService {
 	
-	/*
-	 * 添加
-	 * 修改
-	 * 查看详细委托冲突
-	 * 
-	 * 主要验证的内容
-	 * 1.在同一个时间内相互委托, 特别是有时间差的这种情况
-	 * 2.在委托了某个code的流程和指定具体version的流程时, 要分析数据, 就不保存具体version的
-	 * 
-	 * */
-	
 	/**
 	 * 添加委托
-	 * @param delegation
+	 * @param builder
 	 * @return
 	 */
 	@Transaction
-	public Result insert(Delegation delegation) {
-		// TODO 添加委托
+	public Result insert(DelegationBuilder builder) {
+		Delegation delegation = builder.build();
+		
+		// 递归查询被委托人委托了哪些流程, 这些流程是否和当前委托的流程相同; 如果不相同, 则结束, 否则继续递归查询和判断
 		
 		
+		
+		
+		
+		
+		
+		
+		
+		SessionContext.getTableSession().save(delegation);
+		if(delegation.getDetails() != null)
+			SessionContext.getTableSession().save(delegation.getDetails());
 		return Result.getDefaultSuccessInstance();
 	}
 	
 	/**
 	 * 修改委托
-	 * @param delegation
+	 * @param builder
 	 * @return
 	 */
 	@Transaction
-	public Result update(Delegation delegation) {
-		// TODO 修改委托
+	public Result update(DelegationBuilder builder) {
+		Delegation delegation = builder.build();
+		
+		// 判断是否存在指定id的委托信息
+		Delegation old = SessionContext.getSqlSession().uniqueQuery(Delegation.class, "select * from bpm_re_delegation where id=?", Arrays.asList(delegation.getId()));
+		if(old == null)
+			throw new RepositoryException("修改委托失败, 不存在id为["+delegation.getId()+"]的委托");
 		
 		
+		
+		
+		// 如果已经接受, 然后其修改了明细, 要判断是否需要重新接受, 以及激活状态
+		
+		
+		
+		
+		
+		
+		
+		SessionContext.getTableSession().update(delegation);
+		SessionContext.getSqlSession().executeUpdate("delete bpm_re_delegation_detail where delegation_id=?", Arrays.asList(delegation.getId()));
+		if(delegation.getDetails() != null)
+			SessionContext.getTableSession().save(delegation.getDetails());
 		return Result.getDefaultSuccessInstance();
 	}
 	
@@ -120,11 +140,11 @@ public class DelegationService {
 		if(delegation.isAccept())
 			throw new RepositoryException("接受委托失败, 委托已被接受");
 		
-		Date current = new Date();
-		if(delegation.getEndTime() < current.getTime())
+		Date currentDate = new Date();
+		if(delegation.getEndTime() < currentDate.getTime())
 			return new Result("接受委托失败, 当前时间已晚于委托配置的结束时间", "jbpm.delegation.accept.fail.too.late");
 		
-		SessionContext.getSqlSession().executeUpdate("update bpm_re_delegation set is_enabled=1, accept_time=? where id=?", Arrays.asList(current, delegationId));
+		SessionContext.getSqlSession().executeUpdate("update bpm_re_delegation set is_enabled=1, accept_time=? where id=?", Arrays.asList(currentDate, delegationId));
 		return Result.getDefaultSuccessInstance();
 	}
 	
@@ -177,9 +197,9 @@ public class DelegationService {
 	 * @return
 	 */
 	public Result delete(int delegationId) {
-		List<Object> paramList = Arrays.asList(delegationId);
-		if(SessionContext.getSqlSession().executeUpdate("delete bpm_re_delegation where id=?", paramList) == 1)
-			SessionContext.getSqlSession().executeUpdate("delete bpm_re_delegation_detail where delegation_id=?", paramList);
+		List<Object> params = Arrays.asList(delegationId);
+		if(SessionContext.getSqlSession().executeUpdate("delete bpm_re_delegation where id=?", params) == 1)
+			SessionContext.getSqlSession().executeUpdate("delete bpm_re_delegation_detail where delegation_id=?", params);
 		return Result.getDefaultSuccessInstance();
 	}
 }

@@ -10,6 +10,12 @@ public class DelegationDetail {
 	private String procdefCode;
 	private String procdefVersion;
 	
+	public DelegationDetail() {}
+	public DelegationDetail(String procdefCode, String procdefVersion) {
+		this.procdefCode = procdefCode;
+		this.procdefVersion = procdefVersion;
+	}
+	
 	public int getId() {
 		return id;
 	}

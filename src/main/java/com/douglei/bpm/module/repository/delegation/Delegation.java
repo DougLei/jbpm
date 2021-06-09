@@ -1,6 +1,5 @@
 package com.douglei.bpm.module.repository.delegation;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +16,6 @@ public class Delegation {
 	private String reason;
 	private Date acceptTime;
 	private int isEnabled;
-	private String tenantId;
 	private List<DelegationDetail> details;
 	
 	public int getId() {
@@ -74,21 +72,10 @@ public class Delegation {
 	public void setIsEnabled(int isEnabled) {
 		this.isEnabled = isEnabled;
 	}
-	public String getTenantId() {
-		return tenantId;
-	}
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
-	}
 	public List<DelegationDetail> getDetails() {
 		return details;
 	}
 	public void setDetails(List<DelegationDetail> details) {
 		this.details = details;
-	}
-	public void addDetail(DelegationDetail detail) {
-		if(details == null)
-			details = new ArrayList<DelegationDetail>();
-		details.add(detail);
 	}
 }

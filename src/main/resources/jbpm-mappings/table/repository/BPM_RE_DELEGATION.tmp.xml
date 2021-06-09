@@ -11,7 +11,6 @@
 			<column name="REASON" property="reason" dataType="nstring" length="300" nullable="false" />
 			<column name="ACCEPT_TIME" property="acceptTime" dataType="datetime" />
 			<column name="IS_ENABLED" property="isEnabled" dataType="number" length="1" nullable="false" />
-			<column name="TENANT_ID" property="tenantId" dataType="nstring" length="150" />
 		</columns>
 		
 		<constraints>

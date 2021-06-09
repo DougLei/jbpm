@@ -13,7 +13,6 @@ import com.douglei.bpm.module.execution.task.runtime.Assignee;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.orm.context.SessionContext;
 
-
 /**
  * 委托信息处理器
  * @author DougLei
@@ -43,7 +42,7 @@ public class DelegationHandler {
 			counter.add(uid);
 		});
 		
-		List<DelegationInfo> list = SessionContext.getSQLSession().query(DelegationInfo.class, "Assignee", "queryDelegations", condition);
+		List<DelegationInfo> list = SessionContext.getSQLSession().query(DelegationInfo.class, "Delegation", "queryDelegations", condition);
 		if(list.isEmpty())
 			return;
 		
@@ -70,7 +69,7 @@ public class DelegationHandler {
 				this.resultMap.put(entry.getKey(), delegation);
 				
 				if(assigneeUserIds == null) 
-					assigneeUserIds = new HashSet<String>(delegationInfoMap.size());
+					assigneeUserIds = new HashSet<String>();
 				assigneeUserIds.add(delegation.getUserId());
 			}
 		}
@@ -116,7 +115,6 @@ public class DelegationHandler {
 	}
 }
 
-
 /**
  * 多委托实例, 用来记录一个用户的多个委托
  * @author DougLei
@@ -151,7 +149,7 @@ class MultiDelegation {
 class Delegation {
 	private String userId; // 被委托的用户id
 	private String reason;
-	private List<DelegationProcess> details; // 具体委托的流程集合
+	private List<DelegationDetail> details; // 具体委托的流程集合
 	
 	public Delegation(String userId, String reason) {
 		this.userId = userId;
@@ -169,16 +167,16 @@ class Delegation {
 		if(processCode == null)
 			return;
 		if(details == null)
-			details = new ArrayList<DelegationProcess>(5);
-		details.add(new DelegationProcess(processCode, processVersion));
+			details = new ArrayList<DelegationDetail>(5);
+		details.add(new DelegationDetail(processCode, processVersion));
 	}
 	
 	// 是否要委托
 	public boolean isDelegate(String processCode, String processVersion) {
 		if(details == null)
 			return true;
-		for (DelegationProcess process : details) {
-			if(process.matching(processCode, processVersion))
+		for (DelegationDetail detail : details) {
+			if(detail.matching(processCode, processVersion))
 				return true;
 		}
 		return false;
@@ -186,14 +184,14 @@ class Delegation {
 }
 
 /**
- * 具体的一个委托流程
+ * 具体的一个委托明细
  * @author DougLei
  */
-class DelegationProcess {
+class DelegationDetail {
 	private String code;
 	private String version;
 	
-	public DelegationProcess(String code, String version) {
+	public DelegationDetail(String code, String version) {
 		this.code = code;
 		this.version = version;
 	}

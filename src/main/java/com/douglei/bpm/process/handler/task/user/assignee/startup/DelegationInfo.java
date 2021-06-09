@@ -7,9 +7,12 @@ package com.douglei.bpm.process.handler.task.user.assignee.startup;
 public class DelegationInfo {
 	private String userId; // 发起委托的用户id
 	private String assignedUserId; // 被委托的用户id
-	private String reason;
-	private String procdefCode;
-	private String procdefVersion;
+	private String reason; // 委托原因
+	
+	@Override
+	public boolean equals(Object obj) {
+		return userId.equals(((DelegationInfo)obj).userId);
+	}
 	
 	public String getUserId() {
 		return userId;
@@ -28,17 +31,5 @@ public class DelegationInfo {
 	}
 	public void setReason(String reason) {
 		this.reason = reason;
-	}
-	public String getProcdefCode() {
-		return procdefCode;
-	}
-	public void setProcdefCode(String procdefCode) {
-		this.procdefCode = procdefCode;
-	}
-	public String getProcdefVersion() {
-		return procdefVersion;
-	}
-	public void setProcdefVersion(String procdefVersion) {
-		this.procdefVersion = procdefVersion;
 	}
 }

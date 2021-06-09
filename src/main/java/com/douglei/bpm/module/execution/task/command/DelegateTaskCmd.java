@@ -48,13 +48,13 @@ public class DelegateTaskCmd implements Command {
 			throw new TaskHandleException(getAssignMode()+"失败, ["+entity.getName()+"]任务不支持用户进行"+getAssignMode()+"操作");
 		
 		if(userId.equals(assignedUserId))
-			return new Result("%s失败, 不能%s给自己", "jbpm.delegate.fail.to.self", getAssignMode(), getAssignMode());
+			return new Result("不能%s给自己", "jbpm.delegate.fail.to.self", getAssignMode());
 		
 		DelegateOption option = (DelegateOption) ((UserTaskMetadata)taskMetadata).getOption(getOptionType());
 		if(option == null)
 			throw new TaskHandleException(getAssignMode()+"失败, ["+entity.getName()+"]任务不支持用户进行"+getAssignMode()+"操作");
 		if(option.reasonIsRequired() && StringUtil.isEmpty(reason))
-			return new Result("%s失败, 请输入%s的具体原因", "jbpm.delegate.fail.no.reason", getAssignMode(), getAssignMode());
+			return new Result("请输入%s的具体原因", "jbpm.delegate.fail.no.reason", getAssignMode());
 		
 		// 查询指定userId, 判断其是否可以委托
 		List<Assignee> assigneeList = SessionContext.getSqlSession()
@@ -87,11 +87,8 @@ public class DelegateTaskCmd implements Command {
 		assignedUserIds.add(assignedUserId);
 		
 		DelegationHandler delegationHandler = new DelegationHandler(
-				entity.getProcessMetadata().getCode(), 
-				entity.getProcessMetadata().getVersion(), 
-				new SqlCondition(assignedUserIds),
-				entity.getTask().getTaskinstId(),
-				userId);
+				entity.getTask().getTaskinstId(), userId, 
+				new SqlCondition(entity.getProcessMetadata().getCode(), entity.getProcessMetadata().getVersion(), assignedUserIds));
 		
 		List<Assignee> delegateAssigneeList = new ArrayList<Assignee>(assigneeList.size() * 3);
 		Date claimTime = new Date();
@@ -106,13 +103,23 @@ public class DelegateTaskCmd implements Command {
 					false, 
 					delegateAssigneeList);
 
+			// 计算出委托人的委托深度
 			if(delegateDeep == -1) 
 				delegateDeep = delegateAssigneeList.size()-1;
 			
-			// 设置委托人的指派模式
-			delegateAssigneeList.get(delegateAssigneeList.size()-delegateDeep-1).setModeInstance(getAssignMode());
-			// 将最后一个指派信息进行认领
-			delegateAssigneeList.get(delegateAssigneeList.size()-1).claim(claimTime);
+			// 设置第一个指派信息的指派模式
+			int firstIndex = delegateAssigneeList.size()-delegateDeep-1;
+			delegateAssigneeList.get(firstIndex).setModeInstance(getAssignMode());
+			
+			// 对最后一个指派信息进行认领操作
+			int lastIndex = delegateAssigneeList.size()-1;
+			delegateAssigneeList.get(lastIndex).claim(claimTime);
+			
+			// 将前面(二次委托的)指派信息的HandleState设置为INVALID_UNCLAIM
+			if(firstIndex< lastIndex) {
+				for(int i=firstIndex; i< lastIndex; i++) 
+					delegateAssigneeList.get(i).setHandleStateInstance(HandleState.INVALID_UNCLAIM);
+			}
 		}
 		SessionContext.getTableSession().save(delegateAssigneeList);
 		return Result.getDefaultSuccessInstance();

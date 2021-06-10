@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.douglei.bpm.module.Result;
 import com.douglei.bpm.module.repository.RepositoryException;
 
 /**
@@ -82,13 +81,13 @@ public class DelegationBuilder {
 	 * 构建Delegation实例
 	 * @return
 	 */
-	public Result build() {
+	public Delegation build() {
 		if(userId.equals(assignedUserId))
-			return new Result("创建委托失败, 不能委托给自己", "jbpm.delegation.op.fail.cannot.toself");
+			throw new RepositoryException("创建委托失败, 不能委托给自己");
 		if(new Date().getTime() > startTime)
-			return new Result("创建委托失败, 委托的开始时间不能早于当前时间", "jbpm.delegation.op.fail.starttime.earlier.currenttime");
+			throw new RepositoryException("创建委托失败, 委托的开始时间不能早于当前时间");
 		if(startTime >= endTime)
-			return new Result("创建委托失败, 委托的结束时间不能早于开始时间", "jbpm.delegation.op.fail.endtime.earlier.starttime");
+			throw new RepositoryException("创建委托失败, 委托的结束时间不能早于开始时间");
 			
 		Delegation delegation = new Delegation();
 		delegation.setId(id);
@@ -98,6 +97,6 @@ public class DelegationBuilder {
 		delegation.setEndTime(endTime);
 		delegation.setReason(reason);
 		delegation.setDetails(details);
-		return new Result(delegation);
+		return delegation;
 	}
 }

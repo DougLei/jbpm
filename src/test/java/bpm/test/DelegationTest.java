@@ -21,11 +21,12 @@ public class DelegationTest {
 	@Test
 	public void insert() throws Exception {
 		DelegationBuilder builder = new DelegationBuilder();
-		builder.setUserId("A");
+		builder.setUserId("C");
 		builder.setAssignedUserId("B");
 		builder.setStartTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-6-12 18:00:01"));
 		builder.setEndTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-6-18 18:00:00"));
 		builder.setReason("R");
+		builder.addDetail("报销", null);
 		
 		
 		Result result = service.insert(builder);

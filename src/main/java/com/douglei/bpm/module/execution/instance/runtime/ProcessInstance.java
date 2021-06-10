@@ -20,8 +20,8 @@ public class ProcessInstance {
 	@Property protected String startUserId;
 	@Property protected Date startTime;
 	@Property protected Date suspendTime;
-	@Property protected String tenantId;
 	protected State state;
+	@Property protected String tenantId;
 	
 	public int getId() {
 		return id;
@@ -83,12 +83,6 @@ public class ProcessInstance {
 	public void setSuspendTime(Date suspendTime) {
 		this.suspendTime = suspendTime;
 	}
-	public String getTenantId() {
-		return tenantId;
-	}
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
-	}
 	public State getStateInstance() {
 		return state;
 	}
@@ -102,5 +96,11 @@ public class ProcessInstance {
 	}
 	public void setState(Integer state) {
 		this.state = State.valueOf(state);
+	}
+	public String getTenantId() {
+		return tenantId;
+	}
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 }

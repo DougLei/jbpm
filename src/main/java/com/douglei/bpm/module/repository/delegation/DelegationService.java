@@ -92,14 +92,10 @@ public class DelegationService {
 	 */
 	@Transaction
 	public Result insert(DelegationBuilder builder) {
-		Result result = builder.build();
-		if(result.isFail())
-			return result;
-		
-		Delegation delegation = result.getObject(Delegation.class);
-		
+		Delegation delegation = builder.build();
+
 		// 递归验证, 防止出现委托无限循环的情况
-		result = new RecursiveValidator(delegation).execute();
+		Result result = new RecursiveValidator(delegation).execute();
 		if(result != null)
 			return result;
 		
@@ -115,11 +111,7 @@ public class DelegationService {
 	 */
 	@Transaction
 	public Result update(DelegationBuilder builder) {
-		Result result = builder.build();
-		if(result.isFail())
-			return result;
-		
-		Delegation delegation = result.getObject(Delegation.class);
+		Delegation delegation = builder.build();
 		Delegation old = SessionContext.getSqlSession().uniqueQuery(Delegation.class, "select * from bpm_re_delegation where id=?", Arrays.asList(delegation.getId()));
 		if(old == null)
 			throw new RepositoryException("修改委托失败, 不存在id为["+delegation.getId()+"]的委托");
@@ -127,7 +119,7 @@ public class DelegationService {
 			return new Result("修改委托失败, 委托已被接受", "jbpm.delegation.update.fail.accepted");
 		
 		// 递归验证, 防止出现委托无限循环的情况
-		result = new RecursiveValidator(delegation).execute();
+		Result result = new RecursiveValidator(delegation).execute();
 		if(result != null)
 			return result;
 		

@@ -65,7 +65,7 @@ public class SuggestService {
 	
 
 	/**
-	 *  删除指定tenantId的意见
+	 * 删除指定tenantId的意见
 	 * @param tenantId
 	 * @return
 	 */

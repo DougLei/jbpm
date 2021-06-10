@@ -3,27 +3,27 @@ package com.douglei.bpm.process.handler.task.user.assignee.startup;
 import java.util.HashSet;
 
 /**
- * 指派人委托查询条件
+ * 
  * @author DougLei
  */
-public class SqlCondition {
+public class DelegationSqlCondition {
 	private long currentTime;
 	private String procdefCode;
 	private String procdefVersion;
 	private HashSet<String> userIds;
 	
-	public SqlCondition(String procdefCode, String procdefVersion, HashSet<String> assignedUserIds) {
+	public DelegationSqlCondition(String procdefCode, String procdefVersion, HashSet<String> userIds) {
 		this.currentTime = System.currentTimeMillis();
 		this.procdefCode = procdefCode;
 		this.procdefVersion = procdefVersion;
-		this.userIds = assignedUserIds;
+		this.userIds = userIds;
 	}
 
 	/**
-	 * 更新userId集合
+	 * 重置userId集合
 	 * @param userIds
 	 */
-	public void updateUserIds(HashSet<String> userIds) {
+	public void resetUserIds(HashSet<String> userIds) {
 		this.userIds = userIds;
 	}
 	

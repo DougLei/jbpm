@@ -25,19 +25,19 @@ public class DelegationHandler {
 	 * @param condition 条件
 	 * @throws TaskHandleException
 	 */
-	public DelegationHandler(String taskinstId, String userId, SqlCondition condition) throws TaskHandleException{
+	public DelegationHandler(String taskinstId, String userId, DelegationSqlCondition condition) throws TaskHandleException{
 		this(taskinstId, userId, condition, new HashSet<String>());
 	}
 	
-	// counter: 计数器, 用来防止出现委托死循环的情况
-	private DelegationHandler(String taskinstId, String userId, SqlCondition condition, HashSet<String> counter) throws TaskHandleException{
+	// counter: 计数器, 用来防止出现委托无限循环的情况
+	private DelegationHandler(String taskinstId, String userId, DelegationSqlCondition condition, HashSet<String> counter) throws TaskHandleException{
 		condition.getUserIds().forEach(uid -> {
 			if(counter.contains(uid))
 				throw new TaskHandleException("递归查询委托信息出现重复的userId=["+uid+"], 相关的任务实例id为["+taskinstId+"], 操作的用户id为["+userId+"]");
 			counter.add(uid);
 		});
 		
-		List<DelegationInfo> delegations = SessionContext.getSQLSession().query(DelegationInfo.class, "Delegation", "queryDelegations", condition);
+		List<DelegationInfo> delegations = SessionContext.getSQLSession().query(DelegationInfo.class, "Delegation", "queryDelegations4Runtime", condition);
 		if(delegations.isEmpty())
 			return;
 		
@@ -51,7 +51,7 @@ public class DelegationHandler {
 			assigneeUserIds.add(delegation.getAssignedUserId());
 		}
 		
-		condition.updateUserIds(assigneeUserIds);
+		condition.resetUserIds(assigneeUserIds);
 		this.children = new DelegationHandler(taskinstId, userId, condition, counter);
 	}
 	

@@ -2,6 +2,7 @@ package com.douglei.bpm.module.repository.delegation;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import com.douglei.bpm.bean.annotation.Bean;
@@ -17,6 +18,73 @@ import com.douglei.orm.context.Transaction;
 @Bean(isTransaction=true)
 public class DelegationService {
 	
+	// 保存委托明细
+	private void saveDetails(int delegationId, List<DelegationDetail> details) {
+		if(details == null)
+			return;
+		
+		details.forEach(detail -> detail.setDelegationId(delegationId));
+		SessionContext.getTableSession().save(details);
+	}
+	
+	// 递归验证器, 防止出现委托无限循环的情况
+	private class RecursiveValidator {
+		private Delegation origin;
+		private HashSet<String> userIds; // 二次委托的userId集合
+		public RecursiveValidator(Delegation origin) {
+			this.origin = origin;
+		}
+		
+		// 执行验证
+		public Result execute() {
+			DelegationSqlCondition condition = new DelegationSqlCondition(origin.getStartTime(), origin.getEndTime(), origin.getAssignedUserId());
+			return execute_(condition, SessionContext.getSQLSession().query(DelegationInfo.class, "Delegation", "queryDelegations4Op", condition));
+		}
+		
+		// 执行验证(内部方法)
+		private Result execute_(DelegationSqlCondition condition, List<DelegationInfo> delegations) {
+			if(delegations.isEmpty())
+				return null;
+			
+			HashSet<String> userIds = getUserIds();
+			if(origin.getDetails() == null) { // 委托了所有流程
+				delegations.forEach(delegation -> userIds.add(delegation.getAssignedUserId()));
+			}else { // 委托了部分流程
+				for (DelegationInfo delegation : delegations) {
+					if(delegation.getProcdefCode() == null) {
+						userIds.add(delegation.getAssignedUserId());
+						continue;
+					}
+					
+					for(DelegationDetail detail: origin.getDetails()) {
+						if(delegation.getProcdefCode().equals(detail.getProcdefCode()) 
+								&& (detail.getProcdefVersion()== null || delegation.getProcdefVersion()==null || detail.getProcdefVersion().equals(delegation.getProcdefVersion()))) {
+							userIds.add(delegation.getAssignedUserId());
+							break;
+						}
+					}
+				}
+			}
+			
+			if(userIds.isEmpty())
+				return null;
+			if(userIds.contains(origin.getUserId()))
+				return new Result("委托失败, 可能会出现无限循环委托的情况", "jbpm.delegation.op.fail.infinite.cycle");
+			
+			condition.resetUserIds(userIds);
+			return execute_(condition, SessionContext.getSQLSession().query(DelegationInfo.class, "Delegation", "queryDelegations4Op", condition));
+		}
+		
+		// 获取二次委托的userId集合
+		private HashSet<String> getUserIds() {
+			if(userIds == null)
+				userIds = new HashSet<String>(16);
+			else
+				userIds.clear();
+			return userIds;
+		}
+	}
+	
 	/**
 	 * 添加委托
 	 * @param builder
@@ -24,21 +92,19 @@ public class DelegationService {
 	 */
 	@Transaction
 	public Result insert(DelegationBuilder builder) {
-		Delegation delegation = builder.build();
+		Result result = builder.build();
+		if(result.isFail())
+			return result;
 		
-		// 递归查询被委托人委托了哪些流程, 这些流程是否和当前委托的流程相同; 如果不相同, 则结束, 否则继续递归查询和判断
+		Delegation delegation = result.getObject(Delegation.class);
 		
-		
-		
-		
-		
-		
-		
-		
+		// 递归验证, 防止出现委托无限循环的情况
+		result = new RecursiveValidator(delegation).execute();
+		if(result != null)
+			return result;
 		
 		SessionContext.getTableSession().save(delegation);
-		if(delegation.getDetails() != null)
-			SessionContext.getTableSession().save(delegation.getDetails());
+		saveDetails(delegation.getId(), delegation.getDetails());
 		return Result.getDefaultSuccessInstance();
 	}
 	
@@ -49,80 +115,27 @@ public class DelegationService {
 	 */
 	@Transaction
 	public Result update(DelegationBuilder builder) {
-		Delegation delegation = builder.build();
+		Result result = builder.build();
+		if(result.isFail())
+			return result;
 		
-		// 判断是否存在指定id的委托信息
+		Delegation delegation = result.getObject(Delegation.class);
 		Delegation old = SessionContext.getSqlSession().uniqueQuery(Delegation.class, "select * from bpm_re_delegation where id=?", Arrays.asList(delegation.getId()));
 		if(old == null)
 			throw new RepositoryException("修改委托失败, 不存在id为["+delegation.getId()+"]的委托");
+		if(old.isAccept() && !builder.isStrict4Update())
+			return new Result("修改委托失败, 委托已被接受", "jbpm.delegation.update.fail.accepted");
 		
+		// 递归验证, 防止出现委托无限循环的情况
+		result = new RecursiveValidator(delegation).execute();
+		if(result != null)
+			return result;
 		
-		
-		
-		// 如果已经接受, 然后其修改了明细, 要判断是否需要重新接受, 以及激活状态
-		
-		
-		
-		
-		
-		
-		
-		SessionContext.getTableSession().update(delegation);
+		SessionContext.getTableSession().update(delegation, true);
 		SessionContext.getSqlSession().executeUpdate("delete bpm_re_delegation_detail where delegation_id=?", Arrays.asList(delegation.getId()));
-		if(delegation.getDetails() != null)
-			SessionContext.getTableSession().save(delegation.getDetails());
+		saveDetails(delegation.getId(), delegation.getDetails());
 		return Result.getDefaultSuccessInstance();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * 接受委托

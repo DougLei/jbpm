@@ -16,7 +16,7 @@ import com.douglei.bpm.module.execution.task.runtime.TaskEntity;
 import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
 import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.bpm.process.handler.task.user.assignee.startup.DelegationHandler;
-import com.douglei.bpm.process.handler.task.user.assignee.startup.SqlCondition;
+import com.douglei.bpm.process.handler.task.user.assignee.startup.DelegationSqlCondition;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.candidate.Candidate;
@@ -88,7 +88,7 @@ public class DelegateTaskCmd implements Command {
 		
 		DelegationHandler delegationHandler = new DelegationHandler(
 				entity.getTask().getTaskinstId(), userId, 
-				new SqlCondition(entity.getProcessMetadata().getCode(), entity.getProcessMetadata().getVersion(), assignedUserIds));
+				new DelegationSqlCondition(entity.getProcessMetadata().getCode(), entity.getProcessMetadata().getVersion(), assignedUserIds));
 		
 		List<Assignee> delegateAssigneeList = new ArrayList<Assignee>(assigneeList.size() * 3);
 		Date claimTime = new Date();

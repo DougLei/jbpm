@@ -91,7 +91,7 @@ public class AssigneeHandler {
 		String taskinstId= handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId();
 		DelegationHandler delegationHandler = new DelegationHandler(
 				taskinstId, handleParameter.getUserEntity().getUserId(), 
-				new SqlCondition(handleParameter.getProcessMetadata().getCode(), handleParameter.getProcessMetadata().getVersion(), assignedUserIds));
+				new DelegationSqlCondition(handleParameter.getProcessMetadata().getCode(), handleParameter.getProcessMetadata().getVersion(), assignedUserIds));
 		
 		boolean isFixedAssign = !assignPolicy.isDynamic(); // 是否固定指派
 		int groupId = 1;

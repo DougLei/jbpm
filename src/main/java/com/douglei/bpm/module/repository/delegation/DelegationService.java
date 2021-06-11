@@ -69,7 +69,9 @@ public class DelegationService {
 			if(userIds.isEmpty())
 				return null;
 			if(userIds.contains(origin.getUserId()))
-				return new Result("委托失败, 可能会出现无限循环委托的情况", "jbpm.delegation.op.fail.infinite.cycle");
+				return new Result("委托失败, 可能会出现无限循环委托的情况", "jbpm.delegation.op.fail.maybe.infinite.cycle");
+
+//				jbpm.delegation.op.fail.willbe.infinite.cycle=委托失败, 会出现无限循环委托的情况
 			
 			condition.resetUserIds(userIds);
 			return execute_(condition, SessionContext.getSQLSession().query(DelegationInfo.class, "Delegation", "queryDelegations4Op", condition));

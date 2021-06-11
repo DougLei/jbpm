@@ -12,19 +12,17 @@ import com.douglei.bpm.module.repository.RepositoryException;
  */
 public class DelegationBuilder {
 	private int id;
-	private boolean strict4Update;
 	private String userId;
 	private String assignedUserId;
 	private long startTime;
 	private long endTime;
 	private String reason;
 	private List<DelegationDetail> details;
+	private boolean strict4Update;
+	private boolean acceptNotDelegate;
 	
 	public void setId(int id) {
 		this.id = id;
-	}
-	public boolean isStrict4Update() {
-		return strict4Update;
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
@@ -41,6 +39,12 @@ public class DelegationBuilder {
 	public void setReason(String reason) {
 		this.reason = reason;
 	}
+	public boolean isStrict4Update() {
+		return strict4Update;
+	}
+	public boolean isAcceptNotDelegate() {
+		return acceptNotDelegate;
+	}
 	
 	/**
 	 * 委托已被接受时, 是否进行强制修改; 强制修改会取消接受状态, 需要重新进行接受操作; 默认值为false
@@ -48,6 +52,14 @@ public class DelegationBuilder {
 	 */
 	public void setStrict4Update(boolean strict4Update) {
 		this.strict4Update = strict4Update;
+	}
+	
+	/**
+	 * 当可能出现无限循环委托的情况时, 是否接受不委托操作, 即在流程流转中不进行委托操作; 如果值为false, 则无法增加或修改委托信息; 默认值为false
+	 * @param acceptNotDelegate
+	 */
+	public void setAcceptNotDelegate(boolean acceptNotDelegate) {
+		this.acceptNotDelegate = acceptNotDelegate;
 	}
 	
 	/**

@@ -27,12 +27,17 @@ public class DelegationService {
 		SessionContext.getTableSession().save(details);
 	}
 	
-	// 递归验证器, 防止出现委托无限循环的情况
+	/**
+	 * 递归验证器, 防止出现委托无限循环的情况
+	 * @author DougLei
+	 */
 	private class RecursiveValidator {
 		private Delegation origin;
+		private boolean acceptNotDelegate;
 		private HashSet<String> userIds; // 二次委托的userId集合
-		public RecursiveValidator(Delegation origin) {
+		public RecursiveValidator(Delegation origin, boolean acceptNotDelegate) {
 			this.origin = origin;
+			this.acceptNotDelegate = acceptNotDelegate;
 		}
 		
 		// 执行验证
@@ -97,7 +102,7 @@ public class DelegationService {
 		Delegation delegation = builder.build();
 
 		// 递归验证, 防止出现委托无限循环的情况
-		Result result = new RecursiveValidator(delegation).execute();
+		Result result = new RecursiveValidator(delegation, builder.isAcceptNotDelegate()).execute();
 		if(result != null)
 			return result;
 		
@@ -121,7 +126,7 @@ public class DelegationService {
 			return new Result("修改委托失败, 委托已被接受", "jbpm.delegation.update.fail.accepted");
 		
 		// 递归验证, 防止出现委托无限循环的情况
-		Result result = new RecursiveValidator(delegation).execute();
+		Result result = new RecursiveValidator(delegation, builder.isAcceptNotDelegate()).execute();
 		if(result != null)
 			return result;
 		

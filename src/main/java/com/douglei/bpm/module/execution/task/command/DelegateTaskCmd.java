@@ -15,7 +15,7 @@ import com.douglei.bpm.module.execution.task.runtime.Assignee;
 import com.douglei.bpm.module.execution.task.runtime.TaskEntity;
 import com.douglei.bpm.process.api.user.option.OptionTypeConstants;
 import com.douglei.bpm.process.handler.TaskHandleException;
-import com.douglei.bpm.process.handler.task.user.assignee.startup.DelegationHandler;
+import com.douglei.bpm.process.handler.task.user.assignee.startup.DelegateHandler;
 import com.douglei.bpm.process.handler.task.user.assignee.startup.DelegationSqlCondition;
 import com.douglei.bpm.process.mapping.metadata.TaskMetadata;
 import com.douglei.bpm.process.mapping.metadata.task.user.UserTaskMetadata;
@@ -86,7 +86,7 @@ public class DelegateTaskCmd implements Command {
 		HashSet<String> assignedUserIds = new HashSet<String>(2);
 		assignedUserIds.add(assignedUserId);
 		
-		DelegationHandler delegationHandler = new DelegationHandler(
+		DelegateHandler delegateHandler = new DelegateHandler(
 				entity.getTask().getTaskinstId(), userId, 
 				new DelegationSqlCondition(entity.getProcessMetadata().getCode(), entity.getProcessMetadata().getVersion(), assignedUserIds));
 		
@@ -94,7 +94,7 @@ public class DelegateTaskCmd implements Command {
 		Date claimTime = new Date();
 		int delegateDeep = -1; // 委托人的委托深度
 		for(Assignee assignee : assigneeList) {
-			delegationHandler.addAssignee(
+			delegateHandler.addAssignee(
 					entity.getTask().getTaskinstId(), 
 					assignee.getGroupId(), 
 					assignee.getChainId()+1, 

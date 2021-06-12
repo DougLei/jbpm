@@ -27,8 +27,9 @@ public class DelegationSqlCondition {
 	 * 重置userId集合
 	 * @param userIds
 	 */
-	public void resetUserIds(HashSet<String> userIds) {
-		this.userIds = userIds;
+	public HashSet<String> resetUserIds() {
+		userIds.clear();
+		return userIds;
 	}
 	
 	public long getStartTime() {

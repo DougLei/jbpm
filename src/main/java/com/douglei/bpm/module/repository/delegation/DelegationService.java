@@ -34,7 +34,7 @@ public class DelegationService {
 	private class RecursiveValidator {
 		private Delegation origin;
 		private boolean acceptNotDelegate;
-		private HashSet<String> userIds; // 二次委托的userId集合
+		
 		public RecursiveValidator(Delegation origin, boolean acceptNotDelegate) {
 			this.origin = origin;
 			this.acceptNotDelegate = acceptNotDelegate;
@@ -43,21 +43,24 @@ public class DelegationService {
 		// 执行验证
 		public Result execute() {
 			DelegationSqlCondition condition = new DelegationSqlCondition(origin.getStartTime(), origin.getEndTime(), origin.getAssignedUserId());
-			return execute_(condition, SessionContext.getSQLSession().query(DelegationInfo.class, "Delegation", "queryDelegations4Op", condition));
+			if(execute_(condition, SessionContext.getSQLSession().query(DelegationInfo.class, "Delegation", "queryDelegations4Op", condition)) && !acceptNotDelegate)
+				return new Result("委托失败, 可能会出现无限循环委托的情况", "jbpm.delegation.op.fail.maybe.infinite.cycle");
+			return null;
 		}
 		
-		// 执行验证(内部方法)
-		private Result execute_(DelegationSqlCondition condition, List<DelegationInfo> delegations) {
+		// 执行验证(内部方法); 返回是否可能出现无限循环委托的情况
+		private boolean execute_(DelegationSqlCondition condition, List<DelegationInfo> delegations) {
 			if(delegations.isEmpty())
-				return null;
+				return false;
 			
-			HashSet<String> userIds = getUserIds();
+			HashSet<String> userIds = condition.resetUserIds();
 			if(origin.getDetails() == null) { // 委托了所有流程
-				delegations.forEach(delegation -> userIds.add(delegation.getAssignedUserId()));
+				for (DelegationInfo delegation : delegations) 
+					userIds.add(delegation.getAssignedUserId());
 			}else { // 委托了部分流程
 				for (DelegationInfo delegation : delegations) {
-					if(delegation.getProcdefCode() == null) {
-						userIds.add(delegation.getAssignedUserId());
+					if(delegation.getProcdefCode() == null) { 
+						userIds.add(delegation.getAssignedUserId()); // 被委托人将所有流程都进行了委托
 						continue;
 					}
 					
@@ -72,23 +75,10 @@ public class DelegationService {
 			}
 			
 			if(userIds.isEmpty())
-				return null;
-			if(userIds.contains(origin.getUserId()))
-				return new Result("委托失败, 可能会出现无限循环委托的情况", "jbpm.delegation.op.fail.maybe.infinite.cycle");
-
-//				jbpm.delegation.op.fail.willbe.infinite.cycle=委托失败, 会出现无限循环委托的情况
-			
-			condition.resetUserIds(userIds);
+				return false;
+			if(userIds.contains(origin.getUserId())) 
+				return true;
 			return execute_(condition, SessionContext.getSQLSession().query(DelegationInfo.class, "Delegation", "queryDelegations4Op", condition));
-		}
-		
-		// 获取二次委托的userId集合
-		private HashSet<String> getUserIds() {
-			if(userIds == null)
-				userIds = new HashSet<String>(16);
-			else
-				userIds.clear();
-			return userIds;
 		}
 	}
 	

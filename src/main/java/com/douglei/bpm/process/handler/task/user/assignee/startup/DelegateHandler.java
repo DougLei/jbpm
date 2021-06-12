@@ -11,12 +11,13 @@ import com.douglei.bpm.process.handler.TaskHandleException;
 import com.douglei.orm.context.SessionContext;
 
 /**
- * 委托信息处理器
+ * 
  * @author DougLei
  */
-public class DelegationHandler {
+public class DelegateHandler {
 	private List<DelegationInfo> results; // 最终的委托信息集合
-	private DelegationHandler children;
+	private DelegateHandler parent;
+	private DelegateHandler children;
 
 	/**
 	 * 
@@ -25,34 +26,61 @@ public class DelegationHandler {
 	 * @param condition 条件
 	 * @throws TaskHandleException
 	 */
-	public DelegationHandler(String taskinstId, String userId, DelegationSqlCondition condition) throws TaskHandleException{
-		this(taskinstId, userId, condition, new HashSet<String>());
+	public DelegateHandler(String taskinstId, String userId, DelegationSqlCondition condition) throws TaskHandleException{
+		this(null, taskinstId, userId, condition, new HashSet<String>());
 	}
 	
-	// counter: 计数器, 用来防止出现委托无限循环的情况
-	private DelegationHandler(String taskinstId, String userId, DelegationSqlCondition condition, HashSet<String> counter) throws TaskHandleException{
-		condition.getUserIds().forEach(uid -> {
-			if(counter.contains(uid))
-				throw new TaskHandleException("递归查询委托信息出现重复的userId=["+uid+"], 相关的任务实例id为["+taskinstId+"], 操作的用户id为["+userId+"]");
-			counter.add(uid);
-		});
+	// counter: 计数器, 防止委托无限循环的情况
+	private DelegateHandler(DelegateHandler parent, String taskinstId, String userId, DelegationSqlCondition condition, HashSet<String> counter) throws TaskHandleException{
+		this.parent = parent;
+		condition.getUserIds().forEach(uid -> counter.add(uid));
 		
 		List<DelegationInfo> delegations = SessionContext.getSQLSession().query(DelegationInfo.class, "Delegation", "queryDelegations4Runtime", condition);
 		if(delegations.isEmpty())
 			return;
 		
+		// 记录具体的委托信息集合
 		this.results = new ArrayList<DelegationInfo>(delegations.size());
-		HashSet<String> assigneeUserIds = new HashSet<String>();
 		for(DelegationInfo delegation : delegations) {
-			if(this.results.contains(delegation))
+			if(delegation.getUserId().equals(delegation.getAssignedUserId()) || this.results.contains(delegation))
 				continue;
-			
 			this.results.add(delegation);
-			assigneeUserIds.add(delegation.getAssignedUserId());
 		}
 		
-		condition.resetUserIds(assigneeUserIds);
-		this.children = new DelegationHandler(taskinstId, userId, condition, counter);
+		// 如果存在委托信息, 验证是否有委托无限循环的情况
+		if(this.results.size()> 0) {
+			HashSet<String> assigneeUserIds = condition.resetUserIds();
+			for(int i=0; i<results.size(); i++) {
+				if(counter.contains(results.get(i).getAssignedUserId())) {
+					DelegationInfo info = results.remove(i--);
+					parent.giveupDelegate(info.getAssignedUserId(), info.getUserId());
+					continue;
+				}
+				assigneeUserIds.add(results.get(i).getAssignedUserId());
+			}
+			
+			// 验证后依然存在合法的委托信息, 则继续进行递归查询
+			if(assigneeUserIds.size() > 0)
+				this.children = new DelegateHandler(this, taskinstId, userId, condition, counter);
+		}
+	}
+	
+	/**
+	 * 放弃委托(递归); 即出现委托无限循环的情况时, 撤销所有委托, 直接指派给委托发起人
+	 * @param userId 委托发起人id
+	 * @param currentAssigneeUserId 当前被委托人id
+	 */
+	private void giveupDelegate(String userId, String currentAssigneeUserId) {
+		for(int i=0; i<results.size(); i++) {
+			if(results.get(i).getUserId().equals(userId)) {
+				results.remove(i);
+				return;
+			}else if(results.get(i).getAssignedUserId().equals(currentAssigneeUserId)) {
+				DelegationInfo info = results.remove(i);
+				parent.giveupDelegate(userId, info.getUserId());
+				return;
+			}
+		}
 	}
 	
 	/**

@@ -89,14 +89,14 @@ public class AssigneeHandler {
 		List<Assignee> assigneeList = new ArrayList<Assignee>(assignedUserIds.size());
 		
 		String taskinstId= handleParameter.getTaskEntityHandler().getCurrentTaskEntity().getTask().getTaskinstId();
-		DelegationHandler delegationHandler = new DelegationHandler(
+		DelegateHandler delegateHandler = new DelegateHandler(
 				taskinstId, handleParameter.getUserEntity().getUserId(), 
 				new DelegationSqlCondition(handleParameter.getProcessMetadata().getCode(), handleParameter.getProcessMetadata().getVersion(), assignedUserIds));
 		
 		boolean isFixedAssign = !assignPolicy.isDynamic(); // 是否固定指派
 		int groupId = 1;
 		for (String assignedUserId : assignedUserIds) 
-			delegationHandler.addAssignee(taskinstId, groupId++, 0, assignedUserId, null, isFixedAssign , assigneeList);
+			delegateHandler.addAssignee(taskinstId, groupId++, 0, assignedUserId, null, isFixedAssign , assigneeList);
 		return assigneeList;
 	}
 	
